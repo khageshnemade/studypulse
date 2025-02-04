@@ -148,12 +148,30 @@ Manually disconnect	socket.disconnect()
                                         "totalTeachersCount": 1,
                                         "totalStudentCount": 6,
                                         "totalClassCount": 4,
-                                        "recentlyAddedStudents": [],   ---------empty array ---------
+                                        "recentlyAddedStudents": [],  
                                         "recentlyAddedTeachers": [],
-                                        "recentDiscussedTopics":[],
-                                        "ActiveStudents":[classwise active inactive and passed failed status],
-                                        "ActiveTeachers":[classwise active inactive],
-                                        "class_Performance":[classwise Passed,failed students count],
+                                        "recentlyAddedComments": [],
+                                           "students":[
+                                            "class1":{
+                                                sub1:{passed:10, failed:12,}
+                                                sub2:{passed:10, failed:12,}
+                                                sub3:{passed:10, failed:12,}
+                                                active:1,failed:1},
+                                            "class2":{ sub1:{passed:10, failed:12,}
+                                                sub2:{passed:10, failed:12,}
+                                                sub3:{passed:10, failed:12,},
+                                                active:1,failed:1},
+                                            "class3":{ sub1:{passed:10, failed:12,}
+                                                sub2:{passed:10, failed:12,}
+                                                sub3:{passed:10, failed:12,},
+                                                active:1,failed:1},
+                                        ],
+                                        "teachers":[
+                                          "class1":{active:1, inactive:1},
+                                          "class2":{active:1, inactive:1},
+                                          "class3":{active:1, inactive:1},
+                                        ],
+                                       
 
                                     }
   For SuperAdmin Dashboard         {
@@ -161,12 +179,29 @@ Manually disconnect	socket.disconnect()
                                         "totalStudentCount": 6,
                                         "totalClassCount": 4,
                                         "totalAdminCount":5,
-                                        "recentlyAddedStudents": [],   ---------empty array ---------
+                                        "recentlyAddedStudents": [],  
                                         "recentlyAddedTeachers": [],
-                                        "recentDiscussedTopics":[],
-                                        "ActiveStudents":[classwise active inactive and passed failed status],
-                                        "ActiveTeachers":[classwise active inactive],
-                                        "class_Performance":[classwise Passed,failed students count],
+                                          "students":[
+                                            "class1":{
+                                                sub1:{passed:10, failed:12,}
+                                                sub2:{passed:10, failed:12,}
+                                                sub3:{passed:10, failed:12,}
+                                                active:1,failed:1},
+                                            "class2":{ sub1:{passed:10, failed:12,}
+                                                sub2:{passed:10, failed:12,}
+                                                sub3:{passed:10, failed:12,},
+                                                active:1,failed:1},
+                                            "class3":{ sub1:{passed:10, failed:12,}
+                                                sub2:{passed:10, failed:12,}
+                                                sub3:{passed:10, failed:12,},
+                                                active:1,failed:1},
+                                        ],
+                                        "teachers":[
+                                          "class1":{active:1, inactive:1},
+                                          "class2":{active:1, inactive:1},
+                                          "class3":{active:1, inactive:1},
+                                        ],
+                                       
 
                                     }
 For Teacher Dashboard         
@@ -176,10 +211,32 @@ For Teacher Dashboard
                         "ChapterCount": 4,
                         "ChapterCurriculumCount":5,
                         "TotalClasses":6,
-                        "ChapterDistribution": [Classwise subject chapter count],   ---------empty array ---------
+                        "ChapterDistribution": [
+                            "class1":{"sub1":12,"sub2":14,"sub3":32,"sub4":12,"sub5":23,},
+                            "class2":{"sub1":12,"sub2":14,"sub3":32,"sub4":12,"sub5":23,},
+                            "class3":{"sub1":12,"sub2":14,"sub3":32,"sub4":12,"sub5":23,},
+                        ],   
                         "recentlyAddedAssignments": [],
                         "recentChapterCurriculums":[],
-                        "ActiveStudents":[classwise active inactive and passed failed status],
-                        "class_Performance":[classwise Passed,failed students count],
+                        "students":[
+                                    "class1":{
+                                        sub1:{passed:10, failed:12,}
+                                        sub2:{passed:10, failed:12,}
+                                        sub3:{passed:10, failed:12,}
+                                        active:1,failed:1},
+                                    "class2":{ sub1:{passed:10, failed:12,}
+                                        sub2:{passed:10, failed:12,}
+                                        sub3:{passed:10, failed:12,},
+                                        active:1,failed:1},
+                                    "class3":{ sub1:{passed:10, failed:12,}
+                                        sub2:{passed:10, failed:12,}
+                                        sub3:{passed:10, failed:12,},
+                                        active:1,failed:1},
+                                ],
+                        "teachers":[
+                            "class1":{active:1, inactive:1},
+                            "class2":{active:1, inactive:1},
+                            "class3":{active:1, inactive:1},
+                                ],
 
                         }
