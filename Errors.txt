@@ -1,0 +1,185 @@
+1. /web/api/admin/get-all-teachers
+Get All Teachers List - By Admin
+                SubjectName[] ,ClassesName[] ---------------------Pending
+                Duplicate class Name is Allowed  -------------Pending
+                inactive_teachers not found in this list    ----------------Pending
+
+
+2. /web/api/admin/create-subject
+
+    {
+    "success": false,
+    "message": "You are not authorized to create subjects in this class"
+    }                       -----------------------Solved
+
+3./web/api/admin/get-all-students
+please add in response ClassName  --------------------Solved{classId as parameters}
+
+
+4./web/api/admin/update-student-data
+Student update data
+--		Issued while updating status  {"error":"Invalid status value. Allowed values are: active, inactive."}       ----------------Solved
+
+5.Please provide api to update status of student    ---------Solved
+6./admin/create-class                                                                    From where to fetch the stream data   -----Pending
+            
+7.https://api.studypulse.live/web/api/superAdmin/admin/66ea4edc0a94153fc58e712d
+         please provide adminId for updating Data in web/api/login ------Pending 
+            {
+    "success": true,
+    "message": "Registration successfull.",
+    "data": {
+        "userId": "67864e4d5b5c008ca8a9ac81",
+        "email": "wers@gmail.com",
+        "phoneNumber": "7873545676",
+        "firstName": "Khagesh",
+        "lastName": "Nemade",
+        "role": "admin",
+        "organizationID": "67862a1e5b5c008ca8a9aa6a"
+    }
+}
+
+{
+    "success": true,
+    "message": "Data create sucessfully",
+    "data": {
+        "_id": "67864e4d5b5c008ca8a9ac81",
+        "firstName": "dsdsdsd",
+        "lastName": "dssdd",
+        "email": "sdsad@gmail.com",
+        "phoneNumber": "9234567654",
+        "role": "admin",
+        "status": "active",
+        "organizationID": "67862a1e5b5c008ca8a9aa6a",
+        "cityID": "66f3a28df894a5dc67304ce0",
+        "talukaID": "66f3a28cf894a5dc67304cdc",
+        "districtID": "66f3a28cf894a5dc67304cd9",
+        "profileCompletion": true,
+        "refreshTokens": [],
+        "createdAt": "2025-01-14T11:45:17.641Z"
+    }
+}
+
+ 8./teacher/complete-profile   -------when i complete the profile then automatically        new teacher added in teacher list 
+                        classId and subjectId how to pass
+
+9.admin/get-all-students   
+    Automatically all students added in class when new class is added ---Pending
+
+10.Please Create get-all-admins for superAdmin    ------Pending
+
+11. /get-org-by-district-taluka-city-id?talukaId 
+    Please provide adminName for particular organization in response     ---Pending 
+12. https://api.studypulse.live/web/api/teacher/get-all-assignment
+
+                    {
+                    "success": false,
+                    "message": "Chapter ID is required."
+                    }
+                                                13. https://api.studypulse.live/web/api/teacher/get-all-chapter
+            {
+            "success": false,
+            "message": "Both subjectId and classId are required."
+            }
+
+ 14. https://api.studypulse.live/web/api//teacher/get-all-subjects
+        {
+        "success": false,
+        "data": null,
+        "error": {
+            "status": 404
+        },
+        "message": "Not Found"
+        }
+                            -----------------Solved
+15. https://api.studypulse.live/web/api/teacher/get-all-chapterCurriculum
+                    {
+                    "success": false,
+                    "message": "chapterId, subjectId, and classId are required."
+                    }
+16.https://api.studypulse.live/web/api/teacher/get-assignment-result
+                        {
+                            "success": false,
+                            "message": "All required fields must be provided"
+                        }*/
+****************DONE***************8
+Admin 1./admin/get-all-students   address,gender,dob and documents are not coming in response  -----------Done
+2./api/admin/create-class      stream required and duplicate class names created in different streams -------------------Done
+
+
+         ************************superAdministrator************************
+/superAdmin/create-district /superAdmin/create-citiy  /superAdmin/create-taluka   not working
+1.https://api.studypulse.live/web/api/superAdmin/admin/get-all-org
+Name	Description    -------what is the name 
+
+
+        *************************************Teacher*************************
+2.teacher/update-chapter    ------
+            {
+                "success": false,
+                "message": "Internal server error.",
+                "error": "Cast to ObjectId failed for value \"{\n  _id: undefined,\n  subjectId: '6799f471db0e4a39f88c175d',\n  organizationID: undefined,\n  classId: '67935ca5ba3a363b428cd9d1'\n}\" (type Object) at path \"_id\" for model \"Chapter\""
+            }
+
+        ********************************Administration**********************************
+3.admin/update-student-data   unable to upload documents to the server and show on the page 
+
+get-all-students/teacher  profilePic
+
+4.Please provide the api for teacher/get-all-comments provided by the students 
+5./teacher/update-chapterCurriculum     -----------unable to update
+
+5. 
+Connect to server	const socket = io("http://localhost:4000")     
+Send event	socket.emit("eventName", data)                            ----------eventName------------
+Receive event	socket.on("eventName", callback)                      ----------eventName------------
+Handle connection	socket.on("connect", callback)
+Handle disconnection	socket.on("disconnect", callback)
+Manually disconnect	socket.disconnect()
+     
+     web/api/send-message-in-discussion  how to get messageType                                           {
+                                                "chapterCurriculumId": "6772987f9bf198648073cc45",
+                                                "discussionId": "6772987f9bf198648073cc4f",
+                                                "messageType": "text",
+                                                "content": "Hello testtestwt!"
+                                                }
+
+  For Admin Dashboard         {
+                                        "totalTeachersCount": 1,
+                                        "totalStudentCount": 6,
+                                        "totalClassCount": 4,
+                                        "recentlyAddedStudents": [],   ---------empty array ---------
+                                        "recentlyAddedTeachers": [],
+                                        "recentDiscussedTopics":[],
+                                        "ActiveStudents":[classwise active inactive and passed failed status],
+                                        "ActiveTeachers":[classwise active inactive],
+                                        "class_Performance":[classwise Passed,failed students count],
+
+                                    }
+  For SuperAdmin Dashboard         {
+                                        "totalTeachersCount": 1,
+                                        "totalStudentCount": 6,
+                                        "totalClassCount": 4,
+                                        "totalAdminCount":5,
+                                        "recentlyAddedStudents": [],   ---------empty array ---------
+                                        "recentlyAddedTeachers": [],
+                                        "recentDiscussedTopics":[],
+                                        "ActiveStudents":[classwise active inactive and passed failed status],
+                                        "ActiveTeachers":[classwise active inactive],
+                                        "class_Performance":[classwise Passed,failed students count],
+
+                                    }
+For Teacher Dashboard         
+                        {
+                        "SubjectCount": 1,
+                        "AssignmentCount": 6,
+                        "ChapterCount": 4,
+                        "ChapterCurriculumCount":5,
+                        "TotalClasses":6,
+                        "ChapterDistribution": [Classwise subject chapter count],   ---------empty array ---------
+                        "recentlyAddedAssignments": [],
+                        "recentChapterCurriculums":[],
+                        "ActiveStudents":[classwise active inactive and passed failed status],
+                        "class_Performance":[classwise Passed,failed students count],
+
+                        }
