@@ -37,8 +37,9 @@ const SubjectsList = () => {
   // Rendering the component
   return (
     <div className="container mx-auto p-6">
- <p className="text-center text-4xl font-semibold bg-purple-200 p-3 rounded-2xl flex w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
-    <BookOpen className="text-2xl min-w-10 min-h-10 mr-4 animate-bounce" /> {/* Lucid Icon with Bounce Animation */}
+  <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold bg-purple-200 p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
+    <BookOpen className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
+  
     Subjects List
   </p>
 
@@ -46,7 +47,7 @@ const SubjectsList = () => {
        
       {loading ? (
         <div className="text-center py-4">
-          <span className="text-xl">Loading...</span>
+          <span className="text-xl">Please Select Class Name And ChapterName...</span>
         </div>
       ) : (
         <div className="overflow-x-auto w-full">
@@ -55,7 +56,7 @@ const SubjectsList = () => {
             <tr>
               <th className="px-6 py-3 text-sm font-semibold text-left">Subject Name</th>
               <th className="px-6 py-3 text-sm font-semibold text-left">Subject Created Date</th>
-              <th className="px-6 py-3 text-sm font-semibold text-left">Subject Chapters</th>
+              <th className="px-6 py-3 text-sm font-semibold text-left">Chapters</th>
 
             </tr>
           </thead>

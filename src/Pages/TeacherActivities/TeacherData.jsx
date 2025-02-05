@@ -72,8 +72,9 @@ useEffect(() => {
         <div className="">
           <div className="grid gap-6">
             {/* User Information */}
-            <p className="text-center text-4xl font-semibold bg-purple-200 p-3 rounded-2xl flex w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
-          <User2 className="text-2xl min-w-10 min-h-10 mr-4 animate-bounce" />
+            <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold bg-purple-200 p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
+    <User2 className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
+
           Teacher Complete Profile
         </p>
             <div className="p-3 bg-white rounded-lg shadow-xl border-t-8 border-indigo-500">

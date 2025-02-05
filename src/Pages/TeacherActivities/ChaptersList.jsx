@@ -96,8 +96,9 @@ const ChaptersList = () => {
 
   return (
 <div className=" mx-auto p-6 rounded-lg shadow-xl">
-<p className="text-center text-4xl font-semibold bg-purple-200 p-3 rounded-2xl flex w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
-      <Book className="text-2xl min-w-10 min-h-10 mr-4 animate-bounce" /> {/* Lucid Icon with Bounce Animation */}
+<p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold bg-purple-200 p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
+    <Book className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
+  
       Chapters List
     </p>
 
@@ -156,7 +157,7 @@ const ChaptersList = () => {
   {/* Table */}
   {loading ? (
     <div className="text-center py-8">
-      <span className="text-xl text-gray-700">Loading...</span>
+          <span className="text-xl">Please Select Class Name and Subject Name...</span>
     </div>
   ) : (
     <div className="w-full overflow-x-auto">

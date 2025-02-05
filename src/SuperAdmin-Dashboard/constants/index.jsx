@@ -5,7 +5,7 @@ import ProductImage from "../assets/product-image.jpg";
 
 export const navbarLinks = [
   {
-    title: "Dashboard",
+    title: "",
     links: [
       {
         label: "Home",

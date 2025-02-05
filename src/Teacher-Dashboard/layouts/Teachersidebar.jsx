@@ -34,7 +34,7 @@ export const TeacherSidebar = forwardRef(({ collapsed }, ref) => {
         <aside
           ref={ref}
           className={cn(
-            "fixed z-[100] flex h-full w-[240px] flex-col overflow-x-hidden border-r border-slate-300  bg-gradient-to-b from-white to-purple-300 [transition:_width_300ms_cubic-bezier(0.4,_0,_0.2,_1),_left_300ms_cubic-bezier(0.4,_0,_0.2,_1),_background-color_150ms_cubic-bezier(0.4,_0,_0.2,_1),_border_150ms_cubic-bezier(0.4,_0,_0.2,_1)] dark:border-slate-700 dark:bg-slate-900",
+            "fixed z-[100] flex h-full w-[240px] flex-col overflow-x-hidden border-r border-slate-300  bg-blue-500 [transition:_width_300ms_cubic-bezier(0.4,_0,_0.2,_1),_left_300ms_cubic-bezier(0.4,_0,_0.2,_1),_background-color_150ms_cubic-bezier(0.4,_0,_0.2,_1),_border_150ms_cubic-bezier(0.4,_0,_0.2,_1)] dark:border-slate-700 dark:bg-slate-900",
             collapsed ? "md:w-[70px] md:items-center" : "md:w-[240px]",
             collapsed ? "max-md:-left-full" : "max-md:left-0"
           )}
@@ -67,8 +67,8 @@ export const TeacherSidebar = forwardRef(({ collapsed }, ref) => {
       src={logoLight}
       alt="Study Pulse"
       className="dark:hidden"
-      height="120px"
-      width="120px"
+      height="80px"
+      width="80px"
     />
     <img
       src={logoDark}
@@ -81,12 +81,12 @@ export const TeacherSidebar = forwardRef(({ collapsed }, ref) => {
 
   {/* Pulse text */}
   {!collapsed && (
-    <p className="font-bold text-xl text-gray-600 transition-colors dark:text-slate-50 absolute top-24">
+    <p className="font-bold text-sm text-gray-700 mt-2 transition-colors dark:text-slate-50 absolute top-16">
       Pulse
     </p>
   )}
 </div>
-
+<hr className="border-t-2 border-gray-500 my-2" />
 
           <div className="flex w-full flex-col gap-y-4 overflow-y-auto overflow-x-hidden p-3 [scrollbar-width:_thin]">
             {navbarLinks.map((navbarLink) => (
@@ -110,7 +110,7 @@ export const TeacherSidebar = forwardRef(({ collapsed }, ref) => {
                     to={link.path}
                     end
                     className={cn(
-                      "sidebar-item font-bold text-gray-500 hover:text-gray-300 bg-purple-200",
+                      "sidebar-item font-bold text-black hover:text-white bg-blue-200",
                       collapsed && "md:w-[45px]"
                     )}
                   >
@@ -128,7 +128,7 @@ export const TeacherSidebar = forwardRef(({ collapsed }, ref) => {
         <aside
           ref={ref}
           className={cn(
-            "fixed z-[100] flex h-full w-[240px] flex-col overflow-x-hidden border-r border-slate-300  bg-gradient-to-b from-blue-100 to-purple-400 [transition:_width_300ms_cubic-bezier(0.4,_0,_0.2,_1),_left_300ms_cubic-bezier(0.4,_0,_0.2,_1),_background-color_150ms_cubic-bezier(0.4,_0,_0.2,_1),_border_150ms_cubic-bezier(0.4,_0,_0.2,_1)] dark:border-slate-700 dark:bg-slate-900",
+            "fixed z-[100] flex h-full w-[240px] flex-col overflow-x-hidden border-r border-slate-300  bg-blue-500 [transition:_width_300ms_cubic-bezier(0.4,_0,_0.2,_1),_left_300ms_cubic-bezier(0.4,_0,_0.2,_1),_background-color_150ms_cubic-bezier(0.4,_0,_0.2,_1),_border_150ms_cubic-bezier(0.4,_0,_0.2,_1)] dark:border-slate-700 dark:bg-slate-900",
             collapsed ? "md:w-[70px] md:items-center" : "md:w-[240px]",
             collapsed ? "max-md:-left-full" : "max-md:left-0"
           )}
@@ -187,7 +187,7 @@ export const TeacherSidebar = forwardRef(({ collapsed }, ref) => {
                     to={link.path}
                     end
                     className={cn(
-                      "sidebar-item font-bold text-white hover:text-gray-950 bg-[#BCCCDC]",
+                      "sidebar-item font-bold text-white hover:text-gray-950 bg-blue-400",
                       collapsed && "md:w-[45px]"
                     )}
                   >

@@ -71,8 +71,9 @@ export default function Assignments() {
 
       {/* Title Section with Icon */}
       <div className="flex items-center justify-center mb-8">
-        <p className="text-center text-4xl font-semibold bg-purple-200 p-3 rounded-2xl flex w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
-          <Folders className="min-w-10 min-h-10 text-purple-800 animate-bounce mr-3 " />
+      <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold bg-purple-200 p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
+    <Folders className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
+ 
           Assignment List
         </p>
       </div>

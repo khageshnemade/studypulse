@@ -122,8 +122,9 @@ export default function CreateAdmin() {
       <div className="max-w-7xl w-full space-y-8">
         {/* Form Header */}
         <div>
-        <p className="text-center text-4xl font-semibold bg-purple-200 p-3 rounded-2xl flex w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
-    <UserPlus className="text-2xl min-w-8 min-h-8 mr-3 animate-bounce" /> {/* Lucid Icon with Bounce Animation */}
+        <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold bg-purple-200 p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
+    <UserPlus className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
+ 
     Create New Admin
   </p>
          

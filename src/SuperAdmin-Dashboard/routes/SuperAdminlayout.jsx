@@ -28,7 +28,7 @@ const SuperAdminLayout = () => {
     });
 
     return (
-        <div className="min-h-screen bg-gradient-to-r from-blue-200 to-purple-600 transition-colors dark:bg-slate-950">
+        <div className="min-h-screen bg-purple-400 transition-colors dark:bg-slate-950">
             <div
                 className={cn(
                     "pointer-events-none fixed inset-0 -z-10 bg-black opacity-0 transition-opacity",

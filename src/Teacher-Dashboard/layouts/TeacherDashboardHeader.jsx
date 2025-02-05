@@ -31,7 +31,7 @@ export const TeacherDashboardHeader = ({ collapsed, setCollapsed }) => {
   }, []);
   return (
     <>
-      <header className="relative z-10 flex h-[60px] items-center justify-between bg-gradient-to-br from-blue-100 to-purple-300 px-4 shadow-md transition-colors ">
+      <header className="relative z-10 flex h-[60px] items-center justify-between px-4 shadow-md transition-colors bg-blue-500 ">
         <div className="flex items-center gap-x-3">
           <button
             className="btn-ghost size-10 text-gray-100"

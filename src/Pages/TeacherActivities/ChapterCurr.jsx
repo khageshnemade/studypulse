@@ -11,10 +11,11 @@ export default function ChapterCurr() {
   const location = useLocation();
   const { initialClassId, initialSubjectId, initialChapterId } =
     location.state || {};
+const {curr}=location.state||{};
 
-  const [classId, setClassId] = useState(initialClassId || "");
-  const [subjectId, setSubjectId] = useState(initialSubjectId || "");
-  const [chapterId, setChapterId] = useState(initialChapterId || "");
+  const [classId, setClassId] = useState(initialClassId ||curr.classId._id || "");
+  const [subjectId, setSubjectId] = useState(initialSubjectId ||curr.subjectId._id|| "");
+  const [chapterId, setChapterId] = useState(initialChapterId ||curr.subjectId.chapterIds[0] ||"");
   const [chapters, setChapters] = useState([]);
   const [classes, setClasses] = useState([]);
   const [subjects, setSubjects] = useState([]);
@@ -25,6 +26,7 @@ export default function ChapterCurr() {
   console.log("Parsed Data:", parsedData?.token);
   useEffect(() => {
     classId && fetchSubjects();
+    console.log("Curr Subject",curr);
   }, [classId]);
 
   useEffect(() => {

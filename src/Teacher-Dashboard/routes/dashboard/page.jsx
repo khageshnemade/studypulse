@@ -12,6 +12,7 @@ import {
 } from "chart.js";
 import TeacherProfile from "../../../Pages/TeacherActivities/TeacherProfile1";
 import { Home } from "lucide-react";
+import { ToastContainer } from "react-toastify";
 
 export default function TeacherDashboard() {
   const user = localStorage.getItem("user");
@@ -214,103 +215,276 @@ const classes = [
   },
 ];
 
+const BarChart = ({ data, options }) => (
+  <div className="p-4 bg-white shadow-lg rounded-lg !min-h-48">
+    <Bar data={data} options={options} />
+  </div>
+);
+const data = {
+  labels: ["Class1", "Class2", "Class3", "Class4", "Class5", "Class6"],
+  datasets: [
+    {
+      label: "Passed Students",
+      data: [12, 19, 3, 5, 2, 3],
+      backgroundColor: [
+        "rgba(255, 99, 132, 0.2)",
+        "rgba(54, 162, 235, 0.2)",
+        "rgba(255, 206, 86, 0.2)",
+        "rgba(75, 192, 192, 0.2)",
+        "rgba(153, 102, 255, 0.2)",
+        "rgba(255, 159, 64, 0.2)",
+      ],
+      borderColor: [
+        "rgba(255, 99, 132, 1)",
+        "rgba(54, 162, 235, 1)",
+        "rgba(255, 206, 86, 1)",
+        "rgba(75, 192, 192, 1)",
+        "rgba(153, 102, 255, 1)",
+        "rgba(255, 159, 64, 1)",
+      ],
+      borderWidth: 1,
+    },
+    {
+      label: "Failed Students",
+      data: [10, 20, 12, 12, 32, 12],
+      backgroundColor: [
+        "rgba(255, 99, 132, 0.2)",
+        "rgba(54, 162, 235, 0.2)",
+        "rgba(255, 206, 86, 0.2)",
+        "rgba(75, 192, 192, 0.2)",
+        "rgba(153, 102, 255, 0.2)",
+        "rgba(255, 159, 64, 0.2)",
+      ],
+      borderColor: [
+        "rgba(255, 99, 132, 1)",
+        "rgba(54, 162, 235, 1)",
+        "rgba(255, 206, 86, 1)",
+        "rgba(75, 192, 192, 1)",
+        "rgba(153, 102, 255, 1)",
+        "rgba(255, 159, 64, 1)",
+      ],
+      borderWidth: 1,
+    },
+  ],
+};
+const dataStudent = {
+  labels: ["Math", "Science", "History", "English", "Art"],
+  datasets: [
+    {
+      label: "Active Students",
+      data: [30, 40, 25, 50, 15],
+      backgroundColor: "rgba(75, 192, 192, 0.6)",
+      borderColor: "rgba(75, 192, 192, 1)",
+      borderWidth: 1,
+    },
+    {
+      label: "Inactive Students",
+      data: [10, 5, 20, 5, 10],
+      backgroundColor: "rgba(255, 99, 132, 0.6)",
+      borderColor: "rgba(255, 99, 132, 1)",
+      borderWidth: 1,
+    },
+  ],
+};
+const optionsStudent = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: "top",
+      labels: {
+        font: { size: 14 },
+        color: "#333",
+      },
+    },
+    tooltip: {
+      backgroundColor: "#f9f9f9",
+      titleColor: "#333",
+      bodyColor: "#555",
+      borderColor: "#ddd",
+      borderWidth: 1,
+    },
+  },
+  scales: {
+    y: { beginAtZero: true },
+  },
+};
+const Dashboard = () => {
+  const classes = [
+    {
+      className: "Class 1",
+      subjects: [
+        { name: "Math", passed: 40, failed: 10 },
+        { name: "Science", passed: 35, failed: 15 },
+        { name: "English", passed: 38, failed: 12 },
+      ],
+    },
+    {
+      className: "Class 2",
+      subjects: [
+        { name: "Math", passed: 50, failed: 5 },
+        { name: "Science", passed: 48, failed: 7 },
+        { name: "English", passed: 45, failed: 10 },
+      ],
+    },
+  ];
 
-return (
-  <div className="bg-gradient-to-r from-blue-200 to-purple-600 min-h-screen py-8 px-4">
-    {!profileCompletion && <TeacherProfile />}
-    <p className="text-center text-4xl font-semibold bg-purple-200 p-3 rounded-2xl flex w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
-  <Home className="text-2xl min-w-10 min-h-10 mr-4 animate-bounce" /> {/* Lucid Icon with Bounce Animation */}
-  Teacher Dashboard
-</p>
-   
+  const [selectedClassIndex, setSelectedClassIndex] = useState(0);
+  const [selectedSubjectIndex, setSelectedSubjectIndex] = useState(0);
 
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 p-4">
-      {/* Subject Box */}
-      <div className="bg-white shadow-xl rounded-lg p-6 flex items-center justify-between hover:scale-105 transition-transform duration-300 hover:shadow-2xl">
-        <div className="text-left">
-          <h2 className="text-xl font-semibold text-gray-700">Subjects Available</h2>
-          <p className="text-4xl font-bold text-gray-900">{67}</p>
+  const getPieChartData = (subject) => ({
+    labels: ["Passed", "Failed"],
+    datasets: [
+      {
+        data: [subject.passed, subject.failed],
+        backgroundColor: ["#4CAF50", "#F44336"],
+      },
+    ],
+  });
+
+  const handleClassChange = (event) => {
+    setSelectedClassIndex(event.target.value);
+    setSelectedSubjectIndex(0);
+  };
+
+  const handleSubjectChange = (event) => {
+    setSelectedSubjectIndex(event.target.value);
+  };
+
+  const selectedClass = classes[selectedClassIndex];
+  const selectedSubject = selectedClass.subjects[selectedSubjectIndex];
+
+  return (
+    <div className="min-h-screen bg-white flex flex-col items-center py-10">
+
+      <h1 className="text-3xl font-bold text-gray-700 mb-6 text-center">
+        Class Performance
+      </h1>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+        <div>
+          <select
+            id="classSelector"
+            value={selectedClassIndex || ''}
+            onChange={handleClassChange}
+            className="w-full p-1 border rounded-lg focus:ring focus:ring-blue-300"
+          ><option value={''}>Select ClassName</option>
+            {classes?.map((classData, index) => (
+              <option key={index} value={index}>
+                {classData.className}
+              </option>
+            ))}
+          </select>
         </div>
-        <div className="bg-blue-500 text-white p-4 rounded-full">
-          <i className="fas fa-book text-2xl"></i>
+
+        <div>
+
+          <select
+            id="subjectSelector"
+            value={selectedSubjectIndex || ''}
+            onChange={handleSubjectChange}
+            className="w-full p-1 border rounded-lg focus:ring focus:ring-blue-300"
+          ><option value="">Select Subject</option>
+            {selectedClass?.subjects?.map((subject, index) => (
+              <option key={index} value={index}>
+                {subject.name}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
+      <div className="bg-gray-50 w-full p-6 rounded-lg shadow-md flex justify-center">
 
-      {/* Chapter Available Box */}
-      <div className="bg-white shadow-xl rounded-lg p-6 flex items-center justify-between hover:scale-105 transition-transform duration-300 hover:shadow-2xl">
-        <div className="text-left">
-          <h2 className="text-xl font-semibold text-gray-700">Chapter Available</h2>
-          <p className="text-4xl font-bold text-gray-900">{45}</p>
-        </div>
-        <div className="bg-green-500 text-white p-4 rounded-full">
-          <i className="fas fa-chalkboard-teacher text-2xl"></i>
-        </div>
-      </div>
 
-      {/* Assignment Count Box */}
-      <div className="bg-white shadow-xl rounded-lg p-6 flex items-center justify-between hover:scale-105 transition-transform duration-300 hover:shadow-2xl">
-        <div className="text-left">
-          <h2 className="text-xl font-semibold text-gray-700">Assignment Count</h2>
-          <p className="text-4xl font-bold text-gray-900">{56}</p>
-        </div>
-        <div className="bg-yellow-500 text-white p-4 rounded-full">
-          <i className="fas fa-pencil-alt text-2xl"></i>
-        </div>
-      </div>
+        <div className="text-center">
 
-      {/* Chapter Curriculum Box */}
-      <div className="bg-white shadow-xl rounded-lg p-6 flex items-center justify-between hover:scale-105 transition-transform duration-300 hover:shadow-2xl">
-        <div className="text-left">
-          <h2 className="text-xl font-semibold text-gray-700">Chapter Curriculum Count</h2>
-          <p className="text-4xl font-bold text-gray-900">{45}</p>
-        </div>
-        <div className="bg-purple-500 text-white p-4 rounded-full">
-          <i className="fas fa-book-open text-2xl"></i>
-        </div>
-      </div>
-
-      {/* Total Classes Box */}
-      <div className="bg-white shadow-xl rounded-lg p-6 flex items-center justify-between hover:scale-105 transition-transform duration-300 hover:shadow-2xl">
-        <div className="text-left">
-          <h2 className="text-xl font-semibold text-gray-700">Total Classes</h2>
-          <p className="text-4xl font-bold text-gray-900">{45}</p>
-        </div>
-        <div className="bg-teal-500 text-white p-4 rounded-full">
-          <i className="fas fa-chalkboard text-2xl"></i>
+          <div className="flex justify-center">
+            <Pie className="w-full min-h-full" data={getPieChartData(selectedSubject)} />
+          </div>
         </div>
       </div>
     </div>
+  );
+};
+return (
+<div className="bg-blue-200 min-h-screen py-8 px-4">
+  {/* Profile and Header */}
+  {!profileCompletion && <TeacherProfile />}
+  <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold bg-blue-400 p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
+    <Home className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
+    Teacher Dashboard
+  </p>
 
-    {/* Charts Section */}
-    <div className="shadow-xl rounded-lg grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6 p-4">
-      {/* HollowPieChart */}
-      <div className="bg-white p-4 rounded-lg shadow-md hover:shadow-2xl transition-shadow duration-300">
-        <HollowPieChart classes={classes} />
+  {/* Stats Boxes */}
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+    {[
+      { label: 'Subjects Available', count: 67, icon: 'fa-book', bg: 'bg-blue-500' },
+      { label: 'Chapter Available', count: 45, icon: 'fa-chalkboard-teacher', bg: 'bg-green-500' },
+      { label: 'Assignment Count', count: 56, icon: 'fa-pencil-alt', bg: 'bg-yellow-500' },
+      { label: 'Chapter Curriculum Count', count: 45, icon: 'fa-book-open', bg: 'bg-purple-500' },
+      { label: 'Total Classes', count: 45, icon: 'fa-chalkboard', bg: 'bg-teal-500' },
+    ].map(({ label, count, icon, bg }, index) => (
+      <div key={index} className="bg-white shadow-xl rounded-lg p-6 flex items-center justify-between hover:scale-105 transition-all">
+        <div>
+          <h2 className="text-xl font-semibold text-gray-700">{label}</h2>
+          <p className="text-4xl font-bold text-gray-900">{count}</p>
+        </div>
+        <div className={`${bg} text-white p-4 rounded-full`}>
+          <i className={`fas ${icon} text-2xl`} />
+        </div>
       </div>
+    ))}
+  </div>
 
-      {/* Recently Added Assignments */}
-      <div className="bg-white p-4 rounded-lg shadow-md hover:shadow-2xl transition-shadow duration-300">
-        <p className="font-semibold text-xl text-gray-800">Recently Added Assignments</p>
-        {assignments.map((assignment) => (
-          <div key={assignment.id} className="flex items-center p-2 border-b border-gray-200">
-            <div className="w-10 h-10 rounded-full bg-blue-500 mr-4"></div>
-            <p className="text-gray-700">{assignment.title}</p>
-          </div>
-        ))}
-      </div>
+  {/* Comments Section */}
+  <div className="bg-white shadow-lg rounded-xl p-6 mb-8 hover:scale-105 transition-all">
+    <h2 className="text-xl font-semibold text-gray-800">Comments Received</h2>
+    <p className="text-4xl font-bold text-gray-900 mb-3">67</p>
+    <p className="text-gray-600">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+  </div>
 
-      {/* Recently Added Curriculums */}
-      <div className="bg-white p-4 rounded-lg shadow-md hover:shadow-2xl transition-shadow duration-300">
-        <p className="font-semibold text-xl text-gray-800">Recently Added Curriculums</p>
-        {curriculums.map((curriculum) => (
-          <div key={curriculum.id} className="flex items-center p-2 border-b border-gray-200">
-            <div className="w-10 h-10 rounded-full bg-green-500 mr-4"></div>
-            <p className="text-gray-700">{curriculum.title}</p>
-          </div>
-        ))}
+  {/* Charts Section */}
+  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div className="bg-white shadow-lg rounded-xl p-6 hover:scale-105 transition-all">
+      <h2 className="text-2xl font-semibold text-center mb-4 text-gray-800">Active vs Inactive Students</h2>
+      <BarChart data={dataStudent} options={optionsStudent} />
+    </div>
+    <div className="bg-white shadow-lg rounded-xl p-6 hover:scale-105 transition-all">
+      <h2 className="text-2xl font-semibold text-center mb-4 text-gray-800">Student Pass/Fail Stats</h2>
+      <div className="bg-gray-50 p-6 rounded-lg shadow-md flex justify-center">
+        <Pie style={{ minHeight: '250px' }} data={data} />
       </div>
     </div>
   </div>
+
+  {/* Recently Added Section */}
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
+    <div className="bg-white shadow-lg rounded-xl p-6 hover:scale-105 transition-all">
+      <HollowPieChart classes={classes} />
+    </div>
+    <div className="bg-white shadow-lg rounded-xl p-6 hover:scale-105 transition-all">
+      <p className="font-semibold text-xl text-gray-800">Recently Added Assignments</p>
+      {assignments.map((assignment) => (
+        <div key={assignment.id} className="flex items-center p-2 border-b border-gray-200">
+          <div className="w-10 h-10 rounded-full bg-blue-500 mr-4" />
+          <p className="text-gray-700">{assignment.title}</p>
+        </div>
+      ))}
+    </div>
+    <div className="bg-white shadow-lg rounded-xl p-6 hover:scale-105 transition-all">
+      <p className="font-semibold text-xl text-gray-800">Recently Added Curriculums</p>
+      {curriculums.map((curriculum) => (
+        <div key={curriculum.id} className="flex items-center p-2 border-b border-gray-200">
+          <div className="w-10 h-10 rounded-full bg-green-500 mr-4" />
+          <p className="text-gray-700">{curriculum.title}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  {/* Toast Notification */}
+  <ToastContainer />
+</div>
+
 );
 
 }
