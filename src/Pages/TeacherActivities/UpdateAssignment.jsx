@@ -7,7 +7,7 @@ const UpdateAssignment = () => {
   const { assignment } = location.state || {};
 
   const [formData, setFormData] = useState({
-    assignmentId: assignment?._id||"",
+    assignmentId: assignment?._id || "",
     title: assignment?.title || "",
     classId: assignment?.classId || "",
     subjectId: assignment?.subjectId || "",
@@ -61,11 +61,24 @@ const UpdateAssignment = () => {
 
     setIsLoading(true);
     setError("");
+    console.log("passing submit", formData.questions);
+    const totalMarks = formData.questions.reduce((sum, e) => sum + e.marks, 0);
+    console.log("total marks", totalMarks);
+
+    setFormData({ ...formData, totalMarks });
+    console.log("Passing mark", formData);
 
     try {
-      const response = await makeRequest.post("teacher/update-assignment", formData);
-      console.log("Assignment updated successfully:", response.data);
-      alert("Assignment updated successfully!");
+      if (formData.passingMarks <= formData.totalMarks) {
+        const response = await makeRequest.post(
+          "teacher/update-assignment",
+          formData
+        );
+        console.log("Assignment updated successfully:", response.data);
+        alert("Assignment updated successfully!");
+      } else {
+        alert("Please enter valid passing marks");
+      }
     } catch (err) {
       console.error("Error updating assignment:", err.message);
       setError("Failed to update assignment");
@@ -74,7 +87,6 @@ const UpdateAssignment = () => {
     }
   };
 
-  
   const currentDateTime = new Date().toISOString().slice(0, 16);
 
   return (
@@ -97,7 +109,10 @@ const UpdateAssignment = () => {
 
         {/* Description */}
         <div>
-          <label htmlFor="description" className="block text-sm font-medium mb-2">
+          <label
+            htmlFor="description"
+            className="block text-sm font-medium mb-2"
+          >
             Description
           </label>
           <textarea
@@ -120,21 +135,19 @@ const UpdateAssignment = () => {
           />
         </div>
 
-          {/* AssignMent ID */}
-          <div>
-                   <input
+        {/* AssignMent ID */}
+        <div>
+          <input
             type="text"
             hidden
             name="classId"
             value={formData.assignmentId}
-            
-           className="w-full border border-gray-300 rounded px-4 py-2"
+            className="w-full border border-gray-300 rounded px-4 py-2"
           />
         </div>
 
         {/* Subject ID */}
         <div>
-        
           <input
             type="text"
             name="subjectId"
@@ -147,7 +160,10 @@ const UpdateAssignment = () => {
 
         {/* Passing Marks */}
         <div>
-          <label htmlFor="passingMarks" className="block text-sm font-medium mb-2">
+          <label
+            htmlFor="passingMarks"
+            className="block text-sm font-medium mb-2"
+          >
             Passing Marks
           </label>
           <input
@@ -161,13 +177,17 @@ const UpdateAssignment = () => {
 
         {/* Total Marks */}
         <div>
-          <label htmlFor="totalMarks" className="block text-sm font-medium mb-2">
+          <label
+            htmlFor="totalMarks"
+            className="block text-sm font-medium mb-2"
+          >
             Total Marks
           </label>
           <input
             type="number"
+            disabled
             name="totalMarks"
-            value={formData.totalMarks>0?formData.totalMarks:1}
+            value={formData.totalMarks > 0 ? formData.totalMarks : 1}
             onChange={handleInputChange}
             className="w-full border border-gray-300 rounded px-4 py-2"
           />
@@ -178,7 +198,9 @@ const UpdateAssignment = () => {
           {formData.questions.map((question, index) => (
             <div key={index} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-2">Question</label>
+                <label className="block text-sm font-medium mb-2">
+                  Question
+                </label>
                 <input
                   type="text"
                   name="question"
@@ -191,19 +213,26 @@ const UpdateAssignment = () => {
               {/* Options */}
               <div className="space-y-2">
                 {question.options.map((option, optionIndex) => (
-                  <div key={optionIndex} className="flex items-center space-x-2">
+                  <div
+                    key={optionIndex}
+                    className="flex items-center space-x-2"
+                  >
                     <input
                       type="text"
                       name="text"
                       value={option.text}
-                      onChange={(e) => handleOptionChange(index, optionIndex, e)}
+                      onChange={(e) =>
+                        handleOptionChange(index, optionIndex, e)
+                      }
                       className="w-full border border-gray-300 rounded px-4 py-2"
                     />
                     <input
                       type="checkbox"
                       name="isCorrect"
                       checked={option.isCorrect}
-                      onChange={(e) => handleOptionChange(index, optionIndex, e)}
+                      onChange={(e) =>
+                        handleOptionChange(index, optionIndex, e)
+                      }
                       className="h-4 w-4"
                     />
                     <label className="text-sm whitespace-nowrap">Correct</label>
@@ -216,18 +245,22 @@ const UpdateAssignment = () => {
 
         {/* Due Date */}
         <div>
-      <label htmlFor="dueDate" className="block text-sm font-medium mb-2">
-        Due Date
-      </label>
-      <input
-        type="datetime-local"
-        name="dueDate"
-        value={formData.dueDate ? new Date(formData.dueDate).toISOString().slice(0, 16) : ""}
-        onChange={handleInputChange}
-        min={currentDateTime} // Prevent selecting past dates
-        className="w-full border border-gray-300 rounded px-4 py-2"
-      />
-    </div>
+          <label htmlFor="dueDate" className="block text-sm font-medium mb-2">
+            Due Date
+          </label>
+          <input
+            type="datetime-local"
+            name="dueDate"
+            value={
+              formData.dueDate
+                ? new Date(formData.dueDate).toISOString().slice(0, 16)
+                : ""
+            }
+            onChange={handleInputChange}
+            min={currentDateTime} // Prevent selecting past dates
+            className="w-full border border-gray-300 rounded px-4 py-2"
+          />
+        </div>
 
         {/* Submit Button */}
         <div className="flex justify-end">

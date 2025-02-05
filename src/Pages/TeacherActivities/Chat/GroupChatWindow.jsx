@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { io } from "socket.io-client";
 import { makeRequest } from "../../../axios";
@@ -17,26 +17,21 @@ const GroupChatWindow = () => {
   const [discussionId, setDiscussionId] = useState("");
   const location = useLocation();
   const { curr } = location.state || {};
+  const [page, setPage] = useState(1);
+  const chatContainerRef = useRef(null);
+  const [hasMore, setHasMore] = useState(true); // ✅ Check if more messages exist
 
-  // ✅ Set discussionId when component mounts
   useEffect(() => {
     if (curr?.discussionId) {
       setDiscussionId(curr.discussionId);
     }
   }, [curr]);
 
-  // ✅ Join discussion when discussionId is set
   useEffect(() => {
     if (discussionId) {
       socket.emit("join-discussion", { discussionId });
       console.log(`Joined discussion: ${discussionId}`);
     }
-
-    // Cleanup function to leave the discussion when component unmounts
-    return () => {
-      socket.emit("leave-discussion", { discussionId });
-      console.log(`Left discussion: ${discussionId}`);
-    };
   }, [discussionId]);
 
   // ✅ Listen for new messages (runs only once)
@@ -46,29 +41,60 @@ const GroupChatWindow = () => {
       setMessages((prev) => [...prev, message]);
     });
 
-    // Cleanup function to prevent multiple listeners
     return () => {
       socket.off("get-message");
     };
   }, []);
 
-  // ✅ Fetch existing discussion messages
+  // ✅ Fetch discussion messages (with pagination)
   const fetchDiscussion = useCallback(async () => {
+    if (!curr?.discussionId || !hasMore) return;
+
     try {
       const res = await makeRequest.get(
-        `get-discussions?discussionId=${curr.discussionId}&limit=10&page=1`
+        `get-discussions?discussionId=${curr.discussionId}&limit=10&page=${page}`
       );
-      console.log("Discussion messages:", res?.data.data);
-      setMessages(res?.data.data || []);
+
+      const newMessages = res?.data.data || [];
+
+      if (newMessages.length === 0) {
+        setHasMore(false); // No more messages
+      }
+
+      // ✅ Append old messages at the start
+      setMessages((prev) => [...newMessages.reverse(), ...prev]);
     } catch (error) {
       console.error("Error fetching discussion:", error);
     }
-  }, [curr.discussionId]);
+  }, [curr?.discussionId, page, hasMore]);
 
-  // Only call fetchDiscussion once on mount
+  // ✅ Fetch initial messages
   useEffect(() => {
     fetchDiscussion();
   }, [fetchDiscussion]);
+
+  // ✅ Fetch more messages when `page` changes
+  useEffect(() => {
+    if (page > 1) {
+      fetchDiscussion();
+    }
+  }, [page]);
+
+  // ✅ Scroll Event for Infinite Scroll Up
+  useEffect(() => {
+    const chatContainer = chatContainerRef.current;
+
+    const handleScroll = () => {
+      if (chatContainer?.scrollTop === 0 && hasMore) {
+        console.log("Scrolled to top, loading more...");
+        setPage((prev) => prev + 1);
+      }
+    };
+
+    chatContainer?.addEventListener("scroll", handleScroll);
+
+    return () => chatContainer?.removeEventListener("scroll", handleScroll);
+  }, [hasMore]);
 
   // ✅ Handle Send Message
   const handleSendMessage = async () => {
@@ -94,18 +120,37 @@ const GroupChatWindow = () => {
         </h2>
 
         {/* Messages Section */}
-        <div className="flex-1 bg-gray-100 p-4 rounded-xl overflow-y-auto space-y-4">
+        <div
+          ref={chatContainerRef}
+          className="flex-1 bg-gray-100 p-4 rounded-xl overflow-y-scroll max-h-[400px] space-y-4"
+        >
           {messages.map((msg, index) => (
             <div
               key={index}
               className={`flex ${msg.user === "You" ? "justify-end" : "justify-start"}`}
             >
               <div
-                className={`max-w-xs p-3 rounded-lg text-sm ${msg.user === "You" ? "bg-blue-600 text-white" : "bg-gray-300 text-gray-800"}`}
+                className={`max-w-xs p-3 rounded-lg text-sm ${
+                  msg.user === "You"
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-300 text-gray-800"
+                }`}
               >
+                {/* ✅ Check if senderDetails exists before accessing properties */}
+                {msg.senderDetails?.length > 0 && (
+                  <div className="font-semibold">
+                    {msg.senderDetails[0].firstName}{" "}
+                    {msg.senderDetails[0].lastName}
+                  </div>
+                )}
+
                 <div>{msg.content}</div>
                 <div className="text-xs text-right text-gray-500 mt-1">
-                  <span>{new Date(msg.timestamp).toLocaleString()}</span>
+                  <span>
+                    {msg.timestamp
+                      ? new Date(msg.timestamp).toLocaleString()
+                      : "N/A"}
+                  </span>
                 </div>
               </div>
             </div>
