@@ -31,7 +31,7 @@ export const SuperAdminDashboardHeader = ({ collapsed, setCollapsed }) => {
   }, []);
   return (
     <>
-      <header className="relative z-10 flex h-[60px] items-center justify-between bg-purple-500 px-4 shadow-md transition-colors ">
+      <header className="relative z-10 flex h-[60px] items-center justify-between bg-blue-500 px-4 shadow-md transition-colors ">
         <div className="flex items-center gap-x-3">
           <button
             className="btn-ghost size-10 text-gray-100"

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { makeRequest } from "../../axios";
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from "lucide-react";
 
 import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
@@ -78,14 +78,13 @@ const AddChapter = () => {
 
   return (
     <div className="max-w-3xl mx-auto mt-8 p-6 bg-white shadow-lg rounded-lg">
-     <Link
-  to={'/teacher-dashboard/chapters'}
-  className="flex items-center gap-2 w-1/5  bg-gradient-to-r from-blue-500 to-purple-600 text-white p-1 rounded-full m-2"
-  title="Go Back"
->
-  <ArrowLeft />
-  
-</Link>
+      <Link
+        to={"/teacher-dashboard/chapters"}
+        className="flex items-center gap-2 w-1/5  bg-gradient-to-r from-blue-500 to-purple-600 text-white p-1 rounded-full m-2"
+        title="Go Back"
+      >
+        <ArrowLeft />
+      </Link>
       <div className="card-header mb-4">
         <p className="text-2xl font-semibold text-gray-900">Create Chapter</p>
       </div>
@@ -178,36 +177,41 @@ const AddChapter = () => {
           {error && <p className="text-red-500 text-sm">{error}</p>}
 
           <button
-  type="submit"
-  className={`w-full py-3 px-6 rounded-md text-white font-semibold flex items-center justify-center ${
-    isLoading
-      ? "bg-purple-300 cursor-not-allowed"
-      : "bg-gradient-to-r from-blue-500 to-purple-600 hover:bg-purple-700 focus:ring-2 focus:ring-blue-400 transition-all duration-300"
-  }`}
-  disabled={isLoading}
->
-  {isLoading ? (
-    <>
-      <svg
-        className="w-5 h-5 mr-3 animate-spin"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-      >
-        <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-      </svg>
-      Creating Chapter...
-    </>
-  ) : (
-    "Create Chapter"
-  )}
-</button>
-
+            type="submit"
+            className={`w-full py-3 px-6 rounded-md text-white font-semibold flex items-center justify-center ${
+              isLoading
+                ? "bg-blue-300 cursor-not-allowed"
+                : "bg-blue-600-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+            }`}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <>
+                <svg
+                  className="w-5 h-5 mr-3 animate-spin"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                    fill="none"
+                  />
+                </svg>
+                Creating Chapter...
+              </>
+            ) : (
+              "Create Chapter"
+            )}
+          </button>
         </form>
-
       </div>
-      <ToastContainer/>
+      <ToastContainer />
     </div>
   );
 };

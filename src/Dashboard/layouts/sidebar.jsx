@@ -63,7 +63,7 @@ export const Sidebar = forwardRef(({ collapsed }, ref) => {
                 to={link.path}
                 end
                 className={cn(
-                  "sidebar-item font-bold text-gray-500 hover:text-gray-300 bg-purple-200",
+                  "sidebar-item font-bold text-gray-500 hover:text-gray-300 bg-blue-200",
                   collapsed && "md:w-[45px]"
                 )}
               >

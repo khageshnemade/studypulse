@@ -4,18 +4,24 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Optional, for toast notifications
 import { makeRequest } from "../../axios";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Plus, Edit, ArrowLeft, MessageSquare } from "lucide-react";
+import { Plus, Edit, ArrowLeft, MessageSquare, Book } from "lucide-react";
 
 export default function ChapterCurr() {
   const navigate = useNavigate();
   const location = useLocation();
   const { initialClassId, initialSubjectId, initialChapterId } =
     location.state || {};
-const {curr}=location.state||{};
+  const { curr } = location.state || {};
 
-  const [classId, setClassId] = useState(initialClassId ||curr.classId._id || "");
-  const [subjectId, setSubjectId] = useState(initialSubjectId ||curr.subjectId._id|| "");
-  const [chapterId, setChapterId] = useState(initialChapterId ||curr.subjectId.chapterIds[0] ||"");
+  const [classId, setClassId] = useState(
+    initialClassId || (curr && curr.classId._id) || ""
+  );
+  const [subjectId, setSubjectId] = useState(
+    initialSubjectId || (curr && curr.subjectId._id) || ""
+  );
+  const [chapterId, setChapterId] = useState(
+    initialChapterId || (curr && curr.subjectId.chapterIds[0]) || ""
+  );
   const [chapters, setChapters] = useState([]);
   const [classes, setClasses] = useState([]);
   const [subjects, setSubjects] = useState([]);
@@ -26,7 +32,7 @@ const {curr}=location.state||{};
   console.log("Parsed Data:", parsedData?.token);
   useEffect(() => {
     classId && fetchSubjects();
-    console.log("Curr Subject",curr);
+    console.log("Curr Subject", curr);
   }, [classId]);
 
   useEffect(() => {
@@ -173,7 +179,6 @@ const {curr}=location.state||{};
           </select>
         </div>
       </div>
-
       {/* Add Chapter Button */}
       <div className="flex justify-between mb-6">
         <button
@@ -200,12 +205,12 @@ const {curr}=location.state||{};
           <Plus className="w-4 h-4" /> {/* Add Icon */}
         </button>
       </div>
-
-      {/* Curriculum List */}
-      <h1 className="text-3xl font-bold mb-8 text-center text-gray-900">
+      {/* Curriculum List */}{" "}
+      <h1 className="text-3xl font-bold mb-8 text-center text-gray-900"></h1>
+      <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold bg-blue-400 p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
+        <Book className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
         Chapter Curriculum List
-      </h1>
-
+      </p>
       {chapterCurr.map((curr) => (
         <div key={curr._id} className="mb-10 bg-white rounded-lg shadow-lg p-6">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">
@@ -256,7 +261,6 @@ const {curr}=location.state||{};
           </div>
         </div>
       ))}
-
       <ToastContainer />
     </div>
   );

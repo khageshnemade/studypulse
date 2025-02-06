@@ -3,7 +3,6 @@ import { makeRequest } from "../../axios";
 import { toast, ToastContainer } from "react-toastify";
 import { PlusCircle } from "lucide-react";
 
-
 export default function Organizations() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newOrg, setNewOrg] = useState({
@@ -46,7 +45,10 @@ export default function Organizations() {
     delete formData.city;
 
     try {
-      const res = await makeRequest.post('/superAdmin/create-organization', formData);
+      const res = await makeRequest.post(
+        "/superAdmin/create-organization",
+        formData
+      );
       if (res.status === 200 || res.status === 201) {
         toast.success("Organization added successfully!");
         // Add the new organization to the orgs state directly
@@ -54,8 +56,8 @@ export default function Organizations() {
         setNewOrg({ name: "", districtID: "", talukaID: "", cityID: "" }); // Clear form fields after adding
       }
     } catch (err) {
-      console.error('Error creating organization:', err.message);
-      setError('Failed to create organization');
+      console.error("Error creating organization:", err.message);
+      setError("Failed to create organization");
     } finally {
       setIsLoading(false);
     }
@@ -211,7 +213,7 @@ export default function Organizations() {
       setIsLoading(false);
     }
   };
-  const Orgs = () =>
+  const Orgs = () => (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
       <select
         name="district"
@@ -270,13 +272,13 @@ export default function Organizations() {
         ))}
       </select>
     </div>
+  );
   return (
     <div className="p-4  shadow-lg">
       <ToastContainer />
 
-      <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold bg-purple-200 p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
+      <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold bg-blue-400 p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
         <PlusCircle className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
-
         Organizations
       </p>
       <button
@@ -285,7 +287,6 @@ export default function Organizations() {
       >
         Add Organization
       </button>
-
 
       <Orgs />
       {/* Modal */}
@@ -368,7 +369,9 @@ export default function Organizations() {
                 name="name"
                 placeholder="Organization Name"
                 value={newOrg.name}
-                onChange={(e) => handleInputChange(e.target.name, e.target.value)}
+                onChange={(e) =>
+                  handleInputChange(e.target.name, e.target.value)
+                }
                 required
                 className="w-full p-2 border border-gray-300 rounded-md"
               />
@@ -399,7 +402,9 @@ export default function Organizations() {
       {/* Organizations Table */}
       {orgs && orgs.length > 0 ? (
         <div className="mt-6 overflow-x-auto">
-          <h3 className="text-lg font-bold text-[30px] text-center text-gray-700 mb-4">Organizations</h3>
+          <h3 className="text-lg font-bold text-[30px] text-center text-gray-700 mb-4">
+            Organizations
+          </h3>
           <table className="min-w-full table-auto border-collapse whitespace-nowrap">
             <thead className="bg-gray-200 text-gray-700">
               <tr>
@@ -415,13 +420,16 @@ export default function Organizations() {
             </thead>
             <tbody>
               {orgs.map(({ id, name, districtID, talukaID, cityID }) => (
-                <tr key={id} className="text-gray-100 hover:bg-gray-50 hover:text-gray-700 transition-all">
+                <tr
+                  key={id}
+                  className="text-gray-100 hover:bg-gray-50 hover:text-gray-700 transition-all"
+                >
                   <td className="border-b border-gray-300 px-4 py-2">{name}</td>
                   <td className="border-b border-gray-300 px-4 py-2">
-                    {(districts.find((d) => d._id === districtID))?.name || "N/A"}
+                    {districts.find((d) => d._id === districtID)?.name || "N/A"}
                   </td>
                   <td className="border-b border-gray-300 px-4 py-2">
-                    {(talukas.find((t) => t._id === talukaID))?.name || "N/A"}
+                    {talukas.find((t) => t._id === talukaID)?.name || "N/A"}
                   </td>
                   <td className="border-b border-gray-300 px-4 py-2">
                     {cities.find((c) => c._id === cityID)?.name || "N/A"}
@@ -436,10 +444,6 @@ export default function Organizations() {
           Please select district, taluka, and city to view the organizations.
         </div>
       )}
-
     </div>
-
-
-  )
-
+  );
 }

@@ -47,30 +47,39 @@ export default function Cls() {
     }
   };
   return (
-
-    <>  <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold bg-purple-200 p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
-    <Layers className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
- 
-      Classes
-    </p>
-
+    <>
+      {" "}
+      <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold bg-blue-400 p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
+        <Layers className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
+        Classes
+      </p>
       <div className="mx-auto p-4 sm:p-6 bg-white shadow-lg rounded-lg overflow-x-auto">
-
-
         <table className="table-auto w-full border-collapse border border-gray-300 whitespace-nowrap">
           <thead className="bg-gray-200">
             <tr>
-              <th className="border border-gray-300 px-4 py-2 text-left text-gray-700">Classes</th>
-              <th className="border border-gray-300 px-4 py-2 text-left text-gray-700">Stream</th>
-              <th className="border border-gray-300 px-4 py-2 text-left text-gray-700">Created At</th>
-              <th className="border border-gray-300 px-4 py-2 text-left text-gray-700">Action</th>
+              <th className="border border-gray-300 px-4 py-2 text-left text-gray-700">
+                Classes
+              </th>
+              <th className="border border-gray-300 px-4 py-2 text-left text-gray-700">
+                Stream
+              </th>
+              <th className="border border-gray-300 px-4 py-2 text-left text-gray-700">
+                Created At
+              </th>
+              <th className="border border-gray-300 px-4 py-2 text-left text-gray-700">
+                Action
+              </th>
             </tr>
           </thead>
           <tbody>
             {classes.map((item, index) => (
               <tr key={index} className="hover:bg-gray-100 transition-all">
-                <td className="border border-gray-300 px-4 py-2">{item.name}</td>
-                <td className="border border-gray-300 px-4 py-2">{item.stream}</td>
+                <td className="border border-gray-300 px-4 py-2">
+                  {item.name}
+                </td>
+                <td className="border border-gray-300 px-4 py-2">
+                  {item.stream}
+                </td>
                 <td className="border border-gray-300 px-4 py-2">
                   {new Date(item.createdAt).toLocaleDateString()}
                 </td>

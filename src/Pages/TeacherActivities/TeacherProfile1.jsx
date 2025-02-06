@@ -9,8 +9,8 @@ const TeacherProfile = () => {
   const [classes, setClasses] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [classId, setClassId] = useState("");
-  const [selectedClassId, setSelectedClassId] = useState('')
-  const [selectedSubjectId, setSelectedSubjectId] = useState('')
+  const [selectedClassId, setSelectedClassId] = useState("");
+  const [selectedSubjectId, setSelectedSubjectId] = useState("");
   const [s_c, setS_c] = useState({});
   const [classIds, setClassIds] = useState([]); // Array to hold class IDs
   const [subjectIds, setSubjectIds] = useState([]); // Array to hold subject IDs
@@ -130,7 +130,6 @@ const TeacherProfile = () => {
   };
 
   const handleC_SSubmit = async () => {
-
     console.log("Classes and Subjects", selectedClassId, selectedSubjectId); // Debugging output
 
     // Update state
@@ -139,7 +138,9 @@ const TeacherProfile = () => {
 
       const updatedState = {
         ...prev,
-        [selectedClassId]: [...new Set([...existingSubjects, selectedSubjectId])], // Add new subjectId, ensuring uniqueness
+        [selectedClassId]: [
+          ...new Set([...existingSubjects, selectedSubjectId]),
+        ], // Add new subjectId, ensuring uniqueness
       };
 
       // After updating state, update classIds and subjectIds arrays
@@ -299,17 +300,14 @@ const TeacherProfile = () => {
 
   return (
     <div>
-     <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold bg-purple-200 p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
-    <User className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
-  
+      <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold bg-blue-400 p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
+        <User className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
         Teacher Complete Profile
       </p>
       <form
         onSubmit={handleSubmit}
         className="max-w-4xl mx-auto p-8 bg-white shadow-md rounded-md"
       >
-
-
         {/* Basic Info */}
         <div className="grid grid-cols-2 gap-4">
           <div>
@@ -544,7 +542,6 @@ const TeacherProfile = () => {
 
         {/* Classes and Subjects */}
         <div className="m-3">
-
           {/* Select Class */}
           <div className="m-2">
             <select
@@ -554,7 +551,6 @@ const TeacherProfile = () => {
                 fetchSubjectsByClassId(e.target.value);
               }}
               name="classes"
-
               className="w-full px-3 py-2 border rounded-lg"
             >
               <option value="">Select Class</option>
@@ -586,7 +582,7 @@ const TeacherProfile = () => {
           {/* Add Button */}
           <div>
             <button
-              type="button"  // Ensure it's not a submit button
+              type="button" // Ensure it's not a submit button
               onClick={handleC_SSubmit}
               className="btn btn-info m-2"
             >
@@ -605,11 +601,10 @@ const TeacherProfile = () => {
 
                     {value.map((item, index) => (
                       <div key={index} className="subject-item mb-2">
-
                         {subjects.find((subject) => subject._id === item)?.name}
                         {/* Print subject or item */}
                         <button
-                        type="button"
+                          type="button"
                           onClick={() =>
                             handleRemoveFromClassAndSubjects(key, index)
                           }
@@ -624,7 +619,6 @@ const TeacherProfile = () => {
               })}
             </div>
           </div>
-
         </div>
         <button
           type="submit"

@@ -54,7 +54,7 @@ export default function CreateAdmin() {
       setName("");
     } catch (error) {
       console.error("Error creating Admin:", error.response.data.message);
-      toast.error( error.response.data.message);
+      toast.error(error.response.data.message);
     } finally {
       setIsLoading(false);
     }
@@ -122,19 +122,21 @@ export default function CreateAdmin() {
       <div className="max-w-7xl w-full space-y-8">
         {/* Form Header */}
         <div>
-        <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold bg-purple-200 p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
-    <UserPlus className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
- 
-    Create New Admin
-  </p>
-         
+          <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold bg-blue-400 p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
+            <UserPlus className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
+            Create New Admin
+          </p>
+
           <p className="mt-2 text-center text-sm text-slate-200">
             Fill in the details to add a new admin
           </p>
         </div>
-  
+
         {/* Form Body */}
-        <form onSubmit={handleAdminSubmit} className="mt-8 space-y-6 bg-white p-6 shadow-xl rounded-lg">
+        <form
+          onSubmit={handleAdminSubmit}
+          className="mt-8 space-y-6 bg-white p-6 shadow-xl rounded-lg"
+        >
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {/* Input Fields */}
             {[
@@ -156,13 +158,15 @@ export default function CreateAdmin() {
                   id={field.name}
                   name={field.name}
                   value={adminData[field.name]}
-                  onChange={(e) => updateAdminData(e.target.name, e.target.value)}
+                  onChange={(e) =>
+                    updateAdminData(e.target.name, e.target.value)
+                  }
                   required
                   className="block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
             ))}
-  
+
             {/* Select Fields */}
             {[
               {
@@ -225,10 +229,10 @@ export default function CreateAdmin() {
               </div>
             ))}
           </div>
-  
+
           {/* Error Message */}
           {error && <p className="text-red-500 text-sm">{error}</p>}
-  
+
           {/* Submit Button */}
           <button
             type="submit"

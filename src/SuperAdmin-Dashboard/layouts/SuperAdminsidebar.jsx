@@ -15,7 +15,7 @@ export const SuperAdminSidebar = forwardRef(({ collapsed }, ref) => {
     <aside
       ref={ref}
       className={cn(
-        "fixed z-[100] flex h-full w-[240px] flex-col overflow-x-hidden border-r border-slate-300  bg-purple-500 [transition:_width_300ms_cubic-bezier(0.4,_0,_0.2,_1),_left_300ms_cubic-bezier(0.4,_0,_0.2,_1),_background-color_150ms_cubic-bezier(0.4,_0,_0.2,_1),_border_150ms_cubic-bezier(0.4,_0,_0.2,_1)] dark:border-slate-700 dark:bg-slate-900",
+        "fixed z-[100] flex h-full w-[240px] flex-col overflow-x-hidden border-r border-slate-300  bg-blue-500 [transition:_width_300ms_cubic-bezier(0.4,_0,_0.2,_1),_left_300ms_cubic-bezier(0.4,_0,_0.2,_1),_background-color_150ms_cubic-bezier(0.4,_0,_0.2,_1),_border_150ms_cubic-bezier(0.4,_0,_0.2,_1)] dark:border-slate-700 dark:bg-slate-900",
         collapsed ? "md:w-[70px] md:items-center" : "md:w-[240px]",
         collapsed ? "max-md:-left-full" : "max-md:left-0"
       )}
@@ -67,7 +67,7 @@ export const SuperAdminSidebar = forwardRef(({ collapsed }, ref) => {
                 to={link.path}
                 end
                 className={cn(
-                  "sidebar-item font-bold text-gray-500 hover:text-gray-300 bg-purple-200",
+                  "sidebar-item font-bold text-gray-500 hover:text-gray-300 bg-blue-200",
                   collapsed && "md:w-[45px]"
                 )}
               >

@@ -31,7 +31,7 @@ export default function SuperAdminDashboard() {
   const teacherData = useSelector((state) => state?.teachers?.teachersData);
   const studentsData = useSelector((state) => state?.students?.studentsData);
   const classDta = useSelector((state) => state.class.classData);
-const[dashboard,setData] = useState({})
+  const [dashboard, setData] = useState({});
   const [teachers, setTeachers] = useState([]);
   const [students, setStudents] = useState([]);
   const [classes, setClassses] = useState([]);
@@ -41,7 +41,7 @@ const[dashboard,setData] = useState({})
     setStudents(studentsData);
     setClassses(classDta);
     fetchData();
-    fetchDashboardData()
+    fetchDashboardData();
     console.log("Classes: ", classes.length);
   }, []);
 
@@ -148,12 +148,11 @@ const[dashboard,setData] = useState({})
     },
   };
 
-  const fetchDashboardData=async()=>{
-    const res=await makeRequest.get('admin/get-dashboard-details')
+  const fetchDashboardData = async () => {
+    const res = await makeRequest.get("admin/get-dashboard-details");
     console.log("Dashboard Data: ", res?.data.data);
-    setData(res?.data.data)
-    res&&console.log("Dashboard Data: ",dashboard);
-
+    setData(res?.data.data);
+    res && console.log("Dashboard Data: ", dashboard);
   };
 
   const BarChart = ({ data, options }) => (
@@ -257,7 +256,6 @@ const[dashboard,setData] = useState({})
 
     return (
       <div className="min-h-screen bg-white flex flex-col items-center py-10">
-
         <h1 className="text-3xl font-bold text-gray-700 mb-6 text-center">
           Class Performance
         </h1>
@@ -266,10 +264,11 @@ const[dashboard,setData] = useState({})
           <div>
             <select
               id="classSelector"
-              value={selectedClassIndex || ''}
+              value={selectedClassIndex || ""}
               onChange={handleClassChange}
               className="w-full p-1 border rounded-lg focus:ring focus:ring-blue-300"
-            ><option value={''}>Select ClassName</option>
+            >
+              <option value={""}>Select ClassName</option>
               {classes?.map((classData, index) => (
                 <option key={index} value={index}>
                   {classData.className}
@@ -279,13 +278,13 @@ const[dashboard,setData] = useState({})
           </div>
 
           <div>
-
             <select
               id="subjectSelector"
-              value={selectedSubjectIndex || ''}
+              value={selectedSubjectIndex || ""}
               onChange={handleSubjectChange}
               className="w-full p-1 border rounded-lg focus:ring focus:ring-blue-300"
-            ><option value="">Select Subject</option>
+            >
+              <option value="">Select Subject</option>
               {selectedClass?.subjects?.map((subject, index) => (
                 <option key={index} value={index}>
                   {subject.name}
@@ -295,12 +294,12 @@ const[dashboard,setData] = useState({})
           </div>
         </div>
         <div className="bg-gray-50 w-full p-6 rounded-lg shadow-md flex justify-center">
-
-
           <div className="text-center">
-
             <div className="flex justify-center">
-              <Pie className="w-full min-h-full" data={getPieChartData(selectedSubject)} />
+              <Pie
+                className="w-full min-h-full"
+                data={getPieChartData(selectedSubject)}
+              />
             </div>
           </div>
         </div>
@@ -309,23 +308,45 @@ const[dashboard,setData] = useState({})
   };
 
   return (
-    <div className="bg-gradient-to-r from-blue-200 to-purple-600 min-h-screen py-8 px-4">
+    <div className=" min-h-screen py-8 px-4">
       {/* Page Title */}
-      <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold bg-purple-200 p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
-    <Home className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
-
-    SuperAdmin Dashboard
-  </p>
+      <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold bg-blue-400 p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
+        <Home className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 mimin-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
+        SuperAdmin Dashboard
+      </p>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 p-6">
         {[
-          { title: "Teachers Registered", count: dashboard.totalTeachersCount, color: "bg-gradient-to-r from-blue-500 to-blue-700", icon: "fas fa-user" },
-          { title: "Admin Registered", count: dashboard.totalTeachersCount, color: "bg-gradient-to-r from-blue-500 to-blue-700", icon: "fas fa-user" },
-          { title: "Students Registered", count: dashboard.totalStudentCount, color: "bg-gradient-to-r from-green-500 to-green-700", icon: "fas fa-users" },
-          { title: "Classes Created", count: dashboard.totalClassCount, color: "bg-gradient-to-r from-yellow-500 to-yellow-700", icon: "fas fa-school" },
+          {
+            title: "Teachers Registered",
+            count: dashboard.totalTeachersCount,
+            color: "bg-gradient-to-r from-blue-500 to-blue-700",
+            icon: "fas fa-user",
+          },
+          {
+            title: "Admin Registered",
+            count: dashboard.totalTeachersCount,
+            color: "bg-gradient-to-r from-blue-500 to-blue-700",
+            icon: "fas fa-user",
+          },
+          {
+            title: "Students Registered",
+            count: dashboard.totalStudentCount,
+            color: "bg-gradient-to-r from-green-500 to-green-700",
+            icon: "fas fa-users",
+          },
+          {
+            title: "Classes Created",
+            count: dashboard.totalClassCount,
+            color: "bg-gradient-to-r from-yellow-500 to-yellow-700",
+            icon: "fas fa-school",
+          },
         ].map(({ title, count, color, icon }, index) => (
-          <div key={index} className="bg-white shadow-lg rounded-xl p-6 flex flex-col items-center text-center transition-transform transform hover:scale-105 hover:shadow-2xl">
+          <div
+            key={index}
+            className="bg-white shadow-lg rounded-xl p-6 flex flex-col items-center text-center transition-transform transform hover:scale-105 hover:shadow-2xl"
+          >
             <div className="flex justify-center items-center mb-6">
               <div className={`${color} p-4 rounded-full`}>
                 <i className={`${icon} text-3xl text-white`} />
@@ -337,71 +358,96 @@ const[dashboard,setData] = useState({})
         ))}
       </div>
 
-
-
-
       {/* Comments Section */}
       <div className="bg-white shadow-lg rounded-xl p-6 mt-6 hover:scale-105 hover:shadow-2xl transition-transform duration-300">
-        <h2 className="text-xl font-semibold text-gray-800">Comments Received</h2>
+        <h2 className="text-xl font-semibold text-gray-800">
+          Comments Received
+        </h2>
         <p className="text-4xl font-bold text-gray-900 mb-3">{67}</p>
-        <p className="text-gray-600">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+        <p className="text-gray-600">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+        </p>
       </div>
 
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
         <div className="bg-white shadow-lg rounded-xl p-6 hover:scale-105 hover:shadow-2xl transition-transform duration-300">
-          <h2 className="text-2xl font-semibold text-center mb-4 text-gray-800">Active vs Inactive Students</h2>
+          <h2 className="text-2xl font-semibold text-center mb-4 text-gray-800">
+            Active vs Inactive Students
+          </h2>
           <BarChart data={dataStudent} options={optionsStudent} />
         </div>
         <div className="bg-white shadow-lg rounded-xl p-6 hover:scale-105 hover:shadow-2xl transition-transform duration-300">
-          <h2 className="text-2xl font-semibold text-center mb-4 text-gray-800">Active vs Inactive Teachers</h2>
+          <h2 className="text-2xl font-semibold text-center mb-4 text-gray-800">
+            Active vs Inactive Teachers
+          </h2>
           <BarChart data={dataTeacher} options={optionsTeacher} />
         </div>
       </div>
 
       {/* Recently Added Teachers & Students */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
-        {[{ title: "Recently Added Teachers", data: dashboard.recentlyAddedTeachers }, { title: "Recently Added Students", data: dashboard.recentlyAddedStudents }]?.map(
-          ({ title, data }, index) => (
-            <div
-              key={index}
-              className="bg-white shadow-lg rounded-xl p-6 hover:scale-105 hover:shadow-2xl transition-transform duration-300"
-            >
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">{title}</h2>
-              {data?.map((person) => (
-                <div key={person._id || person.id} className="flex items-center p-3 border-b last:border-b-0">
-                  <div className="w-12 h-12 rounded-full bg-gray-300 mr-4">
-                    <img src={""} alt="Profile" className="w-full h-full object-cover rounded-full" />
-                  </div>
-                  <p className="text-gray-800 text-sm">{person.firstName+' '+person.lastName}</p>
+        {[
+          {
+            title: "Recently Added Teachers",
+            data: dashboard.recentlyAddedTeachers,
+          },
+          {
+            title: "Recently Added Students",
+            data: dashboard.recentlyAddedStudents,
+          },
+        ]?.map(({ title, data }, index) => (
+          <div
+            key={index}
+            className="bg-white shadow-lg rounded-xl p-6 hover:scale-105 hover:shadow-2xl transition-transform duration-300"
+          >
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+              {title}
+            </h2>
+            {data?.map((person) => (
+              <div
+                key={person._id || person.id}
+                className="flex items-center p-3 border-b last:border-b-0"
+              >
+                <div className="w-12 h-12 rounded-full bg-gray-300 mr-4">
+                  <img
+                    src={""}
+                    alt="Profile"
+                    className="w-full h-full object-cover rounded-full"
+                  />
                 </div>
-              ))}
-            </div>
-          )
-        )}
+                <p className="text-gray-800 text-sm">
+                  {person.firstName + " " + person.lastName}
+                </p>
+              </div>
+            ))}
+          </div>
+        ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
-      {/* Student Pass/Fail Stats */}
-      <div className="bg-white shadow-lg rounded-xl p-6 mt-6 hover:scale-105 hover:shadow-2xl transition-transform duration-300">
-        <h2 className="text-2xl font-semibold text-gray-800 text-center">Student Pass/Fail Stats</h2>
-        <p className="text-gray-600 text-center mt-2 mb-4">Visualization of Passed vs Failed Students</p>
-        <div className="bg-gray-50 p-6 rounded-lg shadow-md flex justify-center">
-          <Pie style={{
-            minHeight: '250px',
-          }} data={data} />
-        </div>
+        {/* Student Pass/Fail Stats */}
+        <div className="bg-white shadow-lg rounded-xl p-6 mt-6 hover:scale-105 hover:shadow-2xl transition-transform duration-300">
+          <h2 className="text-2xl font-semibold text-gray-800 text-center">
+            Student Pass/Fail Stats
+          </h2>
+          <p className="text-gray-600 text-center mt-2 mb-4">
+            Visualization of Passed vs Failed Students
+          </p>
+          <div className="bg-gray-50 p-6 rounded-lg shadow-md flex justify-center">
+            <Pie
+              style={{
+                minHeight: "250px",
+              }}
+              data={data}
+            />
+          </div>
         </div>
         <div className="bg-white shadow-lg rounded-xl p-6 mt-6 hover:scale-105 hover:shadow-2xl transition-transform duration-300">
-        <Dashboard /></div>
-        <ToastContainer/>
-         </div>
-    
-
-
-
+          <Dashboard />
+        </div>
+        <ToastContainer />
+      </div>
     </div>
   );
-
-
 }

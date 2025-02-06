@@ -61,32 +61,32 @@ export const TeacherSidebar = forwardRef(({ collapsed }, ref) => {
               </p>
             )}
           </div> */}
-<div className="flex flex-col items-center justify-center p-3">
-  <div className="flex items-center justify-center gap-x-3">
-    <img
-      src={logoLight}
-      alt="Study Pulse"
-      className="dark:hidden"
-      height="80px"
-      width="80px"
-    />
-    <img
-      src={logoDark}
-      alt="Study Pulse"
-      className="hidden dark:block"
-      height="40px"
-      width="40px"
-    />
-  </div>
+          <div className="flex flex-col items-center justify-center p-3">
+            <div className="flex items-center justify-center gap-x-3">
+              <img
+                src={logoLight}
+                alt="Study Pulse"
+                className="dark:hidden"
+                height="80px"
+                width="80px"
+              />
+              <img
+                src={logoDark}
+                alt="Study Pulse"
+                className="hidden dark:block"
+                height="40px"
+                width="40px"
+              />
+            </div>
 
-  {/* Pulse text */}
-  {!collapsed && (
-    <p className="font-bold text-sm text-gray-700 mt-2 transition-colors dark:text-slate-50 absolute top-16">
-      Pulse
-    </p>
-  )}
-</div>
-<hr className="border-t-2 border-gray-500 my-2" />
+            {/* Pulse text */}
+            {!collapsed && (
+              <p className="font-bold text-sm text-gray-700 mt-2 transition-colors dark:text-slate-50 absolute top-16">
+                Pulse
+              </p>
+            )}
+          </div>
+          <hr className="border-t-2 border-gray-500 my-2" />
 
           <div className="flex w-full flex-col gap-y-4 overflow-y-auto overflow-x-hidden p-3 [scrollbar-width:_thin]">
             {navbarLinks.map((navbarLink) => (
