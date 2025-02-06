@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { makeRequest } from "../../axios";
 import { toast, ToastContainer } from "react-toastify";
 import { UserPlus } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function CreateAdmin() {
   const [name, setName] = useState("");
@@ -15,6 +16,7 @@ export default function CreateAdmin() {
   const [cityId, setCityId] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const navigate=useNavigate();
   const [adminData, setAdminData] = useState({
     email: "",
     password: "",
@@ -50,7 +52,8 @@ export default function CreateAdmin() {
       });
       console.log("Adminn Data:", res.data);
       toast.success(res?.data?.message);
-
+      toast.success(res?.data?.message)
+// res.status===200||res.status===201 ? navigate('/admin-dashboard'):'';
       setName("");
     } catch (error) {
       console.error("Error creating Admin:", error.response.data.message);

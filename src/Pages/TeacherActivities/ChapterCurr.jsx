@@ -23,6 +23,7 @@ export default function ChapterCurr() {
     initialChapterId || (curr && curr.subjectId.chapterIds[0]) || ""
   );
   const [chapters, setChapters] = useState([]);
+  const[chapter,setChapter]=useState({})
   const [classes, setClasses] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -37,6 +38,7 @@ export default function ChapterCurr() {
 
   useEffect(() => {
     fetchClasses();
+    
   }, []);
   useEffect(() => {
     subjectId && fetchChapters();
@@ -248,11 +250,17 @@ export default function ChapterCurr() {
               <Edit className="w-5 h-5" /> {/* Edit Icon */}
             </button>
             <button
-              onClick={() => {
+             onClick={() => {
+              const newChapter = chapters.find(c => c._id === chapterId);
+                if (newChapter) {
                 navigate("/teacher-dashboard/chat", {
-                  state: { curr },
+                  state: { curr, chapter: newChapter },
                 });
-              }}
+              } else {
+                console.log('Chapter not found');
+              }
+            }}
+            
               className="flex items-center justify-center bg-green-600 text-white p-2 rounded-full hover:bg-green-700 transition duration-200 transform hover:scale-105"
               title="Send Chat"
             >

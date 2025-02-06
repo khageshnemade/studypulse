@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import { makeRequest } from "../../../axios";
-import { ArrowLeft, ArrowLeftCircle, Send } from "lucide-react";
+import { ArrowLeft, Send } from "lucide-react";
 
 // Socket connection (move this inside useEffect or useRef for cleanup)
 let socket;
@@ -12,7 +12,7 @@ const GroupChatWindow = () => {
   const [messages, setMessages] = useState([]);
   const [discussionId, setDiscussionId] = useState("");
   const location = useLocation();
-  const { curr } = location.state || {};
+  const { curr,chapter } = location.state || {};
   const [page, setPage] = useState(1);
   const chatContainerRef = useRef(null);
   const [hasMore, setHasMore] = useState(true);
@@ -122,7 +122,7 @@ const GroupChatWindow = () => {
     <div className="flex items-center justify-center min-h-screen  p-4">
       <div className="bg-white shadow-lg rounded-3xl w-full max-w-xl p-6 flex flex-col">
         <h2 className="text-2xl font-semibold text-center mb-4 text-gray-800">
-          Chat Room
+          Chat on {chapter.title}
         </h2>
         <div className="flex items-end mt-6">
           <button

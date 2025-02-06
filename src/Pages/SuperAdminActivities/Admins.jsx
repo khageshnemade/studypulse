@@ -44,6 +44,9 @@ export default function Admins() {
         }
       }
     } catch (error) {
+     
+        setAdmins([])
+       
       console.error("Admin Problem:", error.response.data.message);
       toast.error(error.response.data.message);
     }
