@@ -3,7 +3,7 @@ import { makeRequest } from "../../axios";
 import { useSelector } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Plus, Edit } from "lucide-react";
+import { Plus, Edit, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
   const studentsData = useSelector((state) => state?.students?.studentsData);
@@ -319,6 +319,9 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
       <div className="flex items-center justify-center min-h-screen">
         {/* Tab Navigation */}
         <div className="mt-8 w-full">
+        <button onClick={()=>{
+        setShowUpdateStudent(false);
+      }}><ArrowLeft/></button>
           <div className="flex text-center border-b border-gray-300">
             <button
               onClick={() => setActiveTab("about")}

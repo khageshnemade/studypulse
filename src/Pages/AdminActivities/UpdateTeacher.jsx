@@ -3,7 +3,8 @@ import { makeRequest } from "../../axios";
 import { useSelector } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 
 export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
   const teachersData = useSelector((state) => state?.teachers?.teachersData);
@@ -86,6 +87,10 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
   return (
 
     <div className="p-4 bg-white rounded-lg shadow-md">
+
+      <button onClick={()=>{
+        setShowUpdateTeacher(false);
+      }}><ArrowLeft/></button>
       {/* Profile Picture and Update Button */}
       <div className="text-center">
         <img

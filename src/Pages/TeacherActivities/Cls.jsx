@@ -85,7 +85,7 @@ export default function Cls() {
                 </td>
                 <td className="border border-gray-300 px-4 py-2">
                   <button
-                    className="bg-gradient-to-r from-blue-300 to-purple-400 text-white px-3 py-1 rounded-lg hover:bg-green-600 transition-all"
+                    className="bg-blue-400 text-white px-3 py-1 rounded-lg hover:bg-blue-600 transition-all"
                     onClick={() => showStudents(item._id, item.name)}
                   >
                     View Students

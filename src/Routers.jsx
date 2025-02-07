@@ -126,11 +126,7 @@ const router = createBrowserRouter(
     },
 
     // Protected routes (only accessible if the user is logged in)
-{
-  path:"/admin_dashboard",
-  element:<AdminDashboard/>
-}
-,
+
     {
       path: "/admin-dashboard", // Only accessible if the user is logged in
       element: <AdminLayout />,

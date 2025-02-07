@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { makeRequest } from "../../axios";
 import { useLocation, useNavigate } from "react-router-dom";
-import { BookUserIcon } from "lucide-react";
+import { BookUserIcon, Trash2 } from "lucide-react";
 
 export default function Subject() {
   const navigate = useNavigate();
@@ -57,6 +57,15 @@ export default function Subject() {
       setIsLoading(false);
     }
   };
+  const deleteSubject = async (subjectId) => {
+    try {
+      const res = await makeRequest.delete(`/admin/delete-subject?subjectId=${subjectId}`);
+      console.log("Subject deleted successfully:", res.data);
+      fetchSubjectsByClassId();
+    } catch (error) {
+      console.error("Request Error:", error.message);
+    }
+  }
   return (
     <>
       {isModalOpen && (
@@ -152,11 +161,10 @@ export default function Subject() {
                 <div className="flex justify-between gap-4">
                   <button
                     type="submit"
-                    className={`w-full py-3 px-6 rounded-md text-white font-semibold transition-all ${
-                      isLoading
-                        ? "bg-gray-400 cursor-not-allowed"
-                        : "bg-blue-500 hover:bg-blue-600"
-                    }`}
+                    className={`w-full py-3 px-6 rounded-md text-white font-semibold transition-all ${isLoading
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-blue-500 hover:bg-blue-600"
+                      }`}
                     disabled={isLoading}
                   >
                     {isLoading ? "Creating Subject..." : "Create Subject"}
@@ -175,49 +183,60 @@ export default function Subject() {
         </div>
       )}
 
-      <div className="container mx-auto p-6  shadow-lg rounded-lg">
-        <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold bg-blue-400 p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
+      <div className="container mx-auto p-6 shadow-lg rounded-lg max-w-6xl">
+        {/* Title Section */}
+        <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold bg-blue-400 p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 mb-4">
           <BookUserIcon className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
           Subjects
         </p>
-        <div className="flex justify-between mb-2">
+
+        {/* Class Name and Add Button */}
+        <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold text-black">{className}</h1>
           <button
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-all"
+            className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-all"
             onClick={() => setIsModalOpen(true)}
           >
             Add Subject
           </button>
         </div>
 
+        {/* Table Section */}
         <table className="table-auto w-full border-collapse border border-gray-300">
           <thead className="bg-gray-200">
             <tr>
-              <th className="border border-gray-300 px-4 py-2 text-left text-gray-700">
-                Classes
-              </th>
-              <th className="border border-gray-300 px-4 py-2 text-left text-gray-700">
-                Created At
-              </th>
+              <th className="border border-gray-300 px-4 py-2 text-left text-gray-700">Classes</th>
+              <th className="border border-gray-300 px-4 py-2 text-left text-gray-700">Created At</th>
+              <th className="border border-gray-300 px-4 py-2 text-left text-gray-700">Actions</th>
             </tr>
           </thead>
-          <tbody className="text-white ">
+          <tbody className="text-gray-700">
             {subjects.map((item, index) => (
               <tr
                 key={index}
                 className="hover:bg-gray-100 hover:text-gray-400 transition-all"
               >
-                <td className="border border-gray-300 px-4 py-2">
-                  {item.name}
+                <td className="border border-gray-300 px-4 py-2 whitespace-nowrap">{item.name}</td>
+                <td className="border border-gray-300 px-4 py-2 whitespace-nowrap">
+                  {new Date(item.createdAt).toLocaleDateString()}
                 </td>
                 <td className="border border-gray-300 px-4 py-2">
-                  {new Date(item.createdAt).toLocaleDateString()}
+                  <div className="flex space-x-3 items-center justify-center">
+                    {/* Delete Button */}
+                    <button
+                      className="bg-red-500 text-white p-2 rounded-lg hover:bg-red-600 transition-all focus:outline-none focus:ring-2 focus:ring-red-400"
+                      onClick={() => deleteSubject(item._id, item.name)}
+                    >
+                      <Trash2 className="w-5 h-5" />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
     </>
   );
 }

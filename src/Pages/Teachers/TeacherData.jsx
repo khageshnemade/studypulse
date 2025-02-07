@@ -18,6 +18,9 @@ import {
   TrendingUp,
   User,
   Users,
+  ArrowRight,
+  Delete,
+  Trash2
 } from "lucide-react";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -125,17 +128,31 @@ export const Table = () => {
                 <td className="px-4 py-2 border border-gray-300">
                   {row?.teacherData?.totalYearsOfExperience}
                 </td>
-                <td className="px-4 py-2 border border-gray-300">
-                  <button
-                    className="p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap"
-                    onClick={() => {
-                      setCurrentId(row._id);
-                      setShowUpdateTeacher(true);
-                    }}
-                  >
-                    View More
-                  </button>
-                </td>
+
+
+                <td className="border border-gray-300 px-4 py-2 max-w-min">
+  <div className="flex space-x-3 items-center">
+    {/* Update Button */}
+    <button
+      className="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all"
+      onClick={() => {
+        setCurrentId(row._id);
+        setShowUpdateTeacher(true);
+      }}
+    >
+      <ArrowRight className="w-5 h-5" />
+    </button>
+
+    {/* Delete Button */}
+    <button
+      className="bg-red-500 text-white p-2 rounded-lg hover:bg-red-600 transition-all focus:outline-none focus:ring-2 focus:ring-red-400"
+      onClick={() => deleteSubject(item._id, item.name)}
+    >
+      <Trash2 className="w-5 h-5" />
+    </button>
+  </div>
+</td>
+
 
                 <td className="p-3 border border-gray-300">
                   <button

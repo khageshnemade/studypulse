@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setStudent } from "../../redux/features/studentSlice";
 import { UpdateStudent } from "../AdminActivities/UpdateStudent";
 import { toast, ToastContainer } from "react-toastify";
-import { Users2 } from "lucide-react";
+import { ArrowRight, Trash2, Users2 } from "lucide-react";
 
 const Table = () => {
   const [currentId, setCurrentId] = useState("");
@@ -158,26 +158,41 @@ const Table = () => {
                 <td className="px-4 py-2 border">{row.phoneNumber}</td>
                 <td className="px-4 py-2 border">{row?.cityData?.name}</td>
                 {profileComplete && (
-                  <td className="px-4 py-2 border">
-                    <button
-                      onClick={() => {
-                        setCurrentId(row._id);
-                        setShowUpdateStudent(true);
-                      }}
-                      className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-                    >
-                      View More
-                    </button>
+                  <td className="border border-gray-300 px-4 py-2 max-w-min">
+
+
+
+
+                    <div className="flex space-x-3 items-center">
+                      <button
+                        onClick={() => {
+                          setCurrentId(row._id);
+                          setShowUpdateStudent(true);
+                        }}
+                        className="px-2 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                      >
+                        <ArrowRight/>
+                      </button>
+
+                      {/* Delete Button */}
+                      <button
+                        className="bg-red-500 text-white p-2 rounded-lg hover:bg-red-600 transition-all focus:outline-none focus:ring-2 focus:ring-red-400"
+                        onClick={() => deleteStudent(item._id, item.name)}
+                      >
+                        <Trash2 className="w-5 h-5" />
+                      </button>
+                    </div>
                   </td>
+
+
                 )}
                 <td className="px-4 py-2 border">
                   <button
                     onClick={() => handleStatusChange(row)}
-                    className={`px-4 py-2 rounded-md text-white ${
-                      row.status === "active"
+                    className={`px-4 py-2 rounded-md text-white ${row.status === "active"
                         ? "bg-green-500 hover:bg-green-600"
                         : "bg-red-500 hover:bg-red-600"
-                    }`}
+                      }`}
                   >
                     {row.status}
                   </button>
