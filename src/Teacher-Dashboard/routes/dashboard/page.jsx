@@ -427,124 +427,131 @@ export default function TeacherDashboard() {
   return (
     <div className="bg-blue-200 min-h-screen py-8 px-4">
       {/* Profile and Header */}
-      {!profileCompletion && <TeacherProfile />}
-      <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold bg-blue-400 p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
-        <Home className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
-        Teacher Dashboard
-      </p>
+      {!profileCompletion ? (
+        <TeacherProfile />
+      ) : (
+        <>
+          <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold bg-blue-400 p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
+            <Home className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
+            Teacher Dashboard
+          </p>
 
-      {/* Stats Boxes */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-        {[
-          {
-            label: "Subjects Available",
-            count: 67,
-            icon: "fa-book",
-            bg: "bg-blue-500",
-          },
-          {
-            label: "Chapter Available",
-            count: 45,
-            icon: "fa-chalkboard-teacher",
-            bg: "bg-green-500",
-          },
-          {
-            label: "Assignment Count",
-            count: 56,
-            icon: "fa-pencil-alt",
-            bg: "bg-yellow-500",
-          },
-          {
-            label: "Chapter Curriculum Count",
-            count: 45,
-            icon: "fa-book-open",
-            bg: "-500",
-          },
-          {
-            label: "Total Classes",
-            count: 45,
-            icon: "fa-chalkboard",
-            bg: "bg-teal-500",
-          },
-        ].map(({ label, count, icon, bg }, index) => (
-          <div
-            key={index}
-            className="bg-white shadow-xl rounded-lg p-6 flex items-center justify-between hover:scale-105 transition-all"
-          >
-            <div>
-              <h2 className="text-xl font-semibold text-gray-700">{label}</h2>
-              <p className="text-4xl font-bold text-gray-900">{count}</p>
+          {/* Stats Boxes */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            {[
+              {
+                label: "Subjects Available",
+                count: 67,
+                icon: "fa-book",
+                bg: "bg-blue-500",
+              },
+              {
+                label: "Chapter Available",
+                count: 45,
+                icon: "fa-chalkboard-teacher",
+                bg: "bg-green-500",
+              },
+              {
+                label: "Assignment Count",
+                count: 56,
+                icon: "fa-pencil-alt",
+                bg: "bg-yellow-500",
+              },
+              {
+                label: "Chapter Curriculum Count",
+                count: 45,
+                icon: "fa-book-open",
+                bg: "-500",
+              },
+              {
+                label: "Total Classes",
+                count: 45,
+                icon: "fa-chalkboard",
+                bg: "bg-teal-500",
+              },
+            ].map(({ label, count, icon, bg }, index) => (
+              <div
+                key={index}
+                className="bg-white shadow-xl rounded-lg p-6 flex items-center justify-between hover:scale-105 transition-all"
+              >
+                <div>
+                  <h2 className="text-xl font-semibold text-gray-700">
+                    {label}
+                  </h2>
+                  <p className="text-4xl font-bold text-gray-900">{count}</p>
+                </div>
+                <div className={`${bg} text-white p-4 rounded-full`}>
+                  <i className={`fas ${icon} text-2xl`} />
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Comments Section */}
+          <div className="bg-white shadow-lg rounded-xl p-6 mb-8 hover:scale-105 transition-all">
+            <h2 className="text-xl font-semibold text-gray-800">
+              Comments Received
+            </h2>
+            <p className="text-4xl font-bold text-gray-900 mb-3">67</p>
+            <p className="text-gray-600">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            </p>
+          </div>
+
+          {/* Charts Section */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="bg-white shadow-lg rounded-xl p-6 hover:scale-105 transition-all">
+              <h2 className="text-2xl font-semibold text-center mb-4 text-gray-800">
+                Active vs Inactive Students
+              </h2>
+              <BarChart data={dataStudent} options={optionsStudent} />
             </div>
-            <div className={`${bg} text-white p-4 rounded-full`}>
-              <i className={`fas ${icon} text-2xl`} />
+            <div className="bg-white shadow-lg rounded-xl p-6 hover:scale-105 transition-all">
+              <h2 className="text-2xl font-semibold text-center mb-4 text-gray-800">
+                Student Pass/Fail Stats
+              </h2>
+              <div className="bg-gray-50 p-6 rounded-lg shadow-md flex justify-center">
+                <Pie style={{ minHeight: "100%" }} data={data} />
+              </div>
             </div>
           </div>
-        ))}
-      </div>
 
-      {/* Comments Section */}
-      <div className="bg-white shadow-lg rounded-xl p-6 mb-8 hover:scale-105 transition-all">
-        <h2 className="text-xl font-semibold text-gray-800">
-          Comments Received
-        </h2>
-        <p className="text-4xl font-bold text-gray-900 mb-3">67</p>
-        <p className="text-gray-600">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        </p>
-      </div>
-
-      {/* Charts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="bg-white shadow-lg rounded-xl p-6 hover:scale-105 transition-all">
-          <h2 className="text-2xl font-semibold text-center mb-4 text-gray-800">
-            Active vs Inactive Students
-          </h2>
-          <BarChart data={dataStudent} options={optionsStudent} />
-        </div>
-        <div className="bg-white shadow-lg rounded-xl p-6 hover:scale-105 transition-all">
-          <h2 className="text-2xl font-semibold text-center mb-4 text-gray-800">
-            Student Pass/Fail Stats
-          </h2>
-          <div className="bg-gray-50 p-6 rounded-lg shadow-md flex justify-center">
-            <Pie style={{ minHeight: "100%" }} data={data} />
+          {/* Recently Added Section */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
+            <div className="bg-white shadow-lg rounded-xl p-6 hover:scale-105 transition-all">
+              <HollowPieChart classes={classes} />
+            </div>
+            <div className="bg-white shadow-lg rounded-xl p-6 hover:scale-105 transition-all">
+              <p className="font-semibold text-xl text-gray-800">
+                Recently Added Assignments
+              </p>
+              {assignments.map((assignment) => (
+                <div
+                  key={assignment.id}
+                  className="flex items-center p-2 border-b border-gray-200"
+                >
+                  <div className="w-10 h-10 rounded-full bg-blue-500 mr-4" />
+                  <p className="text-gray-700">{assignment.title}</p>
+                </div>
+              ))}
+            </div>
+            <div className="bg-white shadow-lg rounded-xl p-6 hover:scale-105 transition-all">
+              <p className="font-semibold text-xl text-gray-800">
+                Recently Added Curriculums
+              </p>
+              {curriculums.map((curriculum) => (
+                <div
+                  key={curriculum.id}
+                  className="flex items-center p-2 border-b border-gray-200"
+                >
+                  <div className="w-10 h-10 rounded-full bg-green-500 mr-4" />
+                  <p className="text-gray-700">{curriculum.title}</p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </div>
-
-      {/* Recently Added Section */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
-        <div className="bg-white shadow-lg rounded-xl p-6 hover:scale-105 transition-all">
-          <HollowPieChart classes={classes} />
-        </div>
-        <div className="bg-white shadow-lg rounded-xl p-6 hover:scale-105 transition-all">
-          <p className="font-semibold text-xl text-gray-800">
-            Recently Added Assignments
-          </p>
-          {assignments.map((assignment) => (
-            <div
-              key={assignment.id}
-              className="flex items-center p-2 border-b border-gray-200"
-            >
-              <div className="w-10 h-10 rounded-full bg-blue-500 mr-4" />
-              <p className="text-gray-700">{assignment.title}</p>
-            </div>
-          ))}
-        </div>
-        <div className="bg-white shadow-lg rounded-xl p-6 hover:scale-105 transition-all">
-          <p className="font-semibold text-xl text-gray-800">
-            Recently Added Curriculums
-          </p>
-          {curriculums.map((curriculum) => (
-            <div
-              key={curriculum.id}
-              className="flex items-center p-2 border-b border-gray-200"
-            >
-              <div className="w-10 h-10 rounded-full bg-green-500 mr-4" />
-              <p className="text-gray-700">{curriculum.title}</p>
-            </div>
-          ))}
-        </div>
-      </div>
+        </>
+      )}
 
       {/* Toast Notification */}
       <ToastContainer />

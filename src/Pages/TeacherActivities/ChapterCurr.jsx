@@ -4,8 +4,15 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Optional, for toast notifications
 import { makeRequest } from "../../axios";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Plus, Edit, ArrowLeft, MessageSquare, Book } from "lucide-react";
-
+import {
+  Plus,
+  Edit,
+  ArrowLeft,
+  MessageSquare,
+  Book,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 export default function ChapterCurr() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -23,7 +30,7 @@ export default function ChapterCurr() {
     initialChapterId || (curr && curr.subjectId.chapterIds[0]) || ""
   );
   const [chapters, setChapters] = useState([]);
-  const[chapter,setChapter]=useState({})
+  const [chapter, setChapter] = useState({});
   const [classes, setClasses] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -31,6 +38,10 @@ export default function ChapterCurr() {
   const userData = localStorage.getItem("user");
   const parsedData = JSON.parse(userData);
   console.log("Parsed Data:", parsedData?.token);
+  const [openChapter, setOpenChapter] = useState(null);
+  const toggleChapterDetails = (id) => {
+    setOpenChapter(openChapter === id ? null : id);
+  };
   useEffect(() => {
     classId && fetchSubjects();
     console.log("Curr Subject", curr);
@@ -38,7 +49,6 @@ export default function ChapterCurr() {
 
   useEffect(() => {
     fetchClasses();
-    
   }, []);
   useEffect(() => {
     subjectId && fetchChapters();
@@ -85,6 +95,7 @@ export default function ChapterCurr() {
       setChapterCurr(response?.data?.data);
       setLoading(false);
     } catch (error) {
+      setChapterCurr([]);
       toast.error(error.response.data.message);
       console.error(
         "Error fetching chaptersCurr:",
@@ -123,8 +134,9 @@ export default function ChapterCurr() {
     (chapter) => chapter.classId === classId && chapter.subjectId === subjectId
   );
   return (
-    <div className="container mx-auto p-6">
-      {/* Filters Section */}
+    <div className="max-w-5xl mx-auto my-8 p-6 bg-white shadow-lg rounded-lg">
+      {/* Title */}
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         {/* Class Selector */}
         <div>
@@ -172,7 +184,7 @@ export default function ChapterCurr() {
             onChange={(e) => setChapterId(e.target.value)}
             className="w-full border border-gray-300 rounded px-4 py-2"
           >
-            <option value="">All Chapters</option>
+            <option value="">Select Chapter</option>
             {filteredChapters.map((chapter) => (
               <option key={chapter._id} value={chapter._id}>
                 {chapter.title}
@@ -207,68 +219,98 @@ export default function ChapterCurr() {
           <Plus className="w-4 h-4" /> {/* Add Icon */}
         </button>
       </div>
-      {/* Curriculum List */}{" "}
-      <h1 className="text-3xl font-bold mb-8 text-center text-gray-900"></h1>
-      <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold bg-blue-400 p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
-        <Book className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
+      <h1 className="text-3xl font-bold text-center mb-6 text-gray-900">
         Chapter Curriculum List
-      </p>
-      {chapterCurr.map((curr) => (
-        <div key={curr._id} className="mb-10 bg-white rounded-lg shadow-lg p-6">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-            {curr.title}
-          </h2>
-          <p className="text-gray-600 text-lg mb-6 leading-relaxed">
-            {curr.description}
-          </p>
+      </h1>
 
-          {/* Video URL */}
-          <div className="mt-6 flex justify-end items-center gap-4">
-            {curr.videoUrl ? (
-              <Link
-                to={curr.videoUrl}
-                className="text-blue-500 hover:text-blue-600 font-medium text-lg transition duration-200"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Watch Video
-              </Link>
-            ) : (
-              <span className="text-gray-500 text-lg">No video available</span>
+      {/* Chapter List */}
+      <div className="space-y-4">
+        {chapterCurr.map((curr) => (
+          <div
+            key={curr._id}
+            className="border border-gray-300 rounded-lg shadow-sm p-4 bg-gray-50 hover:shadow-md transition"
+          >
+            {/* Chapter Header */}
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-gray-800">
+                {curr.title}
+              </h2>
+
+              <div className="flex items-center gap-4">
+                {/* Edit Button */}
+                <button
+                  onClick={() =>
+                    navigate("/teacher-dashboard/update_chapterCurr", {
+                      state: { curr },
+                    })
+                  }
+                  className="p-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
+                  title="Edit Chapter"
+                >
+                  <Edit className="w-5 h-5" />
+                </button>
+
+                {/* Chat Button */}
+                <button
+                  onClick={() => {
+                    const newChapter = chapters.find(
+                      (c) => c._id === chapterId
+                    );
+                    if (newChapter) {
+                      navigate("/teacher-dashboard/chat", {
+                        state: { curr, chapter: newChapter },
+                      });
+                    } else {
+                      console.log("Chapter not found");
+                    }
+                  }}
+                  className="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                  title="Send Chat"
+                >
+                  <MessageSquare className="w-5 h-5" />
+                </button>
+
+                {/* Dropdown Button */}
+                <button
+                  onClick={() => toggleChapterDetails(curr._id)}
+                  className="p-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+                  title="Expand"
+                >
+                  {openChapter === curr._id ? (
+                    <ChevronUp className="w-5 h-5" />
+                  ) : (
+                    <ChevronDown className="w-5 h-5" />
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {/* Chapter Details (Dropdown Content) */}
+            {openChapter === curr._id && (
+              <div className="mt-4 border-t pt-4">
+                <p className="text-gray-700">{curr.description}</p>
+
+                {/* Video URL */}
+                <div className="mt-3 text-right">
+                  {curr.videoUrl ? (
+                    <a
+                      href={curr.videoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 hover:text-blue-600 font-medium transition"
+                    >
+                      Watch Video
+                    </a>
+                  ) : (
+                    <span className="text-gray-500">No video available</span>
+                  )}
+                </div>
+              </div>
             )}
-
-            {/* Edit Button */}
-            <button
-              onClick={() => {
-                navigate("/teacher-dashboard/update_chapterCurr", {
-                  state: { curr },
-                });
-              }}
-              className="flex items-center justify-center bg-green-600 text-white p-2 rounded-full hover:bg-green-700 transition duration-200 transform hover:scale-105"
-              title="Update Chapter Curriculum"
-            >
-              <Edit className="w-5 h-5" /> {/* Edit Icon */}
-            </button>
-            <button
-             onClick={() => {
-              const newChapter = chapters.find(c => c._id === chapterId);
-                if (newChapter) {
-                navigate("/teacher-dashboard/chat", {
-                  state: { curr, chapter: newChapter },
-                });
-              } else {
-                console.log('Chapter not found');
-              }
-            }}
-            
-              className="flex items-center justify-center bg-green-600 text-white p-2 rounded-full hover:bg-green-700 transition duration-200 transform hover:scale-105"
-              title="Send Chat"
-            >
-              <MessageSquare className="w-5 h-5" /> {/* Lucide Chat Icon */}
-            </button>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
+
       <ToastContainer />
     </div>
   );

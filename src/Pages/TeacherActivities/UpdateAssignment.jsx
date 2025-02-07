@@ -258,7 +258,7 @@ const UpdateAssignment = () => {
             }
             onChange={handleInputChange}
             min={currentDateTime} // Prevent selecting past dates
-            className="w-full border border-gray-300 rounded px-4 py-2"
+            className="w-full border border-gray-300 rounded px-4 py-2 max-w-min"
           />
         </div>
 

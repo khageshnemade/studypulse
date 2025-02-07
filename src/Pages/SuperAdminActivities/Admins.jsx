@@ -44,9 +44,8 @@ export default function Admins() {
         }
       }
     } catch (error) {
-     
-        setAdmins([])
-       
+      setAdmins([]);
+
       console.error("Admin Problem:", error.response.data.message);
       toast.error(error.response.data.message);
     }
@@ -98,9 +97,9 @@ export default function Admins() {
           {admins.map((admin) => (
             <div
               key={admin._id}
-              className="bg-white shadow-xl rounded-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-2xl border border-gray-300"
+              className="bg-white shadow-xl rounded-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-2xl border border-gray-300 flex flex-col"
             >
-              <div className="p-6 text-center">
+              <div className="p-6 text-center flex-grow">
                 <h2 className="text-2xl font-semibold text-gray-900">
                   {admin.firstName} {admin.lastName}
                 </h2>

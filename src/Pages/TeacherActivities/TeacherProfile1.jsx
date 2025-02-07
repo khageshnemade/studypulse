@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { makeRequest } from "../../axios";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { User } from "lucide-react";
 
 const TeacherProfile = () => {
@@ -121,9 +121,13 @@ const TeacherProfile = () => {
         modifiedFormData
       );
       console.log("Form submitted successfully:", res.data);
-      res.status === 200 || res.status === 201
-        ? navigate("/teacher-dashboard")
-        : "";
+      if (res.status === 200 || res.status === 201) {
+        toast.success("Profile completed successfully");
+
+        setTimeout(() => {
+          navigate("/teacher-dashboard");
+        }, 2000); // Wait 2 seconds before redirecting
+      }
     } catch (error) {
       console.error("Error submitting form:", error.message);
     }
@@ -309,85 +313,7 @@ const TeacherProfile = () => {
         className="max-w-4xl mx-auto p-8 bg-white shadow-md rounded-md"
       >
         {/* Basic Info */}
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">Gender</label>
-            <select
-              name="gender"
-              value={formData.gender}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border rounded-lg"
-            >
-              <option value="">Select</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Address</label>
-            <input
-              type="text"
-              name="address"
-              value={formData.address}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border rounded-lg"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Pincode</label>
-            <input
-              type="number"
-              name="pincode"
-              value={formData.pincode}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border rounded-lg"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              Date of Birth
-            </label>
-            <input
-              type="date"
-              name="dob"
-              value={
-                formData.dob
-                  ? new Date(formData.dob).toISOString().split("T")[0]
-                  : ""
-              }
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border rounded-lg"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              Joining Date
-            </label>
-            <input
-              type="date"
-              name="joiningDate"
-              value={
-                formData.joiningDate
-                  ? new Date(formData.joiningDate).toISOString().split("T")[0]
-                  : ""
-              }
-              onChange={handleInputChange} // Ensure the handleInputChange function is set to manage formData
-              className="w-full px-3 py-2 border rounded-lg"
-            />
-          </div>
-        </div>
-        <div className="mt-6">
-          <label className="block text-sm font-medium mb-1">
-            Total Years of Experience
-          </label>
-          <input
-            type="number"
-            name="totalYearsOfExperience"
-            value={formData.totalYearsOfExperience}
-            onChange={handleInputChange}
-            className="w-full px-3 py-2 border rounded-lg"
-          />
-        </div>
+
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium mb-1">Gender</label>
@@ -624,7 +550,7 @@ const TeacherProfile = () => {
           type="submit"
           className="w-full mt-6 py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg"
         >
-          Submit Value
+          Submit
         </button>
       </form>
 
@@ -634,92 +560,3 @@ const TeacherProfile = () => {
 };
 
 export default TeacherProfile;
-
-//   <div>
-//     {/**Classes and Subjects */}
-//     <h3 className="text-lg font-semibold mb-4">Classes and Subjects</h3>
-
-//     {formData.classes?.length > 0 ? (
-//       formData.classes.map((classItem, classIndex) => (
-//         <div key={classIndex} className="mb-4">
-//           <div className="flex gap-2 items-center mb-2">
-//             <select
-//               value={classItem._id || ""}
-//               onChange={(e) => {
-//                 const updatedArray = [...formData.classes];
-//                 updatedArray[classIndex] = {
-//                   ...updatedArray[classIndex],
-//                   _id: e.target.value,
-//                 };
-//                 setFormData((prev) => ({
-//                   ...prev,
-//                   classes: updatedArray,
-//                 }));
-//                 fetchSubjectsByClassId(e.target.value); // Fetch subjects based on selected class
-//               }}
-//               className="flex-grow px-3 py-2 border rounded-lg"
-//             >
-//               <option value="">Select a Class</option>
-//               {classes.map((classOption) => (
-//                 <option key={classOption._id} value={classOption._id}>
-//                   {classOption.name}
-//                 </option>
-//               ))}
-//             </select>
-//           </div>
-
-//           {/* Subjects for this Class */}
-//           <div className="ml-4">
-//             {formData?.subjects.map((subject, subIndex) => (
-//               <div key={subIndex} className="flex gap-2 items-center mb-2">
-//                 <select
-//                   value={subject._id || ""}
-//                   onChange={(e) => handleSubjectChange(classIndex, subIndex, e)}
-//                   className="flex-grow px-3 py-2 border rounded-lg"
-//                 >
-//                   <option value="">Select a Subject</option>
-//                   {subjects.map((subjectOption) => (
-//                     <option key={subjectOption._id} value={subjectOption._id}>
-//                       {subjectOption.name}
-//                     </option>
-//                   ))}
-//                 </select>
-
-//                 <button
-//                   type="button"
-//                   onClick={() => handleRemoveSubject(classIndex, subIndex)}
-//                   className="text-red-600 underline"
-//                 >
-//                   Remove
-//                 </button>
-//               </div>
-//             ))}
-
-//             <button
-//               type="button"
-//               onClick={() => handleAddSubject(classIndex)}
-//               className="text-blue-600 underline"
-//             >
-//               Add Subject
-//             </button>
-//           </div>
-//         </div>
-//       ))
-//     ) : (
-//       <p>No classes available</p>
-//     )}
-
-//     {/* Add New Class Button */}
-//     <button
-//       type="button"
-//       onClick={() => {
-//         setFormData((prev) => ({
-//           ...prev,
-//           classes: [...prev.classes, { name: "", subjects: [] }], // Add a new class with empty subjects
-//         }));
-//       }}
-//       className="text-blue-600 underline"
-//     >
-//       Add Class
-//     </button>
-//   </div>;

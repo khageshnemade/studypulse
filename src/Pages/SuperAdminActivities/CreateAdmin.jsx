@@ -16,7 +16,7 @@ export default function CreateAdmin() {
   const [cityId, setCityId] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const [adminData, setAdminData] = useState({
     email: "",
     password: "",
@@ -52,8 +52,13 @@ export default function CreateAdmin() {
       });
       console.log("Adminn Data:", res.data);
       toast.success(res?.data?.message);
-      toast.success(res?.data?.message)
-// res.status===200||res.status===201 ? navigate('/admin-dashboard'):'';
+
+      if (res.status === 200 || res.status === 201) {
+        setTimeout(() => {
+          navigate("/superadmin-dashboard");
+        }, 2000); // Delay navigation by 2 seconds
+      }
+
       setName("");
     } catch (error) {
       console.error("Error creating Admin:", error.response.data.message);
@@ -143,9 +148,27 @@ export default function CreateAdmin() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {/* Input Fields */}
             {[
-              { label: "Email", name: "email", type: "email" },
-              { label: "Password", name: "password", type: "password" },
-              { label: "Phone Number", name: "phoneNumber", type: "text" },
+              {
+                label: "Email",
+                name: "email",
+                type: "email",
+                autoComplete: "email",
+              },
+              {
+                label: "Password",
+                name: "password",
+                type: "password",
+                minLength: 6,
+              },
+              {
+                label: "Phone Number",
+                name: "phoneNumber",
+                type: "tel",
+                maxLength: "10",
+                minLength: "10",
+                title: "Phone number must be exactly 10 digits",
+                placeholder: "Enter 10-digit phone number",
+              },
               { label: "First Name", name: "firstName", type: "text" },
               { label: "Last Name", name: "lastName", type: "text" },
             ].map((field) => (
@@ -165,6 +188,14 @@ export default function CreateAdmin() {
                     updateAdminData(e.target.name, e.target.value)
                   }
                   required
+                  {...(field.minLength && { minLength: field.minLength })}
+                  {...(field.maxLength && { maxLength: field.maxLength })}
+                  {...(field.pattern && { pattern: field.pattern })}
+                  {...(field.title && { title: field.title })}
+                  {...(field.placeholder && { placeholder: field.placeholder })}
+                  {...(field.autoComplete && {
+                    autoComplete: field.autoComplete,
+                  })}
                   className="block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>

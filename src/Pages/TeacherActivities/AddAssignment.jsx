@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { makeRequest } from "../../axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
+import { PlusCircle } from "lucide-react";
 
 const AddAssignment = () => {
   const [title, setTitle] = useState("");
@@ -18,35 +19,35 @@ const AddAssignment = () => {
   const [chapterId, setChapterId] = useState("d");
   const [subjectId, setSubjectId] = useState("d");
   const [classId, setClassId] = useState("d");
-  const location=useLocation();
-  const { classId: initialClassId, subjectId: initialSubjectId,chapterId:initialChapterId } =location.state;
+  const location = useLocation();
+  const {
+    classId: initialClassId,
+    subjectId: initialSubjectId,
+    chapterId: initialChapterId,
+  } = location.state;
   const userData = localStorage.getItem("user");
   const parsedData = JSON.parse(userData);
-  const navigate=useNavigate();
+  const navigate = useNavigate();
 
-  const today = new Date().toISOString().split('T')[0];
+  const today = new Date().toISOString().split("T")[0];
   useEffect(() => {
-    setClassId(initialClassId||"");
-    setSubjectId(initialSubjectId||"");
-    setChapterId(initialChapterId||"");
+    setClassId(initialClassId || "");
+    setSubjectId(initialSubjectId || "");
+    setChapterId(initialChapterId || "");
     fetchClasses();
   }, []);
 
   useEffect(() => {
-    
     if (classId !== "d") {
       fetchSubjects();
     }
   }, [classId]);
-  
 
   useEffect(() => {
     if (subjectId !== "d") {
       fetchChapters();
     }
   }, [subjectId]);
-  
-
 
   const fetchClasses = async () => {
     try {
@@ -81,7 +82,9 @@ const AddAssignment = () => {
       console.error("Error fetching chapters:", error.message);
     }
   };
-  const filteredSubjects=subjects.filter(subject=>subject.classId==classId);
+  const filteredSubjects = subjects.filter(
+    (subject) => subject.classId == classId
+  );
   console.log("Filtered Subject", filteredSubjects);
   const filteredChapters = chapters.filter(
     (chapter) => chapter.classId === classId && chapter.subjectId === subjectId
@@ -101,7 +104,6 @@ const AddAssignment = () => {
       },
     ]);
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -123,9 +125,12 @@ const AddAssignment = () => {
     setError("");
 
     try {
-      const res = await makeRequest.post("teacher/create-assignment", assignmentData);
+      const res = await makeRequest.post(
+        "teacher/create-assignment",
+        assignmentData
+      );
       console.log("Assignment created successfully:", res.data);
-    
+
       // Reset the form
       setTitle("");
       setDescription("");
@@ -136,41 +141,42 @@ const AddAssignment = () => {
       setClassId("");
       setSubjectId("");
       setChapterId("");
-    
+
       // Show success toast and navigate after it's shown
-      
-    
-      toast.success(res?.data?.message)
-    setTimeout(() => {
-   
-      navigate("/teacher-dashboard/assignments",{state:{
-        classId: classId,
-        subjectId: subjectId,
-        chapterId: chapterId,
-       
-      }})
-    }, 1000);
-       
+
+      toast.success(res?.data?.message);
+      setTimeout(() => {
+        navigate("/teacher-dashboard/assignments", {
+          state: {
+            classId: classId,
+            subjectId: subjectId,
+            chapterId: chapterId,
+          },
+        });
+      }, 1000);
     } catch (error) {
       console.error("Error creating assignment:", error.message);
       toast.error("Failed to create assignment");
-    }
-    finally {
+    } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="card">
-      <div className="card-header">
-        <p className="card-title">Create Assignment</p>
-      </div>
-      <div className="card-body bg-slate-100 dark:bg-slate-950">
+    <div>
+      <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold bg-blue-400 p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
+        <PlusCircle className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
+        Create Assignment
+      </p>
+
+      <div className="card-body bg-white dark:bg-slate-950">
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Class, Subject, and Chapter Selectors */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <div>
-              <label className="block text-sm font-medium mb-2">Select Class</label>
+              <label className="block text-sm font-medium mb-2">
+                Select Class
+              </label>
               <select
                 value={classId}
                 onChange={(e) => setClassId(e.target.value)}
@@ -186,7 +192,9 @@ const AddAssignment = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2">Select Subject</label>
+              <label className="block text-sm font-medium mb-2">
+                Select Subject
+              </label>
               <select
                 value={subjectId}
                 onChange={(e) => setSubjectId(e.target.value)}
@@ -202,7 +210,9 @@ const AddAssignment = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2">Select Chapter</label>
+              <label className="block text-sm font-medium mb-2">
+                Select Chapter
+              </label>
               <select
                 value={chapterId}
                 onChange={(e) => setChapterId(e.target.value)}
@@ -277,7 +287,7 @@ const AddAssignment = () => {
                   }}
                   className="w-full border px-4 py-2 rounded"
                 />
-                  <input
+                <input
                   type="text"
                   placeholder="Question marks"
                   value={question.marks}
@@ -289,14 +299,18 @@ const AddAssignment = () => {
                   className="w-full border px-4 py-2 rounded"
                 />
                 {question.options.map((option, optIndex) => (
-                  <div key={optIndex} className="flex items-center gap-2">
+                  <div
+                    key={optIndex}
+                    className="flex items-center gap-2 whitespace-nowrap"
+                  >
                     <input
                       type="text"
                       placeholder={`Option ${optIndex + 1}`}
                       value={option.text}
                       onChange={(e) => {
                         const updatedQuestions = [...questions];
-                        updatedQuestions[index].options[optIndex].text = e.target.value;
+                        updatedQuestions[index].options[optIndex].text =
+                          e.target.value;
                         setQuestions(updatedQuestions);
                       }}
                       className="w-full border px-4 py-2 rounded"
@@ -327,20 +341,19 @@ const AddAssignment = () => {
             </button>
           </div>
 
-
           {/* Due Date */}
-          
+
           <div>
-      <label className="block text-sm font-medium">Due Date</label>
-      <input
-        type="date"
-        value={dueDate}
-        onChange={(e) => setDueDate(e.target.value)}
-        required
-        min={today} // Prevent selecting past dates
-        className="w-full border px-4 py-2 rounded"
-      />
-    </div>
+            <label className="block text-sm font-medium">Due Date</label>
+            <input
+              type="date"
+              value={dueDate}
+              onChange={(e) => setDueDate(e.target.value)}
+              required
+              min={today} // Prevent selecting past dates
+              className="w-full border px-4 py-2 rounded max-w-min"
+            />
+          </div>
 
           {/* Submit Button */}
           <div>
@@ -355,7 +368,7 @@ const AddAssignment = () => {
           </div>
         </form>
       </div>
-      <ToastContainer/>
+      <ToastContainer />
     </div>
   );
 };

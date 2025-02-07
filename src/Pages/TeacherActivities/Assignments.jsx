@@ -10,6 +10,8 @@ import {
   ArrowDown,
   ArrowUp,
 } from "lucide-react"; // Import Lucid React Icons
+import { ChevronDown, ChevronUp } from "lucide-react";
+
 import { ToastContainer } from "react-toastify";
 
 export default function Assignments() {
@@ -41,8 +43,8 @@ export default function Assignments() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto my-8 p-6 bg-white shadow-xl rounded-lg">
-      {/* Back and Add Assignment Buttons */}
+    <div className="max-w-5xl mx-auto my-8 p-6 bg-white shadow-lg rounded-lg">
+      {/* Header Section */}
       <div className="flex justify-between items-center mb-6">
         <button
           onClick={() => {
@@ -68,118 +70,96 @@ export default function Assignments() {
           <Plus className="w-5 h-5 transition-all" />
         </button>
       </div>
-
-      {/* Title Section with Icon */}
-      <div className="flex items-center justify-center mb-8">
-        <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold bg-blue-400 p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
-          <Folders className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
-          Assignment List
-        </p>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold text-gray-800">Assignment List</h1>
       </div>
 
-      {/* Iterate over assignments */}
-      {assignments.map((assignment) => (
-        <div key={assignment._id} className="mb-8">
-          {/* Button to Update Assignment */}
-          <div className="flex justify-end">
-            <button
-              onClick={() => {
-                navigate("/teacher-dashboard/update_assignment", {
-                  state: { assignment },
-                });
-              }}
-              className="flex items-center justify-center bg-green-500 text-white p-3 rounded-full hover:bg-green-600 transition duration-300 transform hover:scale-110"
-              title="Update Assignment"
-            >
-              <Edit className="w-5 h-5 transition-all" />
-            </button>
-          </div>
-
-          {/* Assignment Title with Toggle Functionality */}
+      {/* Assignment List */}
+      <div className="space-y-4">
+        {assignments.map((assignment) => (
           <div
-            className="flex justify-between items-center cursor-pointer"
-            onClick={() => toggleQuestionsVisibility(assignment._id)}
+            key={assignment._id}
+            className="border border-gray-300 rounded-lg shadow-sm p-4 bg-gray-50 hover:shadow-md transition"
           >
-            <h2 className="text-2xl font-semibold text-center mb-4 text-gray-900">
-              {assignment.title}
-            </h2>
-            <div className="text-gray-600">
-              {openAssignment === assignment._id ? (
-                <ArrowUp className="w-6 h-6 transition-all" />
-              ) : (
-                <ArrowDown className="w-6 h-6 transition-all" />
-              )}
-            </div>
-          </div>
+            {/* Assignment Header */}
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-gray-800">
+                {assignment.title}
+              </h2>
 
-          {/* Questions Section - Visible if Assignment is Open */}
-          {openAssignment === assignment._id && (
-            <div className="space-y-6">
-              {/* Assignment Description */}
-              <p className="text-lg text-gray-700 text-center mb-6">
-                {assignment.description}
-              </p>
-              {assignment.questions?.map((question, index) => (
-                <div
-                  key={question._id}
-                  className="bg-white shadow-md rounded-lg p-6 transition-all hover:shadow-xl"
+              <div className="flex items-center gap-4">
+                {/* Edit Button */}
+                <button
+                  onClick={() =>
+                    navigate("/teacher-dashboard/update_assignment", {
+                      state: { assignment },
+                    })
+                  }
+                  className="p-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
+                  title="Edit Assignment"
                 >
-                  <div className="flex justify-between mb-6">
-                    <p className="text-xl font-medium text-gray-800">{`${index + 1}. ${question.question}`}</p>
-                    <span className="text-sm text-gray-500">
-                      Marks: {question.marks}
-                    </span>
-                  </div>
+                  <Edit className="w-5 h-5" />
+                </button>
 
-                  <div className="space-y-4">
-                    {question?.options.map((option) => (
-                      <div key={option._id} className="flex items-center gap-3">
-                        <input
-                          type="radio"
-                          name={`question-${index}`}
-                          id={`option-${option._id}`}
-                          className="h-5 w-5 text-blue-500 border-gray-300 rounded"
-                          disabled
-                          checked={option.isCorrect}
-                        />
-                        <label
-                          htmlFor={`option-${option._id}`}
-                          className={`text-lg ${option.isCorrect ? "font-semibold text-green-500" : "text-gray-700"}`}
-                        >
-                          {option.text}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
+                {/* View Results Button */}
+                <button
+                  onClick={() =>
+                    navigate("/teacher-dashboard/assignRes", {
+                      state: { assignment },
+                    })
+                  }
+                  className="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                  title="View Results"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+
+                {/* Dropdown Button */}
+                <button
+                  onClick={() => toggleQuestionsVisibility(assignment._id)}
+                  className="p-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+                  title="Expand"
+                >
+                  {openAssignment === assignment._id ? (
+                    <ChevronUp className="w-5 h-5" />
+                  ) : (
+                    <ChevronDown className="w-5 h-5" />
+                  )}
+                </button>
+              </div>
             </div>
-          )}
 
-          {/* View Results Button */}
-          <div className="text-right mt-4">
-            <button
-              onClick={() => {
-                navigate("/teacher-dashboard/assignRes", {
-                  state: { assignment },
-                });
-              }}
-              className="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600 transition duration-300 transform hover:scale-105"
-            >
-              View Assignment Result{" "}
-              <ChevronRight className="inline-block ml-2" />
-            </button>
-          </div>
+            {/* Assignment Details (Dropdown Content) */}
+            {openAssignment === assignment._id && (
+              <div className="mt-4 border-t pt-4">
+                <p className="text-gray-700">{assignment.description}</p>
 
-          {/* Due Date Section */}
-          <div className="mt-6 text-right">
-            <span className="text-gray-500">
-              Due Date: {new Date(assignment.dueDate).toLocaleDateString()}
-            </span>
-            <hr className="my-4 border-gray-300" />
+                {/* Questions Section */}
+                <div className="mt-3 space-y-3">
+                  {assignment.questions?.map((question, index) => (
+                    <div
+                      key={question._id}
+                      className="p-3 bg-white shadow-sm rounded-lg border"
+                    >
+                      <p className="font-medium text-gray-800">
+                        {index + 1}. {question.question}
+                      </p>
+                      <p className="text-gray-500 text-sm">
+                        Marks: {question.marks}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Due Date */}
+                <p className="text-right text-sm text-gray-500 mt-3">
+                  Due Date: {new Date(assignment.dueDate).toLocaleDateString()}
+                </p>
+              </div>
+            )}
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
 
       <ToastContainer />
     </div>
