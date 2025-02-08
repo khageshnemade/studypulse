@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { makeRequest } from "../../axios";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Edit } from "lucide-react";
 
 const UpdateChapter = () => {
@@ -11,6 +11,7 @@ const UpdateChapter = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const location = useLocation();
+  const navigate = useNavigate();
   const { chapter } = location.state || {};
   const {
     _id: chapterId,
@@ -51,7 +52,16 @@ const UpdateChapter = () => {
     try {
       const res = await makeRequest.post("teacher/update-chapter", updateData);
       console.log("Chapter updated successfully:", res.data);
+      console.log("Class Nad SUbject Id: ", classId, subjectId, chapterId);
+
       alert("Chapter updated successfully!");
+      navigate("/teacher-dashboard/chapters", {
+        state: {
+          classId,
+          subjectId,
+          chapterId,
+        },
+      });
     } catch (err) {
       console.error("Error updating chapter:", err.message);
       setError("Failed to update chapter");
@@ -145,7 +155,7 @@ const UpdateChapter = () => {
               className="w-full px-4 py-3 border border-gray-300 rounded-md mt-2"
             >
               <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
+              <option value="inActive">Inactive</option>
             </select>
           </div>
 

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { makeRequest } from "../../axios";
 import { useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
-import { toast } from "react-toastify";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 
 const CreateChapterCurriculum = () => {
@@ -18,7 +18,7 @@ const CreateChapterCurriculum = () => {
   const [subjects, setSubjects] = useState([]);
   const [chapters, setChapters] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const navigate = useNavigate();
   const userData = localStorage.getItem("user");
   const parsedData = JSON.parse(userData);
   console.log("Parsed Data:", parsedData?.token);
@@ -27,7 +27,7 @@ const CreateChapterCurriculum = () => {
     chapterId: initialChapterId,
     classId: initialclassId,
     subjectId: initialsubjectId,
-  } = location.state;
+  } = location.state || {};
   useEffect(() => {
     fetchSubjects();
   }, [classId]);
@@ -79,7 +79,7 @@ const CreateChapterCurriculum = () => {
       setChapters(response?.data?.data);
       setLoading(false);
     } catch (error) {
-      toast.error("Error fetching chapters: " + error.message);
+      toast.error("Error fetching chapters 1: " + error.data.response.message);
       console.error("Error fetching chapters:", error.message);
     }
   };
@@ -111,13 +111,24 @@ const CreateChapterCurriculum = () => {
         chapterCurriculumData
       );
       console.log("Chapter curriculum created successfully:", res.data);
-      // Reset the form
-      setTitle("");
-      setDescription("");
-      setChapterId("");
-      setVideoUrl("");
-      setClassId("");
-      setSubjectId("");
+      toast.success(res?.data.message, { autoClose: 2000 });
+
+      setTimeout(() => {
+        // Reset the form
+        setTitle("");
+        setDescription("");
+        setChapterId("");
+        setVideoUrl("");
+        setClassId("");
+        setSubjectId("");
+        navigate("/teacher-dashboard/chapterCurrs", {
+          state: {
+            initialClassId: classId,
+            initialChapterId: chapterId,
+            initialSubjectId: subjectId,
+          },
+        });
+      }, 2000);
     } catch (err) {
       console.error("Error creating chapter curriculum:", err.message);
       setError("Failed to create chapter curriculum");
@@ -239,13 +250,8 @@ const CreateChapterCurriculum = () => {
             </div>
 
             <div>
-              <label
-                htmlFor="chapterId"
-                className="block text-sm font-medium text-slate-900 dark:text-slate-50"
-              >
-                Chapter ID
-              </label>
               <input
+                hidden
                 type="text"
                 id="chapterId"
                 name="chapterId"
@@ -288,6 +294,7 @@ const CreateChapterCurriculum = () => {
           </form>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

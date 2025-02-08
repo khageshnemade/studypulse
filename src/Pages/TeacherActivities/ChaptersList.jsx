@@ -144,7 +144,7 @@ const ChaptersList = () => {
                 state: { classId, subjectId },
               });
             }}
-            className="flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600 text-white w-10 h-10 rounded-full hover:bg-blue-700 transition duration-300 mt-4"
+            className="flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600 text-white w-10 h-10 rounded-full hover:bg-blue-700 transition duration-300 mt-4 relative bottom-3"
             title="Add Chapter"
           >
             <Plus className="w-6 h-6" />

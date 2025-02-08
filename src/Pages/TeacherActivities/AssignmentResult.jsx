@@ -3,15 +3,24 @@ import { makeRequest } from "../../axios"; // Replace with your Axios instance c
 import { useLocation } from "react-router-dom";
 
 const AssignmentResult = () => {
+  const [chapterId, setChapterId] = useState("");
   const location = useLocation(); // Assuming useLocation hook is available from react-router-dom
-  const assignment = location.state; 
-  const { assignmentId, classId, subjectId, chapterId }=assignment || {};
- 
+  const assignment = location.state;
+  const {
+    _id: assignmentId,
+    classId,
+    subjectId,
+    chapterId: initialchapterId,
+  } = assignment.assignment || {};
+
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
+    setChapterId(initialchapterId._id);
+    console.log("Values Are", assignmentId, classId, subjectId, chapterId);
+
     if (assignmentId && classId && subjectId && chapterId) {
       fetchAssignmentResults();
     }
@@ -22,10 +31,9 @@ const AssignmentResult = () => {
     setError("");
 
     try {
-      const res = await makeRequest.get(
-        `/teacher/get-assignment-result`, 
-        { params: { assignmentId, classId, subjectId, chapterId } }
-      );
+      const res = await makeRequest.get(`/teacher/get-assignment-result`, {
+        params: { assignmentId, classId, subjectId, chapterId },
+      });
       setResults(res.data?.data || []);
     } catch (err) {
       console.error("Error fetching assignment results:", err.message);
@@ -37,13 +45,31 @@ const AssignmentResult = () => {
 
   return (
     <div className="container mx-auto p-6 bg-gray-50 rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">Assignment Results</h2>
+      <h2 className="text-2xl font-bold text-gray-800 mb-6">
+        Assignment Results
+      </h2>
 
       {isLoading && (
         <div className="flex justify-center items-center text-lg text-gray-600">
-          <svg className="animate-spin h-5 w-5 mr-3 text-blue-500" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V2a10 10 0 00-10 10h2z"></path>
+          <svg
+            className="animate-spin h-5 w-5 mr-3 text-blue-500"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            ></circle>
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V2a10 10 0 00-10 10h2z"
+            ></path>
           </svg>
           Loading results...
         </div>
@@ -64,8 +90,12 @@ const AssignmentResult = () => {
             <h3 className="font-semibold text-xl text-gray-900 dark:text-white">
               Student: {result.studentName}
             </h3>
-            <p className="text-gray-700 dark:text-gray-300">Marks Obtained: {result.marksObtained}</p>
-            <p className="text-gray-700 dark:text-gray-300">Total Marks: {result.totalMarks}</p>
+            <p className="text-gray-700 dark:text-gray-300">
+              Marks Obtained: {result.marksObtained}
+            </p>
+            <p className="text-gray-700 dark:text-gray-300">
+              Total Marks: {result.totalMarks}
+            </p>
             <p className="text-gray-700 dark:text-gray-300">
               Status:{" "}
               <span

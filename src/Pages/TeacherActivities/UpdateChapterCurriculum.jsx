@@ -51,6 +51,13 @@ const UpdateChapterCurriculum = () => {
       );
       console.log("Chapter curriculum updated successfully:", res.data);
       alert("Chapter curriculum updated successfully!");
+      navigate("/teacher-dashboard/chapterCurrs", {
+        state: {
+          initialClassId: curr.classId._id,
+          initialChapterId: curr.chapterId._id,
+          initialSubjectId: curr.subjectId._id,
+        },
+      });
     } catch (err) {
       console.error(
         "Error updating chapter curriculum:",
