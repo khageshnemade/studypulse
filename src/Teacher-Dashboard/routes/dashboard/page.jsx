@@ -558,14 +558,14 @@ export default function TeacherDashboard() {
     </div>
   );
 }
-// import React from 'react';
-// import { Link } from 'react-router-dom';
+
+// import React from "react";
+// import { Link } from "react-router-dom";
 
 // export default function TeacherDashboard() {
 //   const htmlString = `
-//     Hello I am Khagesh  <a href='/teacher-dashboard/cls'>@nimrat kaur</a>
-//     In Mandate <a href='/teacher-dashboard/subjects'>@nimrat kaur</a>
-//   `;
+//     Hello <a href="/profile/bf981a28-bc67-4d1d-beb1-3ae9f77be014">@Neha Rathi</a>
+// and <a href="/profile/ab2e7010-8f81-4c8c-b783-7dbaf604fee2">@nimrat kaur</a> `;
 
 //   // A function to parse the HTML string and replace <a> tags with Link components
 //   const parseHtmlString = (html) => {
@@ -577,10 +577,9 @@ export default function TeacherDashboard() {
 //     while ((match = regex.exec(html)) !== null) {
 //       // Push the text before the current <a> tag
 //       if (match.index > lastIndex) {
-
 //         parts.push(html.slice(lastIndex, match.index));
 //       }
-//       console.log("Regex",html.slice(lastIndex, match.index));
+//       console.log("Regex", html.slice(lastIndex, match.index));
 //       // Push the Link component for the <a> tag
 //       parts.push(
 //         <Link key={match[1]} to={match[1]}>
