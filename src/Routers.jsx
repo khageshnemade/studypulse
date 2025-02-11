@@ -46,6 +46,7 @@ import TeacherDashboard from "./Teacher-Dashboard/routes/dashboard/page";
 import Admins from "./Pages/SuperAdminActivities/Admins";
 import CreateRegion from "./Pages/SuperAdminActivities/CreateRegion";
 import GroupChatWindow from "./Pages/TeacherActivities/Chat/GroupChatWindow";
+import ProfilePicUpload from "./Pages/TeacherActivities/ProfilePicUpload";
 
 const user = localStorage.getItem("user"); // Check if the user is logged in
 
@@ -237,6 +238,10 @@ const router = createBrowserRouter(
         {
           path: "students",
           element: <Students />,
+        },
+        {
+          path: "upload",
+          element: <ProfilePicUpload />,
         },
         {
           path: "get_data",
