@@ -79,3 +79,55 @@ const ProfilePicUpload = ({ title = "Upload Profile Picture" }) => {
 };
 
 export default ProfilePicUpload;
+
+
+import React from 'react';
+
+const Modal = ({ isOpen, onClose, children }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+      <div className="bg-white rounded-lg shadow-lg w-96 p-6 relative">
+        <button
+          onClick={onClose}
+          className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
+        >
+          X
+        </button>
+        {children}
+      </div>
+    </div>
+  );
+};
+
+export default Modal;
+
+import React, { useState } from 'react';
+import Modal from './Modal';  // Import Modal component
+import ProfilePicUpload from './ProfilePicUpload';  // Import ProfilePicUpload component
+
+const App = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+  return (
+    <div className="min-h-screen bg-gray-100 flex justify-center items-center">
+      <button
+        onClick={openModal}
+        className="bg-blue-500 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-600 transition duration-300"
+      >
+        Open Profile Picture Upload
+      </button>
+
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <ProfilePicUpload title="Upload Your Profile Picture" />
+      </Modal>
+    </div>
+  );
+};
+
+export default App;
+
