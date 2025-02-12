@@ -36,9 +36,9 @@ export default function Classes() {
   const showSubject = (classId, className) => {
     navigate(`/admin-dashboard/subjects`, { state: { classId, className } });
   };
-  const deleteSubject = async(classId, className) => {
+  const deleteSubject = async (classId, className) => {
     try {
-      const res = await makeRequest.post("/admin/delete-class", {classId});
+      const res = await makeRequest.post("/admin/delete-class", { classId });
       console.log("Class deleted successfully:");
       toast.success(res?.data?.message);
 
@@ -52,32 +52,7 @@ export default function Classes() {
       setIsLoading(false);
     }
   };
-  const addClass = (classId) => {
-    navigate(`/admin-dashboard/addClass`);
-  };
-  const handleSubmit = async (e) => {
-    e.preventDefault();
 
-    const classData = { name, stream };
-
-    setIsLoading(true);
-    console.log("Setting Success", isLoading);
-    setError("");
-    try {
-      const res = await makeRequest.post("/admin/create-class", classData);
-      console.log("Class created successfully:");
-      toast.success(res?.data?.message);
-
-      res.status === 200 || res.status === 201 ? fetchClasses() : "";
-      setIsLoading(false); // Reset loading state
-      setIsModalOpen(false);
-    } catch (error) {
-      console.error("Error creating class:", error.message);
-      toast.error("Failed to fetch Streams,Please try to Login again");
-    } finally {
-      setIsLoading(false);
-    }
-  };
   return (
     <div>
       <div className="mx-auto p-6 shadow-lg rounded-lg overflow-x-auto">
@@ -89,7 +64,7 @@ export default function Classes() {
         <div className="flex justify-end mb-2">
           <button
             className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-all"
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => navigate(`/admin-dashboard/addClass`)}
           >
             Add Class
           </button>
@@ -132,7 +107,7 @@ export default function Classes() {
                     className="bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600 transition-all mr-1"
                     onClick={() => showSubject(item._id, item.name)}
                   >
-                      Subjects
+                    Subjects
                   </button>
                   <button
                     className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition-all ml-1"
@@ -146,98 +121,6 @@ export default function Classes() {
           </tbody>
         </table>
       </div>
-
-      {/* Modal for Add Class */}
-      {isModalOpen && (
-        <div
-          className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-75 z-[999]"
-          onClick={() => setIsModalOpen(false)}
-        >
-          <div
-            className="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg relative"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={() => setIsModalOpen(false)}
-              className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 focus:outline-none"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-
-            <div className="text-center">
-              <h2 className="text-2xl font-bold text-gray-800">Create Class</h2>
-              <p className="text-sm text-gray-600 mt-1">
-                Fill in the details to add a new class
-              </p>
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-4 mt-6">
-              <div>
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Class Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                  className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="stream"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Stream
-                </label>
-                <select
-                  id="stream"
-                  value={stream}
-                  onChange={(e) => setStream(e.target.value)}
-                  required
-                  className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">Select a Stream</option>
-                  <option value="Science">Science</option>
-                  <option value="Arts">Arts</option>
-                  <option value="Commerce">Commerce</option>
-                </select>
-              </div>
-
-              {error && <p className="text-red-500 text-sm">{error}</p>}
-
-              <button
-                type="submit"
-                className={`w-full py-3 px-4 rounded-md text-white font-semibold ${
-                  isLoading ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-600"
-                }`}
-                disabled={isLoading}
-              >
-                {isLoading ? "Creating Class..." : "Create Class"}
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
 
       <ToastContainer />
     </div>

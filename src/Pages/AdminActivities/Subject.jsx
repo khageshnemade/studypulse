@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { makeRequest } from "../../axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { BookUserIcon, Trash2 } from "lucide-react";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function Subject() {
   const navigate = useNavigate();
@@ -15,6 +16,8 @@ export default function Subject() {
   const [error, setError] = useState("");
   const orgId = useSelector((state) => state.org.orgId);
   const [classes, setClasses] = useState([]);
+  const [file, setFile] = useState(null);
+  const [imageUrl, setImageUrl] = useState(""); // Store uploaded image URL
 
   useEffect(() => {
     if (classId) {
@@ -33,10 +36,46 @@ export default function Subject() {
       console.error("Request Error:", error.message);
     }
   };
-  const handleSubmit = async (e) => {
+  const handleFileUpload = async (e) => {
     e.preventDefault();
 
-    const subjectData = { name, classId };
+    if (!file) {
+      toast.error("Please select an image to upload.");
+      return;
+    }
+
+    setIsLoading(true);
+    setError("");
+
+    const formData = new FormData();
+    formData.append("files", file);
+
+    try {
+      const response = await makeRequest.post(
+        "https://api.studypulse.live/web/api/file-upload/profile-pic",
+        formData
+      );
+
+      if (response.data.success) {
+        setImageUrl(response.data.url); // Store the uploaded image URL
+        toast.success("Image uploaded successfully!");
+      } else {
+        toast.error("Image upload failed. Please try again.");
+      }
+    } catch (error) {
+      toast.error("Failed to upload image.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!imageUrl) {
+      toast.error("Please upload a profile picture first.");
+      return;
+    }
+
+    const subjectData = { name, classId, image: imageUrl };
 
     setIsLoading(true);
     setError("");
@@ -44,12 +83,17 @@ export default function Subject() {
     try {
       const res = await makeRequest.post("/admin/create-subject", subjectData);
       console.log("Subject created successfully:", res.data);
+
       // Reset the form
       setName("");
+      setImageUrl(""); // Reset the image URL
+      setFile(null); // Clear the selected file
+      toast("Subject created successfully");
+      // Fetch updated subjects
+      fetchSubjectsByClassId();
 
-      setIsLoading(false); // Reset loading state
+      // Close modal after subject is added
       setIsModalOpen(false);
-      res.status === 200 || res.status === 201 ? fetchSubjectsByClassId() : "";
     } catch (err) {
       console.error("Error creating subject:", err.message);
       setError("Failed to create subject");
@@ -57,17 +101,10 @@ export default function Subject() {
       setIsLoading(false);
     }
   };
-  const deleteSubject = async (subjectId) => {
-    try {
-      const res = await makeRequest.delete(`/admin/delete-subject?subjectId=${subjectId}`);
-      console.log("Subject deleted successfully:", res.data);
-      fetchSubjectsByClassId();
-    } catch (error) {
-      console.error("Request Error:", error.message);
-    }
-  }
+
   return (
     <>
+      <ToastContainer />
       {isModalOpen && (
         <div
           className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-75 z-[999]"
@@ -150,6 +187,38 @@ export default function Subject() {
                   </select>
                 </div>
 
+                <div>
+                  <label className="block text-sm font-medium text-slate-900 dark:text-slate-50">
+                    Profile Picture
+                  </label>
+                  <input
+                    type="file"
+                    onChange={(e) => setFile(e.target.files[0])}
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={handleFileUpload}
+                    className="mt-2 bg-blue-500 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-600 transition duration-300"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? "Uploading..." : "Upload Image"}
+                  </button>
+                </div>
+
+                {/* Show Uploaded Image Preview */}
+                {imageUrl && (
+                  <div className="mt-4 text-center">
+                    <p className="text-green-600 font-semibold">
+                      Image Uploaded Successfully!
+                    </p>
+                    <img
+                      src={`https://api.studypulse.live/${imageUrl}`}
+                      alt="Uploaded Profile"
+                      className="mt-2 max-w-xs mx-auto rounded-full"
+                    />
+                  </div>
+                )}
                 {/* Error Message */}
                 {error && (
                   <p className="text-red-500 text-sm text-center mt-2">
@@ -161,10 +230,11 @@ export default function Subject() {
                 <div className="flex justify-between gap-4">
                   <button
                     type="submit"
-                    className={`w-full py-3 px-6 rounded-md text-white font-semibold transition-all ${isLoading
-                      ? "bg-gray-400 cursor-not-allowed"
-                      : "bg-blue-500 hover:bg-blue-600"
-                      }`}
+                    className={`w-full py-3 px-6 rounded-md text-white font-semibold transition-all ${
+                      isLoading
+                        ? "bg-gray-400 cursor-not-allowed"
+                        : "bg-blue-500 hover:bg-blue-600"
+                    }`}
                     disabled={isLoading}
                   >
                     {isLoading ? "Creating Subject..." : "Create Subject"}
@@ -205,9 +275,12 @@ export default function Subject() {
         <table className="table-auto w-full border-collapse border border-gray-300">
           <thead className="bg-gray-200">
             <tr>
-              <th className="border border-gray-300 px-4 py-2 text-left text-gray-700">Classes</th>
-              <th className="border border-gray-300 px-4 py-2 text-left text-gray-700">Created At</th>
-              <th className="border border-gray-300 px-4 py-2 text-left text-gray-700">Actions</th>
+              <th className="border border-gray-300 px-4 py-2 text-left text-gray-700">
+                Classes
+              </th>
+              <th className="border border-gray-300 px-4 py-2 text-left text-gray-700">
+                Created At
+              </th>
             </tr>
           </thead>
           <tbody className="text-gray-700">
@@ -216,27 +289,17 @@ export default function Subject() {
                 key={index}
                 className="hover:bg-gray-100 hover:text-gray-400 transition-all"
               >
-                <td className="border border-gray-300 px-4 py-2 whitespace-nowrap">{item.name}</td>
+                <td className="border border-gray-300 px-4 py-2 whitespace-nowrap">
+                  {item.name}
+                </td>
                 <td className="border border-gray-300 px-4 py-2 whitespace-nowrap">
                   {new Date(item.createdAt).toLocaleDateString()}
-                </td>
-                <td className="border border-gray-300 px-4 py-2">
-                  <div className="flex space-x-3 items-center justify-center">
-                    {/* Delete Button */}
-                    <button
-                      className="bg-red-500 text-white p-2 rounded-lg hover:bg-red-600 transition-all focus:outline-none focus:ring-2 focus:ring-red-400"
-                      onClick={() => deleteSubject(item._id, item.name)}
-                    >
-                      <Trash2 className="w-5 h-5" />
-                    </button>
-                  </div>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-
     </>
   );
 }
