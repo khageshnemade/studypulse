@@ -44,7 +44,8 @@ export const SuperAdminSidebar = forwardRef(({ collapsed }, ref) => {
       Pulse
     </p>
   )}
-</div>
+</div>                      <hr className="border-t-2 border-gray-700 my-2" />
+
       <div className="flex w-full flex-col gap-y-4 overflow-y-auto overflow-x-hidden p-3 [scrollbar-width:_thin]">
         {navbarLinks.map((navbarLink) => (
           <nav

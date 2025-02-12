@@ -11,7 +11,7 @@ import ProductImage from "../assets/product-image.jpg";
 
 export const navbarLinks = [
   {
-    title: "",
+    title: "Admin Dashboard",
     links: [
       {
         label: "Home", // Shortened and clear label

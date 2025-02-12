@@ -9,7 +9,8 @@ export default defineConfig({
     global: 'window', // This will map `global` to `window` in the browser
   },
   server: {
-    port: 3000,
+    host: '0.0.0.0', // Makes it accessible from other devices on the network
+    port: 3000,       // Change this to the port you want
   },
   resolve: {
     alias: {

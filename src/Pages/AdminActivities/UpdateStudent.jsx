@@ -5,6 +5,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Plus, Edit, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import DocumentViewer from "./DocumentViewer";
 export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
   const studentsData = useSelector((state) => state?.students?.studentsData);
   console.log("All Students:", studentsData); // Log the fetched students
@@ -396,6 +397,7 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-1 gap-6">
                   {/* Student Details */}
+                 
                   <div className="p-6 rounded-lg shadow-md">
                     <ul className="space-y-4 text-gray-600">
                       {studentData ? (
@@ -405,18 +407,17 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
                             label: "Status:",
                             value: userData?.status || "N/A",
                           },
-                          ...(studentData.documents || []).map(
-                            (doc, index) => ({
-                              label: `Document-${index + 1}:`,
-                              value: doc,
-                            })
-                          ),
+                        
                           {
                             label: "DOB:",
                             value: new Date(
                               studentData.dob
                             ).toLocaleDateString(),
                           },
+                          {
+                            label: "Documents:",
+                            value: <DocumentViewer studentData={studentData}/>,
+                          }
                         ].map((item, index) => (
                           <li
                             key={index}
@@ -424,7 +425,9 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
                           >
                             <strong>{item.label}</strong>
                             <span>{item.value || "N/A"}</span>
+                           
                           </li>
+                           
                         ))
                       ) : (
                         <li>No student data available.</li>

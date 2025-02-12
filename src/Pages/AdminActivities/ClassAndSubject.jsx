@@ -36,22 +36,7 @@ export default function Classes() {
   const showSubject = (classId, className) => {
     navigate(`/admin-dashboard/subjects`, { state: { classId, className } });
   };
-  const deleteSubject = async (classId, className) => {
-    try {
-      const res = await makeRequest.post("/admin/delete-class", { classId });
-      console.log("Class deleted successfully:");
-      toast.success(res?.data?.message);
-
-      res.status === 200 || res.status === 201 ? fetchClasses() : "";
-      setIsLoading(false); // Reset loading state
-      setIsModalOpen(false);
-    } catch (error) {
-      console.error("Error deleting class:", error.message);
-      toast.error("Failed to delete Class,Please try to Login again");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+ 
 
   return (
     <div>
@@ -109,12 +94,7 @@ export default function Classes() {
                   >
                     Subjects
                   </button>
-                  <button
-                    className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition-all ml-1"
-                    onClick={() => deleteSubject(item._id, item.name)}
-                  >
-                    Delete
-                  </button>
+                
                 </td>
               </tr>
             ))}

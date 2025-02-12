@@ -58,7 +58,7 @@
   }
 
   .sidebar-group-title {
-    @apply overflow-hidden text-ellipsis text-3xl text-slate-600 dark:text-slate-400;
+    @apply overflow-hidden text-ellipsis text-3xl text-blue-300 dark:text-slate-400;
   }
 
   .sidebar-item {

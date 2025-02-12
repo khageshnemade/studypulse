@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { makeRequest } from "../../axios";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Edit } from "lucide-react";
+import { ArrowLeft, Edit, Plus } from "lucide-react";
 
 const UpdateChapter = () => {
   const [title, setTitle] = useState("");
@@ -72,12 +72,28 @@ const UpdateChapter = () => {
 
   return (
     <>
+    
       <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold bg-blue-400 p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
         <Edit className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
         Update Chapter
       </p>
 
       <div className="bg-white shadow-lg rounded-xl p-6 max-w-lg mx-auto mt-8">
+      <div className="flex justify-between mb-6">
+        <button
+          onClick={() => {
+            navigate("/teacher-dashboard/chapters", {
+              state: { classId, subjectId, chapterId },
+            });
+          }}
+          className="flex items-center justify-center bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 transition duration-300"
+          title="Back To Chapter List"
+        >
+          <ArrowLeft className="w-4 h-4" /> {/* Add Icon */}
+        </button>
+
+      
+      </div>
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Class ID */}
           <div>

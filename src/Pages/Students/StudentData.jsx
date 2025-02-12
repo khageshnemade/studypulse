@@ -137,7 +137,7 @@ const Table = () => {
               <th className="px-4 py-2 border">Email</th>
               <th className="px-4 py-2 border">Phone</th>
               <th className="px-4 py-2 border">City</th>
-              {profileComplete && <th className="px-4 py-2 border">Actions</th>}
+              {profileComplete && <th className="px-4 py-2 border">More</th>}
               <th className="px-4 py-2 border">Status</th>
             </tr>
           </thead>
@@ -174,13 +174,7 @@ const Table = () => {
                         <ArrowRight/>
                       </button>
 
-                      {/* Delete Button */}
-                      <button
-                        className="bg-red-500 text-white p-2 rounded-lg hover:bg-red-600 transition-all focus:outline-none focus:ring-2 focus:ring-red-400"
-                        onClick={() => deleteStudent(item._id, item.name)}
-                      >
-                        <Trash2 className="w-5 h-5" />
-                      </button>
+                    
                     </div>
                   </td>
 

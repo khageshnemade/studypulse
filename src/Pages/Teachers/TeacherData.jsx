@@ -99,7 +99,7 @@ export const Table = () => {
               <th className="px-4 py-2 border border-gray-300">Phone Number</th>
               <th className="px-4 py-2 border border-gray-300">Address</th>
               <th className="px-4 py-2 border border-gray-300">Experience</th>
-              <th className="px-4 py-2 border border-gray-300">Action</th>
+              <th className="px-4 py-2 border border-gray-300">More</th>
               <th className="px-4 py-2 border border-gray-300">Status</th>
             </tr>
           </thead>
@@ -143,13 +143,7 @@ export const Table = () => {
       <ArrowRight className="w-5 h-5" />
     </button>
 
-    {/* Delete Button */}
-    <button
-      className="bg-red-500 text-white p-2 rounded-lg hover:bg-red-600 transition-all focus:outline-none focus:ring-2 focus:ring-red-400"
-      onClick={() => deleteSubject(item._id, item.name)}
-    >
-      <Trash2 className="w-5 h-5" />
-    </button>
+   
   </div>
 </td>
 

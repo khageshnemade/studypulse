@@ -16,6 +16,9 @@ const AssignmentResult = () => {
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+useEffect(() => {
+ console.log("Assertion failed",assignment);
+}, [assignment])
 
   useEffect(() => {
     setChapterId(initialchapterId._id);

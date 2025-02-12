@@ -202,7 +202,7 @@ export default function ChapterCurr() {
             });
           }}
           className="flex items-center justify-center bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 transition duration-300"
-          title=" Add ChapterCurr"
+          title="Back To Chapter List"
         >
           <ArrowLeft className="w-4 h-4" /> {/* Add Icon */}
         </button>
