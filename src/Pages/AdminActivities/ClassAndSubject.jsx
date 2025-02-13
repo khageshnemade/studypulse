@@ -36,7 +36,6 @@ export default function Classes() {
   const showSubject = (classId, className) => {
     navigate(`/admin-dashboard/subjects`, { state: { classId, className } });
   };
- 
 
   return (
     <div>
@@ -94,7 +93,6 @@ export default function Classes() {
                   >
                     Subjects
                   </button>
-                
                 </td>
               </tr>
             ))}

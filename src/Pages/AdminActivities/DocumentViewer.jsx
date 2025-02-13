@@ -19,9 +19,9 @@ const DocumentViewer = ({ studentData }) => {
 
   // Function to render the document based on type
   const renderDocument = (doc) => {
-    const fileExtension = doc.split('.').pop().toLowerCase();
-console.log("renderDocument",doc);
-    if (fileExtension === 'pdf') {
+    const fileExtension = doc.split(".").pop().toLowerCase();
+    console.log("renderDocument", doc);
+    if (fileExtension === "pdf") {
       return (
         <div className="flex flex-col items-center">
           <h3 className="text-xl font-semibold mb-4">Viewing PDF</h3>
@@ -32,16 +32,20 @@ console.log("renderDocument",doc);
             title="Document Viewer"
             className="border-2 border-gray-300 rounded"
           />
-          <a href={doc} download className="mt-2 text-blue-500 underline">
+          <a href={`/${doc}`} download className="mt-2 text-blue-500 underline">
             Download PDF
           </a>
         </div>
       );
-    } else if (['jpg', 'jpeg', 'png'].includes(fileExtension)) {
+    } else if (["jpg", "jpeg", "png"].includes(fileExtension)) {
       return (
         <div className="flex flex-col items-center">
           <h3 className="text-xl font-semibold mb-4">Viewing Image</h3>
-          <img src={doc} alt={`Document ${doc}`} className="max-w-full max-h-96" />
+          <img
+            src={`/${doc}`}
+            alt={`Document ${doc}`}
+            className="max-w-full max-h-96"
+          />
           <a href={doc} download className="mt-2 text-blue-500 underline">
             Download Image
           </a>
@@ -54,18 +58,18 @@ console.log("renderDocument",doc);
 
   return (
     <div className="space-y-4">
-           {/* Display Documents List */}
+      {/* Display Documents List */}
       {studentData?.documents && studentData.documents.length > 0 ? (
         <div className="flex flex-wrap space-x-4 mb-4">
-        {studentData.documents.map((doc, index) => (
-          <div key={index} className="mb-4">
-            <button
-              onClick={() => openModal(doc)} // Open modal with selected document
-              className="text-blue-600 hover:underline"
-            >
-              View Document {index + 1}
-            </button>
-          </div>
+          {studentData.documents.map((doc, index) => (
+            <div key={index} className="mb-4">
+              <button
+                onClick={() => openModal(doc)} // Open modal with selected document
+                className="text-blue-600 hover:underline"
+              >
+                View Document {index + 1}
+              </button>
+            </div>
           ))}
         </div>
       ) : (

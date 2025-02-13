@@ -14,15 +14,39 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
   const [activeTab, setActiveTab] = useState("about");
   const [studentData, setStudentData] = useState({});
   const [userData, setUserData] = useState({});
-
+  const [file, setFile] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
   const [docs, setDocs] = useState([]);
   const [fileName, setFileName] = useState("");
 
   const [newDocument, setNewDocument] = useState("");
 
-  // Handle adding a new document
-  const handleAddDocument = () => {
-    setDocs([...docs, newDocument]);
+  const handleFileUpload = async (e) => {
+    e.preventDefault();
+
+    if (!file) {
+      toast.error("Please select an image to upload.");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("files", file);
+
+    try {
+      const response = await makeRequest.post(
+        "https://api.studypulse.live/web/api/file-upload/profile-pic",
+        formData
+      );
+
+      if (response.data.success) {
+        setImageUrl(response.data.url); // Store the uploaded image URL
+        setDocs([...docs, response?.data.url]);
+        toast.success("Image uploaded successfully!");
+      } else {
+        toast.error("Image upload failed. Please try again.");
+      }
+    } catch (error) {
+      toast.error("Failed to upload image.");
+    }
   };
 
   // Handle removing a document
@@ -232,19 +256,16 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
 
               {/* Add a new document */}
               <div className="flex items-center mt-2 gap-2">
+                {/* Display the file name */}
                 <input
                   type="file"
-                  id="new-doc"
-                  onChange={handleFileChange}
-                  className="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  onChange={(e) => setFile(e.target.files[0])}
+                  required
                 />
-                <span className="text-gray-700 ml-2">
-                  {fileName || "No file selected"}
-                </span>{" "}
-                {/* Display the file name */}
+
                 <button
                   type="button"
-                  onClick={handleAddDocument}
+                  onClick={handleFileUpload}
                   className="px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 flex items-center gap-2"
                 >
                   <Plus className="w-5 h-5" /> {/* Icon added here */}
@@ -320,9 +341,13 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
       <div className="flex items-center justify-center min-h-screen">
         {/* Tab Navigation */}
         <div className="mt-8 w-full">
-        <button onClick={()=>{
-        setShowUpdateStudent(false);
-      }}><ArrowLeft/></button>
+          <button
+            onClick={() => {
+              setShowUpdateStudent(false);
+            }}
+          >
+            <ArrowLeft />
+          </button>
           <div className="flex text-center border-b border-gray-300">
             <button
               onClick={() => setActiveTab("about")}
@@ -397,7 +422,7 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-1 gap-6">
                   {/* Student Details */}
-                 
+
                   <div className="p-6 rounded-lg shadow-md">
                     <ul className="space-y-4 text-gray-600">
                       {studentData ? (
@@ -407,7 +432,7 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
                             label: "Status:",
                             value: userData?.status || "N/A",
                           },
-                        
+
                           {
                             label: "DOB:",
                             value: new Date(
@@ -416,8 +441,8 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
                           },
                           {
                             label: "Documents:",
-                            value: <DocumentViewer studentData={studentData}/>,
-                          }
+                            value: <DocumentViewer studentData={studentData} />,
+                          },
                         ].map((item, index) => (
                           <li
                             key={index}
@@ -425,9 +450,7 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
                           >
                             <strong>{item.label}</strong>
                             <span>{item.value || "N/A"}</span>
-                           
                           </li>
-                           
                         ))
                       ) : (
                         <li>No student data available.</li>
