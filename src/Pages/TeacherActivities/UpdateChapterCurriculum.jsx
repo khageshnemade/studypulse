@@ -35,9 +35,9 @@ const UpdateChapterCurriculum = () => {
       chapterId: curr.chapterId._id,
       subjectId: curr.subjectId._id,
       classId: curr.classId._id,
-      title: curr.chapterId.title,
+      title,
       description,
-      videoUrl: curr.videoUrl,
+      videoUrl,
       status,
     };
 

@@ -12,6 +12,7 @@ import {
   ArcElement,
 } from "chart.js";
 import { makeRequest } from "../../../axios";
+import { BookOpen, FileText, Layers } from "lucide-react";
 
 // Registering chart components
 ChartJS.register(
@@ -84,36 +85,56 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen p-4">
       {/* Page Title */}
-      <p className="text-center text-2xl sm:text-3xl font-semibold bg-blue-400 p-4 rounded-2xl flex justify-center items-center mx-auto my-4 text-gray-700">
+      {/* <p className="text-center text-2xl sm:text-3xl font-semibold bg-blue-400 p-4 rounded-2xl flex justify-center items-center mx-auto my-4 text-gray-700">
         <i className="text-xl sm:text-2xl h-8 sm:h-10 min-w-5 mr-4 animate-bounce fas fa-home" />
         Admin Dashboard
-      </p>
+      </p> */}
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6 mb-8">
-        {[ 
-          { title: "Teachers Registered", count: dashboard.totalTeachersCount, color: "bg-blue-500", icon: "fas fa-user" },
-          { title: "Students Registered", count: dashboard.totalStudentCount, color: "bg-green-500", icon: "fas fa-users" },
-          { title: "Classes Created", count: dashboard.totalClassCount, color: "bg-yellow-500", icon: "fas fa-school" }
-        ].map(({ title, count, color, icon }, index) => (
-          <div key={index} className="bg-white shadow-lg rounded-xl p-6 flex flex-col items-center text-center transition-transform transform hover:scale-105">
-            <div className={`${color} p-4 rounded-full mb-4`}>
-              <i className={`${icon} text-3xl text-white`} />
-            </div>
-            <h2 className="text-lg font-semibold text-gray-800">{title}</h2>
-            <p className="text-4xl font-bold text-gray-900 mt-4">{count}</p>
-          </div>
-        ))}
+   
+   
+
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-10 p-8">
+  <div className="bg-blue-100 shadow-lg rounded-lg p-6 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 hover:shadow-2xl cursor-pointer outline outline-4 outline-gray-400">
+    <div className="flex items-center gap-4">
+      <div className="bg-blue-500 text-white p-4 rounded-full">
+        <BookOpen className="text-2xl" />
       </div>
+      <h3 className="text-lg font-semibold text-gray-700">Teachers Registered</h3>
+    </div>
+    <p className="text-3xl font-bold text-blue-600 bg-white rounded-lg py-2 mt-2 text-center">{dashboard.totalTeachersCount}</p>
+  </div>
+
+  <div className="bg-green-100 shadow-lg rounded-lg p-6 flex flex-col justify-between transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer outline outline-4 outline-gray-400">
+    <div className="flex items-center gap-4">
+      <div className="bg-green-500 text-white p-4 rounded-full">
+        <FileText className="text-2xl" />
+      </div>
+      <h3 className="text-lg font-semibold text-gray-700">Students Registered</h3>
+    </div>
+    <p className="text-3xl font-bold text-green-600 bg-white rounded-lg py-2 mt-2 text-center">{dashboard.totalStudentCount}</p>
+  </div>
+
+  <div className="bg-yellow-100 shadow-lg rounded-lg p-6 flex flex-col justify-between transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer outline outline-4 outline-gray-400">
+    <div className="flex items-center gap-4">
+      <div className="bg-yellow-500 text-white p-4 rounded-full">
+        <Layers className="text-2xl" />
+      </div>
+      <h3 className="text-lg font-semibold text-gray-700">Classes Created</h3>
+    </div>
+    <p className="text-3xl font-bold text-yellow-600 bg-white rounded-lg py-2 mt-2 text-center">{dashboard.totalClassCount}</p>
+  </div>
+
+</div>
+
 
       {/* Recently Added Teachers & Students */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 ">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-8 ">
         {[ 
           { title: "Recently Added Teachers", data: dashboard.recentlyAddedTeachers },
           { title: "Recently Added Students", data: dashboard.recentlyAddedStudents }
         ].map(({ title, data }, index) => (
-          <div key={index} className="bg-white shadow-lg rounded-xl p-6 hover:scale-105 max-h-96 overflow-y-scroll">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">{title}</h2>
+          <div key={index} className="bg-white shadow-lg rounded-xl p-6 transform transition-transform duration-500 hover:scale-105 max-h-96 overflow-y-scroll outline outline-4 outline-gray-400">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4 bg-slate-300 p-2">{title}</h2>
             <div className="space-y-4">
               {data?.map(person => (
                 <div key={person._id || person.id} className="flex items-center p-4 border-b last:border-b-0 space-x-4">
@@ -130,7 +151,7 @@ export default function AdminDashboard() {
             </div>
           </div>
         ))}
-         <div className="bg-white shadow-lg rounded-xl p-6 hover:scale-105 mb-8 ">
+         <div className="bg-white shadow-lg rounded-xl p-6 duration-500 hover:scale-105 mb-8 outline outline-4 outline-gray-400">
         <h2 className="text-xl font-semibold text-gray-800 text-center mb-4">Student Pass/Fail Stats</h2>
         <p className="text-gray-600 text-center mb-4">Visualization of Passed vs Failed Students</p>
         <div className="flex justify-center">
@@ -140,9 +161,6 @@ export default function AdminDashboard() {
         </div>
       </div>
       </div>
-
-      {/* Student Pass/Fail Stats */}
-     
     </div>
   );
 }

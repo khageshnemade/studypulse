@@ -77,7 +77,7 @@ const SubjectsList = () => {
                               state: { subject },
                             })
                           }
-                          className="bg-gradient-to-r from-blue-300 to-purple-500 text-white px-4 py-2 rounded-md w-full sm:w-auto hover:bg-blue-800 focus:outline-none transition duration-300"
+                          className="bg-blue-400 text-white px-3 py-2 rounded-md w-full sm:w-auto hover:bg-blue-700 focus:outline-none transition duration-300"
                           title="Chapters"
                         >
                           <Book className="h-5 w-5 mr-2 inline" />

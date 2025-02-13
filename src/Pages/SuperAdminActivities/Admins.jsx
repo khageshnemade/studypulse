@@ -63,12 +63,11 @@ export default function Admins() {
   }, [orgId]);
 
   return (
-    <div className="container mx-auto p-6 max-w-7xl bg-blue-400 min-h-screen">
-      <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
-        <User2 className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
-        Admin List
-      </p>
-
+    <div className="container mx-auto p-6 max-w-7xl min-h-screen">
+      <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold bg-blue-400 p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
+            <User2 className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
+            Admin List
+          </p>
       <div className="flex justify-between items-center mb-6 max-w-lg mx-auto">
         <Link
           to="/superadmin-dashboard"

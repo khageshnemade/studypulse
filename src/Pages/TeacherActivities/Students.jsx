@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { makeRequest } from "../../axios";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export default function Students() {
   const location = useLocation();
@@ -139,7 +139,7 @@ export default function Students() {
                 </td>
 
                 {selectedStudent && (
-                  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                  <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white rounded-lg shadow-lg w-11/12 md:w-3/4 lg:w-1/2 p-4 max-h-[90vh] overflow-y-auto">
                       <div className="flex justify-between items-center border-b pb-2">
                         <h2 className="text-lg font-semibold">Documents</h2>
@@ -153,14 +153,8 @@ export default function Students() {
                       <div className="mt-4">
                         {selectedStudent.documents.map((doc, index) => (
                           <div key={index} className="mb-2">
-                            <a
-                              href={doc}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-blue-600 hover:text-blue-800 hover:underline"
-                            >
-                              Document {index + 1}
-                            </a>
+                          
+                            <Link to={`/${doc}`}  className="text-blue-600 hover:text-blue-800 hover:underline"> Document {index + 1}</Link>
                           </div>
                         ))}
                       </div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { makeRequest } from "../../axios";
 import { useLocation } from "react-router-dom";
 
@@ -30,6 +30,7 @@ const UpdateAssignment = () => {
     });
   };
 
+
   const handleQuestionChange = (index, e) => {
     const { name, value } = e.target;
     const updatedQuestions = [...formData.questions];
@@ -42,6 +43,11 @@ const UpdateAssignment = () => {
       questions: updatedQuestions,
     });
   };
+useEffect(() => {
+  const totalMarks = formData.questions.reduce((sum, e) => sum + parseInt(e.marks), 0);
+    setFormData({...formData, totalMarks });
+  
+}, [formData?.questions])
 
   const handleOptionChange = (questionIndex, optionIndex, e) => {
     const { name, value, type, checked } = e.target;
@@ -62,10 +68,8 @@ const UpdateAssignment = () => {
     setIsLoading(true);
     setError("");
     console.log("passing submit", formData.questions);
-    const totalMarks = formData.questions.reduce((sum, e) => sum + e.marks, 0);
-    console.log("total marks", totalMarks);
+   
 
-    setFormData({ ...formData, totalMarks });
     console.log("Passing mark", formData);
 
     try {
@@ -167,7 +171,7 @@ const UpdateAssignment = () => {
             Passing Marks
           </label>
           <input
-            type="number"
+            type="text"
             name="passingMarks"
             value={formData.passingMarks}
             onChange={handleInputChange}
@@ -209,7 +213,21 @@ const UpdateAssignment = () => {
                   className="w-full border border-gray-300 rounded px-4 py-2"
                 />
               </div>
-
+              <div className="space-y-2">
+                <label
+                  htmlFor="marks"
+                  className="block text-sm font-medium mb-2"
+                >
+                  Marks
+                </label>
+                <input
+                  type="text"
+                  name="marks"
+                  value={question.marks}
+                  onChange={(e) => handleQuestionChange(index, e)}
+                  className="w-full border border-gray-300 rounded px-4 py-2"
+                />
+              </div>
               {/* Options */}
               <div className="space-y-2">
                 {question.options.map((option, optionIndex) => (
