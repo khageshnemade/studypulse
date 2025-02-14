@@ -47,6 +47,7 @@ import Admins from "./Pages/SuperAdminActivities/Admins";
 import CreateRegion from "./Pages/SuperAdminActivities/CreateRegion";
 import GroupChatWindow from "./Pages/TeacherActivities/Chat/GroupChatWindow";
 import ProfilePicUpload from "./Pages/TeacherActivities/ProfilePicUpload";
+import Showemail from "./Pages/AdminActivities/Showemail";
 
 const user = localStorage.getItem("user"); // Check if the user is logged in
 
@@ -156,6 +157,10 @@ const router = createBrowserRouter(
       ],
     },
 
+    {
+      path:"/add",
+      element:<Showemail/>
+    },
     {
       path: "/superadmin-dashboard",
       element: <SuperAdminLayout />,
