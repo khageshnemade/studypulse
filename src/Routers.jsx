@@ -138,22 +138,6 @@ const router = createBrowserRouter(
           element: <AdminDashboard />,
         },
 
-        {
-          path: "students",
-          element: <StudentData />,
-        },
-        {
-          path: "teachers",
-          element: <TeacherData />,
-        },
-        {
-          path: "addclass",
-          element: <AddClass />,
-        },
-        {
-          path: "addSubject",
-          element: <AddSubject />,
-        },
       ],
     },
 
@@ -210,15 +194,28 @@ const router = createBrowserRouter(
           element: <TeacherData />,
         },
         {
+          path: "class_subject/addclass",
+          element: <AddClass />,
+        },
+        
+        {
+          path: "students",
+          element: <StudentData />,
+        },
+        {
+          path: "teachers",
+          element: <TeacherData />,
+        },
+        {
           path: "class_subject",
           element: <Classes />,
         },
         {
-          path: "addSubject",
+          path: "class_subject/addSubject",
           element: <AddSubject />,
         },
         {
-          path: "subjects",
+          path: "class_subject/subjects",
           element: <Subject />,
         },
       ],
