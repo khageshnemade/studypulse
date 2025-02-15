@@ -122,7 +122,8 @@ export default function CreateAdmin() {
       setName("");
     } catch (error) {
       console.error("Error creating Taluka:", error.message);
-      toast.error(error.message);
+      toast.error("please select city Name or No organisation in this City");
+      setOrgs([])
     }
   };
   return (

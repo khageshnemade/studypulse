@@ -155,7 +155,7 @@ export default function AdminDashboard() {
         <h2 className="text-xl font-semibold text-gray-800 text-center mb-4">Student Pass/Fail Stats</h2>
         <p className="text-gray-600 text-center mb-4">Visualization of Passed vs Failed Students</p>
         <div className="flex justify-center">
-          <div className="w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/3">
+        <div className="flex justify-center">
             <PieChart labels={labels} datasets={dataset} />
           </div>
         </div>

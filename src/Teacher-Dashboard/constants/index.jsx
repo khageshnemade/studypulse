@@ -34,9 +34,14 @@ export const navbarLinks = [
         path: "/teacher-dashboard/get_data",
       },
       {
-        label: "Chapters", // Shortened label for clarity
-        icon: FileText, // Represents the content or files associated with chapters
+        label: "Course Content",
+        icon: FileText,
         path: "/teacher-dashboard/chapters",
+      },
+      {
+        label: "Curriculum & chat", 
+        icon: FileText, 
+        path: "/teacher-dashboard/chapterCurrs",
       },
     ],
   },

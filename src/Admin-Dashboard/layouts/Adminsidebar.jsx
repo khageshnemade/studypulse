@@ -69,7 +69,7 @@ export const AdminSidebar = forwardRef(({ collapsed }, ref) => {
               <NavLink
                 key={link.label}
                 to={link.path}
-                end
+                //end
                 className={cn(
                   "sidebar-item font-bold text-gray-500 hover:text-gray-300 bg-blue-200",
                   collapsed && "md:w-[45px]"

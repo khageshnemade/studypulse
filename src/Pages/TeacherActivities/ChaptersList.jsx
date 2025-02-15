@@ -155,9 +155,10 @@ const ChaptersList = () => {
       {/* Table */}
       {loading ? (
         <div className="text-center py-8">
-          <span className="text-xl">
+           <p className="text-center text-gray-700 bg-gray-100 p-3 rounded-lg shadow-md  mx-auto text-lg font-medium hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1">
+     
             Please Select Class Name and Subject Name...
-          </span>
+          </p>
         </div>
       ) : (
         <div className="w-full overflow-x-auto">
@@ -170,7 +171,7 @@ const ChaptersList = () => {
                 <th className="px-6 py-4 text-sm font-semibold text-left min-w-[200px]">
                   Description
                 </th>
-                <th className="px-6 py-4 text-sm font-semibold text-left min-w-[120px]">
+                <th className="px-6 py-4 text-sm font-semibold text-center min-w-[120px]">
                   Action
                 </th>
               </tr>
@@ -192,7 +193,7 @@ const ChaptersList = () => {
                       {/* Assignments Button */}
                       <button
                         onClick={() =>
-                          navigate("/teacher-dashboard/assignments", {
+                          navigate("/teacher-dashboard/chapters/assignments", {
                             state: {
                               classId,
                               subjectId,

@@ -447,7 +447,7 @@ const GroupChatWindow = () => {
               className={`flex ${isSender ? "justify-end" : "justify-start"}`}
             >
               <div
-                className={`px-6 py-4 max-w-[80%] rounded-xl text-sm transition-all duration-300 ${
+                className={`px-6 py-4 max-w-[60%] rounded-xl text-sm transition-all duration-300 ${
                   isSender
                     ? "bg-green-600 text-white shadow-xl"
                     : "bg-gray-100 text-gray-800 shadow-md"

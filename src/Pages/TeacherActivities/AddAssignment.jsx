@@ -146,7 +146,7 @@ const AddAssignment = () => {
 
       toast.success(res?.data?.message);
       setTimeout(() => {
-        navigate("/teacher-dashboard/assignments", {
+        navigate("/teacher-dashboard/chapters/assignments", {
           state: {
             classId: classId,
             subjectId: subjectId,

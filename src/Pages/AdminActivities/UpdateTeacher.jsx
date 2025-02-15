@@ -273,32 +273,29 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
         <div className="flex border-b border-gray-300">
           <button
             onClick={() => setActiveTab("about")}
-            className={`flex-1 py-2 text-center font-semibold ${
-              activeTab === "userData"
+            className={`flex-1 py-2 text-center font-semibold ${activeTab === "about"
                 ? "text-blue-600 border-b-2 border-blue-600"
                 : "text-gray-600 hover:text-blue-600"
-            }`}
+              }`}
           >
             About
           </button>
 
           <button
             onClick={() => setActiveTab("qualificationData")}
-            className={`flex-1 py-2 text-center font-semibold ${
-              activeTab === "qualificationData"
+            className={`flex-1 py-2 text-center font-semibold ${activeTab === "qualificationData"
                 ? "text-blue-600 border-b-2 border-blue-600"
                 : "text-gray-600 hover:text-blue-600"
-            }`}
+              }`}
           >
             Education
           </button>
           <button
             onClick={() => setActiveTab("experienceData")}
-            className={`flex-1 py-2 text-center font-semibold ${
-              activeTab === "experienceData"
+            className={`flex-1 py-2 text-center font-semibold ${activeTab === "experienceData"
                 ? "text-blue-600 border-b-2 border-blue-600"
                 : "text-gray-600 hover:text-blue-600"
-            }`}
+              }`}
           >
             Experience
           </button>
@@ -311,6 +308,7 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
               <h2 className="text-2xl font-semibold mb-6 text-gray-700 text-center">
                 About
               </h2>
+
 
               {/* User and Teacher Information displayed in two rows */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -429,8 +427,9 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
                         ([field, value]) => (
                           <li
                             key={field}
-                            className="grid grid-cols-[150px_1fr]text-wrap"
+                            className="grid grid-cols-[150px_1fr] text-wrap"
                           >
+
                             <strong className="text-gray-700">
                               {field.replace(/([A-Z])/g, " $1")}:{" "}
                             </strong>
@@ -446,10 +445,10 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
 
           {activeTab === "experienceData" && (
             <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
-              <h2 className="font-bold text-gray-700 col-span-full text-center">
+              <h2 className="font-bold text-gray-700 col-span-full text-center mb-6">
                 Experience
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-6">
                 {teacherData?.experience?.map((experience) => (
                   <div
                     key={experience._id}
@@ -459,18 +458,18 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
                       Experience
                     </h4>
                     <ul className="space-y-2 text-gray-600">
-                      <li>
+                      <li className="grid grid-cols-[180px_1fr]">
                         <strong>Designation:</strong> {experience.designation}
                       </li>
-                      <li>
+                      <li className="grid grid-cols-[180px_1fr]">
                         <strong>Organization Name:</strong>{" "}
                         {experience.organizationName}
                       </li>
-                      <li>
+                      <li className="grid grid-cols-[180px_1fr]">
                         <strong>Start Date:</strong>{" "}
                         {new Date(experience.startDate).toLocaleDateString()}
                       </li>
-                      <li>
+                      <li className="grid grid-cols-[180px_1fr]">
                         <strong>End Date:</strong>{" "}
                         {new Date(experience.endDate).toLocaleDateString()}
                       </li>

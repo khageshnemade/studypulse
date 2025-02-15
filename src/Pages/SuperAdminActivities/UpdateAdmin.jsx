@@ -40,9 +40,6 @@ export default function UpdateAdmin() {
 
   const handleAdminUpdate = async (e) => {
     e.preventDefault();
-    console.log("Admin Update");
-
-
     setIsLoading(true);
     setError(null);
 
@@ -177,8 +174,9 @@ export default function UpdateAdmin() {
               onChange={(e) => updateAdminData(e.target.name, e.target.value)}
               className="mt-2 block w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none dark:bg-slate-700 dark:text-slate-50 dark:border-slate-600"
             >
+              <option selected disabled value="">Select Status</option>
               <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
+              <option value="inActive">Inactive</option>
             </select>
           </div>
 
@@ -190,12 +188,17 @@ export default function UpdateAdmin() {
           {/* Submit Button */}
           <div className="flex justify-between items-center space-x-4">
             {/* Back Link */}
-            <Link
-              to="/superadmin-dashboard"
-              className="text-lg font-semibold text-blue-600 hover:text-blue-700 transition"
-            >
-              Back
-            </Link>
+            <button
+      onClick={() => {
+        navigate('/superadmin-dashboard/admins', {
+          state: { orgId: admin.admin.organizationID }
+        });
+      }
+    }
+      className="text-lg font-semibold text-blue-600 hover:text-blue-700 transition"
+    >
+      Back
+    </button>
 
             {/* Update Admin Button */}
             <button

@@ -108,7 +108,7 @@ export const TeacherSidebar = forwardRef(({ collapsed }, ref) => {
                   <NavLink
                     key={link.label}
                     to={link.path}
-                    end
+                    //end
                     className={cn(
                       "sidebar-item font-bold text-black hover:text-white bg-blue-200",
                       collapsed && "md:w-[45px]"

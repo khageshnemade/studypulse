@@ -136,8 +136,8 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
   };
 
   return (
-    <div className="p-4 bg-white rounded-lg shadow-md">
-      <div className="text-center">
+    <div className="p-4 bg-white rounded-lg shadow-md max-h-fit max-w-fit mx-auto">
+     <div className="text-center">
         <img
           src={`data:image/jpeg;base64,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`}
           alt="Profile"
@@ -230,36 +230,13 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
                 </div>
               </div>
 
-              {/* Dropdown to display all documents */}
-              {/* <div className="flex-1">
-                <label
-                  htmlFor="doc"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Documents
-                </label>
-                <select
-                  id="doc"
-                  name="doc"
-                  className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  onChange={handleSelectChange}
-                >
-                  <option value="">Select a document</option>
-                  {studentData.documents.map((doc, index) => (
-                    <option key={index} value={doc}>
-                      {doc}
-                    </option>
-                  ))}
-                </select>
-              </div> */}
-
               {/* Add a new document */}
               <div className="flex items-center mt-2 gap-2">
                 {/* Display the file name */}
                 <input
                   type="file"
                   onChange={(e) => setFile(e.target.files[0])}
-                  required
+                 
                 />
 
                 <button
@@ -280,13 +257,13 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
                   {docs.map((doc, index) => (
                     <li
                       key={index}
-                      className="flex items-center justify-between px-4 py-2 bg-gray-100 rounded-lg"
+                      className="flex items-center justify-between px-4 py-2 bg-gray-100 rounded-lg "
                     >
                       <span>{doc}</span>
                       <button
                         type="button"
                         onClick={() => handleRemoveDocument(doc)}
-                        className="px-2 py-1 text-red-500 hover:underline"
+                        className="px-2 py-1 text-red-500 hover:underline whitespace-nowrap"
                       >
                         Remove
                       </button>
@@ -339,33 +316,32 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
       {/* Tabs for Data */}
       <div className="flex items-center justify-center min-h-screen">
         {/* Tab Navigation */}
-        <div className="mt-8 w-full">
+        <div className="w-full max-w-lg px-4 sm:px-6 md:px-8 py-4">
           <button
             onClick={() => {
               setShowUpdateStudent(false);
             }}
+            className="text-gray-600 hover:text-blue-600"
           >
             <ArrowLeft />
           </button>
-          <div className="flex text-center border-b border-gray-300">
+          <div className="mt-4 flex border-b">
             <button
               onClick={() => setActiveTab("about")}
-              className={`flex-1 py-2 text-center font-semibold ${
-                activeTab === "about"
+              className={`flex-1 py-2 text-center font-semibold ${activeTab === "about"
                   ? "text-blue-600 border-b-2 border-blue-600"
                   : "text-gray-600 hover:text-blue-600"
-              }`}
+                }`}
             >
               About
             </button>
 
             <button
               onClick={() => setActiveTab("studentData")}
-              className={`flex-1 py-2 text-center font-semibold ${
-                activeTab === "studentData"
+              className={`flex-1 py-2 text-center font-semibold ${activeTab === "studentData"
                   ? "text-blue-600 border-b-2 border-blue-600"
                   : "text-gray-600 hover:text-blue-600"
-              }`}
+                }`}
             >
               Other Details
             </button>
@@ -374,14 +350,13 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
           {/* Data Content */}
           <div className="mt-4">
             {activeTab === "about" && (
-              <div className="p-6 bg-white rounded-lg shadow-md">
-                <h2 className="text-2xl font-semibold mb-6 text-gray-700 text-center">
+              <div className="p-4 bg-white rounded-lg shadow-md">
+                <h2 className="text-xl font-semibold mb-4 text-gray-700 text-center">
                   About
                 </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-1 gap-6">
-                  {/* User Information */}
-                  <div className="p-6 rounded-lg shadow-md">
-                    <ul className="space-y-4 text-gray-600">
+                <div className="space-y-4">
+                  <div className="p-4 rounded-lg shadow-sm">
+                    <ul className="space-y-3 text-gray-600">
                       {[
                         { label: "First Name:", value: userData.firstName },
                         { label: "Last Name:", value: userData.lastName },
@@ -391,7 +366,6 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
                         },
                         { label: "Address:", value: studentData.address },
                         { label: "Role:", value: userData.role },
-
                         { label: "Email Address:", value: userData.email },
                         { label: "City:", value: userData?.cityData?.name },
                         {
@@ -405,7 +379,7 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
                       ].map((item, index) => (
                         <li key={index} className="grid grid-cols-[150px_1fr]">
                           <strong>{item.label}</strong>
-                          <span>{item.value}</span>
+                          <span className="text-sm">{item.value}</span>
                         </li>
                       ))}
                     </ul>
@@ -415,15 +389,13 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
             )}
 
             {activeTab === "studentData" && (
-              <div className="p-6 bg-white rounded-lg shadow-md">
-                <h2 className="text-2xl font-semibold mb-6 text-gray-700 text-center">
+              <div className="p-4 bg-white rounded-lg shadow-md">
+                <h2 className="text-xl font-semibold mb-4 text-gray-700 text-center">
                   Other Details
                 </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-1 gap-6">
-                  {/* Student Details */}
-
-                  <div className="p-6 rounded-lg shadow-md">
-                    <ul className="space-y-4 text-gray-600">
+                <div className="space-y-4">
+                  <div className="p-4 rounded-lg shadow-sm">
+                    <ul className="space-y-3 text-gray-600">
                       {studentData ? (
                         [
                           { label: "Gender:", value: studentData.gender },
@@ -431,28 +403,22 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
                             label: "Status:",
                             value: userData?.status || "N/A",
                           },
-
                           {
                             label: "DOB:",
-                            value: new Date(
-                              studentData.dob
-                            ).toLocaleDateString(),
+                            value: new Date(studentData.dob).toLocaleDateString(),
                           },
                           {
                             label: "Documents:",
                             value: <DocumentViewer studentData={studentData} />,
                           },
                         ].map((item, index) => (
-                          <li
-                            key={index}
-                            className="grid grid-cols-[150px_1fr]"
-                          >
+                          <li key={index} className="grid grid-cols-[150px_1fr]">
                             <strong>{item.label}</strong>
-                            <span>{item.value || "N/A"}</span>
+                            <span className="text-sm">{item.value || "N/A"}</span>
                           </li>
                         ))
                       ) : (
-                        <li>No student data available.</li>
+                        <li className="text-center text-gray-500">No student data available.</li>
                       )}
                     </ul>
                   </div>
@@ -462,6 +428,7 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
           </div>
         </div>
       </div>
+
     </div>
   );
 };

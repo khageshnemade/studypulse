@@ -121,7 +121,7 @@ const CreateChapterCurriculum = () => {
         setVideoUrl("");
         setClassId("");
         setSubjectId("");
-        navigate("/teacher-dashboard/chapterCurrs", {
+        navigate("/teacher-dashboard/chapters/chapterCurrs", {
           state: {
             initialClassId: classId,
             initialChapterId: chapterId,

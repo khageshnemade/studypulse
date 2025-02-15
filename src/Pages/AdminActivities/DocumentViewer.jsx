@@ -60,7 +60,7 @@ const DocumentViewer = ({ studentData }) => {
     <div className="space-y-4">
       {/* Display Documents List */}
       {studentData?.documents && studentData.documents.length > 0 ? (
-        <div className="flex flex-wrap space-x-4 mb-4">
+        <>
           {studentData.documents.map((doc, index) => (
             <div key={index} className="mb-4">
               <button
@@ -71,7 +71,7 @@ const DocumentViewer = ({ studentData }) => {
               </button>
             </div>
           ))}
-        </div>
+        </>
       ) : (
         <p>No documents available.</p>
       )}

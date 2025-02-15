@@ -179,7 +179,7 @@ const router = createBrowserRouter(
           element: <Organizations />,
         },
         {
-          path: "updateAdmin",
+          path: "admins/updateAdmin",
           element: <UpdateAdmin />,
         },
         {
@@ -277,7 +277,7 @@ const router = createBrowserRouter(
           element: <AddAssignment />,
         },
         {
-          path: "assignments",
+          path: "chapters/assignments",
           element: <Assignments />,
         },
         {
@@ -297,7 +297,7 @@ const router = createBrowserRouter(
           element: <AssignmentResult />,
         },
         {
-          path: "chat",
+          path: "chapterCurrs/chat",
           element: <GroupChatWindow />,
         },
       ],

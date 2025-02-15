@@ -153,8 +153,15 @@ export default function Students() {
                       <div className="mt-4">
                         {selectedStudent.documents.map((doc, index) => (
                           <div key={index} className="mb-2">
-                          
-                            <Link to={`/${doc}`}  className="text-blue-600 hover:text-blue-800 hover:underline"> Document {index + 1}</Link>
+
+                            <Link
+                              to={`https://api.studypulse.live/${doc}`}
+                              target="_blank"
+                              className="text-blue-600 hover:text-blue-800 hover:underline"
+                            >
+                              Document {index + 1}
+                            </Link>
+
                           </div>
                         ))}
                       </div>

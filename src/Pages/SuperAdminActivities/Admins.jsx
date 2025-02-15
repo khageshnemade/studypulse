@@ -124,7 +124,7 @@ export default function Admins() {
 
               <button
                 onClick={() =>
-                  navigate(`/superadmin-dashboard/updateAdmin`, {
+                  navigate(`/superadmin-dashboard/admins/updateAdmin`, {
                     state: { admin: admin },
                   })
                 }
@@ -137,7 +137,10 @@ export default function Admins() {
           ))}
         </div>
       ) : (
-        <p className="text-center text-gray-600">No admins found.</p>
+        <p className="text-center text-gray-700 bg-gray-50 p-3 rounded-lg shadow-md  mx-auto text-lg font-medium hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1">
+     
+        Please Select Organization Name...
+      </p>
       )}
       <ToastContainer />
     </div>
