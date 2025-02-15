@@ -22,7 +22,7 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
 
       setTeacherData(teacherData || {});
       setUserData(udata);
-      console.log("Teacher Dta",teacherData);
+      console.log("Teacher Dta", teacherData);
     }
   }, [teachersData, id]);
 
@@ -49,8 +49,7 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
           id: userData._id,
           firstName: userData.firstName,
           lastName: userData.lastName,
-          phoneNumber: userData.phoneNumber
-          
+          phoneNumber: userData.phoneNumber,
         },
         teacherData: {
           totalYearsOfExperience: teacherData.totalYearsOfExperience,
@@ -81,16 +80,17 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
       console.error(error);
       toast.error(error.response?.data?.error || "An error occurred.");
     }
-
   };
 
   return (
-
     <div className="p-4 bg-white rounded-lg shadow-md">
-
-      <button onClick={()=>{
-        setShowUpdateTeacher(false);
-      }}><ArrowLeft/></button>
+      <button
+        onClick={() => {
+          setShowUpdateTeacher(false);
+        }}
+      >
+        <ArrowLeft />
+      </button>
       {/* Profile Picture and Update Button */}
       <div className="text-center">
         <img
@@ -110,11 +110,8 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
       {showForm && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 overflow-y-auto">
           <div className="bg-white rounded-lg shadow-lg p-8 max-w-lg mx-auto">
-
-
             <h2 className="text-2xl font-semibold mb-4">Update Information</h2>
             <form onSubmit={handleSubmit} className="space-y-6">
-
               <div className="mb-4 flex flex-col sm:flex-row sm:space-x-4">
                 <div className="flex-1">
                   <label
@@ -206,32 +203,28 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
                     onChange={handleTeacherDataChange}
                   />
                 </div>
-
-              
               </div>
 
               <div className="flex-1">
-      <label
-        htmlFor="gender"
-        className="block text-sm font-medium text-gray-700"
-      >
-        Gender
-      </label>
-      <select
-        id="gender"
-        name="gender"
-        className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        value={teacherData.gender}
-        onChange={handleTeacherDataChange}
-      >
-        <option value="">Select Gender</option>
-        <option value="Male">Male</option>
-        <option value="Female">Female</option>
-        <option value="other">Other</option>
-      </select>
-    </div>
-
-
+                <label
+                  htmlFor="gender"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Gender
+                </label>
+                <select
+                  id="gender"
+                  name="gender"
+                  className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={teacherData.gender}
+                  onChange={handleTeacherDataChange}
+                >
+                  <option value="">Select Gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
 
               <div className="flex-1">
                 <label
@@ -252,7 +245,6 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
                   <option value="pending">pending</option>
                   <option value="rejected">rejected</option>
                   <option value="accepted">accepted</option>
-
                 </select>
               </div>
               {/* Buttons */}
@@ -276,35 +268,37 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
         </div>
       )}
 
-
       {/* Tabs for Data */}
       <div className="mt-8">
         <div className="flex border-b border-gray-300">
           <button
             onClick={() => setActiveTab("about")}
-            className={`flex-1 py-2 text-center font-semibold ${activeTab === "userData"
-              ? "text-blue-600 border-b-2 border-blue-600"
-              : "text-gray-600 hover:text-blue-600"
-              }`}
+            className={`flex-1 py-2 text-center font-semibold ${
+              activeTab === "userData"
+                ? "text-blue-600 border-b-2 border-blue-600"
+                : "text-gray-600 hover:text-blue-600"
+            }`}
           >
             About
           </button>
 
           <button
             onClick={() => setActiveTab("qualificationData")}
-            className={`flex-1 py-2 text-center font-semibold ${activeTab === "qualificationData"
-              ? "text-blue-600 border-b-2 border-blue-600"
-              : "text-gray-600 hover:text-blue-600"
-              }`}
+            className={`flex-1 py-2 text-center font-semibold ${
+              activeTab === "qualificationData"
+                ? "text-blue-600 border-b-2 border-blue-600"
+                : "text-gray-600 hover:text-blue-600"
+            }`}
           >
             Education
           </button>
           <button
             onClick={() => setActiveTab("experienceData")}
-            className={`flex-1 py-2 text-center font-semibold ${activeTab === "experienceData"
-              ? "text-blue-600 border-b-2 border-blue-600"
-              : "text-gray-600 hover:text-blue-600"
-              }`}
+            className={`flex-1 py-2 text-center font-semibold ${
+              activeTab === "experienceData"
+                ? "text-blue-600 border-b-2 border-blue-600"
+                : "text-gray-600 hover:text-blue-600"
+            }`}
           >
             Experience
           </button>
@@ -313,107 +307,181 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
         {/* Data Content */}
         <div className="mt-4">
           {activeTab === "about" && (
-
             <div className="p-6 bg-white rounded-lg shadow-lg max-w-4xl mx-auto">
-              <h2 className="text-2xl font-semibold mb-6 text-gray-700 text-center">About</h2>
+              <h2 className="text-2xl font-semibold mb-6 text-gray-700 text-center">
+                About
+              </h2>
 
               {/* User and Teacher Information displayed in two rows */}
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {/* User Information */}
-
                 <div className="bg-white p-6 rounded-lg shadow-md">
                   <ul className="space-y-4">
-                    <li className="flex justify-between"><strong>First Name:</strong> <span className="text-gray-900">{userData.firstName}</span></li>
-                    <li className="flex justify-between"><strong>Last Name:</strong> <span className="text-gray-900">{userData.lastName}</span></li>
-                    <li className="flex justify-between"><strong>Phone Number:</strong> <span className="text-gray-900">{userData.phoneNumber}</span></li>
-                    <li className="flex justify-between"><strong>Address:</strong> <span className="text-gray-900">{teacherData.address}</span></li>
-                    <li className="flex justify-between"><strong>Role:</strong> <span className="text-gray-900">{userData.role}</span></li>
-                    <li className="flex justify-between"><strong>Email Address:</strong> <span className="text-gray-900">{userData.email}</span></li>
-                    <li className="flex justify-between"><strong>City:</strong> <span className="text-gray-900">{userData?.cityData?.name}</span></li>
-                    <li className="flex justify-between"><strong>Taluka:</strong> <span className="text-gray-900">{userData?.talukaData?.name}</span></li>
-                    <li className="flex justify-between"><strong>District:</strong> <span className="text-gray-900">{userData?.districtData?.name}</span></li>
+                    <li className="grid grid-cols-[150px_1fr]">
+                      <strong className="w-40">First Name:</strong>{" "}
+                      <span className="text-gray-900">
+                        {userData.firstName}
+                      </span>
+                    </li>
+                    <li className="grid grid-cols-[150px_1fr]">
+                      <strong className="w-40">Last Name:</strong>{" "}
+                      <span className="text-gray-900">{userData.lastName}</span>
+                    </li>
+                    <li className="grid grid-cols-[150px_1fr]">
+                      <strong className="w-40">Phone Number:</strong>{" "}
+                      <span className="text-gray-900">
+                        {userData.phoneNumber}
+                      </span>
+                    </li>
+                    <li className="grid grid-cols-[150px_1fr]">
+                      <strong className="w-40">Address:</strong>{" "}
+                      <span className="text-gray-900">
+                        {teacherData.address}
+                      </span>
+                    </li>
+                    <li className="grid grid-cols-[150px_1fr]">
+                      <strong className="w-40">Role:</strong>{" "}
+                      <span className="text-gray-900">{userData.role}</span>
+                    </li>
+                    <li className="grid grid-cols-[150px_1fr]">
+                      <strong className="w-40">Email Address:</strong>{" "}
+                      <span className="text-gray-900">{userData.email}</span>
+                    </li>
+                    <li className="grid grid-cols-[150px_1fr]">
+                      <strong className="w-40">City:</strong>{" "}
+                      <span className="text-gray-900">
+                        {userData?.cityData?.name}
+                      </span>
+                    </li>
+                    <li className="grid grid-cols-[150px_1fr]">
+                      <strong className="w-40">Taluka:</strong>{" "}
+                      <span className="text-gray-900">
+                        {userData?.talukaData?.name}
+                      </span>
+                    </li>
+                    <li className="grid grid-cols-[150px_1fr]">
+                      <strong className="w-40">District:</strong>{" "}
+                      <span className="text-gray-900">
+                        {userData?.districtData?.name}
+                      </span>
+                    </li>
                   </ul>
                 </div>
 
                 {/* Teacher Information Section */}
                 <div className="bg-white p-6 rounded-lg shadow-md">
                   <ul className="space-y-4">
-                    <li className="flex justify-between"><strong>Total Years of Experience:</strong> <span className="text-gray-900">{teacherData.totalYearsOfExperience}</span></li>
-                    <li className="flex justify-between"><strong>Gender:</strong> <span className="text-gray-900">{teacherData.gender}</span></li>
-                    <li className="flex justify-between"><strong>Status:</strong> <span className="text-gray-900">{teacherData.status}</span></li>
+                    <li className="grid grid-cols-[150px_1fr]">
+                      <strong className="w-40">
+                        Total Years of Experience:
+                      </strong>{" "}
+                      <span className="text-gray-900">
+                        {teacherData.totalYearsOfExperience}
+                      </span>
+                    </li>
+                    <li className="grid grid-cols-[150px_1fr]">
+                      <strong className="w-40">Gender:</strong>{" "}
+                      <span className="text-gray-900">
+                        {teacherData.gender}
+                      </span>
+                    </li>
+                    <li className="grid grid-cols-[150px_1fr]">
+                      <strong className="w-40">Status:</strong>{" "}
+                      <span className="text-gray-900">
+                        {teacherData.status}
+                      </span>
+                    </li>
                     {teacherData?.subjectData?.map((e, i) => (
-                      <li key={i} className="flex justify-between"><strong>Subject-{i + 1}:</strong> <span className="text-gray-900">{e.name}</span></li>
+                      <li key={i} className="grid grid-cols-[150px_1fr]">
+                        <strong className="w-40">Subject-{i + 1}:</strong>{" "}
+                        <span className="text-gray-900">{e.name}</span>
+                      </li>
                     ))}
                     {teacherData.classData?.map((e, i) => (
-                      <li key={i} className="flex justify-between"><strong>Class-{i + 1}:</strong> <span className="text-gray-900">{e.name}</span></li>
-                    ))}
-                  </ul>
-                </div>
-
-
-              </div>
-            </div>
-
-          )}
-
-
-
-          {activeTab === "qualificationData" && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              <h2 className="font-bold text-gray-700 col-span-full text-center">Education</h2>
-
-              {teacherData?.qualification && Object.keys(teacherData?.qualification).map((key) => (
-                <div key={key} className="bg-white shadow-lg rounded-lg p-6 mb-4">
-                  <h3 className="text-xl text-center text-gray-800 mb-4 font-bold">{key.toUpperCase()}</h3>
-                  <ul className="space-y-3 text-gray-600">
-                    {Object.entries(teacherData?.qualification[key]).map(([field, value]) => (
-                      <li key={field} className="flex justify-between items-center text-wrap">
-                        <strong className="text-gray-700">{field.replace(/([A-Z])/g, ' $1')}: </strong>
-                        <span className="text-gray-500">{value}</span>
+                      <li key={i} className="grid grid-cols-[150px_1fr]">
+                        <strong className="w-40">Class-{i + 1}:</strong>{" "}
+                        <span className="text-gray-900">{e.name}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
-              ))}
+              </div>
             </div>
+          )}
 
+          {activeTab === "qualificationData" && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <h2 className="font-bold text-gray-700 col-span-full text-center">
+                Education
+              </h2>
 
+              {teacherData?.qualification &&
+                Object.keys(teacherData?.qualification).map((key) => (
+                  <div
+                    key={key}
+                    className="bg-white shadow-lg rounded-lg p-6 mb-4"
+                  >
+                    <h3 className="text-xl text-center text-gray-800 mb-4 font-bold">
+                      {key.toUpperCase()}
+                    </h3>
+                    <ul className="space-y-3 text-gray-600">
+                      {Object.entries(teacherData?.qualification[key]).map(
+                        ([field, value]) => (
+                          <li
+                            key={field}
+                            className="grid grid-cols-[150px_1fr]text-wrap"
+                          >
+                            <strong className="text-gray-700">
+                              {field.replace(/([A-Z])/g, " $1")}:{" "}
+                            </strong>
+                            <span className="text-gray-500">{value}</span>
+                          </li>
+                        )
+                      )}
+                    </ul>
+                  </div>
+                ))}
+            </div>
           )}
 
           {activeTab === "experienceData" && (
             <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
-              <h2 className="font-bold text-gray-700 col-span-full text-center">Experience</h2>
+              <h2 className="font-bold text-gray-700 col-span-full text-center">
+                Experience
+              </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {teacherData?.experience?.map((experience) => (
-                  <div key={experience._id} className="bg-white rounded-lg shadow-lg p-4">
-                    <h4 className="text-xl font-medium text-gray-700 mb-3">Experience</h4>
+                  <div
+                    key={experience._id}
+                    className="bg-white rounded-lg shadow-lg p-4"
+                  >
+                    <h4 className="text-xl font-medium text-gray-700 mb-3">
+                      Experience
+                    </h4>
                     <ul className="space-y-2 text-gray-600">
                       <li>
                         <strong>Designation:</strong> {experience.designation}
                       </li>
                       <li>
-                        <strong>Organization Name:</strong> {experience.organizationName}
+                        <strong>Organization Name:</strong>{" "}
+                        {experience.organizationName}
                       </li>
                       <li>
-                        <strong>Start Date:</strong> {new Date(experience.startDate).toLocaleDateString()}
+                        <strong>Start Date:</strong>{" "}
+                        {new Date(experience.startDate).toLocaleDateString()}
                       </li>
                       <li>
-                        <strong>End Date:</strong> {new Date(experience.endDate).toLocaleDateString()}
+                        <strong>End Date:</strong>{" "}
+                        {new Date(experience.endDate).toLocaleDateString()}
                       </li>
                     </ul>
                   </div>
                 ))}
               </div>
             </div>
-
           )}
         </div>
       </div>
     </div>
   );
 };
-
-
-
-
-

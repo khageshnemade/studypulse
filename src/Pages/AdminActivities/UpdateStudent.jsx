@@ -18,7 +18,6 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
   const [imageUrl, setImageUrl] = useState("");
   const [docs, setDocs] = useState([]);
   const [fileName, setFileName] = useState("");
-
   const [newDocument, setNewDocument] = useState("");
 
   const handleFileUpload = async (e) => {
