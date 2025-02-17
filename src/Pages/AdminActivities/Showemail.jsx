@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
 
 export default function Showemail() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showSuggestion, setShowSuggestion] = useState(false); // Track if suggestion should be shown
 
   // Handle email input change
@@ -18,34 +18,35 @@ export default function Showemail() {
   // Handle key down event to show gmail.com suggestion when @ is pressed
   const handleEmailKeyDown = (e) => {
     // Check if there is more than one '@' in the email input
-    console.log("Email input has more than one",email);
-    const atCount = email.split('@').length - 1;
+    console.log("Email input has more than one", email);
+    const atCount = email.split("@").length - 1;
 
     // Hide suggestion if there are multiple '@' symbols
     if (atCount > 0) {
       setShowSuggestion(false);
-    } else if (e.key === '@') {
+    } else if (e.key === "@") {
       // If '@' is pressed but no domain (like '.com') is present, show suggestion
-      if (!email.includes('.com')) {
+      if (!email.includes(".com")) {
         setShowSuggestion(true);
       }
-    } else if (e.key !== 'Tab') {
+    } else if (e.key !== "Tab") {
       // Hide suggestion when any other key is pressed except Tab
       setShowSuggestion(false);
     }
 
     // If Tab is pressed and suggestion should show, auto-complete with gmail.com
-    if (e.key === 'Tab' && shouldShowGmail) {
+    if (e.key === "Tab" && shouldShowGmail) {
       // Only append if '@' is already present and user hasn't typed a domain
-      if (email.includes('@') && !email.includes('.com')) {
-        setEmail(email + 'gmail.com');
+      if (email.includes("@") && !email.includes(".com")) {
+        setEmail(email + "gmail.com");
         e.preventDefault(); // Prevent default tab behavior
       }
     }
   };
 
   // Determine if we should show gmail.com based on the email value
-  const shouldShowGmail = email.includes('@') && !email.includes('.com') && showSuggestion;
+  const shouldShowGmail =
+    email.includes("@") && !email.includes(".com") && showSuggestion;
 
   return (
     <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
@@ -53,7 +54,10 @@ export default function Showemail() {
       <form>
         {/* Email Input */}
         <div className="mb-4">
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-gray-700"
+          >
             Email
           </label>
           <div className="relative">
@@ -67,7 +71,13 @@ export default function Showemail() {
               placeholder="Enter your email"
             />
             {shouldShowGmail && (
-              <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+              <div
+                className="absolute top-[53%] transform -translate-y-1/2 text-gray-500 text-[16px] font-sans"
+                style={{
+                  right: `${295 - email.length * 9}px`,
+                  fontFamily: "Arial",
+                }}
+              >
                 gmail.com
               </div>
             )}
@@ -76,7 +86,10 @@ export default function Showemail() {
 
         {/* Password Input */}
         <div className="mb-4">
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="password"
+            className="block text-sm font-medium text-gray-700"
+          >
             Password
           </label>
           <input
