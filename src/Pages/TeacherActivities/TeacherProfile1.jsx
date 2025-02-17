@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { makeRequest } from "../../axios";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
-import { User } from "lucide-react";
+import { Plus, User } from "lucide-react";
 
 const TeacherProfile = () => {
   const navigate = useNavigate();
@@ -12,8 +12,12 @@ const TeacherProfile = () => {
   const [selectedClassId, setSelectedClassId] = useState("");
   const [selectedSubjectId, setSelectedSubjectId] = useState("");
   const [s_c, setS_c] = useState({});
+  const [file, setFile] = useState(null);
+
   const [classIds, setClassIds] = useState([]); // Array to hold class IDs
   const [subjectIds, setSubjectIds] = useState([]); // Array to hold subject IDs
+  const [imageUrl, setImageUrl] = useState("");
+
   const [formData, setFormData] = useState({
     gender: "",
     address: "",
@@ -99,6 +103,7 @@ const TeacherProfile = () => {
         ...formData,
         classId: classIds,
         subjectId: subjectIds,
+        profilePic:`https://api.studypulse.live/${imageUrl}`,
         experience: formData.experience.map((exp) => {
           // Create a new object without the _id field
           const { _id, ...expWithoutId } = exp;
@@ -154,22 +159,38 @@ const TeacherProfile = () => {
       return updatedState;
     });
   };
+  const handleFileUpload = async (e) => {
+    e.preventDefault();
+    if (!file) {
+      toast.error("Please select an image to upload.");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("files", file);
+
+    try {
+      const response = await makeRequest.post(
+        "https://api.studypulse.live/web/api/file-upload/profile-pic",
+        formData
+      );
+
+      if (response.data.success) {
+        setImageUrl(response.data.url); // Store the uploaded image URL
+      console.log("Image Updated Successfully",response.data.url);
+        toast.success("Image uploaded successfully!");
+      } else {
+        toast.error("Image upload failed. Please try again.");
+      }
+    } catch (error) {
+      toast.error("Failed to upload image.");
+    }
+  };
   useEffect(() => {
     console.log("Updated Class-Subject Mapping:", s_c);
     console.log("Updated Classes Mapping:", classIds);
     console.log("Updated Subjects Mapping:", subjectIds);
   }, [s_c, classIds, subjectIds]);
-  // if (classId && subjectId) {
-  //   setS_c((prev) => {
-  //     const existingSubjects = prev[classId] ? prev[classId] : [];
-  //     return {
-  //       ...prev,
-  //       [classId]: [...new Set([...existingSubjects, subjectId])], // Add the new subject ID and ensure uniqueness
-  //     };
-  //   });
-  // } else {
-  //   alert("Please select both class and subject before adding."); // Validation
-  // }
+
 
   const getPreviousData = async () => {
     try {
@@ -348,8 +369,24 @@ const TeacherProfile = () => {
               className="w-full px-3 py-2 border rounded-lg"
             />
           </div>
+          <div className="overflow-hidden">
+               <label className="block text-sm font-medium mb-1 whitespace-nowrap" htmlFor="fil">Profile Picture</label>
+                <input
+                id="fil"
+                className="w-full px-3 py-2 border rounded-lg"
+                  type="file"
+                  onChange={(e) => {setFile(e.target.files[0])
+                    setTimeout(()=>{
+                      handleFileUpload(e)
+                    },0)
+                  }}
+                 
+                />
+
+               
+              </div>
           <div>
-            <label className="block text-sm font-medium mb-1">Classes</label>
+            <label className="block text-sm font-medium mb-1">Date Of Birth</label>
             <input
               type="date"
               name="dob"
@@ -373,6 +410,21 @@ const TeacherProfile = () => {
                 formData.joiningDate
                   ? new Date(formData.joiningDate).toISOString().split("T")[0]
                   : ""
+              }
+              onChange={handleInputChange} // Ensure the handleInputChange function is set to manage formData
+              className="w-full px-3 py-2 border rounded-lg"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">
+             Total Experience
+            </label>
+            <input
+              type="text"
+              name="totalYearsOfExperience"
+              value={
+                formData.totalYearsOfExperience
               }
               onChange={handleInputChange} // Ensure the handleInputChange function is set to manage formData
               className="w-full px-3 py-2 border rounded-lg"

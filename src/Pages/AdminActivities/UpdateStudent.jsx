@@ -4,8 +4,7 @@ import { useSelector } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Plus, Edit, ArrowLeft } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import DocumentViewer from "./DocumentViewer";
+import { Link, useNavigate } from "react-router-dom";
 export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
   const studentsData = useSelector((state) => state?.students?.studentsData);
   console.log("All Students:", studentsData); // Log the fetched students
@@ -20,33 +19,7 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
   const [fileName, setFileName] = useState("");
   const [newDocument, setNewDocument] = useState("");
 
-  const handleFileUpload = async (e) => {
-    e.preventDefault();
 
-    if (!file) {
-      toast.error("Please select an image to upload.");
-      return;
-    }
-    const formData = new FormData();
-    formData.append("files", file);
-
-    try {
-      const response = await makeRequest.post(
-        "https://api.studypulse.live/web/api/file-upload/profile-pic",
-        formData
-      );
-
-      if (response.data.success) {
-        setImageUrl(response.data.url); // Store the uploaded image URL
-        setDocs([...docs, response?.data.url]);
-        toast.success("Image uploaded successfully!");
-      } else {
-        toast.error("Image upload failed. Please try again.");
-      }
-    } catch (error) {
-      toast.error("Failed to upload image.");
-    }
-  };
 
   // Handle removing a document
   const handleRemoveDocument = (docToRemove) => {
@@ -126,20 +99,76 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
     }
   };
 
+  const handleFileUpload = async (file) => {
+
+    if (!file) {
+      toast.error("Please select an image to upload.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("files", file);
+
+    try {
+      const response = await makeRequest.post(
+        "https://api.studypulse.live/web/api/file-upload/profile-pic",
+        formData
+      );
+
+      if (response.data.success) {
+        setImageUrl(response.data.url); // Store the uploaded image URL
+        setStudentData((prevData) => ({
+          ...prevData,
+          profilePic: response.data.url, // Update teacher data with the new image URL
+        }));
+        toast.success("Image uploaded successfully!");
+      } else {
+        toast.error("Image upload failed. Please try again.");
+      }
+    } catch (error) {
+      toast.error("Failed to upload image.");
+    }
+  };
+  const handleDocUpload = async (e) => {
+    e.preventDefault();
+
+    if (!file) {
+      toast.error("Please select an image to upload.");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("files", file);
+
+    try {
+      const response = await makeRequest.post(
+        "https://api.studypulse.live/web/api/file-upload/profile-pic",
+        formData
+      );
+
+      if (response.data.success) {
+        setDocs([...docs, response?.data.url]);
+        toast.success("Image uploaded successfully!");
+      } else {
+        toast.error("Image upload failed. Please try again.");
+      }
+    } catch (error) {
+      toast.error("Failed to upload image.");
+    }
+  };
+
   const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setNewDocument(file.name); // Save the file
-      setFileName(file.name); // Show the file name
-      alert("File changed", file.name);
+    const selectedFile = e.target.files[0]; // Access the selected file
+    if (selectedFile) {
+      setFile(selectedFile); // Store the file in the state
+      handleFileUpload(selectedFile); // Trigger the upload function
     }
   };
 
   return (
     <div className="p-4 bg-white rounded-lg shadow-md max-h-fit max-w-fit mx-auto">
-     <div className="text-center">
+      <div className="text-center">
         <img
-          src={`data:image/jpeg;base64,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`}
+          src={`https://api.studypulse.live/${studentData.profilePic}`}
           alt="Profile"
           className="w-28 h-28 mx-auto rounded-full border-4 border-gray-300 shadow-md"
         />
@@ -230,22 +259,57 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
                 </div>
               </div>
 
-              {/* Add a new document */}
-              <div className="flex items-center mt-2 gap-2">
-                {/* Display the file name */}
+
+              <div className="flex-1">
+                <label
+                  htmlFor="profilePic"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Profile Picture
+                </label>
                 <input
                   type="file"
-                  onChange={(e) => setFile(e.target.files[0])}
-                 
+                  id="profilePic"
+                  name="profilePic"
+                  className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  onChange={handleFileChange}
                 />
+              </div>
 
-                <button
-                  type="button"
-                  onClick={handleFileUpload}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 flex items-center gap-2"
+              {imageUrl && (
+                <div className="mt-4">
+                  <img src={`https://api.studypulse.live/${imageUrl}`} alt="Profile" className="w-24 h-24 rounded-full" />
+                </div>
+              )}
+
+
+
+              <div className="flex-1">
+                <label
+                  htmlFor="filename"
+                  className="block text-sm font-medium text-gray-700"
                 >
-                  <Plus className="w-5 h-5" /> {/* Icon added here */}
-                </button>
+                  Add New Document
+                </label>
+                {/* Add a new document */}
+                <div className="flex items-center mt-2 gap-2">
+                  {/* Display the file name */}
+
+                  <input
+                    type="file"
+                    id="filename"
+                    onChange={(e) => setFile(e.target.files[0])}
+                    className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={handleDocUpload}
+                    className="px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 flex items-center gap-2"
+                  >
+                    <Plus className="w-5 h-5" /> {/* Icon added here */}
+                  </button>
+                </div>
               </div>
 
               {/* List of documents with remove button */}
@@ -329,8 +393,8 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
             <button
               onClick={() => setActiveTab("about")}
               className={`flex-1 py-2 text-center font-semibold ${activeTab === "about"
-                  ? "text-blue-600 border-b-2 border-blue-600"
-                  : "text-gray-600 hover:text-blue-600"
+                ? "text-blue-600 border-b-2 border-blue-600"
+                : "text-gray-600 hover:text-blue-600"
                 }`}
             >
               About
@@ -339,8 +403,8 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
             <button
               onClick={() => setActiveTab("studentData")}
               className={`flex-1 py-2 text-center font-semibold ${activeTab === "studentData"
-                  ? "text-blue-600 border-b-2 border-blue-600"
-                  : "text-gray-600 hover:text-blue-600"
+                ? "text-blue-600 border-b-2 border-blue-600"
+                : "text-gray-600 hover:text-blue-600"
                 }`}
             >
               Other Details
@@ -409,7 +473,21 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
                           },
                           {
                             label: "Documents:",
-                            value: <DocumentViewer studentData={studentData} />,
+                            value: studentData.documents.length > 0 ? (
+                              studentData.documents.map((doc, index) => (
+                                <div key={index} className="mb-2">
+                                  <Link
+                                    to={`https://api.studypulse.live/${doc}`}
+                                    target="_blank"
+                                    className="text-blue-600 hover:text-blue-800 hover:underline"
+                                  >
+                                    Document {index + 1}
+                                  </Link>
+                                </div>
+                              ))
+                            ) : (
+                              "No documents available"
+                            ),
                           },
                         ].map((item, index) => (
                           <li key={index} className="grid grid-cols-[150px_1fr]">
@@ -420,6 +498,7 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
                       ) : (
                         <li className="text-center text-gray-500">No student data available.</li>
                       )}
+
                     </ul>
                   </div>
                 </div>

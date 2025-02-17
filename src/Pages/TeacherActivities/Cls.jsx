@@ -58,6 +58,9 @@ export default function Cls() {
           <thead className="bg-gray-200">
             <tr>
               <th className="border border-gray-300 px-4 py-2 text-left text-gray-700">
+                Profile
+              </th>
+              <th className="border border-gray-300 px-4 py-2 text-left text-gray-700">
                 Classes
               </th>
               <th className="border border-gray-300 px-4 py-2 text-left text-gray-700">
@@ -74,6 +77,14 @@ export default function Cls() {
           <tbody>
             {classes.map((item, index) => (
               <tr key={index} className="hover:bg-gray-100 transition-all">
+                  <td className="px-4 py-2 border">
+              <img
+                className="w-10 h-10 rounded-full"
+                src={`https://api.studypulse.live/${item.image}`}
+
+                alt="Profile"
+              />
+            </td>
                 <td className="border border-gray-300 px-4 py-2">
                   {item.name}
                 </td>

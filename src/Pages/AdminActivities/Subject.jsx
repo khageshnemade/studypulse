@@ -106,152 +106,153 @@ export default function Subject() {
     <>
       <ToastContainer />
       {isModalOpen && (
-        <div
-          className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-75 z-[999]"
-          onClick={() => setIsModalOpen(false)} // Close modal on backdrop click
+  <div
+    className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-75 z-[999]"
+    onClick={() => setIsModalOpen(false)} // Close modal on backdrop click
+  >
+    <div
+      className="bg-white rounded-lg shadow-xl p-8 w-full max-w-lg relative max-h-[90vh] overflow-y-auto"
+      onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside modal
+    >
+      {/* Close Button */}
+      <button
+        onClick={() => setIsModalOpen(false)}
+        className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 focus:outline-none"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
         >
-          <div
-            className="bg-white rounded-lg shadow-xl p-8 w-full max-w-lg relative"
-            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside modal
-          >
-            {/* Close Button */}
-            <button
-              onClick={() => setIsModalOpen(false)}
-              className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 focus:outline-none"
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+
+      {/* Modal Header */}
+      <div className="text-center">
+        <h2 className="text-2xl font-bold text-gray-800">
+          Create Subject
+        </h2>
+        <p className="text-sm text-gray-600 mt-1">
+          Fill in the details to add a new subject
+        </p>
+      </div>
+
+      {/* Form Section */}
+      <div className="mt-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Subject Name Input */}
+          <div>
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-700"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-
-            {/* Modal Header */}
-            <div className="text-center">
-              <h2 className="text-2xl font-bold text-gray-800">
-                Create Subject
-              </h2>
-              <p className="text-sm text-gray-600 mt-1">
-                Fill in the details to add a new subject
-              </p>
-            </div>
-
-            {/* Form Section */}
-            <div className="mt-6">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Subject Name Input */}
-                <div>
-                  <label
-                    htmlFor="name"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Subject Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                    className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Enter subject name"
-                  />
-                </div>
-
-                {/* Class Dropdown (Disabled) */}
-                <div>
-                  <label
-                    htmlFor="classId"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Class
-                  </label>
-                  <select
-                    id="classId"
-                    name="classId"
-                    disabled
-                    required
-                    className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  >
-                    <option value={classId}>{className}</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-slate-900 dark:text-slate-50">
-                    Profile Picture
-                  </label>
-                  <input
-                    type="file"
-                    onChange={(e) => setFile(e.target.files[0])}
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={handleFileUpload}
-                    className="mt-2 bg-blue-500 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-600 transition duration-300"
-                    disabled={isLoading}
-                  >
-                    {isLoading ? "Uploading..." : "Upload Image"}
-                  </button>
-                </div>
-
-                {/* Show Uploaded Image Preview */}
-                {imageUrl && (
-                  <div className="mt-4 text-center">
-                    <p className="text-green-600 font-semibold">
-                      Image Uploaded Successfully!
-                    </p>
-                    <img
-                      src={`https://api.studypulse.live/${imageUrl}`}
-                      alt="Uploaded Profile"
-                      className="mt-2 max-w-xs mx-auto rounded-full"
-                    />
-                  </div>
-                )}
-                {/* Error Message */}
-                {error && (
-                  <p className="text-red-500 text-sm text-center mt-2">
-                    {error}
-                  </p>
-                )}
-
-                {/* Action Buttons */}
-                <div className="flex justify-between gap-4">
-                  <button
-                    type="submit"
-                    className={`w-full py-3 px-6 rounded-md text-white font-semibold transition-all ${
-                      isLoading
-                        ? "bg-gray-400 cursor-not-allowed"
-                        : "bg-blue-500 hover:bg-blue-600"
-                    }`}
-                    disabled={isLoading}
-                  >
-                    {isLoading ? "Creating Subject..." : "Create Subject"}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setIsModalOpen(false)}
-                    className="w-full py-3 px-6 rounded-md text-gray-700 bg-gray-200 hover:bg-gray-300 transition-all font-semibold"
-                  >
-                    Close
-                  </button>
-                </div>
-              </form>
-            </div>
+              Subject Name
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Enter subject name"
+            />
           </div>
-        </div>
-      )}
+
+          {/* Class Dropdown (Disabled) */}
+          <div>
+            <label
+              htmlFor="classId"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Class
+            </label>
+            <select
+              id="classId"
+              name="classId"
+              disabled
+              required
+              className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value={classId}>{className}</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-900 dark:text-slate-50">
+              Profile Picture
+            </label>
+            <input
+              type="file"
+              onChange={(e) => setFile(e.target.files[0])}
+              required
+            />
+            <button
+              type="button"
+              onClick={handleFileUpload}
+              className="mt-2 bg-blue-500 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-600 transition duration-300"
+              disabled={isLoading}
+            >
+              {isLoading ? "Uploading..." : "Upload Image"}
+            </button>
+          </div>
+
+          {/* Show Uploaded Image Preview */}
+          {imageUrl && (
+            <div className="mt-4 text-center">
+              <p className="text-green-600 font-semibold">
+                Image Uploaded Successfully!
+              </p>
+              <img
+                src={`https://api.studypulse.live/${imageUrl}`}
+                alt="Uploaded Profile"
+                className="mt-2 max-w-xs mx-auto rounded-full"
+              />
+            </div>
+          )}
+          {/* Error Message */}
+          {error && (
+            <p className="text-red-500 text-sm text-center mt-2">
+              {error}
+            </p>
+          )}
+
+          {/* Action Buttons */}
+          <div className="flex justify-between gap-4">
+            <button
+              type="submit"
+              className={`w-full py-3 px-6 rounded-md text-white font-semibold transition-all ${
+                isLoading
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-blue-500 hover:bg-blue-600"
+              }`}
+              disabled={isLoading}
+            >
+              {isLoading ? "Creating Subject..." : "Create Subject"}
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsModalOpen(false)}
+              className="w-full py-3 px-6 rounded-md text-gray-700 bg-gray-200 hover:bg-gray-300 transition-all font-semibold"
+            >
+              Close
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+)}
+
 
       <div className="container mx-auto p-6 shadow-lg rounded-lg max-w-6xl">
         {/* Title Section */}
@@ -275,6 +276,9 @@ export default function Subject() {
         <table className="table-auto w-full border-collapse border border-gray-300">
           <thead className="bg-gray-200">
             <tr>
+            <th className="border border-gray-300 px-4 py-2 text-left text-gray-700">
+                Picture
+              </th>
               <th className="border border-gray-300 px-4 py-2 text-left text-gray-700">
                 Classes
               </th>
@@ -289,6 +293,14 @@ export default function Subject() {
                 key={index}
                 className="hover:bg-gray-100 hover:text-gray-400 transition-all"
               >
+                 <td className="px-4 py-2 border">
+              <img
+                className="w-10 h-10 rounded-full"
+                src={`https://api.studypulse.live/${item.image}`}
+
+                alt="Profile"
+              />
+            </td>
                 <td className="border border-gray-300 px-4 py-2 whitespace-nowrap">
                   {item.name}
                 </td>

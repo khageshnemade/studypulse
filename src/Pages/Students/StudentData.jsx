@@ -148,7 +148,8 @@ const Table = () => {
             <td className="px-4 py-2 border">
               <img
                 className="w-10 h-10 rounded-full"
-                src={row?.studentData?.profilePic}
+                src={`https://api.studypulse.live/${row?.studentData?.profilePic}`}
+
                 alt="Profile"
               />
             </td>

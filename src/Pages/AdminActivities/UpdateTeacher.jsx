@@ -13,6 +13,8 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
   const [activeTab, setActiveTab] = useState("about");
   const [userData, setUserData] = useState({});
   const [teacherData, setTeacherData] = useState({ classId: [] });
+  const [file, setFile] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
 
   // Fetch teacher data and populate the form when the component mounts or ID changes
   useEffect(() => {
@@ -25,6 +27,52 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
       console.log("Teacher Dta", teacherData);
     }
   }, [teachersData, id]);
+
+  const handleFileUpload = async (file) => {
+  
+      console.log("File Upload",file);
+      if (!file) {
+        toast.error("Please select a file before uploading.");
+        return;
+      }
+    
+      const formData = new FormData();
+      formData.append("files", file); // Ensure 'file' is not null or undefined
+    
+      console.log("Form Data before upload:", formData);
+    
+      try {
+        const response = await makeRequest.post(
+          "https://api.studypulse.live/web/api/file-upload/profile-pic",
+          formData
+        );
+    
+        console.log("API response:", response);
+    
+        if (response.data.success) {
+          setImageUrl(response.data.url); // Store the uploaded image URL
+          setTeacherData((prevData) => ({
+            ...prevData,
+            profilePic: response.data.url, // Update teacher data with the new image URL
+          }));
+          toast.success("Image uploaded successfully!");
+        } else {
+          toast.error("Image upload failed. Please try again.");
+        }
+      } catch (error) {
+        console.error("Error during file upload:", error);
+        toast.error("Failed to upload image.");
+      }
+  };
+  
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0]; // Access the selected file
+    if (selectedFile) {
+      setFile(selectedFile); 
+      handleFileUpload(selectedFile);
+   
+    }
+  };
 
   const handleUserDataChange = (e) => {
     const { name, value } = e.target;
@@ -54,7 +102,7 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
         teacherData: {
           totalYearsOfExperience: teacherData.totalYearsOfExperience,
           gender: teacherData.gender,
-          profilePic: teacherData.profilePic,
+          profilePic: `https://api.studypulse.live/${teacherData.profilePic}`,
           status: teacherData.status,
           address: teacherData.address,
         },
@@ -94,7 +142,7 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
       {/* Profile Picture and Update Button */}
       <div className="text-center">
         <img
-          src={`data:image/jpeg;base64,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`}
+          src={`${teacherData.profilePic}`}
           alt="Profile"
           className="w-28 h-28 mx-auto rounded-full border-4 border-gray-300 shadow-md"
         />
@@ -108,165 +156,173 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
 
       {/* Update Form Modal */}
       {showForm && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 overflow-y-auto">
-          <div className="bg-white rounded-lg shadow-lg p-8 max-w-lg mx-auto">
-            <h2 className="text-2xl font-semibold mb-4">Update Information</h2>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="mb-4 flex flex-col sm:flex-row sm:space-x-4">
-                <div className="flex-1">
-                  <label
-                    htmlFor="firstName"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    First Name
-                  </label>
-                  <input
-                    type="text"
-                    id="firstName"
-                    name="firstName"
-                    className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value={userData.firstName}
-                    onChange={handleUserDataChange}
-                  />
-                </div>
+  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[999] overflow-auto">
+    <div className="relative max-h-[90%] overflow-y-auto bg-white shadow-lg rounded-lg p-6 w-full max-w-lg">
+      <h2 className="text-2xl font-semibold mb-4">Update Information</h2>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="mb-4 flex flex-col sm:flex-row sm:space-x-4">
+          <div className="flex-1">
+            <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
+              First Name
+            </label>
+            <input
+              type="text"
+              id="firstName"
+              name="firstName"
+              className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={userData.firstName}
+              onChange={handleUserDataChange}
+            />
+          </div>
 
-                <div className="flex-1">
-                  <label
-                    htmlFor="lastName"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Last Name
-                  </label>
-                  <input
-                    type="text"
-                    id="lastName"
-                    name="lastName"
-                    className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value={userData.lastName}
-                    onChange={handleUserDataChange}
-                  />
-                </div>
-              </div>
-
-              {/* Phone Number and Address */}
-              <div className="mb-4 flex flex-col sm:flex-row sm:space-x-4">
-                <div className="flex-1">
-                  <label
-                    htmlFor="phoneNumber"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Phone Number
-                  </label>
-                  <input
-                    type="number"
-                    id="phoneNumber"
-                    name="phoneNumber"
-                    className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value={userData.phoneNumber}
-                    onChange={handleUserDataChange}
-                  />
-                </div>
-
-                <div className="flex-1">
-                  <label
-                    htmlFor="address"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Address
-                  </label>
-                  <input
-                    type="text"
-                    id="address"
-                    name="address"
-                    className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value={teacherData.address}
-                    onChange={handleTeacherDataChange}
-                  />
-                </div>
-              </div>
-
-              {/* Experience and Gender */}
-              <div className="mb-4 flex flex-col sm:flex-row sm:space-x-4">
-                <div className="flex-1">
-                  <label
-                    htmlFor="totalYearsOfExperience"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Experience Years
-                  </label>
-                  <input
-                    type="number"
-                    id="totalYearsOfExperience"
-                    name="totalYearsOfExperience"
-                    className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value={teacherData.totalYearsOfExperience}
-                    onChange={handleTeacherDataChange}
-                  />
-                </div>
-              </div>
-
-              <div className="flex-1">
-                <label
-                  htmlFor="gender"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Gender
-                </label>
-                <select
-                  id="gender"
-                  name="gender"
-                  className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  value={teacherData.gender}
-                  onChange={handleTeacherDataChange}
-                >
-                  <option value="">Select Gender</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-
-              <div className="flex-1">
-                <label
-                  htmlFor="status"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Status
-                </label>
-                <select
-                  type="text"
-                  id="status"
-                  name="status"
-                  className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  value={teacherData.status}
-                  onChange={handleTeacherDataChange}
-                >
-                  <option value="">Select Status</option>
-                  <option value="pending">pending</option>
-                  <option value="rejected">rejected</option>
-                  <option value="accepted">accepted</option>
-                </select>
-              </div>
-              {/* Buttons */}
-              <div className="mt-6 flex justify-end space-x-3">
-                <button
-                  type="button"
-                  onClick={() => setShowForm(false)}
-                  className="px-4 py-2 bg-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  Save
-                </button>
-              </div>
-            </form>
+          <div className="flex-1">
+            <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
+              Last Name
+            </label>
+            <input
+              type="text"
+              id="lastName"
+              name="lastName"
+              className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={userData.lastName}
+              onChange={handleUserDataChange}
+            />
           </div>
         </div>
-      )}
+
+        {/* Phone Number and Address */}
+        <div className="mb-4 flex flex-col sm:flex-row sm:space-x-4">
+          <div className="flex-1">
+            <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">
+              Phone Number
+            </label>
+            <input
+              type="number"
+              id="phoneNumber"
+              name="phoneNumber"
+              className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={userData.phoneNumber}
+              onChange={handleUserDataChange}
+            />
+          </div>
+
+          <div className="flex-1">
+            <label htmlFor="address" className="block text-sm font-medium text-gray-700">
+              Address
+            </label>
+            <input
+              type="text"
+              id="address"
+              name="address"
+              className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={teacherData.address}
+              onChange={handleTeacherDataChange}
+            />
+          </div>
+        </div>
+
+        {/* Profile Picture */}
+        <div className="mb-4 flex flex-col sm:space-x-4">
+          <div className="flex-1 block">
+            <label htmlFor="profilePic" className="block text-sm font-medium text-gray-700">
+              Profile Picture
+            </label>
+            <input
+              type="file"
+              id="profilePic"
+              name="profilePic"
+              className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              onChange={handleFileChange}
+            />
+          </div>
+
+          {imageUrl && (
+            <div className="mt-4 w-full ">
+              {/* This will force the image to be on a new line */}
+              <img
+                src={`https://api.studypulse.live/${imageUrl}`}
+                alt="Profile"
+                className="w-24 h-24 rounded-full mx-auto"
+              />
+            </div>
+          )}
+        </div>
+
+        {/* Experience and Gender */}
+        <div className="mb-4 flex flex-col sm:flex-row sm:space-x-4">
+          <div className="flex-1">
+            <label htmlFor="totalYearsOfExperience" className="block text-sm font-medium text-gray-700">
+              Experience Years
+            </label>
+            <input
+              type="number"
+              id="totalYearsOfExperience"
+              name="totalYearsOfExperience"
+              className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={teacherData.totalYearsOfExperience}
+              onChange={handleTeacherDataChange}
+            />
+          </div>
+        </div>
+
+        {/* Gender and Status */}
+        <div className="flex-1">
+          <label htmlFor="gender" className="block text-sm font-medium text-gray-700">
+            Gender
+          </label>
+          <select
+            id="gender"
+            name="gender"
+            className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={teacherData.gender}
+            onChange={handleTeacherDataChange}
+          >
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <div className="flex-1">
+          <label htmlFor="status" className="block text-sm font-medium text-gray-700">
+            Status
+          </label>
+          <select
+            id="status"
+            name="status"
+            className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={teacherData.status}
+            onChange={handleTeacherDataChange}
+          >
+            <option value="">Select Status</option>
+            <option value="pending">pending</option>
+            <option value="rejected">rejected</option>
+            <option value="accepted">accepted</option>
+          </select>
+        </div>
+
+        {/* Buttons */}
+        <div className="mt-6 flex justify-end space-x-3">
+          <button
+            type="button"
+            onClick={() => setShowForm(false)}
+            className="px-4 py-2 bg-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            Save
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+)}
+
 
       {/* Tabs for Data */}
       <div className="mt-8">
@@ -274,8 +330,8 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
           <button
             onClick={() => setActiveTab("about")}
             className={`flex-1 py-2 text-center font-semibold ${activeTab === "about"
-                ? "text-blue-600 border-b-2 border-blue-600"
-                : "text-gray-600 hover:text-blue-600"
+              ? "text-blue-600 border-b-2 border-blue-600"
+              : "text-gray-600 hover:text-blue-600"
               }`}
           >
             About
@@ -284,8 +340,8 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
           <button
             onClick={() => setActiveTab("qualificationData")}
             className={`flex-1 py-2 text-center font-semibold ${activeTab === "qualificationData"
-                ? "text-blue-600 border-b-2 border-blue-600"
-                : "text-gray-600 hover:text-blue-600"
+              ? "text-blue-600 border-b-2 border-blue-600"
+              : "text-gray-600 hover:text-blue-600"
               }`}
           >
             Education
@@ -293,8 +349,8 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
           <button
             onClick={() => setActiveTab("experienceData")}
             className={`flex-1 py-2 text-center font-semibold ${activeTab === "experienceData"
-                ? "text-blue-600 border-b-2 border-blue-600"
-                : "text-gray-600 hover:text-blue-600"
+              ? "text-blue-600 border-b-2 border-blue-600"
+              : "text-gray-600 hover:text-blue-600"
               }`}
           >
             Experience
