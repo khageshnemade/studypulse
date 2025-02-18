@@ -37,6 +37,7 @@ export const TeacherDashboardHeader = ({ collapsed, setCollapsed }) => {
       const res = await makeRequest.get("/teacher/get-data");
 
       console.log("Previous Data from Dashboard:", res?.data?.data?.profilePic);
+      
       setProfilePic(res?.data?.data?.profilePic)
     } catch (error) {
       console.error("Error fetching Teacher data:", error.message);

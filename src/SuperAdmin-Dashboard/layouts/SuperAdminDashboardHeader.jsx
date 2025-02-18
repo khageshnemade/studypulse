@@ -80,15 +80,15 @@ export const SuperAdminDashboardHeader = ({ collapsed, setCollapsed }) => {
 
                     </button> */}
 
-<button
+          <button
             onClick={toggleModal}
             className="w-10 h-10 overflow-hidden rounded-full cursor-pointer"
           >
-            
-              <div className="w-full h-full flex items-center justify-center bg-blue-600 text-white text-2xl font-bold">
-                {userName.split(" ").map(name => name[0]).join("").toUpperCase()}
-              </div>
-          
+
+            <div className="w-full h-full flex items-center justify-center bg-blue-600 text-white text-2xl font-bold">
+              {userName.split(" ").map(name => name[0]).join("").toUpperCase()}
+            </div>
+
           </button>
         </div>
       </header>

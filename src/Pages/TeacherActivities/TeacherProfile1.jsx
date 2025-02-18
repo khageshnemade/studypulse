@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { makeRequest } from "../../axios";
 import { useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { Plus, User } from "lucide-react";
 
 const TeacherProfile = () => {
@@ -97,13 +98,14 @@ const TeacherProfile = () => {
   };
 
   const handleSubmit = async (e) => {
+
     e.preventDefault();
     try {
       const modifiedFormData = {
         ...formData,
         classId: classIds,
         subjectId: subjectIds,
-        profilePic:`https://api.studypulse.live/${imageUrl}`,
+        profilePic: `https://api.studypulse.live/${imageUrl}`,
         experience: formData.experience.map((exp) => {
           // Create a new object without the _id field
           const { _id, ...expWithoutId } = exp;
@@ -130,8 +132,8 @@ const TeacherProfile = () => {
         toast.success("Profile completed successfully");
 
         setTimeout(() => {
-          navigate("/teacher-dashboard");
-        }, 2000); // Wait 2 seconds before redirecting
+          navigate('/login')
+        }, 2000);
       }
     } catch (error) {
       console.error("Error submitting form:", error.message);
@@ -159,8 +161,7 @@ const TeacherProfile = () => {
       return updatedState;
     });
   };
-  const handleFileUpload = async (e) => {
-    e.preventDefault();
+  const handleFileUpload = async (file) => {
     if (!file) {
       toast.error("Please select an image to upload.");
       return;
@@ -176,7 +177,7 @@ const TeacherProfile = () => {
 
       if (response.data.success) {
         setImageUrl(response.data.url); // Store the uploaded image URL
-      console.log("Image Updated Successfully",response.data.url);
+        console.log("Image Updated Successfully", response.data.url);
         toast.success("Image uploaded successfully!");
       } else {
         toast.error("Image upload failed. Please try again.");
@@ -370,21 +371,22 @@ const TeacherProfile = () => {
             />
           </div>
           <div className="overflow-hidden">
-               <label className="block text-sm font-medium mb-1 whitespace-nowrap" htmlFor="fil">Profile Picture</label>
-                <input
-                id="fil"
-                className="w-full px-3 py-2 border rounded-lg"
-                  type="file"
-                  onChange={(e) => {setFile(e.target.files[0])
-                    setTimeout(()=>{
-                      handleFileUpload(e)
-                    },0)
-                  }}
-                 
-                />
+            <label className="block text-sm font-medium mb-1 whitespace-nowrap" htmlFor="fil">Profile Picture</label>
+            <input
+              id="fil"
+              className="w-full px-3 py-2 border rounded-lg"
+              type="file"
+              onChange={(e) => {
+                setFile(e.target.files[0])
+                setTimeout(() => {
+                  handleFileUpload(e.target.files[0])
+                }, 0)
+              }}
 
-               
-              </div>
+            />
+
+
+          </div>
           <div>
             <label className="block text-sm font-medium mb-1">Date Of Birth</label>
             <input
@@ -416,20 +418,7 @@ const TeacherProfile = () => {
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">
-             Total Experience
-            </label>
-            <input
-              type="text"
-              name="totalYearsOfExperience"
-              value={
-                formData.totalYearsOfExperience
-              }
-              onChange={handleInputChange} // Ensure the handleInputChange function is set to manage formData
-              className="w-full px-3 py-2 border rounded-lg"
-            />
-          </div>
+
         </div>
         {/* Qualifications */}
         <div className="mt-6">
@@ -464,7 +453,21 @@ const TeacherProfile = () => {
         </div>
         {/* Experience */}
         <div className="mt-6">
-          <h3 className="text-lg font-semibold mb-4">Experience</h3>
+          <h3 className="text-lg font-semibold mb-2">Experience</h3>
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Total Experience
+            </label>
+            <input
+              type="text"
+              name="totalYearsOfExperience"
+              value={
+                formData.totalYearsOfExperience
+              }
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 border rounded-lg mb-2"
+            />
+          </div>
           {formData.experience.map((exp, index) => (
             <div key={index} className="mb-4">
               <h4 className="font-medium">Experience {index + 1}</h4>
