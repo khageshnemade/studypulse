@@ -51,7 +51,7 @@ const UpdateChapterCurriculum = () => {
       );
       console.log("Chapter curriculum updated successfully:", res.data);
       alert("Chapter curriculum updated successfully!");
-      navigate("/teacher-dashboard/chapters/chapterCurrs", {
+      navigate("/teacher-dashboard/chapterCurrs", {
         state: {
           initialClassId: curr.classId._id,
           initialChapterId: curr.chapterId._id,
@@ -79,7 +79,7 @@ const UpdateChapterCurriculum = () => {
       <div className="bg-white shadow-lg rounded-lg p-6">
         <button
           onClick={() => {
-            navigate("/teacher-dashboard/chapters/chapterCurrs", {
+            navigate("/teacher-dashboard/chapterCurrs", {
               state: { curr },
             });
           }}

@@ -121,7 +121,7 @@ const CreateChapterCurriculum = () => {
         setVideoUrl("");
         setClassId("");
         setSubjectId("");
-        navigate("/teacher-dashboard/chapters/chapterCurrs", {
+        navigate("/teacher-dashboard/chapterCurrs", {
           state: {
             initialClassId: classId,
             initialChapterId: chapterId,
@@ -138,11 +138,11 @@ const CreateChapterCurriculum = () => {
   };
 
   return (
-    <div className="card">
-      <div className="card-header">
+    <div className="">
+      <div className="">
         <p className="card-title">Create Chapter Curriculum</p>
       </div>
-      <div className="card-body bg-slate-100 transition-colors dark:bg-slate-950">
+      <div className="card-body bg-white transition-colors dark:bg-slate-950">
         <div className="mt-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>

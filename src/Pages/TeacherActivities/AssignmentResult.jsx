@@ -13,7 +13,7 @@ const AssignmentResult = () => {
     chapterId: initialchapterId,
   } = assignment.assignment || {};
 
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 useEffect(() => {
@@ -37,7 +37,8 @@ useEffect(() => {
       const res = await makeRequest.get(`/teacher/get-assignment-result`, {
         params: { assignmentId, classId, subjectId, chapterId },
       });
-      setResults(res.data?.data || []);
+      console.log("Assignment Results fetched", res?.data);
+      setResults(res.data?.data || {});
     } catch (err) {
       console.error("Error fetching assignment results:", err.message);
       setError("Failed to fetch assignment results. Please try again.");
@@ -84,36 +85,66 @@ useEffect(() => {
         <p className="text-gray-500">No results found for this assignment.</p>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {results.map((result, index) => (
-          <div
-            key={index}
-            className="p-6 border border-gray-200 rounded-lg shadow-lg bg-white dark:bg-gray-800 dark:border-gray-700"
-          >
-            <h3 className="font-semibold text-xl text-gray-900 dark:text-white">
-              Student: {result.studentName}
-            </h3>
-            <p className="text-gray-700 dark:text-gray-300">
-              Marks Obtained: {result.marksObtained}
-            </p>
-            <p className="text-gray-700 dark:text-gray-300">
-              Total Marks: {result.totalMarks}
-            </p>
-            <p className="text-gray-700 dark:text-gray-300">
-              Status:{" "}
-              <span
-                className={`font-semibold ${
-                  result.status === "Passed" ? "text-green-500" : "text-red-500"
-                }`}
-              >
-                {result.status}
-              </span>
-            </p>
-          </div>
-        ))}
+<div className="max-w-4xl mx-auto p-8 bg-gradient-to-r from-teal-50 to-blue-50 shadow-lg rounded-xl">
+  <h2 className="text-3xl font-semibold text-gray-800 mb-6">{results?.assignmentId?.title}</h2>
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+    <p className="text-lg text-gray-600">
+      <strong>Subject:</strong> <span className="text-gray-900">{results.subjectId}</span>
+    </p>
+    <p className="text-lg text-gray-600">
+      <strong>Chapter:</strong> <span className="text-gray-900">{results.chapterId}</span>
+    </p>
+  </div>
+
+  <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+    <div className="flex justify-between mb-4">
+      <p className="text-lg font-medium text-gray-700">
+        <strong>Total Marks:</strong> {results.totalMarks}
+      </p>
+      <p className="text-lg font-medium text-gray-700">
+        <strong>Obtained Marks:</strong> {results.obtainedMarks}
+      </p>
+    </div>
+    <div className="flex justify-between">
+      <p className="text-lg font-medium text-gray-700">
+        <strong>Passing Marks:</strong> {results.passingMarks}
+      </p>
+      <p className={`text-lg font-bold ${results.result === "pass" ? "text-green-600" : "text-red-600"}`}>
+        <strong>Result:</strong> {results.result}
+      </p>
+    </div>
+  </div>
+
+  <div className="space-y-6">
+    {results?.questionResponses?.map((response, index) => (
+      <div key={index} className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+        <p className="font-semibold text-lg text-gray-800 mb-4">Question {index + 1}</p>
+        <div className="space-y-3">
+          {response.options.map((option, optIndex) => (
+            <div key={optIndex} className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                checked={option.isSelected}
+                readOnly
+                className="w-5 h-5 text-teal-500 border-gray-300 rounded focus:ring-0"
+              />
+              <span className="text-gray-800">{option._id}</span>
+            </div>
+          ))}
+        </div>
+        <p className="mt-4 text-lg text-gray-700">
+          <strong>Marks:</strong> {response.marks}
+        </p>
       </div>
+    ))}
+  </div>
+</div>
+
+
+
     </div>
   );
 };
 
 export default AssignmentResult;
+ 

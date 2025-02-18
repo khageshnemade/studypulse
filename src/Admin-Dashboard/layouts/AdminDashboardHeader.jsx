@@ -58,7 +58,7 @@ export const AdminDashboardHeader = ({ collapsed, setCollapsed }) => {
         <div className="flex items-center justify-center text-gray-600 gap-2 font-bold ">
           <p>Welcome Back,</p>
           <h2 className=" text-gray-800 "> {userName} </h2>
-          
+
           {/* Display other user data as needed */}
         </div>
 
@@ -81,13 +81,18 @@ export const AdminDashboardHeader = ({ collapsed, setCollapsed }) => {
 
                     </button> */}
 
-          <button className="size-10 overflow-hidden rounded-full">
-            <img
-              src={profileImg}
-              onClick={toggleModal} // Toggle modal visibility
-              alt="profile image"
-              className="size-full object-cover"
-            />
+         
+
+
+          <button
+            onClick={toggleModal}
+            className="w-10 h-10 overflow-hidden rounded-full cursor-pointer"
+          >
+            
+              <div className="w-full h-full flex items-center justify-center bg-blue-600 text-white text-2xl font-bold">
+                {userName.split(" ").map(name => name[0]).join("").toUpperCase()}
+              </div>
+          
           </button>
         </div>
       </header>

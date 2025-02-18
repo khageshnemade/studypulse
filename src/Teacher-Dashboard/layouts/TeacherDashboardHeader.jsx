@@ -8,12 +8,13 @@ import PropTypes from "prop-types";
 import AdminModal from "./TeacherModal";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { makeRequest } from "../../axios";
 
 export const TeacherDashboardHeader = ({ collapsed, setCollapsed }) => {
   // const { theme, setTheme } = useTheme();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [profilePic, setProfilePic] = useState('');
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
@@ -21,6 +22,7 @@ export const TeacherDashboardHeader = ({ collapsed, setCollapsed }) => {
   useEffect(() => {
     const userData = localStorage.getItem("user");
     if (userData) {
+      getPreviousData()
       try {
         const parsedData = JSON.parse(userData);
         setUserName(parsedData.userName || "Guest");
@@ -29,6 +31,17 @@ export const TeacherDashboardHeader = ({ collapsed, setCollapsed }) => {
       }
     }
   }, []);
+
+  const getPreviousData = async () => {
+    try {
+      const res = await makeRequest.get("/teacher/get-data");
+
+      console.log("Previous Data from Dashboard:", res?.data?.data?.profilePic);
+      setProfilePic(res?.data?.data?.profilePic)
+    } catch (error) {
+      console.error("Error fetching Teacher data:", error.message);
+    }
+  };
   return (
     <>
       <header className="relative z-10 flex h-[60px] items-center justify-between px-4 shadow-md transition-colors bg-blue-500 ">
@@ -62,31 +75,25 @@ export const TeacherDashboardHeader = ({ collapsed, setCollapsed }) => {
         </div>
 
         <div className="flex items-center gap-x-3">
-          {/* <button
-                        className="btn-ghost size-10"
-                        onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-                    >
-                        <Sun
-                            size={20}
-                            className="dark:hidden"
-                        />
-                        <Moon
-                            size={20}
-                            className="hidden dark:block"
-                        />
-                    </button> */}
-          {/* <button className="btn-ghost size-10 text-gray-100">
-            <Bell size={20} />
-          </button> */}
 
-          <button className="size-10 overflow-hidden rounded-full">
-            <img
-              src={profileImg}
-              onClick={toggleModal} // Toggle modal visibility
-              alt="profile image"
-              className="size-full object-cover"
-            />
-          </button>
+
+        <button 
+  onClick={toggleModal} 
+  className="w-10 h-10 overflow-hidden rounded-full cursor-pointer"
+>
+  {profilePic ? (
+    <img
+      src={profilePic}
+      alt="Profile"
+      className="w-full h-full object-cover"
+    />
+  ) : (
+    <div className="w-full h-full flex items-center justify-center bg-blue-600 text-white text-2xl font-bold">
+      {userName.split(" ").map(name => name[0]).join("").toUpperCase()}
+    </div>
+  )}
+</button>
+
         </div>
       </header>
       {isModalOpen && <AdminModal onClose={toggleModal} />}
