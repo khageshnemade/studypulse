@@ -242,7 +242,7 @@ export default function ChapterCurr() {
                   {/* Edit Button */}
                   <button
                     onClick={() =>
-                      navigate("/teacher-dashboard/update_chapterCurr", {
+                      navigate("/teacher-dashboard/chapterCurrs/update_chapterCurr", {
                         state: { curr },
                       })
                     }

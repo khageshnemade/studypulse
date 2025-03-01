@@ -91,7 +91,7 @@ export default function Assignments() {
                 {/* Edit Button */}
                 <button
                   onClick={() =>
-                    navigate("/teacher-dashboard/update_assignment", {
+                    navigate("/teacher-dashboard/chapters/assignments/update_assignment", {
                       state: { assignment },
                     })
                   }

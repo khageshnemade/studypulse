@@ -6,8 +6,38 @@ import Banner from "../../Component/Banner/Banner";
 import Map from "../../Component/Map";
 import GotoTop from "../../Component/GotoTop";
 import LoginForm from "../../Component/Form/LoginForm";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+    const navigate=useNavigate();
+    useEffect(
+           ()=>{
+            const userData = localStorage.getItem("user");
+
+               if (userData) {
+                // Parse the JSON string to an object
+                const parsedUserData = JSON.parse(localStorage.getItem("user"));
+                
+                // Access the userRole
+                const userRole = parsedUserData.role;
+                
+                console.log("User Role:", userRole);
+                setTimeout(() => {
+                    if (userRole === "admin") {
+                    navigate("/admin-dashboard");
+                    } else if (userRole === "teacher") {
+                      navigate("/teacher-dashboard");
+                    } else if (userRole === "superAdmin") {
+                      navigate("/superadmin-dashboard");
+                    } else if (userRole === "student") {
+                      navigate("/dashboard");
+                    }
+                  }, 0);
+              } else {
+                console.log("No user data found");
+              }
+           }
+    ,[]);
     const [isLoading, setIsLoading] = useState(true);
     let content = undefined;
     useEffect(() => {

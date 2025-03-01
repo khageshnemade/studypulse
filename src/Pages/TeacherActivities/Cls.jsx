@@ -34,7 +34,7 @@ export default function Cls() {
   // Only runs on initial mount
 
   const showStudents = (classId, className) => {
-    navigate(`/teacher-dashboard/students`, { state: { classId, className } });
+    navigate(`/teacher-dashboard/cls/students`, { state: { classId, className } });
   };
   const fetchClasses = async (id) => {
     try {

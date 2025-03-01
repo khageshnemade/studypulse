@@ -111,7 +111,38 @@ function LoginForm() {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+  useEffect(() => {
+    // Check if the user is logged in (for example, check localStorage or a global state)
+    const userData = localStorage.getItem("user");
 
+    if (userData) {
+      // Parse the JSON string to an object
+      const parsedUserData = JSON.parse(userData);
+      
+      // Access the userRole
+      const userRole = parsedUserData.role;
+      
+      console.log("User Role:", userRole);
+      setTimeout(() => {
+        if (userRole === "admin") {
+          console.log("hello admin", response?.data?.data?.organizationID);
+          const orgId = response?.data?.data?.organizationID;
+          
+          dispatch(setOrgId(orgId));
+          navigate("/admin-dashboard");
+        } else if (userRole === "teacher") {
+          navigate("/teacher-dashboard");
+        } else if (userRole === "superAdmin") {
+          navigate("/superadmin-dashboard");
+        } else if (userRole === "student") {
+          navigate("/dashboard");
+        }
+      }, 500);
+    } else {
+      console.log("No user data found");
+    }
+  
+  }, [navigate]);
   return (
     <>
       <div className="flex justify-center mb-4">

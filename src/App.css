@@ -100,7 +100,7 @@
   }
 
   .sidebar-group-title {
-    @apply overflow-hidden text-ellipsis text-sm font-medium text-slate-600 dark:text-slate-400;
+    @apply overflow-hidden text-ellipsis text-sm font-medium text-white dark:text-slate-400;
   }
 
   .sidebar-item {

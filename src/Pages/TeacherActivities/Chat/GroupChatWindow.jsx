@@ -259,6 +259,108 @@
 
 // export default GroupChatWindow;
 
+// import React, { useState, useEffect, useRef } from "react";
+
+// // Mock function to fetch messages (replace with API call)
+// const fetchMessages = async (offset, limit) => {
+//   const messages = [];
+//   for (let i = 0; i < limit; i++) {
+//     messages.push(`Message ${offset + i + 1}`);
+//   }
+//   return messages;
+// };
+
+// const GroupChatWindow = () => {
+//   const [messages, setMessages] = useState([]);
+//   const [loading, setLoading] = useState(false);
+//   const [hasMore, setHasMore] = useState(true);
+//   const messageContainerRef = useRef(null);
+//   const offset = useRef(0); // Keep track of the current offset for fetching messages
+//   const [scrollPosition, setScrollPosition] = useState(0); // Track scroll position
+//   const[val,setVal]=useState('1');
+//   useEffect(() => {
+//     loadMessages();
+//   }, []);
+
+//   const loadMessages = async () => {
+//     if (loading || !hasMore) return;
+
+//     setLoading(true);
+//     const limit = 10;
+//     const newMessages = await fetchMessages(offset.current, limit);
+//     setMessages((prevMessages) => [...newMessages, ...prevMessages]); // Prepend messages to the top
+//     offset.current += limit;
+
+//     // After loading messages, we can adjust the scroll position
+//     setScrollPosition(messageContainerRef.current.scrollHeight);
+
+//     if (newMessages.length < limit) {
+//       setHasMore(false);
+//     }
+//     setLoading(false);
+//   };
+
+//   const handleScroll = () => {
+//     const container = messageContainerRef.current;
+//     // When the scroll is at the top and there are more messages, load more
+//     if (container.scrollTop === 0 && hasMore) {
+//       loadMessages();
+//       scrollToPosition(580);
+//     }
+
+//   };
+
+//   // Programmatically change the scroll position (e.g., scroll to the top)
+//   const scrollToTop = () => {
+//     messageContainerRef.current.scrollTop = 0; // Scroll to top
+//   };
+
+//   const scrollToPosition = (position) => {
+//     console.log("In Scrolling Position",position);
+//     messageContainerRef.current.scrollTop = position; 
+//   };
+//   const handleSubmit = (e) => {
+//     e.preventDefault();
+//     scrollToPosition(val); // Use the val directly, as it holds the current input value
+//   };
+
+//   return (
+//     <div>
+//       <button
+//         onClick={scrollToTop}
+//         className="bg-blue-500 text-white px-4 py-2 mt-4"
+//       >
+//         Scroll to Top
+//       </button>
+//       <div
+//         className="h-96 overflow-y-scroll border border-gray-300 p-4"
+//         ref={messageContainerRef}
+//         onScroll={handleScroll}
+//       >
+//         <div className="space-y-4">
+//           {messages.map((message, index) => (
+//             <div key={index} className="bg-gray-100 p-2 rounded-md">
+//               {message}
+//             </div>
+//           ))}
+//         </div>
+
+//         {loading && <div className="text-center text-gray-500 mt-4">Loading...</div>}
+//         {!hasMore && <div className="text-center text-gray-500 mt-4">No more messages</div>}
+//       </div>
+//       <form action="" onSubmit={ handleSubmit}>
+//           <input type="text" value={val} onChange={(e) => { setVal(e.target.value) }} />
+//           <button type="submit">Submit</button>
+//         </form>
+//     </div>
+//   );
+// };
+
+// export default GroupChatWindow;
+
+
+
+
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
@@ -277,7 +379,9 @@ const GroupChatWindow = () => {
   const [page, setPage] = useState(1);
   const chatContainerRef = useRef(null);
   const [hasMore, setHasMore] = useState(true);
-  const [isAtBottom, setIsAtBottom] = useState(true); // Track if the user is at the bottom
+  const [isConnected, setIsConnected] = useState(false);
+  const [isAtBottom, setIsAtBottom] = useState(true); // Track if the user is at the 
+  const[notifications,setNotifications] = useState(0);
   const navigate = useNavigate();
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
@@ -288,7 +392,9 @@ const GroupChatWindow = () => {
   }, [curr]);
 
   useEffect(() => {
+
     if (discussionId) {
+      // Initialize the socket connection when the discussionId changes
       socket = io("wss://api.studypulse.live", {
         path: "/socket.io",
         forceNew: true,
@@ -298,9 +404,11 @@ const GroupChatWindow = () => {
 
       socket.emit("join-discussion", { discussionId });
       console.log(`Joined discussion: ${discussionId}`);
+      setIsConnected(true);
 
       socket.on("get-message", (message) => {
         console.log("Received message:", message);
+        setNotifications(prev=>prev+1);
         setMessages((prev) => [
           ...prev,
           {
@@ -309,19 +417,28 @@ const GroupChatWindow = () => {
             timestamp: new Date().toISOString(),
           },
         ]);
-
-        // Scroll to the latest message if the user is at the bottom
-        if (isAtBottom) {
+        const email1 = JSON.parse(localStorage.getItem("user")).user;
+        if (message.senderDetails.email === email1) {
           scrollToLatest();
+          setNotifications(0);
+        }
+        
+
+        if (isAtBottom) {
+setNotifications(0)
         }
       });
 
+      // Cleanup the socket connection when the component is unmounted or discussionId changes
       return () => {
-        socket.off("get-message");
-        socket.disconnect();
+        if (socket) {
+          socket.off("get-message");
+          socket.disconnect();
+          console.log("Socket disconnected");
+        }
       };
     }
-  }, [discussionId, isAtBottom]); // Re-run when isAtBottom changes
+  }, [discussionId, isAtBottom]); // Re-run when isAtBottom changes or discussionId changes
 
   const handleEmojiClick = (emoji) => {
     setMessage(message + emoji.emoji); // Add the selected emoji to the message input
@@ -340,38 +457,73 @@ const GroupChatWindow = () => {
       if (newMessages.length === 0) {
         setHasMore(false); // No more messages
       }
-
+      console.log("newMessages: ", newMessages);
       setMessages((prev) => [...newMessages.reverse(), ...prev]);
+      scrollToPosition();
     } catch (error) {
       console.error("Error fetching discussion:", error);
     }
   }, [curr?.discussionId, page, hasMore]);
+  useEffect(() => {
+    console.log("Messages", messages);
+  }, [messages])
+
 
   useEffect(() => {
     fetchDiscussion();
-  }, [fetchDiscussion]);
+  }, []);
 
   useEffect(() => {
     if (page > 1) {
       fetchDiscussion();
     }
   }, [page]);
+  const scrollToPosition = () => {
+    console.log("ChatContainer: scrollToPosition", chatContainerRef);
+    let totalHeight = 0;
+    if (chatContainerRef.current.children.length >= 10) {
+      for (let i = 0; i < 10; i++) {
+        const messageElement = chatContainerRef.current.children;
+        if (messageElement) {
+
+          totalHeight += messageElement[i].clientHeight; // Add the height of each message
+        }
+
+      }
+    }
+    chatContainerRef.current.scrollTop = totalHeight + 200;
+  
+    setTimeout(() => {
+      if (chatContainerRef.current.children.length == 20){
+        console.log("First message",totalHeight);
+              chatContainerRef.current.scrollTop = totalHeight;
+            }
+    }, 200);
+  console.log("Total height: " + totalHeight);
+  };
 
   const handleScroll = useCallback(() => {
     const chatContainer = chatContainerRef.current;
+  
+    if (!chatContainer) return;
+  
+    // Check if user is at the bottom of the container
     const isBottom =
-      chatContainer?.scrollHeight ===
-      chatContainer?.scrollTop + chatContainer?.clientHeight;
-    setIsAtBottom(isBottom); // Update if the user is at the bottom
-
-    if (chatContainer?.scrollTop === 0 && hasMore) {
+      Math.abs(chatContainer.scrollHeight - (chatContainer.scrollTop + chatContainer.clientHeight)) <= 200;
+  
+    setIsAtBottom(isBottom);
+  
+    // Load more messages if the user is at the top of the chat container
+    if (chatContainer.scrollTop === 0 && hasMore) {
       setPage((prev) => prev + 1); // Load more messages if at the top
     }
   }, [hasMore]);
+  
 
   useEffect(() => {
     const chatContainer = chatContainerRef.current;
     chatContainer?.addEventListener("scroll", handleScroll);
+
     return () => chatContainer?.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
 
@@ -389,12 +541,14 @@ const GroupChatWindow = () => {
       console.error("Error sending message:", error);
     }
   };
+
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {  // Check if Enter key is pressed
       e.preventDefault(); // Prevent form submission on Enter key default behavior
       handleSendMessage(e); // Trigger form submission
     }
   };
+
   useEffect(() => {
     if (isAtBottom) {
       const chatContainer = chatContainerRef.current;
@@ -411,6 +565,7 @@ const GroupChatWindow = () => {
       top: chatContainer.scrollHeight,
       behavior: "smooth",
     });
+    setNotifications(0)
   };
 
   return (
@@ -447,17 +602,15 @@ const GroupChatWindow = () => {
               className={`flex ${isSender ? "justify-end" : "justify-start"}`}
             >
               <div
-                className={`px-6 py-4 max-w-[60%] rounded-xl text-sm transition-all duration-300 ${
-                  isSender
+                className={`px-6 py-4 max-w-[60%] rounded-xl text-sm transition-all duration-300 ${isSender
                     ? "bg-green-600 text-white shadow-xl"
                     : "bg-gray-100 text-gray-800 shadow-md"
-                }`}
+                  }`}
               >
                 {msg.senderDetails?.length > 0 && (
                   <div
-                    className={`font-semibold text-sm ${
-                      isSender ? "text-white" : "text-gray-600"
-                    }`}
+                    className={`font-semibold text-sm ${isSender ? "text-white" : "text-gray-600"
+                      }`}
                   >
                     {!isSender &&
                       `${msg.senderDetails[0].firstName} ${msg.senderDetails[0].lastName}`}
@@ -468,9 +621,8 @@ const GroupChatWindow = () => {
                 <div className="text-base mt-2">{msg.content}</div>
 
                 <div
-                  className={`text-xs mt-1 ${
-                    isSender ? "text-white" : "text-gray-500"
-                  } text-right`}
+                  className={`text-xs mt-1 ${isSender ? "text-white" : "text-gray-500"
+                    } text-right`}
                 >
                   <span>
                     {msg.timestamp
@@ -486,13 +638,17 @@ const GroupChatWindow = () => {
 
       {/* Scroll to Latest Button */}
       {!isAtBottom && (
-        <button
-          onClick={scrollToLatest}
-          className="fixed bottom-24 right-8 bg-purple-600 text-white p-3 rounded-full hover:bg-purple-700 transition-all duration-300"
-        >
-          <MessageCircle />
-        </button>
-      )}
+  <button
+    onClick={scrollToLatest}
+    className={`fixed bottom-24 right-8 p-3 rounded-full transition-all duration-300 ${notifications ? 'bg-green-600 text-white' : 'bg-purple-600 text-white'} hover:${notifications ? 'bg-green-700' : 'bg-purple-700'}`}
+  >
+    {notifications ? (
+      <span className="absolute top-0 right-0 w-6 h-6 bg-red-600 rounded-full">{notifications}</span> // Notification dot
+    ):( <span className="absolute top-0 right-0 w-3 h-3 bg-red-600 rounded-full"></span>)}
+    <MessageCircle />
+  </button>
+)}
+
 
       {/* Send message button inside the chat */}
       <div className="flex items-center space-x-4 p-2 bg-slate-200 rounded-b-2xl shadow-xl sticky bottom-[-22px] z-10">
@@ -506,7 +662,7 @@ const GroupChatWindow = () => {
         <input
           type="text"
           className="flex-grow p-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-500"
-          placeholder="Type a message..."
+          placeholder={isConnected ? "Type a message..." : "Connecting..."}
           value={message}
           onKeyDown={handleKeyPress}
           onChange={(e) => setMessage(e.target.value)}
@@ -530,78 +686,3 @@ const GroupChatWindow = () => {
 };
 
 export default GroupChatWindow;
-
-// import React, { useState, useEffect, useRef } from "react";
-
-// // Mock function to fetch messages (replace with API call)
-// const fetchMessages = async (offset, limit) => {
-//   // Replace with your database call logic
-//   const messages = [];
-//   for (let i = 0; i < limit; i++) {
-//     messages.push(`Message ${offset + i + 1}`);
-//   }
-//   return messages;
-// };
-
-// const GroupChatWindow = () => {
-//   const [messages, setMessages] = useState([]);
-//   const [loading, setLoading] = useState(false);
-//   const [hasMore, setHasMore] = useState(true);
-//   const messageContainerRef = useRef(null);
-//   const offset = useRef(0); // Keep track of the current offset for fetching messages
-
-//   useEffect(() => {
-//     // Initial load of messages
-//     loadMessages();
-//   }, []);
-
-//   // Function to load messages
-//   const loadMessages = async () => {
-//     if (loading || !hasMore) return;
-
-//     setLoading(true);
-//     const limit = 10;
-//     const newMessages = await fetchMessages(offset.current, limit);
-//     setMessages((prevMessages) => [...newMessages, ...prevMessages]);
-//     offset.current += limit;
-//     setLoading(false);
-
-//     if (newMessages.length < limit) {
-//       setHasMore(false); // No more messages to load
-//     }
-//   };
-
-//   // Handle scroll event to fetch more messages when scrolled to the top
-//   const handleScroll = () => {
-//     const container = messageContainerRef.current;
-//     if (container.scrollTop === 0 && hasMore) {
-//       loadMessages();
-//     }
-//   };
-
-//   return (
-//     <div
-//       className="h-96 overflow-y-scroll border border-gray-300 p-4"
-//       ref={messageContainerRef}
-//       onScroll={handleScroll}
-//     >
-//       <div className="space-y-4">
-//         {messages.map((message, index) => (
-//           <div key={index} className="bg-gray-100 p-2 rounded-md">
-//             {message}
-//           </div>
-//         ))}
-//       </div>
-
-//       {loading && (
-//         <div className="text-center text-gray-500 mt-4">Loading...</div>
-//       )}
-
-//       {!hasMore && (
-//         <div className="text-center text-gray-500 mt-4">No more messages</div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default GroupChatWindow;

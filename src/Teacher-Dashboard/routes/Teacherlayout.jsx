@@ -33,7 +33,7 @@ const TeacherLayout = () => {
               "max-md:pointer-events-auto max-md:z-50 max-md:opacity-30"
           )}
         />
-        <TeacherSidebar ref={sidebarRef} collapsed={collapsed} />
+        <TeacherSidebar ref={sidebarRef} collapsed={collapsed}           setCollapsed={setCollapsed}/>
         <div
           className={cn(
             "transition-[margin] duration-300",

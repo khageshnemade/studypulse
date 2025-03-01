@@ -238,7 +238,7 @@ const router = createBrowserRouter(
           element: <Cls />,
         },
         {
-          path: "students",
+          path: "cls/students",
           element: <Students />,
         },
         {
@@ -278,15 +278,15 @@ const router = createBrowserRouter(
           element: <Assignments />,
         },
         {
-          path: "update_assignment",
+          path: "chapters/assignments/update_assignment",
           element: <UpdateAssignment />,
         },
         {
-          path: "update_chapter",
+          path: "chapters/update_chapter",
           element: <UpdateChapter />,
         },
         {
-          path: "update_chapterCurr",
+          path: "chapterCurrs/update_chapterCurr",
           element: <UpdateChapterCurriculum />,
         },
         {

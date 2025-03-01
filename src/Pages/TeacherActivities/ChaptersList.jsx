@@ -227,7 +227,7 @@ const ChaptersList = () => {
                       {/* Update Button */}
                       <button
                         onClick={() =>
-                          navigate("/teacher-dashboard/update_chapter", {
+                          navigate("/teacher-dashboard/chapters/update_chapter", {
                             state: { chapter },
                           })
                         }
