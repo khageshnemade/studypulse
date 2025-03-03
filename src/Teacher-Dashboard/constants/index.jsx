@@ -28,11 +28,7 @@ export const navbarLinks = [
         icon: BookOpen, // Icon represents academic materials
         path: "/teacher-dashboard/subjects",
       },
-      {
-        label: "Profile", // Shortened label for clarity
-        icon: User, // More appropriate icon for user profile
-        path: "/teacher-dashboard/get_data",
-      },
+     
       {
         label: "Course Content",
         icon: FileText,

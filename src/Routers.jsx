@@ -48,6 +48,7 @@ import CreateRegion from "./Pages/SuperAdminActivities/CreateRegion";
 import GroupChatWindow from "./Pages/TeacherActivities/Chat/GroupChatWindow";
 import ProfilePicUpload from "./Pages/TeacherActivities/ProfilePicUpload";
 import Showemail from "./Pages/AdminActivities/Showemail";
+import StudentsRegistered from "./Admin-Dashboard/routes/dashboard/StudentsRegistered";
 
 const user = localStorage.getItem("user"); // Check if the user is logged in
 
@@ -190,6 +191,10 @@ const router = createBrowserRouter(
           element: <StudentData />,
         },
         {
+          path: "student",
+          element: <StudentsRegistered />,
+        },
+        {
           path: "teachers",
           element: <TeacherData />,
         },
@@ -258,7 +263,7 @@ const router = createBrowserRouter(
           element: <ChaptersList />,
         },
         {
-          path: "add_chapter",
+          path: "chapters/add_chapter",
           element: <AddChapter />,
         },
         {
@@ -266,7 +271,7 @@ const router = createBrowserRouter(
           element: <ChapterCurr />,
         },
         {
-          path: "add_chapterCurr",
+          path: "chapterCurrs/add_chapterCurr",
           element: <CreateChapterCurriculum />,
         },
         {
@@ -290,7 +295,7 @@ const router = createBrowserRouter(
           element: <UpdateChapterCurriculum />,
         },
         {
-          path: "assignRes",
+          path: "chapters/assignments/assignRes",
           element: <AssignmentResult />,
         },
         {

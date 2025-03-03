@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { LogOut, X } from "lucide-react";
 
 const AdminModal = ({ onClose }) => {
-
     // Close modal on outside click
     const handleOutsideClick = (e) => {
         if (e.target.id === "modal-overlay") {
@@ -30,14 +29,13 @@ const AdminModal = ({ onClose }) => {
     if (!user) {
       return <div>Loading...</div>;
     }
-
     return (
         <div
         id="modal-overlay"
-        className="fixed inset-0 z-[200] flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-lg"
+        className="fixed inset-0 z-[200] flex items-start justify-end bg-black bg-opacity-50"
     >
         <div
-            className="relative bg-white bg-opacity-90 backdrop-blur-md rounded-lg p-6 shadow-2xl w-[90%] md:w-[400px] animate-fade-in"
+            className="relative bg-white rounded-lg p-6 shadow-2xl max-w-[40%] md:w-[400px] animate-fade-in"
             onClick={(e) => e.stopPropagation()} // Prevent click events from propagating to the overlay
         >
             {/* Modal Content */}

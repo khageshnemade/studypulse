@@ -2,15 +2,17 @@ import { forwardRef, useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { ChevronsLeft, Home, LogOut } from "lucide-react";
 import { navbarLinks } from "../constants";
-
+import { resetClassDetails } from "../../redux/features/idsSlice";
 import logoLight from "../assets/logosn.png";
 import logoDark from "../assets/logosn.png";
 
 import { cn } from "../utils/cn";
 
 import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
 
 export const TeacherSidebar = forwardRef(({ collapsed, setCollapsed }, ref) => {
+  const dispatch = useDispatch();
 
 
   const [profileCompletion, setProfileCompletion] = useState(false);
@@ -22,6 +24,7 @@ export const TeacherSidebar = forwardRef(({ collapsed, setCollapsed }, ref) => {
     console.log("logging out");
     navigate("/login");
     console.log("Logged out");
+    dispatch(resetClassDetails());
     setShowModal(false); // Close the modal after logging out
   };
   useEffect(() => {

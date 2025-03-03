@@ -1,35 +1,29 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { makeRequest } from "../../axios";
-import {
-  ArrowLeft,
-  Plus,
-  Edit,
-  ChevronRight,
-  Folders,
-  ArrowDown,
-  ArrowUp,
-} from "lucide-react"; // Import Lucid React Icons
-import { ChevronDown, ChevronUp } from "lucide-react";
-
+import { ArrowLeft, Plus, Edit, ChevronRight, ChevronDown, ChevronUp } from "lucide-react"; // Import Lucid React Icons
 import { ToastContainer } from "react-toastify";
+import { useSelector } from 'react-redux';  // Import useSelector from Redux
 
 export default function Assignments() {
-  const [openAssignment, setOpenAssignment] = useState(null); // Track which assignment is open
   const navigate = useNavigate();
+
+  // Use useSelector to get data from Redux store
+  const { classId, subjectId, chapterId } = useSelector(state => state.ids.classDetails); // Assume classDetails is set in redux
+
+  const [openAssignment, setOpenAssignment] = useState(null); // Track which assignment is open
+  const [assignments, setAssignments] = useState([]);
+
   const toggleQuestionsVisibility = (assignmentId) => {
     // Toggle visibility for the clicked assignment
     setOpenAssignment(openAssignment === assignmentId ? null : assignmentId);
   };
-  const location = useLocation();
-  const { classId, subjectId, chapterId } = location.state || {};
-  const [assignments, setAssignments] = useState([]);
+
   useEffect(() => {
     fetchAssignment();
-  }, [chapterId]);
-  useEffect(() => {
-    assignments && console.log("Assihnment", assignments);
-  }, [assignments]);
+    console.log("In fetch assignment",classId,subjectId,chapterId);
+  }, [chapterId]); // Only refetch when chapterId changes
+
   const fetchAssignment = async () => {
     try {
       const res = await makeRequest.get(
@@ -49,7 +43,7 @@ export default function Assignments() {
         <button
           onClick={() => {
             navigate("/teacher-dashboard/chapters", {
-              state: { classId, subjectId, chapterId },
+              // No need to pass location state here, fetch it from Redux
             });
           }}
           className="flex items-center justify-center bg-blue-500 text-white p-3 rounded-full hover:bg-blue-600 transition duration-300 transform hover:scale-110"
@@ -61,7 +55,7 @@ export default function Assignments() {
         <button
           onClick={() => {
             navigate("/teacher-dashboard/add_assignment", {
-              state: { classId, subjectId, chapterId },
+              // No need to pass location state here, fetch it from Redux
             });
           }}
           className="flex items-center justify-center bg-blue-500 text-white p-3 rounded-full hover:bg-blue-600 transition duration-300 transform hover:scale-110"
@@ -70,6 +64,7 @@ export default function Assignments() {
           <Plus className="w-5 h-5 transition-all" />
         </button>
       </div>
+
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-gray-800">Assignment List</h1>
       </div>
@@ -104,7 +99,7 @@ export default function Assignments() {
                 {/* View Results Button */}
                 <button
                   onClick={() =>
-                    navigate("/teacher-dashboard/assignRes", {
+                    navigate("/teacher-dashboard/chapters/assignments/assignRes", {
                       state: { assignment },
                     })
                   }

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { makeRequest } from "../../axios";
-import { useDispatch, useSelector } from "react-redux";
 import { setStudent } from "../../redux/features/studentSlice";
 import { UpdateStudent } from "../AdminActivities/UpdateStudent";
 import { toast, ToastContainer } from "react-toastify";
 import { ArrowRight, Trash2, Users2 } from "lucide-react";
-
+import { useSelector, useDispatch } from "react-redux";
+import { setAdminDetails } from "../../redux/features/adminSlice";
 const Table = () => {
   const [currentId, setCurrentId] = useState("");
   const dispatch = useDispatch();
@@ -17,7 +17,14 @@ const Table = () => {
   const [pageSize, setPageSize] = useState(10);
   const [profileComplete, setProfileComplete] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const { classId:initialClassId, page } = useSelector(
+    (state) => state.admin.adminDetails
+  );
 
+  useEffect(() => {
+setClassId(initialClassId)
+setPageSize(page)
+}, [classId, page])  
   const fetchStudents = async (classId, pageSize, page, profileComplete) => {
     const url = `/admin/get-all-students?classId=${classId}&page=${page}&limit=${pageSize}&isProfileComplete=${profileComplete}`;
     try {
@@ -92,7 +99,10 @@ const Table = () => {
         <select
           id="classId"
           value={classId}
-          onChange={(e) => setClassId(e.target.value)}
+          onChange={(e) => {
+            dispatch(setAdminDetails({ classId: e.target.value }));
+
+            setClassId(e.target.value)}}
           className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white w-1/3"
         >
           <option value="">Select Class</option>
@@ -106,7 +116,10 @@ const Table = () => {
         <select
           id="pageSize"
           value={pageSize}
-          onChange={(e) => setPageSize(Number(e.target.value))}
+          onChange={(e) => {
+            dispatch(setAdminDetails({ page: e.target.value }));
+
+            setPageSize(Number(e.target.value))}}
           className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white w-1/3"
         >
           <option value="1">1</option>

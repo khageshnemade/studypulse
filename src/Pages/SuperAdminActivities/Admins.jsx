@@ -3,6 +3,8 @@ import { makeRequest } from "../../axios";
 import { Link, useLocation, useNavigate } from "react-router-dom"; // For navigation
 import { Pencil, User2 } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
+import { useDispatch,useSelector } from "react-redux";
+import { setSuperAdminDetails } from "../../redux/features/superAdminSlice";
 
 export default function Admins() {
   const [admins, setAdmins] = useState([]);
@@ -10,8 +12,12 @@ export default function Admins() {
   const [orgId, setOrgId] = useState("");
   const [adminId, setAdminId] = useState("");
   const navigate = useNavigate(); // Hook for navigation
-  const { orgId: initialOrgId } = useLocation()?.state || {};
+const {orgId:initialOrgId} = useSelector((state) => state.superAdmin.superAdminDetails);
+useEffect(() => {
+ console.log("OrgId",orgId);
+}, [orgId])
 
+  const dispatch=useDispatch()
   const fetchOrgs = async () => {
     try {
       const res = await makeRequest.get(`/superAdmin/admin/get-all-org`);
@@ -79,7 +85,11 @@ export default function Admins() {
         <select
           id="org"
           name="org"
-          onChange={(e) => setOrgId(e.target.value)}
+          value={orgId}
+          onChange={(e) => {
+            dispatch(setSuperAdminDetails({ orgId: e.target.value }));
+
+            setOrgId(e.target.value)}}
           className="w-48 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white text-gray-700"
         >
           <option value="s">Select Organization</option>

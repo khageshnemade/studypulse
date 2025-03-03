@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { makeRequest } from "../../axios";
 import { ArrowLeft, PlusCircle } from "lucide-react";
-
-import { useSelector } from "react-redux";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
+import { useSelector } from "react-redux";
 
 const AddChapter = () => {
   const [title, setTitle] = useState("");
@@ -15,21 +14,22 @@ const AddChapter = () => {
   const [error, setError] = useState("");
   const [subjects, setSubjects] = useState([]);
   const [classes, setClasses] = useState([]);
-  const location = useLocation();
+  const { classId: selectedClassId, subjectId: selectedSubjectId } = useSelector(state => state.ids.classDetails);
+
   const navigate = useNavigate();
-  const { classId: initialClassId, subjectId: initialSubjectId } =
-    location.state;
 
   useEffect(() => {
-    setClassId(initialClassId || "");
-    setSubjectId(initialSubjectId || "");
     fetchClasses();
     fetchSubjects();
-  }, [classId]);
-  const filteredSubjects = subjects.filter(
-    (subject) => subject.classId == classId
-  );
-  console.log("Filtered Subject", filteredSubjects);
+  }, []);
+
+  useEffect(() => {
+    setClassId(selectedClassId);
+    setSubjectId(selectedSubjectId);
+    console.log("Selected Ids", selectedClassId, selectedSubjectId);
+  }, [selectedClassId, selectedSubjectId]);
+
+  // Fetch classes and subjects
   const fetchClasses = async () => {
     try {
       const res = await makeRequest.get(`teacher/get-all-classes`);
@@ -42,12 +42,13 @@ const AddChapter = () => {
   const fetchSubjects = async () => {
     try {
       const res = await makeRequest.get(`teacher/get-all-subjects`);
-      console.log("Subjects fetched", res?.data);
       setSubjects(res?.data?.data || []);
     } catch (error) {
       console.error("Request Error:", error.message);
     }
   };
+
+  const filteredSubjects = subjects.filter(subject => subject.classId === classId);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -58,10 +59,7 @@ const AddChapter = () => {
     setError("");
 
     try {
-      const res = await makeRequest.post(
-        "/teacher/create-chapter",
-        chapterData
-      );
+      const res = await makeRequest.post("/teacher/create-chapter", chapterData);
       console.log("Chapter created successfully:", res.data);
 
       setTitle("");
@@ -86,7 +84,6 @@ const AddChapter = () => {
 
   return (
     <>
-      {" "}
       <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold bg-blue-400 p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
         <PlusCircle className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
         Create Chapter

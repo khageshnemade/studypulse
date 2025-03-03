@@ -124,10 +124,7 @@ function LoginForm() {
       
       console.log("User Role:", userRole);
       setTimeout(() => {
-        if (userRole === "admin") {
-          console.log("hello admin", response?.data?.data?.organizationID);
-          const orgId = response?.data?.data?.organizationID;
-          
+        if (userRole === "admin") {       
           dispatch(setOrgId(orgId));
           navigate("/admin-dashboard");
         } else if (userRole === "teacher") {

@@ -1,0 +1,33 @@
+// src/features/idsSlice.js
+import { createSlice } from '@reduxjs/toolkit';
+
+const initialState = {
+  adminDetails: {
+    classId: null,
+    page:null
+  }
+};
+
+const adminSlice = createSlice({
+  name: 'admin',
+  initialState,
+  reducers: {
+    setAdminDetails: (state, action) => {
+      // Update the class details object with the action payload
+      state.adminDetails = { ...state.adminDetails, ...action.payload };
+    },
+    resetAdminDetails: (state) => {
+      // Reset the class details to their initial state
+      state.adminDetails = {
+        classId: null,
+        page:null
+      };
+    },
+  },
+});
+
+// Export the actions
+export const { setAdminDetails, resetAdminDetails } = adminSlice.actions;
+
+// Export the reducer
+export default adminSlice.reducer;

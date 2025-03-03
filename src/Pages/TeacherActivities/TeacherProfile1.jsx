@@ -9,7 +9,6 @@ const TeacherProfile = () => {
   const navigate = useNavigate();
   const [classes, setClasses] = useState([]);
   const [subjects, setSubjects] = useState([]);
-  const [classId, setClassId] = useState("");
   const [selectedClassId, setSelectedClassId] = useState("");
   const [selectedSubjectId, setSelectedSubjectId] = useState("");
   const [s_c, setS_c] = useState({});

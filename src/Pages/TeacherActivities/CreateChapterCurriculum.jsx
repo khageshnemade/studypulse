@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { makeRequest } from "../../axios";
-import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import { setClassDetails } from "../../redux/features/idsSlice";
+import { Plus } from "lucide-react";
 
 const CreateChapterCurriculum = () => {
   const [classId, setClassId] = useState("");
@@ -22,12 +24,9 @@ const CreateChapterCurriculum = () => {
   const userData = localStorage.getItem("user");
   const parsedData = JSON.parse(userData);
   console.log("Parsed Data:", parsedData?.token);
-  const location = useLocation();
-  const {
-    chapterId: initialChapterId,
-    classId: initialclassId,
-    subjectId: initialsubjectId,
-  } = location.state || {};
+  const { classId:initialclassId, subjectId:initialsubjectId, chapterId:initialChapterId } = useSelector(
+    (state) => state.ids.classDetails
+  );
   useEffect(() => {
     fetchSubjects();
   }, [classId]);
@@ -140,7 +139,9 @@ const CreateChapterCurriculum = () => {
   return (
     <div className="">
       <div className="">
-        <p className="card-title">Create Chapter Curriculum</p>
+      <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold bg-blue-400 p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
+        <Plus className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
+        Create Chapter Curriculum</p>
       </div>
       <div className="card-body bg-white transition-colors dark:bg-slate-950">
         <div className="mt-6">

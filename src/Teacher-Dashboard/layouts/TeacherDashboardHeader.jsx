@@ -2,15 +2,16 @@ import { Bell, ChevronsLeft, Menu, Moon, Search, Sun } from "lucide-react";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { makeRequest } from "../../axios";
-import { useLocation, Link } from "react-router-dom";  // Import useLocation for breadcrumb functionality
+import { useLocation, Link, useNavigate } from "react-router-dom";  // Import useLocation for breadcrumb functionality
 
 export const TeacherDashboardHeader = ({ collapsed, setCollapsed }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [profilePic, setProfilePic] = useState('');
   const [userName, setUserName] = useState("");
   const location = useLocation();  // Hook to get the current location
+  const navigate=useNavigate();
   const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
+    navigate('/teacher-dashboard/get_data');
   };
 
   // Get user data from localStorage and set the user name
@@ -80,11 +81,7 @@ export const TeacherDashboardHeader = ({ collapsed, setCollapsed }) => {
   </nav>
 </div>
 
-
-
-
-
-  {/* Centered welcome text */}
+ {/* Centered welcome text */}
   <div className="flex items-center justify-center text-white gap-1 font-bold mr-4">
           <p className="">Welcome Back,</p>
     <h2 className="text-inherit">{userName}</h2>

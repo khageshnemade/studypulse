@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { makeRequest } from "../../axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ArrowLeft, Edit, Plus } from "lucide-react";
+import { useSelector, useDispatch } from "react-redux";
+import { setClassDetails } from "../../redux/features/idsSlice";
 
 const UpdateChapter = () => {
   const [title, setTitle] = useState("");
@@ -12,7 +14,9 @@ const UpdateChapter = () => {
   const [error, setError] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
-  const { chapter } = location.state || {};
+  const { chapter} = useSelector(
+    (state) => state.ids.classDetails
+  );
   const {
     _id: chapterId,
     classId,

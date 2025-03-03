@@ -12,6 +12,10 @@ import teachersReducer from '../features/teacherSlice'
 import studentsReducer from '../features/studentSlice'
 import orgReducer from '../features/orgSlice'
 import classReducer from '../features/classSlice'
+import idsReducer from '../features/idsSlice';
+import adminReducer from '../features/adminSlice'
+import superAdminReducer from '../features/superAdminSlice'
+
 
 const rootReducer = combineReducers({
     profile: profileReducer,
@@ -23,7 +27,10 @@ const rootReducer = combineReducers({
     teachers: teachersReducer,
     students: studentsReducer,
     org: orgReducer ,
-    class: classReducer 
+    class: classReducer ,
+    ids: idsReducer,
+    admin: adminReducer,
+    superAdmin: superAdminReducer,
 
 });
 

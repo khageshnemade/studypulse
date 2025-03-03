@@ -10,8 +10,11 @@ import { cn } from "../utils/cn";
 
 import PropTypes from "prop-types";
 import { LogOut } from "lucide-react";
+import { resetAdminDetails } from "../../redux/features/adminSlice";
+import { useDispatch } from "react-redux";
 
 export const AdminSidebar = forwardRef(({ collapsed }, ref) => {
+  const dispatch=useDispatch()
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const handleLogout = () => {
@@ -20,6 +23,7 @@ export const AdminSidebar = forwardRef(({ collapsed }, ref) => {
   console.log("logging out");
   navigate("/login");
     console.log("Logged out");
+    dispatch(resetAdminDetails())
     setShowModal(false); // Close the modal after logging out
   };
   return (

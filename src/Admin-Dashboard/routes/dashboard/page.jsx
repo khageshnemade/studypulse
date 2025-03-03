@@ -13,6 +13,8 @@ import {
 } from "chart.js";
 import { makeRequest } from "../../../axios";
 import { BookOpen, FileText, Layers } from "lucide-react";
+import StudentsRegistered from "./StudentsRegistered";
+import { useNavigate } from "react-router-dom";
 
 // Registering chart components
 ChartJS.register(
@@ -29,7 +31,7 @@ export default function AdminDashboard() {
   const [dashboard, setData] = useState({});
   const [labels, setLabels] = useState([]);
   const [dataset, setDataset] = useState([]);
-
+const navigate=useNavigate();
   useEffect(() => {
     fetchDashboardData();
   }, []);
@@ -104,12 +106,19 @@ export default function AdminDashboard() {
     <p className="text-3xl font-bold text-blue-600 bg-white rounded-lg py-2 mt-2 text-center">{dashboard.totalTeachersCount}</p>
   </div>
 
-  <div className="bg-green-100 shadow-lg rounded-lg p-6 flex flex-col justify-between transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer outline outline-4 outline-gray-400">
-    <div className="flex items-center gap-4">
+  <div className="bg-green-100 shadow-lg rounded-lg p-6 flex flex-col justify-between transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer outline outline-4 outline-gray-400" onClick={() => {
+          navigate('student');
+        }}>
+    <div className="flex items-center gap-4" >
       <div className="bg-green-500 text-white p-4 rounded-full">
         <FileText className="text-2xl" />
       </div>
-      <h3 className="text-lg font-semibold text-gray-700">Students Registered</h3>
+      <h3 
+        className="text-lg font-semibold text-gray-700 cursor-pointer"
+       
+      >
+        Students Registered
+      </h3>
     </div>
     <p className="text-3xl font-bold text-green-600 bg-white rounded-lg py-2 mt-2 text-center">{dashboard.totalStudentCount}</p>
   </div>

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { makeRequest } from "../../axios";
 import { toast, ToastContainer } from "react-toastify";
 import { PlusCircle } from "lucide-react";
+import { useDispatch,useSelector } from "react-redux";
+import { setSuperAdminDetails } from "../../redux/features/superAdminSlice";
 
 export default function Organizations() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -12,23 +14,28 @@ export default function Organizations() {
     cityID: "",
   });
   const [name, setName] = useState("");
-  const [districtName, setDistrictName] = useState("");
-  const [talukaName, setTalukaName] = useState("");
-  const [cityName, setCityName] = useState("");
   const [districts, setDistricts] = useState([]);
   const [talukas, setTalukas] = useState([]);
   const [cities, setCities] = useState([]);
   const [orgs, setOrgs] = useState([]);
   const [districtId, setDistrictId] = useState("");
   const [talukaId, settalukaId] = useState("");
-  const [orgId, setOrgId] = useState("");
   const [cityId, setCityId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const { districtId: initialDistrictId, talukaId: initialTalukaId, cityId: initialCityId } = useSelector((state) => state.superAdmin.superAdminDetails);
 
+const dispatch=useDispatch()
   useEffect(() => {
+    setNewOrg({
+      name: "",
+      district: initialDistrictId,
+      taluka: initialTalukaId,
+      city: initialCityId,
+    });
+    console.log("NewOrg",newOrg);
     fetchDistricts();
-  }, []);
+  }, [initialDistrictId,initialTalukaId,initialCityId]);
   const handleInputChange = (name, value) => {
     setNewOrg((prev) => ({ ...prev, [name]: value }));
   };
@@ -146,74 +153,7 @@ export default function Organizations() {
       setIsLoading(false);
     }
   };
-  const handleDistrictSubmit = async (e) => {
-    e.preventDefault();
-
-    setIsLoading(true);
-    console.log("Setting Success", isLoading);
-    setError("");
-    try {
-      const res = await makeRequest.post("/superAdmin/create-district", {
-        name,
-      });
-      console.log("District created successfully:");
-      toast.success(res?.data?.message);
-
-      setName("");
-    } catch (error) {
-      console.error("Error creating class:", error.message);
-      toast.error(error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const handleTalukaSubmit = async (e) => {
-    e.preventDefault();
-
-    setIsLoading(true);
-    console.log("Setting Success", isLoading);
-    setError("");
-    try {
-      console.log("DID", districtId);
-      const res = await makeRequest.post("/superAdmin/create-taluka", {
-        name,
-        districtId,
-      });
-      console.log("Taluka created successfully:", res.data);
-      toast.success(res?.data?.message);
-
-      setName("");
-      setDistrictId("");
-    } catch (error) {
-      console.error("Taluka Submit:", error.message);
-      toast.error(error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const handleCitySubmit = async (e) => {
-    e.preventDefault();
-
-    setIsLoading(true);
-    console.log("Setting Success", isLoading);
-    setError("");
-    try {
-      const res = await makeRequest.post("/superAdmin/create-city", {
-        talukaName,
-        cityName,
-        districtName,
-      });
-      console.log("Region created successfully:", res.data);
-      toast.success(res?.data?.message);
-
-      setName("");
-    } catch (error) {
-      console.error("CitySubmit:", error.message);
-      toast.error(error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+ 
   const Orgs = () => (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
       <select
@@ -221,6 +161,7 @@ export default function Organizations() {
         id="district"
         value={newOrg.district}
         onChange={(e) => {
+          dispatch(setSuperAdminDetails({ districtId: e.target.value }));
           const districtId = e.target.value;
           fetchTalukas(districtId);
           handleInputChange("district", districtId);
@@ -240,6 +181,7 @@ export default function Organizations() {
         id="talukas"
         value={newOrg.taluka}
         onChange={(e) => {
+          dispatch(setSuperAdminDetails({ talukaId: e.target.value }));
           const talukaId = e.target.value;
           fetchCities(talukaId);
           handleInputChange("taluka", talukaId);
@@ -310,6 +252,7 @@ export default function Organizations() {
                   name="district"
                   value={newOrg.district}
                   onChange={(e) => {
+                    dispatch(setSuperAdminDetails({ districtId: e.target.value }));
                     const districtId = e.target.value;
                     fetchTalukas(districtId);
                     handleInputChange("district", districtId);
@@ -329,6 +272,7 @@ export default function Organizations() {
                   name="taluka"
                   value={newOrg.taluka}
                   onChange={(e) => {
+                    dispatch(setSuperAdminDetails({ talukaId: e.target.value }));
                     const talukaId = e.target.value;
                     fetchCities(talukaId);
                     handleInputChange("taluka", talukaId);
@@ -348,6 +292,7 @@ export default function Organizations() {
                   name="city"
                   value={newOrg.city}
                   onChange={(e) => {
+                    dispatch(setSuperAdminDetails({ cityId: e.target.value }));
                     const cityId = e.target.value;
                     fetchOrgs(cityId);
                     handleInputChange("city", cityId);
@@ -448,3 +393,4 @@ export default function Organizations() {
     </div>
   );
 }
+
