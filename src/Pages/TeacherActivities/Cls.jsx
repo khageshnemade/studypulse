@@ -34,7 +34,9 @@ export default function Cls() {
   // Only runs on initial mount
 
   const showStudents = (classId, className) => {
-    navigate(`/teacher-dashboard/cls/students`, { state: { classId, className } });
+    navigate(`/teacher-dashboard/cls/students`, {
+      state: { classId, className },
+    });
   };
   const fetchClasses = async (id) => {
     try {
@@ -55,21 +57,21 @@ export default function Cls() {
       </p>
       <div className="mx-auto p-4 sm:p-6 bg-white shadow-lg rounded-lg overflow-x-auto">
         <table className="table-auto w-full border-collapse border border-gray-300 whitespace-nowrap">
-          <thead className="bg-gray-200">
+          <thead className="bg-gradient-to-r from-blue-400 to-purple-600 text-white">
             <tr>
-              <th className="border border-gray-300 px-4 py-2 text-left text-gray-700">
+              <th className="border border-gray-300 px-4 py-2 text-left">
                 Profile
               </th>
-              <th className="border border-gray-300 px-4 py-2 text-left text-gray-700">
+              <th className="border border-gray-300 px-4 py-2 text-left ">
                 Classes
               </th>
-              <th className="border border-gray-300 px-4 py-2 text-left text-gray-700">
+              <th className="border border-gray-300 px-4 py-2 text-left ">
                 Stream
               </th>
-              <th className="border border-gray-300 px-4 py-2 text-left text-gray-700">
+              <th className="border border-gray-300 px-4 py-2 text-left ">
                 Created At
               </th>
-              <th className="border border-gray-300 px-4 py-2 text-left text-gray-700">
+              <th className="border border-gray-300 px-4 py-2 text-left ">
                 Action
               </th>
             </tr>
@@ -77,14 +79,13 @@ export default function Cls() {
           <tbody>
             {classes.map((item, index) => (
               <tr key={index} className="hover:bg-gray-100 transition-all">
-                  <td className="px-4 py-2 border">
-              <img
-                className="w-10 h-10 rounded-full"
-                src={`https://api.studypulse.live/${item.image}`}
-
-                alt="Profile"
-              />
-            </td>
+                <td className="px-4 py-2 border">
+                  <img
+                    className="w-10 h-10 rounded-full"
+                    src={`https://api.studypulse.live/${item.image}`}
+                    alt="Profile"
+                  />
+                </td>
                 <td className="border border-gray-300 px-4 py-2">
                   {item.name}
                 </td>

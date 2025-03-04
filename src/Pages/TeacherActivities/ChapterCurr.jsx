@@ -13,14 +13,19 @@ import {
   MessageSquare,
   ChevronDown,
   ChevronUp,
+  Book,
 } from "lucide-react";
 
 export default function ChapterCurr() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
-  const { classId: selectedClassId, subjectId: selectedSubjectId, chapterId: selectedChapterId } = useSelector(state => state.ids.classDetails);
-  
+
+  const {
+    classId: selectedClassId,
+    subjectId: selectedSubjectId,
+    chapterId: selectedChapterId,
+  } = useSelector((state) => state.ids.classDetails);
+
   // State variables
   const [classId, setClassId] = useState(selectedClassId || "");
   const [subjectId, setSubjectId] = useState(selectedSubjectId || "");
@@ -116,15 +121,22 @@ export default function ChapterCurr() {
     } catch (error) {
       toast.error(error.response.data.message);
       setChapterCurr([]);
-      console.error("Error fetching chapter curriculum:", error.response.data.message);
+      console.error(
+        "Error fetching chapter curriculum:",
+        error.response.data.message
+      );
     }
   };
 
   // Filter subjects based on selected class
-  const filteredSubjects = subjects.filter(subject => subject.classId === classId);
+  const filteredSubjects = subjects.filter(
+    (subject) => subject.classId === classId
+  );
 
   // Filter chapters based on selected subject and class
-  const filteredChapters = chapters.filter(chapter => chapter.classId === classId && chapter.subjectId === subjectId);
+  const filteredChapters = chapters.filter(
+    (chapter) => chapter.classId === classId && chapter.subjectId === subjectId
+  );
 
   // Toggle chapter details
   const toggleChapterDetails = (id) => {
@@ -132,18 +144,29 @@ export default function ChapterCurr() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto my-8 p-6 bg-white shadow-lg rounded-lg">
+    <div className="max-w-5xl mx-auto my-8 p-6  shadow-lg rounded-lg">
       {/* Title */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+      <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold bg-blue-400 p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
+        <Book className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
+        Chapter Curriculums
+      </p>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-2 bg-gradient-to-r from-blue-400 to-purple-600 text-black p-3">
         {/* Class Selector */}
         <div>
-          <label className="block text-sm font-medium mb-2">Select Class</label>
           <select
             value={classId}
-            onChange={(e) => dispatch(setClassDetails({ classId: e.target.value, subjectId, chapterId }))}
+            onChange={(e) =>
+              dispatch(
+                setClassDetails({
+                  classId: e.target.value,
+                  subjectId,
+                  chapterId,
+                })
+              )
+            }
             className="w-full border border-gray-300 rounded px-4 py-2"
           >
-            <option value="">All Classes</option>
+            <option value="">Select Class</option>
             {classes.map((cls) => (
               <option key={cls.id} value={cls._id}>
                 {cls.name}
@@ -154,13 +177,20 @@ export default function ChapterCurr() {
 
         {/* Subject Selector */}
         <div>
-          <label className="block text-sm font-medium mb-2">Select Subject</label>
           <select
             value={subjectId}
-            onChange={(e) => dispatch(setClassDetails({ classId, subjectId: e.target.value, chapterId }))}
+            onChange={(e) =>
+              dispatch(
+                setClassDetails({
+                  classId,
+                  subjectId: e.target.value,
+                  chapterId,
+                })
+              )
+            }
             className="w-full border border-gray-300 rounded px-4 py-2"
           >
-            <option value="">All Subjects</option>
+            <option value="">Select Subject</option>
             {filteredSubjects.map((subj) => (
               <option key={subj.id} value={subj._id}>
                 {subj.name}
@@ -171,10 +201,17 @@ export default function ChapterCurr() {
 
         {/* Chapter Selector */}
         <div>
-          <label className="block text-sm font-medium mb-2">Select Chapter</label>
           <select
             value={chapterId}
-            onChange={(e) => dispatch(setClassDetails({ classId, subjectId, chapterId: e.target.value }))}
+            onChange={(e) =>
+              dispatch(
+                setClassDetails({
+                  classId,
+                  subjectId,
+                  chapterId: e.target.value,
+                })
+              )
+            }
             className="w-full border border-gray-300 rounded px-4 py-2"
           >
             <option value="">Select Chapter</option>
@@ -203,7 +240,8 @@ export default function ChapterCurr() {
 
         <button
           onClick={() => {
-            navigate("/teacher-dashboard/chapterCurrs/add_chapterCurr")}  }
+            navigate("/teacher-dashboard/chapterCurrs/add_chapterCurr");
+          }}
           className="flex items-center justify-center bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 transition duration-300"
           title="Add ChapterCurr"
         >
@@ -211,21 +249,27 @@ export default function ChapterCurr() {
         </button>
       </div>
 
-      <h1 className="text-3xl font-bold text-center mb-6 text-gray-900">Chapter Curriculum List</h1>
-
       {/* Chapter List */}
       <div className="space-y-4">
         {chapterCurr.length > 0 ? (
           chapterCurr.map((curr) => (
-            <div key={curr._id} className="border border-gray-300 rounded-lg shadow-sm p-4 bg-gray-50 hover:shadow-md transition">
+            <div
+              key={curr._id}
+              className="border border-gray-300 rounded-lg shadow-sm p-4 bg-gray-50 hover:shadow-md transition"
+            >
               {/* Chapter Header */}
               <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-gray-800">{curr.title}</h2>
+                <h2 className="text-lg font-semibold text-gray-800">
+                  {curr.title}
+                </h2>
                 <div className="flex items-center gap-4">
                   {/* Edit Button */}
                   <button
                     onClick={() =>
-                      navigate("/teacher-dashboard/chapterCurrs/update_chapterCurr", { state: { curr } })
+                      navigate(
+                        "/teacher-dashboard/chapterCurrs/update_chapterCurr",
+                        { state: { curr } }
+                      )
                     }
                     className="p-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
                     title="Edit Chapter"
@@ -236,9 +280,13 @@ export default function ChapterCurr() {
                   {/* Chat Button */}
                   <button
                     onClick={() => {
-                      const newChapter = chapters.find((c) => c._id === chapterId);
+                      const newChapter = chapters.find(
+                        (c) => c._id === chapterId
+                      );
                       if (newChapter) {
-                        navigate("/teacher-dashboard/chapterCurrs/chat", { state: { curr, chapter: newChapter } });
+                        navigate("/teacher-dashboard/chapterCurrs/chat", {
+                          state: { curr, chapter: newChapter },
+                        });
                       } else {
                         console.log("Chapter not found");
                       }
@@ -255,7 +303,11 @@ export default function ChapterCurr() {
                     className="p-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
                     title="Expand"
                   >
-                    {openChapter === curr._id ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                    {openChapter === curr._id ? (
+                      <ChevronUp className="w-5 h-5" />
+                    ) : (
+                      <ChevronDown className="w-5 h-5" />
+                    )}
                   </button>
                 </div>
               </div>

@@ -46,13 +46,18 @@ export const SuperAdminDashboardHeader = ({ collapsed, setCollapsed }) => {
         <div className="flex-1 flex items-center justify-start">
           <nav aria-label="breadcrumb">
             <ol className="hidden sm:flex flex-wrap space-x-2 text-sm bg-light-blue-500 text-white">
+              {/* Always display Home */}
               <li>
-                <Link to="/" className="hover:text-blue-600 dark:hover:text-blue-400">
+                <Link
+                  to="/"
+                  className="hover:text-blue-600 dark:hover:text-blue-400"
+                >
                   Home
                 </Link>
               </li>
-              {pathnames.map((segment, index) => {
-                const to = `/${pathnames.slice(0, index + 1).join("/")}`;
+              {/* Render breadcrumbs for pathnames excluding the first item */}
+              {pathnames.slice(1).map((segment, index) => {
+                const to = `/${pathnames.slice(0, index + 2).join("/")}`; // index + 2 to account for Home being excluded
                 return (
                   <li key={to} className="flex items-center space-x-2">
                     <span>/</span>
@@ -81,11 +86,13 @@ export const SuperAdminDashboardHeader = ({ collapsed, setCollapsed }) => {
             onClick={toggleModal}
             className="w-10 h-10 overflow-hidden rounded-full cursor-pointer"
           >
-
             <div className="w-full h-full flex items-center justify-center bg-blue-600 text-white text-2xl font-bold">
-              {userName.split(" ").map(name => name[0]).join("").toUpperCase()}
+              {userName
+                .split(" ")
+                .map((name) => name[0])
+                .join("")
+                .toUpperCase()}
             </div>
-
           </button>
         </div>
       </header>

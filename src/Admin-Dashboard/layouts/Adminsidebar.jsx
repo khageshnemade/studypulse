@@ -14,16 +14,16 @@ import { resetAdminDetails } from "../../redux/features/adminSlice";
 import { useDispatch } from "react-redux";
 
 export const AdminSidebar = forwardRef(({ collapsed }, ref) => {
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem("user");
-  localStorage.removeItem("student");
-  console.log("logging out");
-  navigate("/login");
+    localStorage.removeItem("student");
+    console.log("logging out");
+    navigate("/login");
     console.log("Logged out");
-    dispatch(resetAdminDetails())
+    dispatch(resetAdminDetails());
     setShowModal(false); // Close the modal after logging out
   };
   return (
@@ -35,7 +35,6 @@ export const AdminSidebar = forwardRef(({ collapsed }, ref) => {
         collapsed ? "max-md:-left-full" : "max-md:left-0"
       )}
     >
-       
       <div className="flex flex-col items-center justify-center p-3">
         <div className="flex items-center justify-center gap-x-3">
           <img
@@ -64,7 +63,6 @@ export const AdminSidebar = forwardRef(({ collapsed }, ref) => {
       <hr className="border-t-2 border-gray-700 my-2" />
 
       <div className="flex w-full flex-col gap-y-4 overflow-y-auto overflow-x-hidden p-3 [scrollbar-width:_thin]">
-
         {navbarLinks.map((navbarLink) => (
           <nav
             key={navbarLink.title}
@@ -99,38 +97,38 @@ export const AdminSidebar = forwardRef(({ collapsed }, ref) => {
             ))}
           </nav>
         ))}
-         <button
-            onClick={() => setShowModal(true)}
-            className="flex items-center justify-center bg-gradient-to-r from-red-500 to-red-700 text-white w-2/3 mx-auto h-3 py-3 rounded-lg shadow-lg hover:scale-105 transition-transform duration-300"
-          >
-            <LogOut className="mr-2" size={20} />
-           {!collapsed &&  'Logout'}
-          </button>
+        <button
+          onClick={() => setShowModal(true)}
+          className="flex items-center justify-center bg-gradient-to-r from-red-500 to-red-700 text-white w-5/6 pl-2 mx-auto h-3 py-3 rounded-lg shadow-lg hover:scale-105 transition-transform duration-300"
+        >
+          <LogOut className="mr-2" size={20} />
+          {!collapsed && "Logout"}
+        </button>
       </div>
-     
-          {showModal && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="bg-white rounded-lg shadow-lg p-6 w-96">
-                <h2 className="text-lg font-semibold text-gray-800 mb-4 text-center">
-                  Are you sure you want to logout?
-                </h2>
-                <div className="flex justify-end space-x-4">
-                  <button
-                    onClick={() => setShowModal(false)}
-                    className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg shadow hover:bg-gray-300 transition"
-                  >
-                    No
-                  </button>
-                  <button
-                    onClick={handleLogout}
-                    className="px-4 py-2 bg-red-500 text-white rounded-lg shadow hover:bg-red-600 transition"
-                  >
-                    Yes
-                  </button>
-                </div>
-              </div>
+
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-96">
+            <h2 className="text-lg font-semibold text-gray-800 mb-4 text-center">
+              Are you sure you want to logout?
+            </h2>
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={() => setShowModal(false)}
+                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg shadow hover:bg-gray-300 transition"
+              >
+                No
+              </button>
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 bg-red-500 text-white rounded-lg shadow hover:bg-red-600 transition"
+              >
+                Yes
+              </button>
             </div>
-          )}
+          </div>
+        </div>
+      )}
     </aside>
   );
 });

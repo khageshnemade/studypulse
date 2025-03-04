@@ -7,10 +7,11 @@ import { useNavigate } from "react-router-dom";
 import { FileText, BookOpen, Edit, Plus, Book } from "lucide-react"; // Import icons
 import { useSelector, useDispatch } from "react-redux";
 import { setClassDetails } from "../../redux/features/idsSlice";
+import store from "../../redux/store/store";
 
 const ChaptersList = () => {
   const navigate = useNavigate();
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const [chapters, setChapters] = useState([]);
   const [classes, setClasses] = useState([]);
   const [subjects, setSubjects] = useState([]);
@@ -23,15 +24,12 @@ const ChaptersList = () => {
 
   const userData = localStorage.getItem("user");
   const parsedData = JSON.parse(userData);
-  console.log("Parsed Data:", parsedData?.token);
-
   useEffect(() => {
     fetchClasses();
   }, []);
 
   useEffect(() => {
     if (classId) fetchSubjects();
-    console.log("in FetchSubject UseEffects", classId);
   }, [classId]);
 
   useEffect(() => {
@@ -58,11 +56,15 @@ const ChaptersList = () => {
     }
   };
   const handleClassChange = (e) => {
-    dispatch(setClassDetails({ classId: e.target.value, subjectId, chapterId }));
+    dispatch(
+      setClassDetails({ classId: e.target.value, subjectId, chapterId })
+    );
   };
 
   const handleSubjectChange = (e) => {
-    dispatch(setClassDetails({ classId, subjectId: e.target.value, chapterId }));
+    dispatch(
+      setClassDetails({ classId, subjectId: e.target.value, chapterId })
+    );
   };
   const fetchChapters = async () => {
     try {
@@ -86,7 +88,9 @@ const ChaptersList = () => {
     }
   };
 
-  const filteredSubjects = subjects.filter((subject) => subject.classId == classId);
+  const filteredSubjects = subjects.filter(
+    (subject) => subject.classId == classId
+  );
   const filteredChapters = chapters.filter(
     (chapter) => chapter.classId === classId && chapter.subjectId === subjectId
   );
@@ -103,7 +107,15 @@ const ChaptersList = () => {
         <div className="w-full sm:w-1/3 relative">
           <select
             value={classId}
-            onChange={(e) => dispatch(setClassDetails({ classId: e.target.value, subjectId, chapterId }))}
+            onChange={(e) =>
+              dispatch(
+                setClassDetails({
+                  classId: e.target.value,
+                  subjectId,
+                  chapterId,
+                })
+              )
+            }
             className="w-full border border-gray-300 rounded-lg shadow-sm px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
           >
             <option value="">All Classes</option>
@@ -185,7 +197,13 @@ const ChaptersList = () => {
                       {/* Assignments Button */}
                       <button
                         onClick={() => {
-                          dispatch(setClassDetails({ classId, subjectId, chapterId: chapter?._id }));
+                          dispatch(
+                            setClassDetails({
+                              classId,
+                              subjectId,
+                              chapterId: chapter?._id,
+                            })
+                          );
                           navigate("/teacher-dashboard/chapters/assignments");
                         }}
                         className="bg-green-500 text-white p-3 rounded-full hover:bg-green-600 transition duration-200"
@@ -197,10 +215,15 @@ const ChaptersList = () => {
                       {/* Notes Button */}
                       <button
                         onClick={(e) => {
-
                           // Update Redux store with classId, subjectId, and chapterId
-                          dispatch(setClassDetails({ classId, subjectId, chapterId: chapter._id }));
-                          navigate("/teacher-dashboard/chapterCurrs")
+                          dispatch(
+                            setClassDetails({
+                              classId,
+                              subjectId,
+                              chapterId: chapter._id,
+                            })
+                          );
+                          navigate("/teacher-dashboard/chapterCurrs");
                         }}
                         className="bg-blue-500 text-white p-3 rounded-full hover:bg-blue-600 transition duration-200"
                         title="Chapter Curriculum"
@@ -211,8 +234,17 @@ const ChaptersList = () => {
                       {/* Update Button */}
                       <button
                         onClick={() => {
-                          dispatch(setClassDetails({chapter:chapter, classId, subjectId, chapterId: chapter._id }));
-                          navigate(`/teacher-dashboard/chapters/update_chapter`);
+                          dispatch(
+                            setClassDetails({
+                              chapter: chapter,
+                              classId,
+                              subjectId,
+                              chapterId: chapter._id,
+                            })
+                          );
+                          navigate(
+                            `/teacher-dashboard/chapters/update_chapter`
+                          );
                         }}
                         className="bg-yellow-500 text-white p-3 rounded-full hover:bg-yellow-600 transition duration-200"
                         title="Update Chapter"
@@ -224,7 +256,10 @@ const ChaptersList = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="3" className="text-center py-4 text-lg font-semibold">
+                  <td
+                    colSpan="3"
+                    className="text-center py-4 text-lg font-semibold"
+                  >
                     No chapters available
                   </td>
                 </tr>

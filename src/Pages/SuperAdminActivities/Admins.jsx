@@ -3,7 +3,7 @@ import { makeRequest } from "../../axios";
 import { Link, useLocation, useNavigate } from "react-router-dom"; // For navigation
 import { Pencil, User2 } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setSuperAdminDetails } from "../../redux/features/superAdminSlice";
 
 export default function Admins() {
@@ -12,12 +12,14 @@ export default function Admins() {
   const [orgId, setOrgId] = useState("");
   const [adminId, setAdminId] = useState("");
   const navigate = useNavigate(); // Hook for navigation
-const {orgId:initialOrgId} = useSelector((state) => state.superAdmin.superAdminDetails);
-useEffect(() => {
- console.log("OrgId",orgId);
-}, [orgId])
+  const { orgId: initialOrgId } = useSelector(
+    (state) => state.superAdmin.superAdminDetails
+  );
+  useEffect(() => {
+    console.log("OrgId", orgId);
+  }, [orgId]);
 
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
   const fetchOrgs = async () => {
     try {
       const res = await makeRequest.get(`/superAdmin/admin/get-all-org`);
@@ -71,10 +73,10 @@ useEffect(() => {
   return (
     <div className="container mx-auto p-6 max-w-7xl min-h-screen">
       <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold bg-blue-400 p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
-            <User2 className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
-            Admin List
-          </p>
-      <div className="flex justify-between items-center mb-6 max-w-lg mx-auto">
+        <User2 className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
+        Admin List
+      </p>
+      <div className="flex justify-between items-center mb-6 mx-auto bg-gradient-to-r from-blue-500 to-purple-600 text-white p-3">
         <Link
           to="/superadmin-dashboard"
           className="text-lg font-semibold text-white hover:text-gray-200 transition"
@@ -89,7 +91,8 @@ useEffect(() => {
           onChange={(e) => {
             dispatch(setSuperAdminDetails({ orgId: e.target.value }));
 
-            setOrgId(e.target.value)}}
+            setOrgId(e.target.value);
+          }}
           className="w-48 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white text-gray-700"
         >
           <option value="s">Select Organization</option>
@@ -148,9 +151,8 @@ useEffect(() => {
         </div>
       ) : (
         <p className="text-center text-gray-700 bg-gray-50 p-3 rounded-lg shadow-md  mx-auto text-lg font-medium hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1">
-     
-        Please Select Organization Name...
-      </p>
+          Please Select Organization Name...
+        </p>
       )}
       <ToastContainer />
     </div>

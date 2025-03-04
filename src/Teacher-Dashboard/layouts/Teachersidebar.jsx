@@ -14,7 +14,6 @@ import { useDispatch } from "react-redux";
 export const TeacherSidebar = forwardRef(({ collapsed, setCollapsed }, ref) => {
   const dispatch = useDispatch();
 
-
   const [profileCompletion, setProfileCompletion] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
@@ -139,15 +138,15 @@ export const TeacherSidebar = forwardRef(({ collapsed, setCollapsed }, ref) => {
                 ))}
               </nav>
             ))}
-             <button
-            onClick={() => setShowModal(true)}
-            className="flex items-center justify-center bg-gradient-to-r from-red-500 to-red-700 text-white w-2/3 mx-auto h-3 py-3 rounded-lg shadow-lg hover:scale-105 transition-transform duration-300"
-          >
-            <LogOut className="mr-2" size={20} />
-           {!collapsed &&  'Logout'}
-          </button>
+            <button
+              onClick={() => setShowModal(true)}
+              className="flex items-center justify-center bg-gradient-to-r from-red-500 to-red-700 text-white w-5/6 pl-2 mx-auto h-3 py-3 rounded-lg shadow-lg hover:scale-105 transition-transform duration-300"
+            >
+              <LogOut className="mr-2" size={20} />
+              {!collapsed && "Logout"}
+            </button>
           </div>
-         
+
           {showModal && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
               <div className="bg-white rounded-lg shadow-lg p-6 w-96">
@@ -248,7 +247,6 @@ export const TeacherSidebar = forwardRef(({ collapsed, setCollapsed }, ref) => {
               </nav>
             ))}
           </div>
-
         </aside>
       )}
     </>

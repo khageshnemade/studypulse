@@ -34,7 +34,6 @@ export default function CreateAdmin() {
   }, []);
 
   const updateAdminData = (name, value) => {
-    console.log("Admin Data", name, value);
     setAdminData((prevState) => ({
       ...prevState,
       [name]: value,
@@ -123,7 +122,7 @@ export default function CreateAdmin() {
     } catch (error) {
       console.error("Error creating Taluka:", error.message);
       toast.error("please select city Name or No organisation in this City");
-      setOrgs([])
+      setOrgs([]);
     }
   };
   return (
@@ -136,7 +135,7 @@ export default function CreateAdmin() {
             Create New Admin
           </p>
 
-          <p className="mt-2 text-center text-sm text-slate-200">
+          <p className="mt-2 text-center text-lg text-gray-900">
             Fill in the details to add a new admin
           </p>
         </div>
