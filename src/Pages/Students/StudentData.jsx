@@ -17,14 +17,15 @@ const Table = () => {
   const [pageSize, setPageSize] = useState(10);
   const [profileComplete, setProfileComplete] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const { classId:initialClassId, page } = useSelector(
+  const { classId: initialClassId, page, isp } = useSelector(
     (state) => state.admin.adminDetails
   );
 
   useEffect(() => {
-setClassId(initialClassId)
-setPageSize(page)
-}, [classId, page])  
+    setClassId(initialClassId)
+    setPageSize(page)
+    setProfileComplete(isp)
+  }, [classId, page])
   const fetchStudents = async (classId, pageSize, page, profileComplete) => {
     const url = `/admin/get-all-students?classId=${classId}&page=${page}&limit=${pageSize}&isProfileComplete=${profileComplete}`;
     try {
@@ -70,6 +71,7 @@ setPageSize(page)
 
   const handleToggle = () => {
     setProfileComplete(!profileComplete);
+    dispatch(setAdminDetails({ isp: !profileComplete }));
   };
 
   useEffect(() => {
@@ -102,7 +104,8 @@ setPageSize(page)
           onChange={(e) => {
             dispatch(setAdminDetails({ classId: e.target.value }));
 
-            setClassId(e.target.value)}}
+            setClassId(e.target.value)
+          }}
           className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white w-1/3"
         >
           <option value="">Select Class</option>
@@ -119,7 +122,8 @@ setPageSize(page)
           onChange={(e) => {
             dispatch(setAdminDetails({ page: e.target.value }));
 
-            setPageSize(Number(e.target.value))}}
+            setPageSize(Number(e.target.value))
+          }}
           className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white w-1/3"
         >
           <option value="1">1</option>
@@ -141,81 +145,81 @@ setPageSize(page)
         <div className="text-lg font-semibold">Page: {currentPage}</div>
       </div>
 
-    { classId
-    ?   <div className="overflow-x-auto">
-    <table className="min-w-full bg-white rounded-lg shadow-md whitespace-nowrap">
-      <thead className="bg-gray-100">
-        <tr>
-          <th className="px-4 py-2 border">Profile</th>
-          <th className="px-4 py-2 border">Name</th>
-          <th className="px-4 py-2 border">Email</th>
-          <th className="px-4 py-2 border">Phone</th>
-          <th className="px-4 py-2 border">City</th>
-          {profileComplete && <th className="px-4 py-2 border">More</th>}
-          <th className="px-4 py-2 border">Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        {students.map((row) => (
-          <tr key={row._id} className="hover:bg-gray-50">
-            <td className="px-4 py-2 border">
-              <img
-                className="w-10 h-10 rounded-full"
-                src={`https://api.studypulse.live/${row?.studentData?.profilePic}`}
+      {classId
+        ? <div className="overflow-x-auto">
+          <table className="min-w-full bg-white rounded-lg shadow-md whitespace-nowrap">
+            <thead className="bg-gray-100">
+              <tr>
+                <th className="px-4 py-2 border">Profile</th>
+                <th className="px-4 py-2 border">Name</th>
+                <th className="px-4 py-2 border">Email</th>
+                <th className="px-4 py-2 border">Phone</th>
+                <th className="px-4 py-2 border">City</th>
+                {profileComplete && <th className="px-4 py-2 border">More</th>}
+                <th className="px-4 py-2 border">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {students.map((row) => (
+                <tr key={row._id} className="hover:bg-gray-50">
+                  <td className="px-4 py-2 border">
+                    <img
+                      className="w-10 h-10 rounded-full"
+                      src={`https://api.studypulse.live/${row?.studentData?.profilePic}`}
 
-                alt="Profile"
-              />
-            </td>
-            <td className="px-4 py-2 border">
-              {row.firstName} {row.lastName}
-            </td>
-            <td className="px-4 py-2 border">{row.email}</td>
-            <td className="px-4 py-2 border">{row.phoneNumber}</td>
-            <td className="px-4 py-2 border">{row?.cityData?.name}</td>
-            {profileComplete && (
-              <td className="border border-gray-300 px-4 py-2 max-w-min">
-
-
+                      alt="Profile"
+                    />
+                  </td>
+                  <td className="px-4 py-2 border">
+                    {row.firstName} {row.lastName}
+                  </td>
+                  <td className="px-4 py-2 border">{row.email}</td>
+                  <td className="px-4 py-2 border">{row.phoneNumber}</td>
+                  <td className="px-4 py-2 border">{row?.cityData?.name}</td>
+                  {profileComplete && (
+                    <td className="border border-gray-300 px-4 py-2 max-w-min">
 
 
-                <div className="flex space-x-3 items-center">
-                  <button
-                    onClick={() => {
-                      setCurrentId(row._id);
-                      setShowUpdateStudent(true);
-                    }}
-                    className="px-2 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-                  >
-                    <ArrowRight/>
-                  </button>
-
-                
-                </div>
-              </td>
 
 
-            )}
-            <td className="px-4 py-2 border">
-              <button
-                onClick={() => handleStatusChange(row)}
-                className={`px-4 py-2 rounded-md text-white ${row.status === "active"
-                    ? "bg-green-500 hover:bg-green-600"
-                    : "bg-red-500 hover:bg-red-600"
-                  }`}
-              >
-                {row.status}
-              </button>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>:
-  <p className="text-center text-gray-700 bg-gray-100 p-3 rounded-lg shadow-md  mx-auto text-lg font-medium hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1">
-     
-  Please Select Class Name and Page Size...
-</p>
-  }
+                      <div className="flex space-x-3 items-center">
+                        <button
+                          onClick={() => {
+                            setCurrentId(row._id);
+                            setShowUpdateStudent(true);
+                          }}
+                          className="px-2 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                        >
+                          <ArrowRight />
+                        </button>
+
+
+                      </div>
+                    </td>
+
+
+                  )}
+                  <td className="px-4 py-2 border">
+                    <button
+                      onClick={() => handleStatusChange(row)}
+                      className={`px-4 py-2 rounded-md text-white ${row.status === "active"
+                        ? "bg-green-500 hover:bg-green-600"
+                        : "bg-red-500 hover:bg-red-600"
+                        }`}
+                    >
+                      {row.status}
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div> :
+        <p className="text-center text-gray-700 bg-gray-100 p-3 rounded-lg shadow-md  mx-auto text-lg font-medium hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1">
+
+          Please Select Class Name and Page Size...
+        </p>
+      }
 
       <div className="flex justify-between mt-4">
         <button
@@ -244,7 +248,7 @@ export default function StudentData() {
         <Users2 className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
         Students
       </p>
-      
+
       <Table />
       <ToastContainer />
     </div>

@@ -14,7 +14,8 @@ import {
 import { makeRequest } from "../../../axios";
 import { BookOpen, FileText, Layers } from "lucide-react";
 import StudentsRegistered from "./StudentsRegistered";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import OnlineUsers from "../../../Pages/TeacherActivities/OnlineUsers";
 
 // Registering chart components
 ChartJS.register(
@@ -31,10 +32,21 @@ export default function AdminDashboard() {
   const [dashboard, setData] = useState({});
   const [labels, setLabels] = useState([]);
   const [dataset, setDataset] = useState([]);
-const navigate=useNavigate();
+  const [users, setUsers] = useState([]);
+  const navigate = useNavigate();
   useEffect(() => {
     fetchDashboardData();
+    fetchOnlineUsers();
   }, []);
+  const fetchOnlineUsers = async () => {
+    try {
+      const res = await makeRequest.get(`/admin/get-online-users`);
+      console.log("Online Users: ", res?.data?.data);
+      setOnlineUsers(res?.data?.data.slice(0, 5));
+    } catch (error) {
+      console.error("Request Error:", error.message);
+    }
+  };
 
   const fetchDashboardData = async () => {
     const res = await makeRequest.get("admin/get-dashboard-details");
@@ -92,53 +104,53 @@ const navigate=useNavigate();
         Admin Dashboard
       </p> */}
 
-   
-   
 
-<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-10 p-8">
-  <div className="bg-blue-100 shadow-lg rounded-lg p-6 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 hover:shadow-2xl cursor-pointer outline outline-4 outline-gray-400">
-    <div className="flex items-center gap-4">
-      <div className="bg-blue-500 text-white p-4 rounded-full">
-        <BookOpen className="text-2xl" />
-      </div>
-      <h3 className="text-lg font-semibold text-gray-700">Teachers Registered</h3>
-    </div>
-    <p className="text-3xl font-bold text-blue-600 bg-white rounded-lg py-2 mt-2 text-center">{dashboard.totalTeachersCount}</p>
-  </div>
 
-  <div className="bg-green-100 shadow-lg rounded-lg p-6 flex flex-col justify-between transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer outline outline-4 outline-gray-400" onClick={() => {
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-10 p-8">
+        <div className="bg-blue-100 shadow-lg rounded-lg p-6 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 hover:shadow-2xl cursor-pointer outline outline-4 outline-gray-400">
+          <div className="flex items-center gap-4">
+            <div className="bg-blue-500 text-white p-4 rounded-full">
+              <BookOpen className="text-2xl" />
+            </div>
+            <h3 className="text-lg font-semibold text-gray-700">Teachers Registered</h3>
+          </div>
+          <p className="text-3xl font-bold text-blue-600 bg-white rounded-lg py-2 mt-2 text-center">{dashboard.totalTeachersCount}</p>
+        </div>
+
+        <div className="bg-green-100 shadow-lg rounded-lg p-6 flex flex-col justify-between transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer outline outline-4 outline-gray-400" onClick={() => {
           navigate('student');
         }}>
-    <div className="flex items-center gap-4" >
-      <div className="bg-green-500 text-white p-4 rounded-full">
-        <FileText className="text-2xl" />
+          <div className="flex items-center gap-4" >
+            <div className="bg-green-500 text-white p-4 rounded-full">
+              <FileText className="text-2xl" />
+            </div>
+            <h3
+              className="text-lg font-semibold text-gray-700 cursor-pointer"
+
+            >
+              Students Registered
+            </h3>
+          </div>
+          <p className="text-3xl font-bold text-green-600 bg-white rounded-lg py-2 mt-2 text-center">{dashboard.totalStudentCount}</p>
+        </div>
+
+        <div className="bg-yellow-100 shadow-lg rounded-lg p-6 flex flex-col justify-between transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer outline outline-4 outline-gray-400">
+          <div className="flex items-center gap-4">
+            <div className="bg-yellow-500 text-white p-4 rounded-full">
+              <Layers className="text-2xl" />
+            </div>
+            <h3 className="text-lg font-semibold text-gray-700 whitespace-normal break-words">
+              Classes Created
+            </h3>
+          </div>
+
+          <p className="text-3xl font-bold text-yellow-600 bg-white rounded-lg py-2 mt-2 text-center">{dashboard.totalClassCount}</p>
+        </div>
       </div>
-      <h3 
-        className="text-lg font-semibold text-gray-700 cursor-pointer"
-       
-      >
-        Students Registered
-      </h3>
-    </div>
-    <p className="text-3xl font-bold text-green-600 bg-white rounded-lg py-2 mt-2 text-center">{dashboard.totalStudentCount}</p>
-  </div>
-
-  <div className="bg-yellow-100 shadow-lg rounded-lg p-6 flex flex-col justify-between transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer outline outline-4 outline-gray-400">
-    <div className="flex items-center gap-4">
-      <div className="bg-yellow-500 text-white p-4 rounded-full">
-        <Layers className="text-2xl" />
-      </div>
-      <h3 className="text-lg font-semibold text-gray-700">Classes Created</h3>
-    </div>
-    <p className="text-3xl font-bold text-yellow-600 bg-white rounded-lg py-2 mt-2 text-center">{dashboard.totalClassCount}</p>
-  </div>
-
-</div>
-
-
       {/* Recently Added Teachers & Students */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-8 ">
-        {[ 
+        {[
           { title: "Recently Added Teachers", data: dashboard.recentlyAddedTeachers },
           { title: "Recently Added Students", data: dashboard.recentlyAddedStudents }
         ].map(({ title, data }, index) => (
@@ -160,15 +172,23 @@ const navigate=useNavigate();
             </div>
           </div>
         ))}
-         <div className="bg-white shadow-lg rounded-xl p-6 duration-500 hover:scale-105 mb-8 outline outline-4 outline-gray-400">
-        <h2 className="text-xl font-semibold text-gray-800 text-center mb-4">Student Pass/Fail Stats</h2>
-        <p className="text-gray-600 text-center mb-4">Visualization of Passed vs Failed Students</p>
-        <div className="flex justify-center">
-        <div className="flex justify-center">
-            <PieChart labels={labels} datasets={dataset} />
+        <div className="bg-white shadow-lg rounded-xl p-6 duration-500 hover:scale-105 mb-8 outline outline-4 outline-gray-400">
+          <h2 className="text-xl font-semibold text-gray-800 text-center mb-4">Student Pass/Fail Stats</h2>
+          <p className="text-gray-600 text-center mb-4">Visualization of Passed vs Failed Students</p>
+          <div className="flex justify-center">
+            <div className="flex justify-center">
+              <PieChart labels={labels} datasets={dataset} />
+            </div>
           </div>
         </div>
-      </div>
+
+        <div className="bg-white shadow-lg rounded-xl p-6 duration-500 hover:scale-105 mb-8 outline outline-4 outline-gray-400">
+          <h2 className="text-xl font-semibold text-gray-800 text-center mb-4">Online Users</h2>
+          <OnlineUsers users={users} />
+          <Link className="text-center block btn bg-gray-500 max-w-40 mx-auto" to={'/admin-dashboard/users'}>
+            View More
+          </Link>
+        </div>
       </div>
     </div>
   );
@@ -273,5 +293,5 @@ const Dashboard = () => {
 };
 
 <div className="bg-white shadow-lg rounded-xl p-6 mt-6 hover:scale-105 hover:shadow-2xl transition-transform duration-300">
-<Dashboard />
+  <Dashboard />
 </div>

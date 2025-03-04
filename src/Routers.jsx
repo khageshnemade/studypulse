@@ -49,6 +49,7 @@ import GroupChatWindow from "./Pages/TeacherActivities/Chat/GroupChatWindow";
 import ProfilePicUpload from "./Pages/TeacherActivities/ProfilePicUpload";
 import Showemail from "./Pages/AdminActivities/Showemail";
 import StudentsRegistered from "./Admin-Dashboard/routes/dashboard/StudentsRegistered";
+import OnlineUsers from "./Pages/TeacherActivities/OnlineUsers";
 
 const user = localStorage.getItem("user"); // Check if the user is logged in
 
@@ -185,7 +186,10 @@ const router = createBrowserRouter(
           index: true,
           element: <AdminDashboard />,
         },
-
+        {
+          path: "users",
+          element: <OnlineUsers />,
+        },
         {
           path: "students",
           element: <StudentData />,
@@ -232,6 +236,10 @@ const router = createBrowserRouter(
         {
           index: true,
           element: <TeacherDashboard />,
+        },
+        {
+          path: "users",
+          element: <OnlineUsers />,
         },
 
         {

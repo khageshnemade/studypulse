@@ -121,7 +121,8 @@ function LoginForm() {
       
       // Access the userRole
       const userRole = parsedUserData.role;
-      
+      const orgId = response?.data?.data?.organizationID;
+
       console.log("User Role:", userRole);
       setTimeout(() => {
         if (userRole === "admin") {       

@@ -4,7 +4,8 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   adminDetails: {
     classId: null,
-    page:null
+    page:null,
+    isp:false
   }
 };
 
@@ -20,7 +21,8 @@ const adminSlice = createSlice({
       // Reset the class details to their initial state
       state.adminDetails = {
         classId: null,
-        page:null
+        page:null,
+        isp:false
       };
     },
   },
