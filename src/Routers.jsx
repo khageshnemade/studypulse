@@ -50,6 +50,8 @@ import ProfilePicUpload from "./Pages/TeacherActivities/ProfilePicUpload";
 import Showemail from "./Pages/AdminActivities/Showemail";
 import StudentsRegistered from "./Admin-Dashboard/routes/dashboard/StudentsRegistered";
 import OnlineUsers from "./Pages/TeacherActivities/OnlineUsers";
+import CreateNotification from "./Pages/AdminActivities/CreateNotification";
+import Notifications from "./Pages/AdminActivities/Notifications";
 
 const user = localStorage.getItem("user"); // Check if the user is logged in
 
@@ -189,6 +191,14 @@ const router = createBrowserRouter(
         {
           path: "users",
           element: <OnlineUsers />,
+        },
+        {
+          path: "announce",
+          element: <CreateNotification />,
+        },
+        {
+          path: "update_notifications",
+          element: <Notifications />,
         },
         {
           path: "students",

@@ -7,6 +7,9 @@ const initialState = {
     classId: null,
     subjectId: null,
     chapterId: null,
+    assignments:null,
+    chapterName:null,
+    subjectName:null,
   }
 };
 
@@ -24,6 +27,9 @@ const idsSlice = createSlice({
         classId: null,
         subjectId: null,
         chapterId: null,
+        assignments:null,
+    chapterName:null,
+    subjectName:null,
       };
     },
   },

@@ -1,28 +1,36 @@
 import React, { useEffect, useState } from "react";
-import { makeRequest } from "../../axios"; // Replace with your Axios instance configuration
+import { makeRequest } from "../../axios";
+import { FaChevronDown, FaChevronUp } from 'react-icons/fa'; // Importing icons
 import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const AssignmentResult = () => {
   const [chapterId, setChapterId] = useState("");
   const location = useLocation(); // Assuming useLocation hook is available from react-router-dom
+  const {assignments,subjectName,chapterName} = useSelector((state) => state.ids.classDetails);
   const assignment = location.state;
+
+
   const {
     _id: assignmentId,
     classId,
     subjectId,
     chapterId: initialchapterId,
   } = assignment.assignment || {};
-
-  const [results, setResults] = useState({});
+  const [openIndex, setOpenIndex] = useState(null);
+  const toggleDetails = (index) => {
+    setOpenIndex(prevIndex => (prevIndex === index ? null : index));
+  };
+  const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-useEffect(() => {
- console.log("Assertion failed",assignment);
-}, [assignment])
+
 
   useEffect(() => {
     setChapterId(initialchapterId._id);
-    console.log("Values Are", assignmentId, classId, subjectId, chapterId);
+
+
+    console.log("Values from redux", assignments[0]?.questions[0]?.options[0].text);
 
     if (assignmentId && classId && subjectId && chapterId) {
       fetchAssignmentResults();
@@ -37,8 +45,8 @@ useEffect(() => {
       const res = await makeRequest.get(`/teacher/get-assignment-result`, {
         params: { assignmentId, classId, subjectId, chapterId },
       });
-      console.log("Assignment Results fetched", res?.data);
-      setResults(res.data?.data || {});
+      console.log("Assignment Results fetched", res?.data.data);
+      setResults(res.data?.data || []);
     } catch (err) {
       console.error("Error fetching assignment results:", err.message);
       setError("Failed to fetch assignment results. Please try again.");
@@ -48,8 +56,8 @@ useEffect(() => {
   };
 
   return (
-    <div className="container mx-auto p-6 bg-gray-50 rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">
+    <div className="container mx-auto p-6 bg-gradient-to-r from-blue-200 to-purple-300 rounded-lg shadow-lg">
+      <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
         Assignment Results
       </h2>
 
@@ -84,67 +92,96 @@ useEffect(() => {
       {!isLoading && results.length === 0 && !error && (
         <p className="text-gray-500">No results found for this assignment.</p>
       )}
+ <p className="text-[20px] text-center">{results[0]?.assignmentId?.title}
+         Subject: {subjectName}
+          Chapter: {chapterName}</p>
+      <div className="max-w-4xl mx-auto p-8 bg-gradient-to-r from-blue-200 to-purple-300 shadow-lg rounded-xl">
+     
+        {results.map((result, idx) => {
+          const assign = assignments?.filter(a => a._id === result?.assignmentId._id)
+          console.log("Assignments", assign);
+          return <div key={idx} className="mb-8">
+            {/* Single line display with Tailwind CSS */}
+            <div
+              className="flex items-center justify-between p-4 bg-white rounded-lg shadow-md cursor-pointer"
+              onClick={() => toggleDetails(idx)}
+            >
+              <div className="flex items-center space-x-4">
+                <h2 className="text-xl font-semibold text-gray-800">
+                  {result?.studentId?.firstName} {result?.studentId?.lastName}
+                </h2>
+                <p className={`text-lg font-bold ${result.result === 'pass' ? 'text-green-600' : 'text-red-600'}`}>
+                  <strong>Result:</strong> {result.result}
+                </p>
 
-<div className="max-w-4xl mx-auto p-8 bg-gradient-to-r from-teal-50 to-blue-50 shadow-lg rounded-xl">
-  <h2 className="text-3xl font-semibold text-gray-800 mb-6">{results?.assignmentId?.title}</h2>
-  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
-    <p className="text-lg text-gray-600">
-      <strong>Subject:</strong> <span className="text-gray-900">{results.subjectId}</span>
-    </p>
-    <p className="text-lg text-gray-600">
-      <strong>Chapter:</strong> <span className="text-gray-900">{results.chapterId}</span>
-    </p>
-  </div>
-
-  <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-    <div className="flex justify-between mb-4">
-      <p className="text-lg font-medium text-gray-700">
-        <strong>Total Marks:</strong> {results.totalMarks}
-      </p>
-      <p className="text-lg font-medium text-gray-700">
-        <strong>Obtained Marks:</strong> {results.obtainedMarks}
-      </p>
-    </div>
-    <div className="flex justify-between">
-      <p className="text-lg font-medium text-gray-700">
-        <strong>Passing Marks:</strong> {results.passingMarks}
-      </p>
-      <p className={`text-lg font-bold ${results.result === "pass" ? "text-green-600" : "text-red-600"}`}>
-        <strong>Result:</strong> {results.result}
-      </p>
-    </div>
-  </div>
-
-  <div className="space-y-6">
-    {results?.questionResponses?.map((response, index) => (
-      <div key={index} className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
-        <p className="font-semibold text-lg text-gray-800 mb-4">Question {index + 1}</p>
-        <div className="space-y-3">
-          {response.options.map((option, optIndex) => (
-            <div key={optIndex} className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                checked={option.isSelected}
-                readOnly
-                className="w-5 h-5 text-teal-500 border-gray-300 rounded focus:ring-0"
-              />
-              <span className="text-gray-800">{option._id}</span>
+              </div>
+              <span>
+                {openIndex === idx ? (
+                  <FaChevronUp className="text-gray-600" />
+                ) : (
+                  <FaChevronDown className="text-gray-600" />
+                )}
+              </span>
             </div>
-          ))}
-        </div>
-        <p className="mt-4 text-lg text-gray-700">
-          <strong>Marks:</strong> {response.marks}
-        </p>
+
+            {/* Conditional Rendering for More Details */}
+            {openIndex === idx && (
+              <div className="mt-4 bg-white p-6 rounded-lg shadow-md">
+
+                <div className="flex justify-between mb-4">
+                  <p className="text-lg font-medium text-gray-700">
+                    <strong>Total Marks:</strong> {result.totalMarks}
+                  </p>
+                  <p className="text-lg font-medium text-gray-700">
+                    <strong>Obtained Marks:</strong> {result.obtainedMarks}
+                  </p>
+                </div>
+                <div className="flex justify-between mb-4">
+                  <p className="text-lg font-medium text-gray-700">
+                    <strong>Passing Marks:</strong> {result.passingMarks}
+                  </p>
+                  <p className={`text-lg font-bold ${result.result === 'pass' ? 'text-green-600' : 'text-red-600'}`}>
+                    <strong>Result:</strong> {result.result}
+                  </p>
+                </div>
+                <div className="space-y-6">
+                  
+                  {result?.questionResponses?.map((response, index) => (
+                    <div key={index} className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                      <p className="font-semibold text-lg text-gray-800 mb-4">Question {index + 1}</p>
+                      <div className="space-y-3">
+                     { assign[0].questions[index].question}
+                   
+                     {response?.options?.map((option, optIndex) => (
+                        
+                            <div key={optIndex} className="flex items-center space-x-2">
+                              <input
+                                type="checkbox"
+                                checked={option.isSelected}
+                                readOnly
+                                className="w-5 h-5 text-teal-500 border-gray-300 rounded focus:ring-0"
+                              />
+                              <span className="text-gray-800"> { assign[0].questions[index].options[optIndex].text}</span>
+                              <span className="text-gray-800">{option.text}</span>
+                            </div>
+                          
+                        ))}
+
+                      </div>
+                      <p className="mt-4 text-lg text-gray-700">
+                        <strong>Marks:</strong> {response.marks}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        }
+        )}
       </div>
-    ))}
-  </div>
-</div>
-
-
-
     </div>
   );
 };
 
 export default AssignmentResult;
- 

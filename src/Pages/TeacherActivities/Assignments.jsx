@@ -4,9 +4,11 @@ import { makeRequest } from "../../axios";
 import { ArrowLeft, Plus, Edit, ChevronRight, ChevronDown, ChevronUp } from "lucide-react"; // Import Lucid React Icons
 import { ToastContainer } from "react-toastify";
 import { useSelector } from 'react-redux';  // Import useSelector from Redux
-
+import { useDispatch } from "react-redux";
+import { setClassDetails } from "../../redux/features/idsSlice";
 export default function Assignments() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   // Use useSelector to get data from Redux store
   const { classId, subjectId, chapterId } = useSelector(state => state.ids.classDetails); // Assume classDetails is set in redux
@@ -31,6 +33,7 @@ export default function Assignments() {
       );
       console.log("Assignment fetched", res?.data);
       setAssignments(res?.data?.data);
+dispatch(setClassDetails({assignments:res?.data?.data}))
     } catch (error) {
       console.error("Request Error:", error.message);
     }

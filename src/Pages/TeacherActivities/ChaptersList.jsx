@@ -62,8 +62,11 @@ const ChaptersList = () => {
   };
 
   const handleSubjectChange = (e) => {
+    const selectedId = e.target.value;
+    const selectedSubject = subjects.find((subj) => subj._id === selectedId).name;
+    console.log("Selected Subject",selectedSubject);
     dispatch(
-      setClassDetails({ classId, subjectId: e.target.value, chapterId })
+      setClassDetails({ classId, subjectId: e.target.value, chapterId,subjectName:selectedSubject })
     );
   };
   const fetchChapters = async () => {
@@ -202,8 +205,10 @@ const ChaptersList = () => {
                               classId,
                               subjectId,
                               chapterId: chapter?._id,
+                              chapterName: chapter.title
                             })
                           );
+                          console.log("Changed",);
                           navigate("/teacher-dashboard/chapters/assignments");
                         }}
                         className="bg-green-500 text-white p-3 rounded-full hover:bg-green-600 transition duration-200"

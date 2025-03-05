@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { makeRequest } from "../../axios";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const UpdateAssignment = () => {
+  const navigate=useNavigate()
   const location = useLocation();
   const { assignment } = location.state || {};
 
@@ -34,33 +35,41 @@ const UpdateAssignment = () => {
   const handleQuestionChange = (index, e) => {
     const { name, value } = e.target;
     const updatedQuestions = [...formData.questions];
+  
+    // Update the specific question
     updatedQuestions[index] = {
       ...updatedQuestions[index],
       [name]: value,
     };
+  
     setFormData({
       ...formData,
-      questions: updatedQuestions,
+      questions: updatedQuestions,  // Update the state with new question data
     });
   };
+  
 useEffect(() => {
   const totalMarks = formData.questions.reduce((sum, e) => sum + parseInt(e.marks), 0);
     setFormData({...formData, totalMarks });
   
 }, [formData?.questions])
 
-  const handleOptionChange = (questionIndex, optionIndex, e) => {
-    const { name, value, type, checked } = e.target;
-    const updatedQuestions = [...formData.questions];
-    updatedQuestions[questionIndex].options[optionIndex] = {
-      ...updatedQuestions[questionIndex].options[optionIndex],
-      [name]: type === "checkbox" ? checked : value,
-    };
-    setFormData({
-      ...formData,
-      questions: updatedQuestions,
-    });
+const handleOptionChange = (questionIndex, optionIndex, e) => {
+  const { name, value, type, checked } = e.target;
+  const updatedQuestions = [...formData.questions];
+
+  // Update the specific option for the specific question
+  updatedQuestions[questionIndex].options[optionIndex] = {
+    ...updatedQuestions[questionIndex].options[optionIndex],
+    [name]: type === "checkbox" ? checked : value,  // Handle checkbox correctly
   };
+
+  setFormData({
+    ...formData,
+    questions: updatedQuestions,  // Update the state with new options data
+  });
+};
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -80,6 +89,7 @@ useEffect(() => {
         );
         console.log("Assignment updated successfully:", response.data);
         alert("Assignment updated successfully!");
+        navigate("/teacher-dashboard/chapters/assignments")
       } else {
         alert("Please enter valid passing marks");
       }
