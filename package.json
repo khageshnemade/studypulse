@@ -21,6 +21,7 @@
     "framer-motion": "^11.15.0",
     "global": "^4.4.0",
     "html-react-parser": "^5.2.2",
+    "js-cookie": "^3.0.5",
     "localforage": "^1.10.0",
     "lucide-react": "^0.441.0",
     "match-sorter": "^6.3.1",

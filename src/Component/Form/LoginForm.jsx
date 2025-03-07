@@ -47,8 +47,10 @@ function LoginForm() {
   
     try {
       console.log(`API${apiUrl}`);
-      const response = await axios.post(`${apiUrl}/login/`, formData);
-  
+      const response = await axios.post(`${apiUrl}/login/`, formData, {
+       // withCredentials: true,  // Include cookies in the request
+      }); 
+      console.log('Login successful:', response?.data);
       if (response.status === 200 || response.status === 201) {
         const studentId = response?.data?.student_id;
         const userRole = response?.data?.data?.role; // 'Student' or 'Admin'

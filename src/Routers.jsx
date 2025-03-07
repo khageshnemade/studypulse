@@ -52,6 +52,8 @@ import StudentsRegistered from "./Admin-Dashboard/routes/dashboard/StudentsRegis
 import OnlineUsers from "./Pages/TeacherActivities/OnlineUsers";
 import CreateNotification from "./Pages/AdminActivities/CreateNotification";
 import Notifications from "./Pages/AdminActivities/Notifications";
+import UploadedCount from "./Pages/AdminActivities/UploadedCount";
+import AssignmentPassFailed from "./Pages/TeacherActivities/AssignmentPassFailed";
 
 const user = localStorage.getItem("user"); // Check if the user is logged in
 
@@ -201,6 +203,10 @@ const router = createBrowserRouter(
           element: <Notifications />,
         },
         {
+          path: "counter",
+          element: <UploadedCount />,
+        },
+        {
           path: "students",
           element: <StudentData />,
         },
@@ -250,6 +256,10 @@ const router = createBrowserRouter(
         {
           path: "users",
           element: <OnlineUsers />,
+        },
+        {
+          path: "resultClass",
+          element: <AssignmentPassFailed />,
         },
 
         {

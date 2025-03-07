@@ -21,6 +21,17 @@ export const AdminDashboardHeader = ({ collapsed, setCollapsed }) => {
     setIsModalOpen(!isModalOpen);
   };
 
+  useEffect(() => {
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      try {
+        const parsedData = JSON.parse(userData);
+        setUserName(parsedData.userName || "Guest");
+      } catch (error) {
+        console.error("Failed to parse user data from localStorage:", error);
+      }
+    }
+  }, []);
   return (
     <>
       <header className="relative z-10 flex h-[60px] items-center justify-between bg-blue-500 px-4 shadow-md transition-colors ">
