@@ -9,22 +9,21 @@ app.use(express.json());
 // Middleware to parse cookies
 app.use(cookieParser());
 
-// CORS setup to allow frontend from multiple origins
+// CORS setup to allow frontend from specific origins and enable credentials (cookies)
 app.use(cors({
   origin: ['http://localhost:3000', 'http://localhost:3001'],  // List of allowed origins
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-   // Allow cookies and authentication headers
+  credentials: true,  // Allow cookies and authentication headers
 }));
 
 // Simulate a login route that sets the refreshToken cookie
 app.post('/login', (req, res) => {
-  // Simulating a successful login, generate a refresh token
   const refreshToken = 'ysuadyasuifdyuuuuusniiiiasudjhi-awudhuawdhqwaduihqawudhuahuuad'; // Generate dynamically in real case
 
   // Set the refreshToken as a cookie (Secure & HttpOnly in real deployment)
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true,  // Prevents JavaScript from accessing the cookie
-    secure: false,   // Set to true if using HTTPS (not needed for localhost)
+    secure: process.env.NODE_ENV === 'production',   // Set to true if using HTTPS (needed in production)
     maxAge: 60 * 60 * 24 * 7 * 1000, // 7 days expiration
     sameSite: 'Strict',  // Prevents CSRF attacks
   });
@@ -35,6 +34,14 @@ app.post('/login', (req, res) => {
 
 // Example route to simulate access to the app
 app.get('/app', (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+
+  // Check if refresh token exists
+  if (!refreshToken) {
+    return res.status(403).json({ error: 'Authentication required' });
+  }
+
+  // If the refresh token exists, access granted
   res.json({ message: 'App page, access granted' });
 });
 

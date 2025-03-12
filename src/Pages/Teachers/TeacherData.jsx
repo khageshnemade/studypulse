@@ -92,7 +92,7 @@ export const Table = () => {
       <div className="w-full overflow-x-auto">
         <table className="min-w-full table-auto border-collapse whitespace-nowrap">
           <thead>
-            <tr className="bg-gray-200">
+            <tr className="bg-purple-200">
               <th className="px-4 py-2 border border-gray-300">Profile</th>
               <th className="px-4 py-2 border border-gray-300">Name</th>
               <th className="px-4 py-2 border border-gray-300">Email</th>

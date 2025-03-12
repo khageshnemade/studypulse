@@ -7,23 +7,38 @@ export const makeRequest = axios.create({
   baseURL: apiUrl,
 });
 
-// Function to refresh the token
-const refreshToken = async () => {
+
+
+
+
+const getCookie = (name) => {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`); // Parsing the cookie value
+  if (parts.length === 2) return parts.pop().split(';').shift();
+}
+ 
+// Refresh Token Function
+export const refreshToken = async () => {
   try {
-    const user = JSON.parse(localStorage.getItem("user"));
-
-    // Make a request to the refresh token API
-    const response = await axios.post('https://api.studypulse.live/web/api/refresh-token');
-
-    const newAccessToken = response.data.token; // assuming the new token is returned in `accessToken`
-    localStorage.setItem('user', JSON.stringify({ ...user, token: newAccessToken }));
-    console.log("Response in RefreshToken: ",response)
+    const refreshToken = getCookie('refreshToken'); // Retrieve from cookie
+ 
+    // Request to refresh the access token
+    const response = await axios.post('https://api.studypulse.live/web/api/refresh-token', {
+      refreshToken,
+    }, {
+      withCredentials: true, // Ensure cookies are sent with the request
+    });
+ 
+    const newAccessToken = response.data.token; // Extract new token
+    console.log("Response in RefreshToken: ", response);
     return newAccessToken;
   } catch (error) {
     console.error("Failed to refresh token:", error);
     throw new Error("Failed to refresh token");
   }
 };
+ 
+
 
 // Add a request interceptor to add the Authorization header
 makeRequest.interceptors.request.use(

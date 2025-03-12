@@ -105,86 +105,58 @@ export default function TeacherDashboard() {
         <TeacherProfile />
       ) : (
         <>
-           {/* <p className="text-center text-2xl sm:text-3xl font-semibold bg-blue-400 p-4 rounded-2xl flex justify-center items-center mx-auto my-4 text-gray-700">
-        <i className="text-xl sm:text-2xl h-8 sm:h-10 min-w-5 mr-4 animate-bounce fas fa-home" />
-        Teacher Dashboard
-      </p> */}
-
-      {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-        {[
-          { label: 'Subjects Available', count: dashboard.totalSubjectsCount, bg: 'bg-blue-500', icon: <BookOpen className="text-2xl" /> },
-          { label: 'Chapters Available', count: dashboard.totalChaptersCount, bg: 'bg-green-500', icon: <FileText className="text-2xl" /> },
-          { label: 'Assignments', count: dashboard.totalAssignmentsCount, bg: 'bg-yellow-500', icon: <Layers className="text-2xl" /> },
-          { label: 'Curriculums', count: dashboard.totalCurriculumsCount, bg: 'bg-orange-500', icon: <FileText className="text-2xl" /> },
-          { label: 'Classes', count: dashboard.totalClassesCount, bg: 'bg-teal-500', icon: <Users className="text-2xl" /> },
-        ].map(({ label, count, bg, icon }, index) => (
-          <div
-            key={index}
-            className={`bg-white shadow-xl rounded-lg p-6 flex justify-between items-center transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer`}
-          >
-            <div>
-              <h3 className="text-lg font-semibold">{label}</h3>
-              <p className="text-2xl font-bold">{count}</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 mb-6">
+            <div className="bg-blue-400 shadow-xl rounded-lg p-6 sm:p-8 flex flex-col justify-between transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer outline outline-2 outline-gray-300">
+              <div className="flex flex-col items-center gap-4 mb-4">
+                <div className="bg-white text-blue-600 p-3 rounded-full shadow-md">
+                  <BookOpen className="text-3xl" />
+                </div>
+                <h3 className="text-xl font-semibold text-center text-white">Available Subjects</h3>
+              </div>
+              <p className="text-3xl sm:text-4xl font-bold text-white bg-blue-600 rounded-lg py-3 text-center">{dashboard.totalSubjectsCount}</p>
             </div>
-            <div className={`${bg} text-white p-4 rounded-full`}>
-              {icon}
+
+
+            <div className="bg-green-400 shadow-xl rounded-lg p-6 sm:p-8 flex flex-col justify-between transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer outline outline-2 outline-gray-300">
+              <div className="flex flex-col items-center gap-4 mb-4">
+                <div className="bg-white text-green-600 p-3 rounded-full shadow-md">
+                  <FileText className="text-3xl" />
+                </div>
+                <h3 className="text-xl text-center font-semibold text-white">Available Chapters</h3>
+              </div>
+              <p className="text-3xl sm:text-4xl font-bold text-white bg-green-600 rounded-lg py-3 text-center">{dashboard.totalChaptersCount}</p>
+            </div>
+
+            <div className="bg-yellow-400  shadow-xl rounded-lg p-6 sm:p-8 flex flex-col justify-between transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer outline outline-2 outline-gray-300">
+              <div className="flex flex-col items-center gap-4 mb-4">
+                <div className="bg-white text-yellow-600 p-3 rounded-full shadow-md">
+                  <Layers className="text-3xl" />
+                </div>
+                <h3 className="text-xl text-center font-semibold text-white">Available Assignments</h3>
+              </div>
+              <p className="text-3xl sm:text-4xl font-bold text-white bg-yellow-600 rounded-lg py-3 text-center">{dashboard.totalAssignmentsCount}</p>
+            </div>
+
+            <div className="bg-purple-400 shadow-xl rounded-lg p-6 sm:p-8 flex flex-col justify-between transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer outline outline-2 outline-gray-300">
+              <div className="flex flex-col items-center gap-4 mb-4">
+                <div className="bg-white text-purple-600 p-3 rounded-full shadow-md">
+                  <Users className="text-3xl" />
+                </div>
+                <h3 className="text-xl text-center font-semibold text-white">Available Classes</h3>
+              </div>
+              <p className="text-3xl sm:text-4xl font-bold text-white bg-purple-600 rounded-lg py-3 text-center">{dashboard.totalClassesCount}</p>
+            </div>
+
+            <div className="bg-red-400 shadow-xl rounded-lg p-6 sm:p-8 flex flex-col justify-between transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer outline outline-2 outline-gray-300">
+              <div className="flex flex-col items-center gap-4 mb-4">
+                <div className="bg-white text-red-600 p-3 rounded-full shadow-md">
+                  <Users className="text-3xl" />
+                </div>
+                <h3 className="text-xl text-center font-semibold text-white">Available Curriculums</h3>
+              </div>
+              <p className="text-3xl sm:text-4xl font-bold text-white bg-red-600 rounded-lg py-3 text-center">{dashboard.totalCurriculumsCount}</p>
             </div>
           </div>
-        ))}
-      </div> */}
-
-  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 mb-6">
-  <div className="bg-blue-400 shadow-xl rounded-lg p-6 sm:p-8 flex flex-col justify-between transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer outline outline-2 outline-gray-300">
-    <div className="flex flex-col items-center gap-4 mb-4">
-      <div className="bg-white text-blue-600 p-3 rounded-full shadow-md">
-        <BookOpen className="text-3xl" />
-      </div>
-      <h3 className="text-xl font-semibold text-center text-white">Available Subjects</h3>
-    </div>
-    <p className="text-3xl sm:text-4xl font-bold text-white bg-blue-600 rounded-lg py-3 text-center">{dashboard.totalSubjectsCount}</p>
-  </div>
-
-
-    <div className="bg-green-400 shadow-xl rounded-lg p-6 sm:p-8 flex flex-col justify-between transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer outline outline-2 outline-gray-300">
-      <div className="flex flex-col items-center gap-4 mb-4">
-        <div className="bg-white text-green-600 p-3 rounded-full shadow-md">
-          <FileText className="text-3xl" />
-        </div>
-        <h3 className="text-xl text-center font-semibold text-white">Available Chapters</h3>
-      </div>
-      <p className="text-3xl sm:text-4xl font-bold text-white bg-green-600 rounded-lg py-3 text-center">{dashboard.totalChaptersCount}</p>
-    </div>
-
-    <div className="bg-yellow-400  shadow-xl rounded-lg p-6 sm:p-8 flex flex-col justify-between transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer outline outline-2 outline-gray-300">
-      <div className="flex flex-col items-center gap-4 mb-4">
-        <div className="bg-white text-yellow-600 p-3 rounded-full shadow-md">
-          <Layers className="text-3xl" />
-        </div>
-        <h3 className="text-xl text-center font-semibold text-white">Available Assignments</h3>
-      </div>
-      <p className="text-3xl sm:text-4xl font-bold text-white bg-yellow-600 rounded-lg py-3 text-center">{dashboard.totalAssignmentsCount}</p>
-    </div>
-
-    <div className="bg-purple-400 shadow-xl rounded-lg p-6 sm:p-8 flex flex-col justify-between transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer outline outline-2 outline-gray-300">
-      <div className="flex flex-col items-center gap-4 mb-4">
-        <div className="bg-white text-purple-600 p-3 rounded-full shadow-md">
-          <Users className="text-3xl" />
-        </div>
-        <h3 className="text-xl text-center font-semibold text-white">Available Classes</h3>
-      </div>
-      <p className="text-3xl sm:text-4xl font-bold text-white bg-purple-600 rounded-lg py-3 text-center">{dashboard.totalClassesCount}</p>
-    </div>
-
-    <div className="bg-red-400 shadow-xl rounded-lg p-6 sm:p-8 flex flex-col justify-between transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer outline outline-2 outline-gray-300">
-      <div className="flex flex-col items-center gap-4 mb-4">
-        <div className="bg-white text-red-600 p-3 rounded-full shadow-md">
-          <Users className="text-3xl" />
-        </div>
-        <h3 className="text-xl text-center font-semibold text-white">Available Curriculums</h3>
-      </div>
-      <p className="text-3xl sm:text-4xl font-bold text-white bg-red-600 rounded-lg py-3 text-center">{dashboard.totalCurriculumsCount}</p>
-    </div>
-  </div>
 
 
 
@@ -223,55 +195,3 @@ export default function TeacherDashboard() {
 }
 
 
-const BarChart = ({ data, options }) => (
-  <div className="p-4 bg-white shadow-lg rounded-lg !min-h-48">
-    <Bar data={data} options={options} />
-  </div>
-);
-const data = {
-  labels: ["Class1", "Class2", "Class3", "Class4", "Class5", "Class6"],
-  datasets: [
-    {
-      label: "Passed Students",
-      data: [12, 19, 3, 5, 2, 3],
-      backgroundColor: [
-        "rgba(255, 99, 132, 0.2)",
-        "rgba(54, 162, 235, 0.2)",
-        "rgba(255, 206, 86, 0.2)",
-        "rgba(75, 192, 192, 0.2)",
-        "rgba(153, 102, 255, 0.2)",
-        "rgba(255, 159, 64, 0.2)",
-      ],
-      borderColor: [
-        "rgba(255, 99, 132, 1)",
-        "rgba(54, 162, 235, 1)",
-        "rgba(255, 206, 86, 1)",
-        "rgba(75, 192, 192, 1)",
-        "rgba(153, 102, 255, 1)",
-        "rgba(255, 159, 64, 1)",
-      ],
-      borderWidth: 1,
-    },
-    {
-      label: "Failed Students",
-      data: [10, 20, 12, 12, 32, 12],
-      backgroundColor: [
-        "rgba(255, 99, 132, 0.2)",
-        "rgba(54, 162, 235, 0.2)",
-        "rgba(255, 206, 86, 0.2)",
-        "rgba(75, 192, 192, 0.2)",
-        "rgba(153, 102, 255, 0.2)",
-        "rgba(255, 159, 64, 0.2)",
-      ],
-      borderColor: [
-        "rgba(255, 99, 132, 1)",
-        "rgba(54, 162, 235, 1)",
-        "rgba(255, 206, 86, 1)",
-        "rgba(75, 192, 192, 1)",
-        "rgba(153, 102, 255, 1)",
-        "rgba(255, 159, 64, 1)",
-      ],
-      borderWidth: 1,
-    },
-  ],
-};

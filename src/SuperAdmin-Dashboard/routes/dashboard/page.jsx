@@ -308,37 +308,37 @@ export default function SuperAdminDashboard() {
   };
 
   return (
-    <div className=" min-h-screen py-8 px-4">
+    <div className="min-h-screen py-8 px-4">
       {/* Page Title */}
       <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold bg-blue-400 p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
         <Home className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 mimin-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
         SuperAdmin Dashboard
       </p>
-
+  
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 p-6">
-        {[
+        {[ 
           {
             title: "Teachers Registered",
-            count: dashboard.totalTeachersCount,
+            count: 100,  // Static count for teachers
             color: "bg-gradient-to-r from-blue-500 to-blue-700",
             icon: "fas fa-user",
           },
           {
             title: "Admin Registered",
-            count: dashboard.totalTeachersCount,
+            count: 5,  // Static count for admins
             color: "bg-gradient-to-r from-blue-500 to-blue-700",
             icon: "fas fa-user",
           },
           {
             title: "Students Registered",
-            count: dashboard.totalStudentCount,
+            count: 500,  // Static count for students
             color: "bg-gradient-to-r from-green-500 to-green-700",
             icon: "fas fa-users",
           },
           {
             title: "Classes Created",
-            count: dashboard.totalClassCount,
+            count: 30,  // Static count for classes
             color: "bg-gradient-to-r from-yellow-500 to-yellow-700",
             icon: "fas fa-school",
           },
@@ -357,18 +357,18 @@ export default function SuperAdminDashboard() {
           </div>
         ))}
       </div>
-
+  
       {/* Comments Section */}
       <div className="bg-white shadow-lg rounded-xl p-6 mt-6 hover:scale-105 hover:shadow-2xl transition-transform duration-300">
         <h2 className="text-xl font-semibold text-gray-800">
           Comments Received
         </h2>
-        <p className="text-4xl font-bold text-gray-900 mb-3">{67}</p>
+        <p className="text-4xl font-bold text-gray-900 mb-3">{67}</p>  {/* Static count for comments */}
         <p className="text-gray-600">
           Lorem ipsum dolor sit amet, consectetur adipisicing elit.
         </p>
       </div>
-
+  
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
         <div className="bg-white shadow-lg rounded-xl p-6 hover:scale-105 hover:shadow-2xl transition-transform duration-300">
@@ -384,17 +384,17 @@ export default function SuperAdminDashboard() {
           <BarChart data={dataTeacher} options={optionsTeacher} />
         </div>
       </div>
-
+  
       {/* Recently Added Teachers & Students */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
-        {[
+        {[ 
           {
             title: "Recently Added Teachers",
-            data: dashboard.recentlyAddedTeachers,
+            data: dashboard.recentlyAddedTeachers,  // This would be replaced by static data or mock data
           },
           {
             title: "Recently Added Students",
-            data: dashboard.recentlyAddedStudents,
+            data: dashboard.recentlyAddedStudents,  // This would be replaced by static data or mock data
           },
         ]?.map(({ title, data }, index) => (
           <div
@@ -411,7 +411,7 @@ export default function SuperAdminDashboard() {
               >
                 <div className="w-12 h-12 rounded-full bg-gray-300 mr-4">
                   <img
-                    src={""}
+                    src={""}  // Replace with static image URL if needed
                     alt="Profile"
                     className="w-full h-full object-cover rounded-full"
                   />
@@ -424,7 +424,7 @@ export default function SuperAdminDashboard() {
           </div>
         ))}
       </div>
-
+  
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
         {/* Student Pass/Fail Stats */}
         <div className="bg-white shadow-lg rounded-xl p-6 mt-6 hover:scale-105 hover:shadow-2xl transition-transform duration-300">
@@ -439,7 +439,7 @@ export default function SuperAdminDashboard() {
               style={{
                 minHeight: "250px",
               }}
-              data={data}
+              data={data}  // Replace with static chart data
             />
           </div>
         </div>
@@ -450,4 +450,5 @@ export default function SuperAdminDashboard() {
       </div>
     </div>
   );
+  
 }

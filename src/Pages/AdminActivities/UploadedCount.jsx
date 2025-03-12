@@ -33,15 +33,18 @@ const mockApiResponse = [
 export default function UploadedCount() {
   const [teachersData, setTeachersData] = useState([]);
   const [expandedTeacherId, setExpandedTeacherId] = useState(null); // Track expanded teacher's ID
+  const [isModalOpen, setIsModalOpen] = useState(false); // Control modal visibility
+  const [currentTeacher, setCurrentTeacher] = useState(null); // Store the teacher data for the modal
 
   useEffect(() => {
     // Simulating API call here
     setTeachersData(mockApiResponse);
   }, []);
 
-  // Toggle function to show/hide teacher details
-  const toggleTeacherDetails = (id) => {
-    setExpandedTeacherId(expandedTeacherId === id ? null : id); // Toggle expanded state
+  // Toggle function to show/hide teacher details and open modal
+  const toggleTeacherDetails = (teacher) => {
+    setCurrentTeacher(teacher);
+    setIsModalOpen(true); // Open the modal when a card is clicked
   };
 
   // Calculate salary based on uploaded videos and subject salary
@@ -65,92 +68,92 @@ export default function UploadedCount() {
 
   const { totalDailySalary, totalMonthlySalary } = calculateTotalSalary();
 
+  // Close the modal
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setCurrentTeacher(null);
+  };
+
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h1 className="text-2xl font-bold mb-4 text-center">Teachers Video Upload Details</h1>
+    <div className="max-w-5xl mx-auto p-6 bg-blue-300 rounded-xl shadow-lg">
+      <h1 className="text-4xl font-bold text-white text-center mb-6">Teachers Video Upload Overview</h1>
 
       {/* Total Salary Section */}
-      <div className="bg-gray-100 p-4 rounded-lg mb-6">
-        <h2 className="text-xl font-semibold">Total Salary Overview</h2>
-        <div className="flex justify-between font-bold text-lg mt-2">
+      <div className="bg-white bg-opacity-80 p-6 rounded-lg shadow-md mb-8">
+        <h2 className="text-2xl font-semibold text-gray-800">Total Salary Overview</h2>
+        <div className="flex justify-between font-semibold text-lg mt-4">
           <div>Total Daily Salary:</div>
-          <div>${totalDailySalary}</div>
+          <div className="text-xl text-green-500">${totalDailySalary.toFixed(2)}</div>
         </div>
-        <div className="flex justify-between font-bold text-lg mt-2">
+        <div className="flex justify-between font-semibold text-lg mt-2">
           <div>Total Monthly Salary:</div>
-          <div>${totalMonthlySalary}</div>
+          <div className="text-xl text-green-500">${totalMonthlySalary.toFixed(2)}</div>
         </div>
       </div>
 
-      {/* Teachers List Section */}
-      <div className="space-y-4">
+      {/* Teachers Cards Section */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {teachersData.map((teacher, index) => (
-          <div key={index} className="border-b py-3">
-            <div
-              className="flex justify-between items-center cursor-pointer"
-              onClick={() => toggleTeacherDetails(index)}
-            >
-              <div className="font-semibold">{teacher.name}</div>
-              <div className="flex items-center space-x-2">
-                <div>
-                  <span className="font-medium">Daily Uploaded: {teacher.dailyUploadedVideos}</span> |
-                  <span className="font-medium"> Monthly Uploaded: {teacher.monthlyUploadedVideos}</span>
-                </div>
-                <svg
-                  className={`w-6 h-6 ${expandedTeacherId === index ? 'transform rotate-180' : ''}`}
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
+          <div
+            key={index}
+            className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer"
+            onClick={() => toggleTeacherDetails(teacher)}
+          >
+            <div className="flex justify-between items-center">
+              <div className="text-xl font-semibold text-gray-800">{teacher.name}</div>
+              <div className="text-sm text-gray-600">
+                <span className="font-medium">Daily: {teacher.dailyUploadedVideos}</span> |
+                <span className="font-medium"> Monthly: {teacher.monthlyUploadedVideos}</span>
               </div>
             </div>
-
-            {/* Full Details Section */}
-            {expandedTeacherId === index && (
-              <div className="mt-4 space-y-2">
-                <div className="flex justify-between">
-                  <div className="font-semibold">Subject:</div>
-                  <div>{teacher.subject}</div>
-                </div>
-
-                <div className="flex justify-between">
-                  <div className="font-semibold">Daily Limit:</div>
-                  <div>{teacher.dailyLimit}</div>
-                </div>
-
-                <div className="flex justify-between">
-                  <div className="font-semibold">Monthly Limit:</div>
-                  <div>{teacher.monthlyLimit}</div>
-                </div>
-
-                <div className="flex justify-between">
-                  <div className="font-semibold">Salary per Video:</div>
-                  <div>${teacher.subjectSalary[teacher.subject]}</div>
-                </div>
-
-                <div className="flex justify-between font-bold text-xl">
-                  <div>Total Daily Salary:</div>
-                  <div>${calculateSalary(teacher.dailyUploadedVideos, teacher.subject, teacher)}</div>
-                </div>
-
-                {/* Display Total Monthly Salary */}
-                <div className="flex justify-between font-bold text-xl">
-                  <div>Total Monthly Salary:</div>
-                  <div>${calculateSalary(teacher.monthlyUploadedVideos, teacher.subject, teacher)}</div>
-                </div>
-              </div>
-            )}
           </div>
         ))}
       </div>
+
+      {/* Modal for displaying teacher details */}
+      {isModalOpen && currentTeacher && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-8 rounded-lg w-96">
+            <div className="flex justify-between">
+              <div className="text-2xl font-semibold text-gray-800">{currentTeacher.name}</div>
+              <button className="text-2xl text-gray-600" onClick={closeModal}>
+                &times;
+              </button>
+            </div>
+            <div className="mt-4 space-y-4">
+              <div className="flex justify-between">
+                <div className="font-semibold text-gray-700">Subject:</div>
+                <div className="text-gray-600">{currentTeacher.subject}</div>
+              </div>
+
+              <div className="flex justify-between">
+                <div className="font-semibold text-gray-700">Daily Limit:</div>
+                <div className="text-gray-600">{currentTeacher.dailyLimit}</div>
+              </div>
+
+              <div className="flex justify-between">
+                <div className="font-semibold text-gray-700">Monthly Limit:</div>
+                <div className="text-gray-600">{currentTeacher.monthlyLimit}</div>
+              </div>
+
+              <div className="flex justify-between">
+                <div className="font-semibold text-gray-700">Salary per Video:</div>
+                <div className="text-gray-600">${currentTeacher.subjectSalary[currentTeacher.subject]}</div>
+              </div>
+
+              <div className="flex justify-between font-bold text-xl text-blue-600">
+                <div>Total Daily Salary:</div>
+                <div>${calculateSalary(currentTeacher.dailyUploadedVideos, currentTeacher.subject, currentTeacher).toFixed(2)}</div>
+              </div>
+
+              <div className="flex justify-between font-bold text-xl text-blue-600">
+                <div>Total Monthly Salary:</div>
+                <div>${calculateSalary(currentTeacher.monthlyUploadedVideos, currentTeacher.subject, currentTeacher).toFixed(2)}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

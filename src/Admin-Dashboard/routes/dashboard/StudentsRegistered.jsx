@@ -1,38 +1,35 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, ChevronDown, ChevronUp } from 'lucide-react'; // Importing the icons
+import { ArrowLeft } from 'lucide-react'; // Importing only the necessary icons
 
-// Updated demoData with subjects for students who failed
 const demoData = [
-  { id: 1, name: 'John Doe', class: 'Class A', status: 'Pass', failedSubjects: [] },
-  { id: 2, name: 'Jane Smith', class: 'Class B', status: 'Fail', failedSubjects: ['Math', 'Science'] },
-  { id: 3, name: 'Sam Brown', class: 'Class A', status: 'Pass', failedSubjects: [] },
-  { id: 4, name: 'Alice Green', class: 'Class B', status: 'Pass', failedSubjects: [] },
-  { id: 5, name: 'Tom White', class: 'Class A', status: 'Fail', failedSubjects: ['History', 'Geography', 'Literature'] },
+  { id: 1, name: 'John Doe', class: 'Class A', status: 'Pass', subjects: [{ subject: 'Math', marks: 80 }, { subject: 'Science', marks: 75 }] },
+  { id: 2, name: 'Jane Smith', class: 'Class B', status: 'Fail', subjects: [{ subject: 'Math', marks: 45 }, { subject: 'Science', marks: 50 }] },
+  { id: 3, name: 'Sam Brown', class: 'Class A', status: 'Pass', subjects: [{ subject: 'Math', marks: 90 }, { subject: 'Science', marks: 85 }] },
+  { id: 4, name: 'Alice Green', class: 'Class B', status: 'Pass', subjects: [{ subject: 'Math', marks: 95 }, { subject: 'Science', marks: 92 }] },
+  { id: 5, name: 'Tom White', class: 'Class A', status: 'Fail', subjects: [{ subject: 'Math', marks: 60 }, { subject: 'Science', marks: 65 }] },
 ];
 
 export default function StudentsRegistered() {
   const [selectedClass, setSelectedClass] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
-  const [expandedSubjects, setExpandedSubjects] = useState(null); // State to track expanded subjects
-  const navigate = useNavigate(); // Hook to navigate programmatically
+  const [selectedSubject, setSelectedSubject] = useState('');
+  const navigate = useNavigate();
 
-  // Filter students based on selected class and status
+  // Filter the students based on the selected criteria
   const filteredStudents = demoData.filter(student => {
-    return (
-      (selectedClass ? student.class === selectedClass : true) &&
-      (selectedStatus ? student.status === selectedStatus : true)
-    );
+    const isClassMatch = selectedClass ? student.class === selectedClass : true;
+    const isStatusMatch = selectedStatus ? student.status === selectedStatus : true;
+    const isSubjectMatch = selectedSubject
+      ? student.subjects.some(f => f.subject === selectedSubject)
+      : true;
+
+    return isClassMatch && isStatusMatch && isSubjectMatch;
   });
 
-  // Go back to the previous page when the button is clicked
+  // Go back function for navigation
   const handleGoBack = () => {
-    navigate(-1); // Goes back to the previous page in the browser history
-  };
-
-  // Toggle visibility of failed subjects
-  const toggleFailedSubjects = (studentId) => {
-    setExpandedSubjects((prev) => (prev === studentId ? null : studentId)); // Toggle between expanded and collapsed
+    navigate(-1); // Go back to the previous page
   };
 
   return (
@@ -48,7 +45,7 @@ export default function StudentsRegistered() {
 
       <div className="mb-4 flex space-x-4">
         {/* Dropdown for Select Class */}
-        <div className="w-1/2">
+        <div className="w-1/3">
           <label className="block text-lg font-semibold mb-2">Select Class</label>
           <select
             value={selectedClass}
@@ -62,7 +59,7 @@ export default function StudentsRegistered() {
         </div>
 
         {/* Dropdown for Select Status */}
-        <div className="w-1/2">
+        <div className="w-1/3">
           <label className="block text-lg font-semibold mb-2">Select Status</label>
           <select
             value={selectedStatus}
@@ -74,6 +71,25 @@ export default function StudentsRegistered() {
             <option value="Fail">Fail</option>
           </select>
         </div>
+
+        {/* Dropdown for Select Subject */}
+        <div className="w-1/3">
+          <label className="block text-lg font-semibold mb-2">Select Subject</label>
+          <select
+            value={selectedSubject}
+            onChange={(e) => setSelectedSubject(e.target.value)}
+            className="w-full p-1 border-2 border-red-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+          >
+            <option value="">All Subjects</option>
+            {Array.from(
+              new Set(demoData.flatMap((student) => student.subjects.map((subject) => subject.subject)))
+            ).map((subject) => (
+              <option key={subject} value={subject}>
+                {subject}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       {/* Table to display filtered students */}
@@ -83,51 +99,36 @@ export default function StudentsRegistered() {
             <th className="border p-3">Name</th>
             <th className="border p-3">Class</th>
             <th className="border p-3">Status</th>
-            <th className="border p-3">Failed Subjects</th> {/* New column for failed subjects */}
+            <th className="border p-3">Subject Marks</th> {/* Column for specific subject marks */}
           </tr>
         </thead>
         <tbody>
           {filteredStudents.length > 0 ? (
-            filteredStudents.map((student) => (
-              <tr key={student.id} className="hover:bg-gray-100 transition-all">
-                <td className="border p-3">{student.name}</td>
-                <td className="border p-3">{student.class}</td>
-                <td className="border p-3">{student.status}</td>
-                <td className="border p-3">
-                  {student.status === 'Fail' && student.failedSubjects.length > 0 ? (
-                    <div>
-                      {/* Show first subject with a toggle button */}
+            filteredStudents.map((student) => {
+              // Find the selected subject's marks
+              const selectedSubjectMarks = student.subjects.find(
+                (subject) => subject.subject === selectedSubject
+              );
+              return (
+                <tr key={student.id} className="hover:bg-gray-100 transition-all">
+                  <td className="border p-3">{student.name}</td>
+                  <td className="border p-3">{student.class}</td>
+                  <td className="border p-3">{student.status}</td>
+                  <td className="border p-3">
+                    {/* Display only the selected subject's marks */}
+                    {selectedSubjectMarks ? (
                       <div className="flex items-center">
-                        <span className="mr-2 text-red-600">{student.failedSubjects[0]}</span>
-                        {student.failedSubjects.length > 1 && (
-                          <button
-                            onClick={() => toggleFailedSubjects(student.id)}
-                            className="text-blue-500"
-                          >
-                            {expandedSubjects === student.id ? (
-                              <ChevronUp className="inline" />
-                            ) : (
-                              <ChevronDown className="inline" />
-                            )}
-                          </button>
-                        )}
+                        <span className="mr-2">
+                          {selectedSubjectMarks.subject} - {selectedSubjectMarks.marks}
+                        </span>
                       </div>
-
-                      {/* Show all subjects if expanded */}
-                      {expandedSubjects === student.id && (
-                        <ul className="mt-2">
-                          {student.failedSubjects.slice(1).map((subject, index) => (
-                            <li key={index} className="text-red-600">{subject}</li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-                  ) : (
-                    <span className="text-green-600">None</span>
-                  )}
-                </td>
-              </tr>
-            ))
+                    ) : (
+                      <span>No data available</span>
+                    )}
+                  </td>
+                </tr>
+              );
+            })
           ) : (
             <tr>
               <td colSpan="4" className="border p-3 text-center">No data available</td>

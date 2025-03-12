@@ -55,7 +55,7 @@ export default function Classes() {
         </div>
 
         <table className="table-auto w-full border-collapse border whitespace-nowrap border-gray-300">
-          <thead className="bg-gray-200">
+          <thead className="bg-purple-300">
             <tr>
               <th className="border border-gray-300 px-4 py-2 text-left text-gray-700">
                 Picture
