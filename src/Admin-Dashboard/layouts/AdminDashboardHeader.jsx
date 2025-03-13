@@ -7,7 +7,7 @@ import profileImg from "../assets/profile-image.jpg";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import AdminModal from "../../SuperAdmin-Dashboard/layouts/AdminModal";
 
 export const AdminDashboardHeader = ({ collapsed, setCollapsed }) => {
@@ -16,7 +16,7 @@ export const AdminDashboardHeader = ({ collapsed, setCollapsed }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userName, setUserName] = useState("Guest");
   const pathnames = location.pathname.split("/").filter((x) => x);
-
+const navigate=useNavigate();
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
@@ -96,6 +96,16 @@ export const AdminDashboardHeader = ({ collapsed, setCollapsed }) => {
                 .toUpperCase()}
             </div>
           </button>
+          <button onClick={''} className="w-10 h-10 flex items-center justify-center">
+          <Bell
+          onClick={
+            ()=>{navigate('notifications')}
+          }
+            className={`text-white transition-transform duration-300`}
+            size={24}
+          />
+        
+        </button>
         </div>
       </header>
       {isModalOpen && <AdminModal onClose={toggleModal} />}

@@ -1,4 +1,6 @@
-import { Bell, Menu } from "lucide-react";
+import { Bell, Menu } from "lucide-react";  // Import X (close) icon
+import { X } from 'react-feather';
+
 import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
 import { makeRequest } from "../../axios";
@@ -17,6 +19,10 @@ export const TeacherDashboardHeader = ({ collapsed, setCollapsed }) => {
 
   const toggleModal = () => {
     navigate('/teacher-dashboard/get_data');
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false); // Close the modal
   };
 
   useEffect(() => {
@@ -41,12 +47,22 @@ export const TeacherDashboardHeader = ({ collapsed, setCollapsed }) => {
     }
   };
 
-  const handleBellClick = () => {
-    setUnreadNotifications(false); // Mark notifications as read
-    setNotifications([
-      { id: 1, message: "New Assignment available!" },
-      { id: 2, message: "Your class schedule has been updated." },
-    ]);
+  const handleBellClick = async () => {
+
+    try {
+      const response = await makeRequest.get('/get-notifications');
+      const { success, data } = response.data;
+      console.log("Data received", data);
+      if (success) {
+        setNotifications(data);
+      } else {
+        setError('Failed to fetch notifications');
+      }
+    } catch {
+      setError('Error fetching notifications');
+    }
+    setUnreadNotifications(false);
+
     setIsNotificationOpen((prev) => !prev); // Toggle notification dropdown visibility
   };
 
@@ -139,6 +155,7 @@ export const TeacherDashboardHeader = ({ collapsed, setCollapsed }) => {
             <span className="absolute top-0 right-0 block w-2.5 h-2.5 rounded-full bg-red-500 ring-2 ring-white"></span>
           )}
         </button>
+
         {isNotificationOpen && notifications.length > 0 && (
           <div
             ref={notificationRef}
@@ -146,15 +163,29 @@ export const TeacherDashboardHeader = ({ collapsed, setCollapsed }) => {
           >
             <h3 className="font-semibold text-gray-800">Notifications</h3>
             <ul className="space-y-2 mt-2">
-              {notifications.map((notification) => (
-                <li key={notification.id} className="text-sm text-gray-700">
-                  {notification.message}
-                </li>
-              ))}
+              {notifications.map((notification) => {
+           
+                const formattedDate = new Date(notification.startDate).toLocaleDateString();
+
+                return (
+                  <li key={notification._id} className="text-sm text-gray-700">
+                    <div>{notification.text}</div>
+                    <span className="text-xs text-gray-500">{formattedDate}</span>
+                  </li>
+                );
+              })}
             </ul>
+            {/* Close Button for the Notification Modal */}
+            <button
+              onClick={closeModal}
+              className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
+            >
+              <X size={16} /> {/* Close icon */}
+            </button>
           </div>
         )}
       </div>
+
     </header>
   );
 };

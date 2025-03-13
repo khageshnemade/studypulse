@@ -10,6 +10,17 @@ import { makeRequest } from "../../../axios";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function TeacherDashboard() {
+  const iassignments = [
+    { id: 1, title: "Math Assignment - Algebra" },
+    { id: 2, title: "Science Assignment - Physics" },
+    { id: 3, title: "History Assignment - Ancient Civilizations" },
+  ];
+
+  const icurriculums = [
+    { id: 1, title: "Math Curriculum - Algebra 101" },
+    { id: 2, title: "Science Curriculum - Basic Physics" },
+    { id: 3, title: "History Curriculum - World War II" },
+  ];
   const user = localStorage.getItem("user");
   const profileCompletion = JSON.parse(user)?.profileCompletion;
   const [dashboard, setData] = useState({});
@@ -160,15 +171,15 @@ export default function TeacherDashboard() {
 
 
 
-          <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-6 mb-8 ">
+          <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             <div className="bg-white shadow-lg rounded-lg p-6 outline outline-3 outline-gray-400">
               <HollowPieChart classes={classes} />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 ">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
               <div className="bg-white shadow-lg rounded-lg p-6 outline outline-3 outline-gray-400">
                 <p className="font-semibold text-xl">Recently Added Assignments</p>
-                {assignments.map((assignment) => (
+                {iassignments.map((assignment) => (
                   <div key={assignment.id} className="flex items-center py-2 border-b border-gray-200">
                     <div className="w-10 h-10 rounded-full bg-blue-500 mr-4" />
                     <p className="text-gray-700">{assignment.title}</p>
@@ -178,7 +189,7 @@ export default function TeacherDashboard() {
 
               <div className="bg-white shadow-lg rounded-lg p-6 outline outline-3 outline-gray-400">
                 <p className="font-semibold text-xl">Recently Added Curriculums</p>
-                {curriculums.map((curriculum) => (
+                {icurriculums.map((curriculum) => (
                   <div key={curriculum.id} className="flex items-center py-2 border-b border-gray-200">
                     <div className="w-10 h-10 rounded-full bg-green-500 mr-4" />
                     <p className="text-gray-700">{curriculum.title}</p>

@@ -55,6 +55,7 @@ import Notifications from "./Pages/AdminActivities/Notifications";
 import UploadedCount from "./Pages/AdminActivities/UploadedCount";
 import AssignmentPassFailed from "./Pages/TeacherActivities/AssignmentPassFailed";
 import AssignmentData from "./Admin-Dashboard/routes/dashboard/AssignmentData";
+import StudentReport from "./Pages/AdminActivities/StudentReport";
 
 const user = localStorage.getItem("user"); // Check if the user is logged in
 
@@ -194,6 +195,14 @@ const router = createBrowserRouter(
         {
           path: "users",
           element: <OnlineUsers />,
+        },
+        {
+          path: "notifications",
+          element: <Notifications />,
+        },
+        {
+          path: "studentsReport",
+          element: <StudentReport />,
         },
         {
           path: "ass_stat",

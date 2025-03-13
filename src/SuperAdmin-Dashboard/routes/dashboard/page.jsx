@@ -15,6 +15,7 @@ import { data } from "autoprefixer";
 import { ToastContainer } from "react-toastify";
 import { Home } from "lucide-react";
 import { makeRequest } from "../../../axios";
+import StudentList from "./StudentList";
 
 // Registering chart components
 ChartJS.register(
@@ -358,32 +359,11 @@ export default function SuperAdminDashboard() {
         ))}
       </div>
   
-      {/* Comments Section */}
-      <div className="bg-white shadow-lg rounded-xl p-6 mt-6 hover:scale-105 hover:shadow-2xl transition-transform duration-300">
-        <h2 className="text-xl font-semibold text-gray-800">
-          Comments Received
-        </h2>
-        <p className="text-4xl font-bold text-gray-900 mb-3">{67}</p>  {/* Static count for comments */}
-        <p className="text-gray-600">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        </p>
-      </div>
+         
+      
+ 
+   
   
-      {/* Charts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
-        <div className="bg-white shadow-lg rounded-xl p-6 hover:scale-105 hover:shadow-2xl transition-transform duration-300">
-          <h2 className="text-2xl font-semibold text-center mb-4 text-gray-800">
-            Active vs Inactive Students
-          </h2>
-          <BarChart data={dataStudent} options={optionsStudent} />
-        </div>
-        <div className="bg-white shadow-lg rounded-xl p-6 hover:scale-105 hover:shadow-2xl transition-transform duration-300">
-          <h2 className="text-2xl font-semibold text-center mb-4 text-gray-800">
-            Active vs Inactive Teachers
-          </h2>
-          <BarChart data={dataTeacher} options={optionsTeacher} />
-        </div>
-      </div>
   
       {/* Recently Added Teachers & Students */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
@@ -424,7 +404,7 @@ export default function SuperAdminDashboard() {
           </div>
         ))}
       </div>
-  
+    
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
         {/* Student Pass/Fail Stats */}
         <div className="bg-white shadow-lg rounded-xl p-6 mt-6 hover:scale-105 hover:shadow-2xl transition-transform duration-300">
@@ -446,8 +426,12 @@ export default function SuperAdminDashboard() {
         <div className="bg-white shadow-lg rounded-xl p-6 mt-6 hover:scale-105 hover:shadow-2xl transition-transform duration-300">
           <Dashboard />
         </div>
+
+        <StudentList/>
         <ToastContainer />
+
       </div>
+
     </div>
   );
   
