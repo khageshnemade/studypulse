@@ -62,44 +62,23 @@ const user = localStorage.getItem("user"); // Check if the user is logged in
 const router = createBrowserRouter(
   [
     // Public routes accessible even if the user is not logged in
-    {
-      path: "/",
-      element: <Login />,
-    },
+    { path: "/", element: <Login /> },
 
-    {
-      path: "/login",
-      element: <Login />,
-    },
+    { path: "/login", element: <Login /> },
 
-    {
-      path: "/register",
-      element: <Register />,
-    },
+    { path: "/register", element: <Register /> },
 
     // Protected routes (only accessible if the user is logged in)
     {
       path: "/dashboard", // Only accessible if the user is logged in
       element: <Layout />,
       children: [
-        {
-          index: true,
-          element: <DashboardPage />,
-        },
+        { index: true, element: <DashboardPage /> },
 
-        {
-          path: "contents",
-          element: <Content />,
-        },
-        {
-          path: "contents/:id",
-          element: <Singlecontent />,
-        },
+        { path: "contents", element: <Content /> },
+        { path: "contents/:id", element: <Singlecontent /> },
 
-        {
-          path: "/dashboard/profile",
-          element: <Profile />,
-        },
+        { path: "/dashboard/profile", element: <Profile /> },
         {
           path: "customers",
           element: user ? <h1 className="title">Customers</h1> : <Home />,
@@ -140,198 +119,75 @@ const router = createBrowserRouter(
     {
       path: "/admin-dashboard", // Only accessible if the user is logged in
       element: <AdminLayout />,
-      children: [
-        {
-          index: true,
-          element: <AdminDashboard />,
-        },
-
-      ],
+      children: [{ index: true, element: <AdminDashboard /> }],
     },
 
-    {
-      path:"/add",
-      element:<Showemail/>
-    },
+    { path: "/add", element: <Showemail /> },
     {
       path: "/superadmin-dashboard",
       element: <SuperAdminLayout />,
       children: [
-        {
-          index: true,
-          element: <SuperAdminDashboard />,
-        },
+        { index: true, element: <SuperAdminDashboard /> },
 
-        {
-          path: "createAdmin",
-          element: <CreateAdmin />,
-        },
-        {
-          path: "orgs",
-          element: <Organizations />,
-        },
-        {
-          path: "admins/updateAdmin",
-          element: <UpdateAdmin />,
-        },
-        {
-          path: "admins",
-          element: <Admins />,
-        },
-        {
-          path: "createRegion",
-          element: <CreateRegion />,
-        },
+        { path: "createAdmin", element: <CreateAdmin /> },
+        { path: "orgs", element: <Organizations /> },
+        { path: "admins/updateAdmin", element: <UpdateAdmin /> },
+        { path: "admins", element: <Admins /> },
+        { path: "createRegion", element: <CreateRegion /> },
       ],
     },
     {
       path: "/admin-dashboard", // Only accessible if the user is logged in
       element: <AdminLayout />,
       children: [
-        {
-          index: true,
-          element: <AdminDashboard />,
-        },
-        {
-          path: "users",
-          element: <OnlineUsers />,
-        },
-        {
-          path: "notifications",
-          element: <Notifications />,
-        },
-        {
-          path: "studentsReport",
-          element: <StudentReport />,
-        },
-        {
-          path: "ass_stat",
-          element: <AssignmentData />,
-        },
-        {
-          path: "announce",
-          element: <CreateNotification />,
-        },
-        {
-          path: "update_notifications",
-          element: <Notifications />,
-        },
-        {
-          path: "counter",
-          element: <UploadedCount />,
-        },
-        {
-          path: "students",
-          element: <StudentData />,
-        },
-        {
-          path: "student",
-          element: <StudentsRegistered />,
-        },
-        {
-          path: "teachers",
-          element: <TeacherData />,
-        },
-        {
-          path: "class_subject/addclass",
-          element: <AddClass />,
-        },
-        
-        {
-          path: "students",
-          element: <StudentData />,
-        },
-        {
-          path: "teachers",
-          element: <TeacherData />,
-        },
-        {
-          path: "class_subject",
-          element: <Classes />,
-        },
-        {
-          path: "class_subject/addSubject",
-          element: <AddSubject />,
-        },
-        {
-          path: "class_subject/subjects",
-          element: <Subject />,
-        },
+        { index: true, element: <AdminDashboard /> },
+        { path: "users", element: <OnlineUsers /> },
+        { path: "notifications", element: <Notifications /> },
+        { path: "studentsReport", element: <StudentReport /> },
+        { path: "ass_stat", element: <AssignmentData /> },
+        { path: "announce", element: <CreateNotification /> },
+        { path: "update_notifications", element: <Notifications /> },
+        { path: "counter", element: <UploadedCount /> },
+        { path: "students", element: <StudentData /> },
+        { path: "student", element: <StudentsRegistered /> },
+        { path: "teachers", element: <TeacherData /> },
+        { path: "class_subject/addclass", element: <AddClass /> },
+
+        { path: "students", element: <StudentData /> },
+        { path: "teachers", element: <TeacherData /> },
+        { path: "class_subject", element: <Classes /> },
+        { path: "class_subject/addSubject", element: <AddSubject /> },
+        { path: "class_subject/subjects", element: <Subject /> },
       ],
     },
     {
       path: "/teacher-dashboard", // Only accessible if the user is logged in
       element: <TeacherLayout />,
       children: [
-        {
-          index: true,
-          element: <TeacherDashboard />,
-        },
-        {
-          path: "users",
-          element: <OnlineUsers />,
-        },
-        {
-          path: "resultClass",
-          element: <AssignmentPassFailed />,
-        },
+        { index: true, element: <TeacherDashboard /> },
+        { path: "users", element: <OnlineUsers /> },
+        { path: "resultClass", element: <AssignmentPassFailed /> },
 
-        {
-          path: "profile",
-          element: <TeacherProfile />,
-        },
-        {
-          path: "cls",
-          element: <Cls />,
-        },
-        {
-          path: "cls/students",
-          element: <Students />,
-        },
-        {
-          path: "upload",
-          element: <ProfilePicUpload />,
-        },
-        {
-          path: "get_data",
-          element: <TProfile />,
-        },
-        {
-          path: "subjects",
-          element: <SubjectsList />,
-        },
-        {
-          path: "chapters",
-          element: <ChaptersList />,
-        },
-        {
-          path: "chapters/add_chapter",
-          element: <AddChapter />,
-        },
-        {
-          path: "chapterCurrs",
-          element: <ChapterCurr />,
-        },
+        { path: "profile", element: <TeacherProfile /> },
+        { path: "cls", element: <Cls /> },
+        { path: "cls/students", element: <Students /> },
+        { path: "upload", element: <ProfilePicUpload /> },
+        { path: "get_data", element: <TProfile /> },
+        { path: "subjects", element: <SubjectsList /> },
+        { path: "chapters", element: <ChaptersList /> },
+        { path: "chapters/add_chapter", element: <AddChapter /> },
+        { path: "chapterCurrs", element: <ChapterCurr /> },
         {
           path: "chapterCurrs/add_chapterCurr",
           element: <CreateChapterCurriculum />,
         },
-        {
-          path: "add_assignment",
-          element: <AddAssignment />,
-        },
-        {
-          path: "chapters/assignments",
-          element: <Assignments />,
-        },
+        { path: "add_assignment", element: <AddAssignment /> },
+        { path: "chapters/assignments", element: <Assignments /> },
         {
           path: "chapters/assignments/update_assignment",
           element: <UpdateAssignment />,
         },
-        {
-          path: "chapters/update_chapter",
-          element: <UpdateChapter />,
-        },
+        { path: "chapters/update_chapter", element: <UpdateChapter /> },
         {
           path: "chapterCurrs/update_chapterCurr",
           element: <UpdateChapterCurriculum />,
@@ -340,19 +196,13 @@ const router = createBrowserRouter(
           path: "chapters/assignments/assignRes",
           element: <AssignmentResult />,
         },
-        {
-          path: "chapterCurrs/chat",
-          element: <GroupChatWindow />,
-        },
+        { path: "chapterCurrs/chat", element: <GroupChatWindow /> },
       ],
     },
   ],
 
   // Catch-all route for any unmatched paths
-  {
-    path: "*",
-    element: <Error />,
-  }
+  { path: "*", element: <Error /> }
 );
 
 function Routers() {
