@@ -56,6 +56,8 @@ import UploadedCount from "./Pages/AdminActivities/UploadedCount";
 import AssignmentPassFailed from "./Pages/TeacherActivities/AssignmentPassFailed";
 import AssignmentData from "./Admin-Dashboard/routes/dashboard/AssignmentData";
 import StudentReport from "./Pages/AdminActivities/StudentReport";
+import TeacherSubjectLimits from "./Pages/TeacherActivities/TeacherSubjectLimits";
+import PieClick from "./Pages/AdminActivities/PieClick";
 
 const user = localStorage.getItem("user"); // Check if the user is logged in
 
@@ -142,12 +144,14 @@ const router = createBrowserRouter(
       children: [
         { index: true, element: <AdminDashboard /> },
         { path: "users", element: <OnlineUsers /> },
+        { path: "subjects", element: <TeacherSubjectLimits /> },
         { path: "notifications", element: <Notifications /> },
         { path: "studentsReport", element: <StudentReport /> },
         { path: "ass_stat", element: <AssignmentData /> },
         { path: "announce", element: <CreateNotification /> },
         { path: "update_notifications", element: <Notifications /> },
         { path: "counter", element: <UploadedCount /> },
+        { path: "pieclick", element: <PieClick /> },
         { path: "students", element: <StudentData /> },
         { path: "student", element: <StudentsRegistered /> },
         { path: "teachers", element: <TeacherData /> },

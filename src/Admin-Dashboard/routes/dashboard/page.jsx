@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Bar, Pie } from "react-chartjs-2";
+import { setAdminDetails } from "../../../redux/features/adminSlice";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -14,7 +15,7 @@ import {
 import { makeRequest } from "../../../axios";
 import { BookOpen, FileText, Layers } from "lucide-react";
 import StudentsRegistered from "./StudentsRegistered";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import OnlineUsers from "../../../Pages/AdminActivities/OnlineUsers";
 import AssignmentData from "./AssignmentData";
 
@@ -30,28 +31,17 @@ ChartJS.register(
 );
 
 export default function AdminDashboard() {
-  const [dashboard, setData] = useState({});
+  const [dashboard, setDashboard] = useState({});
   const [labels, setLabels] = useState([]);
   const [dataset, setDataset] = useState([]);
   const [users, setUsers] = useState([]);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     fetchDashboardData();
     fetchOnlineUsers();
   }, []);
-
-  const fetchStudents = async (classId, pageSize, page, profileComplete) => {
-    const url = `/admin/get-all-students?classId=${classId}&page=${page}&limit=${pageSize}&isProfileComplete=${profileComplete}`;
-    try {
-      const res = await makeRequest.get(url);
-      setStudents(res?.data?.data);
-      dispatch(setStudent(res?.data?.data));
-    } catch (error) {
-      console.error("Error fetching students:", error?.response?.data?.message);
-      toast.error("Failed to fetch students. Please try again.");
-    }
-  };
 
   const fetchOnlineUsers = async () => {
     try {
@@ -70,7 +60,7 @@ export default function AdminDashboard() {
     // Process the data
     setLabels(Object.keys(data));
     setDataset(Object.values(data));
-    setData(res?.data?.data || {});
+    setDashboard(res?.data?.data || {});
   };
 
   // PieChart Component
@@ -155,6 +145,29 @@ export default function AdminDashboard() {
     const selectedClass = classes[selectedClassIndex];
     const selectedSubject = selectedClass.subjects[selectedSubjectIndex];
 
+    const options = {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: "top",
+        },
+        tooltip: {
+          enabled: true,
+        },
+      },
+      // Handle click event on the pie chart
+      onClick: (event, chartElement) => {
+        if (chartElement.length > 0) {
+          // Get the index of the clicked element
+          const clickedIndex = chartElement[0].index;
+          const label = getPieChartData(selectedSubject).labels[clickedIndex]; // Get the label of the clicked section
+          console.log(`Clicked on ${label} section ${selectedSubject.name} with`);
+          dispatch(setAdminDetails({ classId: selectedSubject.name, isPassed: label === 'Passed' ? true : false }));
+          navigate('student');
+        }
+      },
+    };
+
     return (
       <div className="min-h-screen bg-white flex flex-col items-center py-10">
         <h1 className="text-3xl font-bold text-gray-700 mb-6 text-center">
@@ -199,6 +212,7 @@ export default function AdminDashboard() {
           <div className="text-center">
             <div className="flex justify-center">
               <Pie
+                options={options}
                 className="w-full min-h-full"
                 data={getPieChartData(selectedSubject)}
               />
@@ -259,62 +273,38 @@ export default function AdminDashboard() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-8">
-        {[
-          {
-            title: "Recently Added Teachers",
-            data: dashboard.recentlyAddedTeachers,
-          },
-          {
-            title: "Recently Added Students",
-            data: dashboard.recentlyAddedStudents,
-          },
-        ].map(({ title, data }, index) => (
-          <div
-            key={index}
-            className="bg-white shadow-lg rounded-xl p-6 transform transition-transform duration-500 hover:scale-105 max-h-96 overflow-y-scroll outline outline-4 outline-gray-400"
-          >
-            <h2 className="text-xl font-semibold text-gray-800 mb-4 bg-blue p-2">
-              {title}
-            </h2>
-            <div className="space-y-4">
-              {data?.map((person) => (
-                <div
-                  key={person._id || person.id}
-                  className="flex items-center p-4 border-b last:border-b-0 space-x-4"
-                >
-                  <div className="w-12 h-12 rounded-full bg-gray-300 overflow-hidden">
-                    <img
-                      src={""}
-                      alt="Profile"
-                      className="w-full h-full object-cover"
-                    />
+        {[{ title: "Recently Added Teachers", data: dashboard.recentlyAddedTeachers }, { title: "Recently Added Students", data: dashboard.recentlyAddedStudents }].map(
+          ({ title, data }, index) => (
+            <div
+              key={index}
+              className="bg-white shadow-lg rounded-xl p-6 transform transition-transform duration-500 hover:scale-105 max-h-96 overflow-y-scroll outline outline-4 outline-gray-400"
+            >
+              <h2 className="text-xl font-semibold text-gray-800 mb-4 bg-blue p-2">{title}</h2>
+              <div className="space-y-4">
+                {data?.map((person) => (
+                  <div key={person._id || person.id} className="flex items-center p-4 border-b last:border-b-0 space-x-4">
+                    <div className="w-12 h-12 rounded-full bg-gray-300 overflow-hidden">
+                      <img src={""} alt="Profile" className="w-full h-full object-cover" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-lg font-medium text-gray-800">
+                        {person.firstName} {person.lastName}
+                      </p>
+                      <p className="text-sm text-gray-500">{person.email}</p>
+                      <p className="text-sm text-gray-500">{person.phoneNumber}</p>
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <p className="text-lg font-medium text-gray-800">
-                      {person.firstName} {person.lastName}
-                    </p>
-                    <p className="text-sm text-gray-500">{person.email}</p>
-                    <p className="text-sm text-gray-500">
-                      {person.phoneNumber}
-                    </p>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
+          )
+        )}
 
         <div className="bg-white shadow-lg rounded-xl p-6 duration-500 hover:scale-105 mb-8 outline outline-4 outline-gray-400">
-          <h2 className="text-xl font-semibold text-gray-800 text-center mb-4">
-            Student Pass/Fail Stats
-          </h2>
-          <p className="text-gray-600 text-center mb-4">
-            Visualization of Passed vs Failed Students
-          </p>
+          <h2 className="text-xl font-semibold text-gray-800 text-center mb-4">Student Pass/Fail Stats</h2>
+          <p className="text-gray-600 text-center mb-4">Visualization of Passed vs Failed Students</p>
           <div className="flex justify-center">
-            <div className="flex justify-center">
-              <PieChart labels={labels} datasets={dataset} />
-            </div>
+            <PieChart labels={labels} datasets={dataset} />
           </div>
         </div>
 
@@ -331,6 +321,7 @@ export default function AdminDashboard() {
     </div>
   );
 }
+
 
 // import axios from 'axios';
 // import React from 'react';

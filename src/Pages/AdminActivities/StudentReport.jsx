@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import { jsPDF } from "jspdf";
+import { mark } from "framer-motion/client";
 
 const StudentReport = () => {
   const reportRef = useRef();
@@ -51,11 +52,11 @@ const StudentReport = () => {
   const getAttemptStatus = (marks) => {
     let status = marks.map((mark, index) =>
       mark >= passingGrade
-        ? `Attempt ${index + 1}: Passed`
-        : `Attempt ${index + 1}: Failed`
+        ? `Attempt ${index + 1}: Passed`:
+        isNaN(mark) ?'': `Attempt ${index + 1}: Failed,`
     );
 
-    return status.join(", ");
+    return status
   };
 
   return (
@@ -84,9 +85,9 @@ const StudentReport = () => {
           <thead>
             <tr className="bg-gray-800 text-white">
               <th className="border border-gray-700 p-2 text-left">Subject</th>
-              <th className="border border-gray-700 p-2">Marks Q1</th>
-              <th className="border border-gray-700 p-2">Marks Q2</th>
-              <th className="border border-gray-700 p-2">Marks Q3</th>
+              <th className="border border-gray-700 p-2">Marks Assignment1</th>
+              <th className="border border-gray-700 p-2">Marks Assignment2</th>
+              <th className="border border-gray-700 p-2">Marks Assignment3</th>
               <th className="border border-gray-700 p-2">Status</th>
             </tr>
           </thead>
