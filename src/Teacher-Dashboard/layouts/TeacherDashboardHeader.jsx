@@ -22,7 +22,7 @@ export const TeacherDashboardHeader = ({ collapsed, setCollapsed }) => {
   };
 
   const closeModal = () => {
-    setIsModalOpen(false); // Close the modal
+    setIsNotificationOpen(false); 
   };
 
   useEffect(() => {
@@ -159,18 +159,22 @@ export const TeacherDashboardHeader = ({ collapsed, setCollapsed }) => {
         {isNotificationOpen && notifications.length > 0 && (
           <div
             ref={notificationRef}
-            className="absolute top-12 right-0 bg-white shadow-lg rounded-md p-4 max-w-xs w-64"
+            className="absolute top-12 right-0 bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100 shadow-lg rounded-xl p-6 max-w-xs w-[1200px] transform transition-all duration-300 ease-in-out"
           >
-            <h3 className="font-semibold text-gray-800">Notifications</h3>
-            <ul className="space-y-2 mt-2">
+            <h3 className="font-bold text-gray-800 text-lg">Announcements</h3>
+            <ul className="space-y-4 mt-4">
               {notifications.map((notification) => {
-           
                 const formattedDate = new Date(notification.startDate).toLocaleDateString();
 
                 return (
-                  <li key={notification._id} className="text-sm text-gray-700">
-                    <div>{notification.text}</div>
-                    <span className="text-xs text-gray-500">{formattedDate}</span>
+                  <li
+                    key={notification._id}
+                    className="flex items-center space-x-3 p-2 rounded-lg bg-white shadow-md hover:bg-gray-50 transition duration-200"
+                  >
+                    <div className="flex-1">
+                      <p className="text-sm text-gray-800">{notification.text}</p>
+                      <span className="text-xs text-gray-500">{formattedDate}</span>
+                    </div>
                   </li>
                 );
               })}
@@ -178,12 +182,13 @@ export const TeacherDashboardHeader = ({ collapsed, setCollapsed }) => {
             {/* Close Button for the Notification Modal */}
             <button
               onClick={closeModal}
-              className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
+              className="absolute top-2 right-2 text-gray-600 hover:text-gray-900 transition-transform transform hover:scale-125"
             >
-              <X size={16} /> {/* Close icon */}
+              <X size={18} /> {/* Close icon */}
             </button>
           </div>
         )}
+
       </div>
 
     </header>

@@ -58,19 +58,7 @@ export default function StudentsRegistered() {
           </select>
         </div>
 
-        {/* Dropdown for Select Status */}
-        <div className="w-1/3">
-          <label className="block text-lg font-semibold mb-2">Select Status</label>
-          <select
-            value={selectedStatus}
-            onChange={(e) => setSelectedStatus(e.target.value)}
-            className="w-full p-1 border-2 border-red-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
-          >
-            <option value="">Select Status</option>
-            <option value="Pass">Pass</option>
-            <option value="Fail">Fail</option>
-          </select>
-        </div>
+      
 
         {/* Dropdown for Select Subject */}
         <div className="w-1/3">
@@ -88,6 +76,21 @@ export default function StudentsRegistered() {
                 {subject}
               </option>
             ))}
+          </select>
+        </div>
+
+
+          {/* Dropdown for Select Status */}
+          <div className="w-1/3">
+          <label className="block text-lg font-semibold mb-2">Select Status</label>
+          <select
+            value={selectedStatus}
+            onChange={(e) => setSelectedStatus(e.target.value)}
+            className="w-full p-1 border-2 border-red-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+          >
+            <option value="">Select Status</option>
+            <option value="Pass">Pass</option>
+            <option value="Fail">Fail</option>
           </select>
         </div>
       </div>
