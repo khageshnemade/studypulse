@@ -15,7 +15,7 @@ import { makeRequest } from "../../../axios";
 import { BookOpen, FileText, Layers } from "lucide-react";
 import StudentsRegistered from "./StudentsRegistered";
 import { useNavigate, Link } from "react-router-dom";
-import OnlineUsers from "../../../Pages/TeacherActivities/OnlineUsers";
+import OnlineUsers from "../../../Pages/AdminActivities/OnlineUsers";
 import AssignmentData from "./AssignmentData";
 
 // Registering chart components
@@ -75,8 +75,8 @@ export default function AdminDashboard() {
 
   // PieChart Component
   const PieChart = ({ labels, datasets }) => {
-    const passedData = datasets.map(item => item.passed);
-    const failedData = datasets.map(item => item.failed);
+    const passedData = datasets.map((item) => item.passed);
+    const failedData = datasets.map((item) => item.failed);
 
     const data = {
       labels,
@@ -94,8 +94,8 @@ export default function AdminDashboard() {
           borderColor: "rgba(255, 99, 132, 1)",
           borderWidth: 1,
           data: failedData,
-        }
-      ]
+        },
+      ],
     };
 
     return (
@@ -103,16 +103,11 @@ export default function AdminDashboard() {
         data={data}
         options={{
           responsive: true,
-          plugins: {
-            legend: { position: 'top' },
-            tooltip: { enabled: true }
-          }
+          plugins: { legend: { position: "top" }, tooltip: { enabled: true } },
         }}
       />
     );
   };
-
-
 
   // Student Passed/Failed Stats Component
   const StudentPassedFailed = () => {
@@ -162,7 +157,9 @@ export default function AdminDashboard() {
 
     return (
       <div className="min-h-screen bg-white flex flex-col items-center py-10">
-        <h1 className="text-3xl font-bold text-gray-700 mb-6 text-center">Class Performance</h1>
+        <h1 className="text-3xl font-bold text-gray-700 mb-6 text-center">
+          Class Performance
+        </h1>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
           <div>
@@ -220,19 +217,30 @@ export default function AdminDashboard() {
             <div className="bg-blue-500 text-white p-4 rounded-full">
               <BookOpen className="text-2xl" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-700">Teachers Registered</h3>
+            <h3 className="text-lg font-semibold text-gray-700">
+              Teachers Registered
+            </h3>
           </div>
-          <p className="text-3xl font-bold text-blue-600 bg-white rounded-lg py-2 mt-2 text-center">{dashboard.totalTeachersCount}</p>
+          <p className="text-3xl font-bold text-blue-600 bg-white rounded-lg py-2 mt-2 text-center">
+            {dashboard.totalTeachersCount}
+          </p>
         </div>
 
-        <div className="bg-green-100 shadow-lg rounded-lg p-6 flex flex-col justify-between transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer outline outline-4 outline-gray-400" onClick={() => navigate('student')}>
+        <div
+          className="bg-green-100 shadow-lg rounded-lg p-6 flex flex-col justify-between transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer outline outline-4 outline-gray-400"
+          onClick={() => navigate("student")}
+        >
           <div className="flex items-center gap-4">
             <div className="bg-green-500 text-white p-4 rounded-full">
               <FileText className="text-2xl" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-700">Students Registered</h3>
+            <h3 className="text-lg font-semibold text-gray-700">
+              Students Registered
+            </h3>
           </div>
-          <p className="text-3xl font-bold text-green-600 bg-white rounded-lg py-2 mt-2 text-center">{dashboard.totalStudentCount}</p>
+          <p className="text-3xl font-bold text-green-600 bg-white rounded-lg py-2 mt-2 text-center">
+            {dashboard.totalStudentCount}
+          </p>
         </div>
 
         <div className="bg-yellow-100 shadow-lg rounded-lg p-6 flex flex-col justify-between transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer outline outline-4 outline-gray-400">
@@ -240,26 +248,55 @@ export default function AdminDashboard() {
             <div className="bg-yellow-500 text-white p-4 rounded-full">
               <Layers className="text-2xl" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-700 whitespace-normal break-words">Classes Created</h3>
+            <h3 className="text-lg font-semibold text-gray-700 whitespace-normal break-words">
+              Classes Created
+            </h3>
           </div>
-          <p className="text-3xl font-bold text-yellow-600 bg-white rounded-lg py-2 mt-2 text-center">{dashboard.totalClassCount}</p>
+          <p className="text-3xl font-bold text-yellow-600 bg-white rounded-lg py-2 mt-2 text-center">
+            {dashboard.totalClassCount}
+          </p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-8">
-        {[{ title: "Recently Added Teachers", data: dashboard.recentlyAddedTeachers }, { title: "Recently Added Students", data: dashboard.recentlyAddedStudents }].map(({ title, data }, index) => (
-          <div key={index} className="bg-white shadow-lg rounded-xl p-6 transform transition-transform duration-500 hover:scale-105 max-h-96 overflow-y-scroll outline outline-4 outline-gray-400">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4 bg-blue p-2">{title}</h2>
+        {[
+          {
+            title: "Recently Added Teachers",
+            data: dashboard.recentlyAddedTeachers,
+          },
+          {
+            title: "Recently Added Students",
+            data: dashboard.recentlyAddedStudents,
+          },
+        ].map(({ title, data }, index) => (
+          <div
+            key={index}
+            className="bg-white shadow-lg rounded-xl p-6 transform transition-transform duration-500 hover:scale-105 max-h-96 overflow-y-scroll outline outline-4 outline-gray-400"
+          >
+            <h2 className="text-xl font-semibold text-gray-800 mb-4 bg-blue p-2">
+              {title}
+            </h2>
             <div className="space-y-4">
-              {data?.map(person => (
-                <div key={person._id || person.id} className="flex items-center p-4 border-b last:border-b-0 space-x-4">
+              {data?.map((person) => (
+                <div
+                  key={person._id || person.id}
+                  className="flex items-center p-4 border-b last:border-b-0 space-x-4"
+                >
                   <div className="w-12 h-12 rounded-full bg-gray-300 overflow-hidden">
-                    <img src={''} alt="Profile" className="w-full h-full object-cover" />
+                    <img
+                      src={""}
+                      alt="Profile"
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                   <div className="flex-1">
-                    <p className="text-lg font-medium text-gray-800">{person.firstName} {person.lastName}</p>
+                    <p className="text-lg font-medium text-gray-800">
+                      {person.firstName} {person.lastName}
+                    </p>
                     <p className="text-sm text-gray-500">{person.email}</p>
-                    <p className="text-sm text-gray-500">{person.phoneNumber}</p>
+                    <p className="text-sm text-gray-500">
+                      {person.phoneNumber}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -268,8 +305,12 @@ export default function AdminDashboard() {
         ))}
 
         <div className="bg-white shadow-lg rounded-xl p-6 duration-500 hover:scale-105 mb-8 outline outline-4 outline-gray-400">
-          <h2 className="text-xl font-semibold text-gray-800 text-center mb-4">Student Pass/Fail Stats</h2>
-          <p className="text-gray-600 text-center mb-4">Visualization of Passed vs Failed Students</p>
+          <h2 className="text-xl font-semibold text-gray-800 text-center mb-4">
+            Student Pass/Fail Stats
+          </h2>
+          <p className="text-gray-600 text-center mb-4">
+            Visualization of Passed vs Failed Students
+          </p>
           <div className="flex justify-center">
             <div className="flex justify-center">
               <PieChart labels={labels} datasets={dataset} />
@@ -281,29 +322,21 @@ export default function AdminDashboard() {
 
         <div className="bg-white shadow-lg rounded-xl p-6 duration-500 hover:scale-105 mb-8 outline outline-4 outline-gray-400">
           <AssignmentData />
-         
         </div>
 
         <div className="bg-white shadow-lg rounded-xl p-6 duration-500 hover:scale-105 mb-8 outline outline-4 outline-gray-400">
-        
           <OnlineUsers users={users} />
-        
         </div>
       </div>
     </div>
   );
 }
 
-
-
-
-
-
 // import axios from 'axios';
 // import React from 'react';
 
 // export default function AdminDashboard() {
-  
+
 //   const refreshToken = async () => {
 //     try {
 //       // Make the POST request with credentials (cookies included)
@@ -312,21 +345,20 @@ export default function AdminDashboard() {
 //         {},
 //         { withCredentials: true } // This ensures cookies are sent along with the request
 //       );
-      
+
 //       console.log('Token refreshed:', response.data);
 //       // Handle the response data (e.g., save the new token, etc.)
 //     } catch (error) {
 //       console.error('Failed to refresh token:', error.response ? error.response.data : error.message);
 //     }
 //   };
-  
 
 // const login = async () => {
 //   try {
 //     // Send login request with credentials (to set the refreshToken cookie)
 //     const response = await axios.post(
 //       'https://api.studypulse.live/web/api/login',
-//       { 
+//       {
 //         email: 'admin@gmail.com',
 //         password: 'password123'
 //       },
@@ -349,9 +381,6 @@ export default function AdminDashboard() {
 //     }
 //   }
 // };
-
-
-
 
 //   return (
 //     <div>

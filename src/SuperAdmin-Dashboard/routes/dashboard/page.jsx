@@ -63,92 +63,6 @@ export default function SuperAdminDashboard() {
     ]);
   };
 
-  const dataStudent = {
-    labels: ["Math", "Science", "History", "English", "Art"],
-    datasets: [
-      {
-        label: "Active Students",
-        data: [30, 40, 25, 50, 15],
-        backgroundColor: "rgba(75, 192, 192, 0.6)",
-        borderColor: "rgba(75, 192, 192, 1)",
-        borderWidth: 1,
-      },
-      {
-        label: "Inactive Students",
-        data: [10, 5, 20, 5, 10],
-        backgroundColor: "rgba(255, 99, 132, 0.6)",
-        borderColor: "rgba(255, 99, 132, 1)",
-        borderWidth: 1,
-      },
-    ],
-  };
-
-  const optionsStudent = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: "top",
-        labels: {
-          font: { size: 14 },
-          color: "#333",
-        },
-      },
-      tooltip: {
-        backgroundColor: "#f9f9f9",
-        titleColor: "#333",
-        bodyColor: "#555",
-        borderColor: "#ddd",
-        borderWidth: 1,
-      },
-    },
-    scales: {
-      y: { beginAtZero: true },
-    },
-  };
-
-  const dataTeacher = {
-    labels: ["Math", "Science", "History", "English", "Art"],
-    datasets: [
-      {
-        label: "Active Teachers",
-        data: [30, 40, 25, 50, 15],
-        backgroundColor: "rgba(75, 192, 192, 0.6)",
-        borderColor: "rgba(75, 192, 192, 1)",
-        borderWidth: 1,
-      },
-      {
-        label: "Inactive Teachers",
-        data: [10, 5, 20, 5, 10],
-        backgroundColor: "rgba(255, 99, 132, 0.6)",
-        borderColor: "rgba(255, 99, 132, 1)",
-        borderWidth: 1,
-      },
-    ],
-  };
-
-  const optionsTeacher = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: "top",
-        labels: {
-          font: { size: 14 },
-          color: "#333",
-        },
-      },
-      tooltip: {
-        backgroundColor: "#f9f9f9",
-        titleColor: "#333",
-        bodyColor: "#555",
-        borderColor: "#ddd",
-        borderWidth: 1,
-      },
-    },
-    scales: {
-      y: { beginAtZero: true },
-    },
-  };
-
   const fetchDashboardData = async () => {
     const res = await makeRequest.get("admin/get-dashboard-details");
     console.log("Dashboard Data: ", res?.data.data);
@@ -233,15 +147,31 @@ export default function SuperAdminDashboard() {
     const [selectedClassIndex, setSelectedClassIndex] = useState(0);
     const [selectedSubjectIndex, setSelectedSubjectIndex] = useState(0);
 
-    const getPieChartData = (subject) => ({
-      labels: ["Passed", "Failed"],
-      datasets: [
-        {
-          data: [subject.passed, subject.failed],
-          backgroundColor: ["#4CAF50", "#F44336"],
-        },
-      ],
-    });
+    const getPieChartData = (subject) => {
+      if (!subject) {
+        // If subject is undefined or null, return a default value or handle the error
+        return {
+          labels: ["Passed", "Failed"],
+          datasets: [
+            {
+              data: [0, 0], // Default data in case of missing subject
+              backgroundColor: ["#4CAF50", "#F44336"],
+            },
+          ],
+        };
+      }
+
+      // If subject is defined, proceed with the normal logic
+      return {
+        labels: ["Passed", "Failed"],
+        datasets: [
+          {
+            data: [subject.passed, subject.failed],
+            backgroundColor: ["#4CAF50", "#F44336"],
+          },
+        ],
+      };
+    };
 
     const handleClassChange = (event) => {
       setSelectedClassIndex(event.target.value);
@@ -315,31 +245,31 @@ export default function SuperAdminDashboard() {
         <Home className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 mimin-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
         SuperAdmin Dashboard
       </p>
-  
+
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 p-6">
-        {[ 
+        {[
           {
             title: "Teachers Registered",
-            count: 100,  // Static count for teachers
+            count: 100, // Static count for teachers
             color: "bg-gradient-to-r from-blue-500 to-blue-700",
             icon: "fas fa-user",
           },
           {
             title: "Admin Registered",
-            count: 5,  // Static count for admins
+            count: 5, // Static count for admins
             color: "bg-gradient-to-r from-blue-500 to-blue-700",
             icon: "fas fa-user",
           },
           {
             title: "Students Registered",
-            count: 500,  // Static count for students
+            count: 500, // Static count for students
             color: "bg-gradient-to-r from-green-500 to-green-700",
             icon: "fas fa-users",
           },
           {
             title: "Classes Created",
-            count: 30,  // Static count for classes
+            count: 30, // Static count for classes
             color: "bg-gradient-to-r from-yellow-500 to-yellow-700",
             icon: "fas fa-school",
           },
@@ -358,23 +288,17 @@ export default function SuperAdminDashboard() {
           </div>
         ))}
       </div>
-  
-         
-      
- 
-   
-  
-  
+
       {/* Recently Added Teachers & Students */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
-        {[ 
+        {[
           {
             title: "Recently Added Teachers",
-            data: dashboard.recentlyAddedTeachers,  // This would be replaced by static data or mock data
+            data: dashboard.recentlyAddedTeachers, // This would be replaced by static data or mock data
           },
           {
             title: "Recently Added Students",
-            data: dashboard.recentlyAddedStudents,  // This would be replaced by static data or mock data
+            data: dashboard.recentlyAddedStudents, // This would be replaced by static data or mock data
           },
         ]?.map(({ title, data }, index) => (
           <div
@@ -391,7 +315,7 @@ export default function SuperAdminDashboard() {
               >
                 <div className="w-12 h-12 rounded-full bg-gray-300 mr-4">
                   <img
-                    src={""}  // Replace with static image URL if needed
+                    src={""} // Replace with static image URL if needed
                     alt="Profile"
                     className="w-full h-full object-cover rounded-full"
                   />
@@ -404,7 +328,7 @@ export default function SuperAdminDashboard() {
           </div>
         ))}
       </div>
-    
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
         {/* Student Pass/Fail Stats */}
         <div className="bg-white shadow-lg rounded-xl p-6 mt-6 hover:scale-105 hover:shadow-2xl transition-transform duration-300">
@@ -416,10 +340,8 @@ export default function SuperAdminDashboard() {
           </p>
           <div className="bg-gray-50 p-6 rounded-lg shadow-md flex justify-center">
             <Pie
-              style={{
-                minHeight: "250px",
-              }}
-              data={data}  // Replace with static chart data
+              style={{ minHeight: "250px" }}
+              data={data} // Replace with static chart data
             />
           </div>
         </div>
@@ -427,12 +349,9 @@ export default function SuperAdminDashboard() {
           <Dashboard />
         </div>
 
-        <StudentList/>
+        <StudentList />
         <ToastContainer />
-
       </div>
-
     </div>
   );
-  
 }
