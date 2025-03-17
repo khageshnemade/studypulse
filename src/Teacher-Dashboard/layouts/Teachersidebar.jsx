@@ -48,7 +48,7 @@ export const TeacherSidebar = forwardRef(({ collapsed, setCollapsed }, ref) => {
         <aside
           ref={ref}
           className={cn(
-            "fixed z-[100] flex h-full w-[240px] flex-col overflow-x-hidden border-r border-slate-300  bg-blue-500 [transition:_width_300ms_cubic-bezier(0.4,_0,_0.2,_1),_left_300ms_cubic-bezier(0.4,_0,_0.2,_1),_background-color_150ms_cubic-bezier(0.4,_0,_0.2,_1),_border_150ms_cubic-bezier(0.4,_0,_0.2,_1)] dark:border-slate-700 dark:bg-slate-900",
+            "fixed z-[100] flex h-full w-[240px] flex-col overflow-x-hidden border-r border-slate-300  bg-gradient-to-b to-red-400 from-blue-900[transition:_width_300ms_cubic-bezier(0.4,_0,_0.2,_1),_left_300ms_cubic-bezier(0.4,_0,_0.2,_1),_background-color_150ms_cubic-bezier(0.4,_0,_0.2,_1),_border_150ms_cubic-bezier(0.4,_0,_0.2,_1)] dark:border-slate-700 dark:bg-slate-900",
             collapsed ? "md:w-[70px] md:items-center" : "md:w-[240px]",
             collapsed ? "max-md:-left-full" : "max-md:left-0"
           )}

@@ -4,19 +4,16 @@ import makeRequest from '../../axios'; // Your axios setup for API calls (makeRe
 import { useNavigate } from 'react-router-dom'; // For redirecting after success
 
 export default function CreateNotification() {
-    // State to hold input values
     const [text, setText] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [notificationFor, setNotificationFor] = useState('all');
     const [isLoading, setIsLoading] = useState(false);
 
-    const navigate = useNavigate(); // Hook to handle navigation
+    const navigate = useNavigate(); 
 
-    // Get today's date to ensure start date is not in the past
     const today = new Date().toISOString().split('T')[0];
 
-    // Handle form submission
     const createNotification = async (e) => {
         e.preventDefault();
         setIsLoading(true);

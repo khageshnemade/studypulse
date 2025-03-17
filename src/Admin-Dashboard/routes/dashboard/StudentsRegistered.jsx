@@ -93,6 +93,8 @@ export default function StudentsRegistered() {
             <option value="Fail">Fail</option>
           </select>
         </div>
+
+        
       </div>
 
       {/* Table to display filtered students */}
@@ -103,6 +105,7 @@ export default function StudentsRegistered() {
             <th className="border p-3">Class</th>
             <th className="border p-3">Status</th>
             <th className="border p-3">Subject Marks</th> {/* Column for specific subject marks */}
+            <th className="border p-3">View Score Card</th>
           </tr>
         </thead>
         <tbody>
@@ -129,6 +132,7 @@ export default function StudentsRegistered() {
                       <span>No data available</span>
                     )}
                   </td>
+                  <td><button onClick={navigate('studentsReport')}>View</button></td>
                 </tr>
               );
             })
