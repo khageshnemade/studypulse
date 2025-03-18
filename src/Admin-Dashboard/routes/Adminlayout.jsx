@@ -27,7 +27,7 @@ const AdminLayout = () => {
   });
 
   return (
-    <div className="min-h-screen bg-blue-300 transition-colors dark:bg-slate-950">
+    <div className="min-h-screen bg-gradient-to-r to-blue-400 from-teal-400 transition-colors dark:bg-slate-950">
       <div
         className={cn(
           "pointer-events-none fixed inset-0 -z-10 bg-black opacity-0 transition-opacity",

@@ -24,32 +24,36 @@ const TeacherLayout = () => {
     }
   });
 
-    return (
-      <div className="min-h-screen bg-gradient-to-r to-blue-400 from-teal-400 transition-colors dark:bg-slate-950">
-        <div
-          className={cn(
-            "pointer-events-none fixed inset-0 -z-10 bg-black opacity-0 transition-opacity",
-            !collapsed &&
-              "max-md:pointer-events-auto max-md:z-50 max-md:opacity-30"
-          )}
+  return (
+    <div className="min-h-screen bg-gradient-to-r to-blue-400 from-teal-400 transition-colors dark:bg-slate-950">
+      <div
+        className={cn(
+          "pointer-events-none fixed inset-0 -z-10 bg-black opacity-0 transition-opacity",
+          !collapsed &&
+            "max-md:pointer-events-auto max-md:z-50 max-md:opacity-30"
+        )}
+      />
+      <TeacherSidebar
+        ref={sidebarRef}
+        collapsed={collapsed}
+        setCollapsed={setCollapsed}
+      />
+      <div
+        className={cn(
+          "transition-[margin] duration-300",
+          collapsed ? "md:ml-[70px]" : "md:ml-[240px]"
+        )}
+      >
+        <TeacherDashboardHeader
+          collapsed={collapsed}
+          setCollapsed={setCollapsed}
         />
-        <TeacherSidebar ref={sidebarRef} collapsed={collapsed}           setCollapsed={setCollapsed}/>
-        <div
-          className={cn(
-            "transition-[margin] duration-300",
-            collapsed ? "md:ml-[70px]" : "md:ml-[240px]"
-          )}
-        >
-          <TeacherDashboardHeader
-            collapsed={collapsed}
-            setCollapsed={setCollapsed}
-          />
-          <div className="h-[calc(100vh-60px)] overflow-y-auto overflow-x-hidden p-6">
-            <Outlet />
-          </div>
+        <div className="h-[calc(100vh-60px)] overflow-y-auto overflow-x-hidden p-6">
+          <Outlet />
         </div>
       </div>
-    );
+    </div>
+  );
 };
 
 export default TeacherLayout;
