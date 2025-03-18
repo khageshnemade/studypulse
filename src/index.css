@@ -2,6 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Add this at the top of your index.css file */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+/* index.css */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+
+/* Apply the Roboto font globally */
+*,
+*::before,
+*::after {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
 .swiper-pagination-bullet {
   width: 10px !important;
   height: 10px !important;
@@ -58,13 +73,13 @@
   }
 
   .sidebar-group-title {
-    @apply overflow-hidden text-ellipsis text-3xl text-white dark:text-slate-400;
+    @apply overflow-hidden text-ellipsis text-3xl text-black dark:text-slate-400;
   }
 
   .sidebar-item {
-    @apply flex h-[40px] w-full flex-shrink-0 items-center gap-x-3 rounded-lg p-3 text-base font-medium text-slate-900 transition-colors hover:bg-black dark:text-slate-50 dark:hover:bg-blue-950;
+    @apply flex h-[40px] w-full flex-shrink-0 items-center gap-x-3 rounded-lg p-3 text-base font-medium text-slate-900 transition-colors hover:bg-teal-300 dark:text-slate-50 dark:hover:bg-blue-950;
     &.active {
-      @apply bg-[black] text-white dark:bg-blue-600;
+      @apply bg-teal-400 text-black dark:bg-blue-600;
     }
   }
 

@@ -18,6 +18,7 @@ import StudentsRegistered from "./StudentsRegistered";
 import { useNavigate } from "react-router-dom";
 import OnlineUsers from "../../../Pages/AdminActivities/OnlineUsers";
 import AssignmentData from "./AssignmentData";
+import { div } from "framer-motion/client";
 
 // Registering chart components
 ChartJS.register(
@@ -169,56 +170,60 @@ export default function AdminDashboard() {
     };
 
     return (
-      <div className="min-h-screen bg-white flex flex-col items-center py-10">
-        <h1 className="text-3xl font-bold text-gray-700 mb-6 text-center">
+      <div>
+        <h2 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-green-500 to-teal-300 text-white p-2 rounded-md w-full text-center">
           Class Performance
-        </h1>
+        </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
-          <div>
-            <select
-              id="classSelector"
-              value={selectedClassIndex || ""}
-              onChange={handleClassChange}
-              className="w-full p-1 border rounded-lg focus:ring focus:ring-blue-300"
-            >
-              <option value={""}>Select ClassName</option>
-              {classes?.map((classData, index) => (
-                <option key={index} value={index}>
-                  {classData.className}
-                </option>
-              ))}
-            </select>
+        <div className="bg-white shadow-lg rounded-xl p-6 transform transition-transform duration-300 hover:scale-105">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+            <div>
+              <select
+                id="classSelector"
+                value={selectedClassIndex || ""}
+                onChange={handleClassChange}
+                className="w-full p-1 border rounded-lg focus:ring focus:ring-blue-300"
+              >
+                <option value={""}>Select ClassName</option>
+                {classes?.map((classData, index) => (
+                  <option key={index} value={index}>
+                    {classData.className}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <select
+                id="subjectSelector"
+                value={selectedSubjectIndex || ""}
+                onChange={handleSubjectChange}
+                className="w-full p-1 border rounded-lg focus:ring focus:ring-blue-300"
+              >
+                <option value="">Select Subject</option>
+                {selectedClass?.subjects?.map((subject, index) => (
+                  <option key={index} value={index}>
+                    {subject.name}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
-          <div>
-            <select
-              id="subjectSelector"
-              value={selectedSubjectIndex || ""}
-              onChange={handleSubjectChange}
-              className="w-full p-1 border rounded-lg focus:ring focus:ring-blue-300"
-            >
-              <option value="">Select Subject</option>
-              {selectedClass?.subjects?.map((subject, index) => (
-                <option key={index} value={index}>
-                  {subject.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        <div className="bg-gray-50 w-full p-6 rounded-lg shadow-md flex justify-center">
-          <div className="text-center">
-            <div className="flex justify-center">
-              <Pie
-                options={options}
-                className="w-full min-h-full"
-                data={getPieChartData(selectedSubject)}
-              />
+          {/* Pie Chart Section */}
+          <div className="bg-gray-50 w-full p-6 rounded-lg flex justify-center">
+            <div className="text-center">
+              <div className="flex justify-center">
+                <Pie
+                  options={options}
+                  className="w-full min-h-full"
+                  data={getPieChartData(selectedSubject)}
+                />
+              </div>
             </div>
           </div>
         </div>
+
       </div>
     );
   };
@@ -226,72 +231,107 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen p-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-10 p-8">
-        <div className="bg-blue-100 shadow-lg rounded-lg p-6 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 hover:shadow-2xl cursor-pointer outline outline-4 outline-gray-400">
-          <div className="flex items-center gap-4">
-            <div className="bg-blue-500 text-white p-4 rounded-full">
-              <BookOpen className="text-2xl" />
-            </div>
-            <h3 className="text-lg font-semibold text-gray-700">
+        {/* Teachers Registered Card */}
+        <div className="bg-red-300 rounded-2xl p-6 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer">
+          {/* Title Row */}
+          <div className="text-center mb-4">
+            <h3 className="text-[26px] font-bold text-white font-serif">
               Teachers Registered
             </h3>
           </div>
-          <p className="text-3xl font-bold text-blue-600 bg-white rounded-lg py-2 mt-2 text-center">
-            {dashboard.totalTeachersCount}
-          </p>
+
+          {/* Icon and Count Row */}
+          <div className="flex justify-center items-center gap-4 mb-4">
+            <div className="bg-blue-500 text-white p-4 rounded-full">
+              <BookOpen className="text-5xl" />
+            </div>
+            <p className="text-4xl font-extrabold text-blue-600  rounded-lg py-2">
+              {dashboard.totalTeachersCount}
+            </p>
+          </div>
+
+          {/* Subtitle Row */}
+          <div className="text-center text-lg text-black font-sans">
+            <p>Number of teachers currently registered.</p>
+          </div>
         </div>
 
-        <div
-          className="bg-green-100 shadow-lg rounded-lg p-6 flex flex-col justify-between transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer outline outline-4 outline-gray-400"
-          onClick={() => navigate("student")}
-        >
-          <div className="flex items-center gap-4">
-            <div className="bg-green-500 text-white p-4 rounded-full">
-              <FileText className="text-2xl" />
-            </div>
-            <h3 className="text-lg font-semibold text-gray-700">
+
+        {/* Students Registered Card */}
+        <div className="bg-teal-400 rounded-2xl p-6 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer" onClick={() => navigate("student")}>
+
+          {/* Title Row */}
+          <div className="text-center mb-4">
+            <h3 className="text-[26px] font-semibold text-white font-serif">
               Students Registered
             </h3>
           </div>
-          <p className="text-3xl font-bold text-green-600 bg-white rounded-lg py-2 mt-2 text-center">
-            {dashboard.totalStudentCount}
-          </p>
+
+          {/* Icon and Count Row */}
+          <div className="flex justify-center items-center gap-4 mb-4">
+            <div className="bg-green-600 text-white p-4 rounded-full">
+              <FileText className="text-3xl" />
+            </div>
+            <p className="text-4xl font-extrabold text-white  rounded-lg py-2">
+              {dashboard.totalStudentCount}
+            </p>
+          </div>
+
+          {/* Subtitle Row */}
+          <div className="text-center text-lg text-black font-sans">
+            <p>Number of students currently registered.</p>
+          </div>
         </div>
 
-        <div className="bg-yellow-100 shadow-lg rounded-lg p-6 flex flex-col justify-between transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer outline outline-4 outline-gray-400">
-          <div className="flex items-center gap-4">
-            <div className="bg-yellow-500 text-white p-4 rounded-full">
-              <Layers className="text-2xl" />
-            </div>
-            <h3 className="text-lg font-semibold text-gray-700 whitespace-normal break-words">
+        {/* Classes Created Card (Already correct) */}
+        <div className="bg-orange-400 rounded-2xl p-6 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer">
+          {/* Title Row */}
+          <div className="text-center mb-4">
+            <h3 className="text-[26px] font-bold text-white font-serif">
               Classes Created
             </h3>
           </div>
-          <p className="text-3xl font-bold text-yellow-600 bg-white rounded-lg py-2 mt-2 text-center">
-            {dashboard.totalClassCount}
-          </p>
+
+          {/* Icon and Count Row */}
+          <div className="flex justify-center items-center gap-4 mb-4">
+            <div className="bg-indigo-500 text-white p-4 rounded-full">
+              <Layers className="text-3xl" />
+            </div>
+            <p className="text-4xl font-extrabold text-yellow-800  rounded-lg py-2">
+              {dashboard.totalClassCount}
+            </p>
+          </div>
+
+          {/* Subtitle Row */}
+          <div className="text-center text-lg text-black font-sans">
+            <p>Number of classes currently created.</p>
+          </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-8">
+
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-8">
+        {/* Recently Added Teachers & Students */}
         {[{ title: "Recently Added Teachers", data: dashboard.recentlyAddedTeachers }, { title: "Recently Added Students", data: dashboard.recentlyAddedStudents }].map(
           ({ title, data }, index) => (
             <div
               key={index}
-              className="bg-white shadow-lg rounded-xl p-6 transform transition-transform duration-500 hover:scale-105 max-h-96 overflow-y-scroll outline outline-4 outline-gray-400"
+              className="bg-white shadow-lg rounded-xl p-6 transform transition-transform duration-300 hover:scale-105 max-h-96 overflow-y-auto text-center"
             >
-              <h2 className="text-xl font-semibold text-gray-800 mb-4 bg-blue p-2">{title}</h2>
+              <h2 className="text-2xl font-semibold  mb-4 bg-gradient-to-r from-blue-500 to-blue-300 text-white p-2 rounded-md shadow-md">
+                {title}
+              </h2>
               <div className="space-y-4">
                 {data?.map((person) => (
                   <div key={person._id || person.id} className="flex items-center p-4 border-b last:border-b-0 space-x-4">
-                    <div className="w-12 h-12 rounded-full bg-gray-300 overflow-hidden">
+                    <div className="w-14 h-14 rounded-full bg-gray-200 overflow-hidden">
                       <img src={""} alt="Profile" className="w-full h-full object-cover" />
                     </div>
                     <div className="flex-1">
-                      <p className="text-lg font-medium text-gray-800">
-                        {person.firstName} {person.lastName}
-                      </p>
-                      <p className="text-sm text-gray-500">{person.email}</p>
-                      <p className="text-sm text-gray-500">{person.phoneNumber}</p>
+                      <p className="text-lg font-semibold text-gray-800">{person.firstName} {person.lastName}</p>
+                      <p className="text-sm text-gray-600">{person.email}</p>
+                      <p className="text-sm text-gray-600">{person.phoneNumber}</p>
                     </div>
                   </div>
                 ))}
@@ -300,24 +340,33 @@ export default function AdminDashboard() {
           )
         )}
 
-        <div className="bg-white shadow-lg rounded-xl p-6 duration-500 hover:scale-105 mb-8 outline outline-4 outline-gray-400">
-          <h2 className="text-xl font-semibold text-gray-800 text-center mb-4">Student Pass/Fail Stats</h2>
-          <p className="text-gray-600 text-center mb-4">Visualization of Passed vs Failed Students</p>
+        {/* Student Pass/Fail Stats */}
+        <div className="bg-white shadow-lg rounded-xl p-6 duration-300 hover:scale-105 mb-8">
+          <h2 className="text-2xl font-semibold  text-center mb-4 bg-gradient-to-r from-green-500 to-teal-300 text-white p-2 rounded-md shadow-md">
+            Student Pass/Fail Stats
+          </h2>
+          <p className="text-gray-600 text-center mb-6">Visualization of Passed vs Failed Students</p>
           <div className="flex justify-center">
             <PieChart labels={labels} datasets={dataset} />
           </div>
         </div>
 
-        <StudentPassedFailed />
+        {/* Student Pass/Fail Table */}
+        <div className="bg-white shadow-lg rounded-xl p-6 duration-300 hover:scale-105 mb-8">
+          <StudentPassedFailed />
+        </div>
 
-        <div className="bg-white shadow-lg rounded-xl p-6 duration-500 hover:scale-105 mb-8 outline outline-4 outline-gray-400">
+        {/* Assignment Data */}
+        <div className="bg-white shadow-lg rounded-xl p-6 duration-300 hover:scale-105 mb-8">
           <AssignmentData />
         </div>
 
-        <div className="bg-white shadow-lg rounded-xl p-6 duration-500 hover:scale-105 mb-8 outline outline-4 outline-gray-400">
+        {/* Online Users */}
+        <div className="bg-white shadow-lg rounded-xl p-6 duration-300 hover:scale-105 mb-8">
           <OnlineUsers users={users} />
         </div>
       </div>
+
     </div>
   );
 }

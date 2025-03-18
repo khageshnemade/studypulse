@@ -16,7 +16,7 @@ export const AdminDashboardHeader = ({ collapsed, setCollapsed }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userName, setUserName] = useState("Guest");
   const pathnames = location.pathname.split("/").filter((x) => x);
-const navigate=useNavigate();
+  const navigate = useNavigate();
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
@@ -34,7 +34,7 @@ const navigate=useNavigate();
   }, []);
   return (
     <>
-      <header className="relative z-10 flex h-[60px] items-center justify-between bg-blue-500 px-4 shadow-md transition-colors ">
+      <header className="relative z-10 flex h-[60px] items-center justify-between bg-gradient-to-r from-teal-400 via-teal-500 to-blue-500 px-4 shadow-md transition-colors ">
         <div className="flex self-end gap-x-3  relative bottom-2 ">
           <button
             className="btn-ghost size-10 text-gray-100"
@@ -47,13 +47,15 @@ const navigate=useNavigate();
         {/* Breadcrumb section aligned to the left */}
         <div className="flex-1 flex items-center justify-start">
           <nav aria-label="breadcrumb">
-            <ol className="hidden sm:flex flex-wrap space-x-2 text-sm bg-light-blue-500 text-white">
+            <ol className="hidden sm:flex flex-wrap space-x-2 text-xl bg-light-blue-500 text-white">
               {/* Always display Home */}
               <li>
-                <Link
-                  to="/"
-                  className="hover:text-blue-600 dark:hover:text-blue-400"
-                >
+              <Link
+  to="/"
+  className="hover:text-blue-600 text-white text-xl dark:hover:text-blue-400 font-bold"
+>
+
+
                   Home
                 </Link>
               </li>
@@ -65,8 +67,8 @@ const navigate=useNavigate();
                     <span>/</span>
                     <Link
                       to={to}
-                      className="text-white hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
-                    >
+                      className="hover:text-blue-600 text-white text-xl dark:hover:text-blue-400 font-bold"
+                      >
                       {segment.charAt(0).toUpperCase() + segment.slice(1)}
                     </Link>
                   </li>
@@ -74,6 +76,7 @@ const navigate=useNavigate();
               })}
             </ol>
           </nav>
+
         </div>
 
         <div className="flex items-center justify-center text-white gap-1 font-bold mr-4">
@@ -97,15 +100,15 @@ const navigate=useNavigate();
             </div>
           </button>
           <button onClick={''} className="w-10 h-10 flex items-center justify-center">
-          <Bell
-          onClick={
-            ()=>{navigate('notifications')}
-          }
-            className={`text-white transition-transform duration-300`}
-            size={24}
-          />
-        
-        </button>
+            <Bell
+              onClick={
+                () => { navigate('notifications') }
+              }
+              className={`text-white transition-transform duration-300`}
+              size={24}
+            />
+
+          </button>
         </div>
       </header>
       {isModalOpen && <AdminModal onClose={toggleModal} />}

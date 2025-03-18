@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const AssignmentData = () => {
+  const location = useLocation();
+
   // Demo data for students, assignments, and subjects
   const demoData = [
     { studentId: 'S001', name: 'Alice', assignment: 'Math Exam', subject: 'Math', attempts: 3, status: 'Passed' },
@@ -35,12 +37,9 @@ const AssignmentData = () => {
     return (
       <div className="p-6 flex flex-col h-full justify-between">
         {/* Title Section */}
-        <h1 className="text-3xl font-semibold mb-6">Student Assignment Attempts Dashboard</h1>
+        <h1 className="text-2xl font-semibold  mb-4 bg-gradient-to-r from-red-500 to-red-300 text-white p-2 rounded-md shadow-md">Student Assignment Attempts Dashboard</h1>
     
-        {/* Average Attempts Section */}
-        <div className="mb-4">
-          <h2 className="text-xl font-semibold">Average Attempts to Pass: {averageAttempts.toFixed(1)}</h2>
-        </div>
+      
     
         {/* Subject Selection Dropdown */}
         <div className="mb-6 flex justify-start">
@@ -88,11 +87,16 @@ const AssignmentData = () => {
         </div>
     
         {/* View More Button */}
+        {location.pathname !== '/admin-dashboard/ass_stat' && (
         <div className="text-center mt-auto">
-          <Link className="btn bg-gray-500 text-white mt-2 py-2 px-4 rounded-full" to="/admin-dashboard/ass_stat">
+          <Link
+            className="btn bg-red-400 hover:bg-red-500 text-white mt-2 py-2 px-4 rounded-full"
+            to="/admin-dashboard/ass_stat"
+          >
             View More
           </Link>
         </div>
+      )}
       </div>
     );
     

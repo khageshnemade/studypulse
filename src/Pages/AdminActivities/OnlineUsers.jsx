@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import makeRequest from "../../axios"; // Import the appropriate function for making API requests
 
 export default function OnlineUsers() {
+  const location=useLocation();
   const [onlineUsers, setOnlineUsers] = useState([]);
 
   useEffect(() => {
@@ -22,7 +23,8 @@ export default function OnlineUsers() {
   return (
     <div className="p-6 space-y-4 flex flex-col justify-between h-full">
       {/* Title Section */}
-      <h2 className="text-xl font-semibold text-gray-800 text-center mb-4">
+      
+      <h2 className="text-2xl font-semibold  mb-4 bg-gradient-to-r from-red-400 to-red-300 text-white p-2 rounded-md shadow-md">
         Online Users
       </h2>
 
@@ -54,14 +56,17 @@ export default function OnlineUsers() {
       </div>
 
       {/* View More Button */}
-      <div className="text-center mt-auto">
-        <Link
-          className="btn bg-gray-500 text-white py-2 px-4 rounded-full"
-          to="/admin-dashboard/users"
-        >
-          View More
-        </Link>
-      </div>
+
+      {location.pathname !== '/admin-dashboard/users' && (
+        <div className="text-center mt-auto">
+          <Link
+            className="btn bg-red-400 hover:bg-red-500 text-white mt-2 py-2 px-4 rounded-full"
+            to="/admin-dashboard/users"
+          >
+            View More
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

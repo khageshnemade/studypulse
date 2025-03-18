@@ -4,6 +4,7 @@ import makeRequest from '../../axios'; // Your axios setup for API calls (makeRe
 import { useNavigate } from 'react-router-dom'; // For redirecting after success
 
 export default function CreateNotification() {
+    const [title, setTitle] = useState(''); // New state for the title
     const [text, setText] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -33,6 +34,7 @@ export default function CreateNotification() {
 
         try {
             const response = await makeRequest.post('admin/create-notification', {
+                title, // Include the title field
                 text,
                 startDate,
                 endDate,
@@ -59,6 +61,20 @@ export default function CreateNotification() {
         <div className="max-w-md mx-auto p-6 bg-white rounded-xl shadow-lg space-y-6">
             <h2 className="text-2xl font-bold text-center text-gray-800">Create Notification</h2>
             <form onSubmit={createNotification} className="space-y-4">
+                {/* Title Input */}
+                <div className="flex flex-col">
+                    <label htmlFor="title" className="text-sm font-medium text-gray-600">Notification Title</label>
+                    <input
+                        id="title"
+                        type="text"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        className="mt-2 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Enter notification title"
+                        required
+                    />
+                </div>
+
                 {/* Notification Text */}
                 <div className="flex flex-col">
                     <label htmlFor="text" className="text-sm font-medium text-gray-600">Notification Text</label>

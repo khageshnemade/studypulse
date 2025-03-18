@@ -54,14 +54,16 @@ export default function OnlineUsers() {
       </div>
 
       {/* View More Button */}
-      <div className="text-center mt-auto">
-        <Link
-          className="btn bg-gray-500 text-white py-2 px-4 rounded-full"
-          to="/admin-dashboard/users"
-        >
-          View More
-        </Link>
-      </div>
+      {location.pathname !== '/admin-dashboard/users' && (
+        <div className="text-center mt-auto">
+          <Link
+            className="btn bg-red-400 hover:bg-red-500 text-white mt-2 py-2 px-4 rounded-full"
+            to="/admin-dashboard/users"
+          >
+            View More
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

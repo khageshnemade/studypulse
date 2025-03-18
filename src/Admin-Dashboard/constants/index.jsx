@@ -17,6 +17,7 @@ export const navbarLinks = [
         label: "Home", // Shortened and clear label
         icon: Home, // Icon for the main dashboard or landing page
         path: "/admin-dashboard",
+        
       },
       {
         label: "Teachers", // Shortened and relevant label
