@@ -58,6 +58,7 @@ import AssignmentData from "./Admin-Dashboard/routes/dashboard/AssignmentData";
 import StudentReport from "./Pages/AdminActivities/StudentReport";
 import TeacherSubjectLimits from "./Pages/TeacherActivities/TeacherSubjectLimits";
 import PieClick from "./Pages/AdminActivities/PieClick";
+import Invoice from "./Invoice";
 
 const user = localStorage.getItem("user"); // Check if the user is logged in
 
@@ -138,6 +139,7 @@ const router = createBrowserRouter(
         { path: "createRegion", element: <CreateRegion /> },
       ],
     },
+    { path: "/invoice", element: <Invoice /> },
     {
       path: "/admin-dashboard", // Only accessible if the user is logged in
       element: <AdminLayout />,
