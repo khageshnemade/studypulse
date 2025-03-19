@@ -22,7 +22,7 @@ export default function OnlineUsers() {
   return (
     <div className="p-6 space-y-4 flex flex-col justify-between h-full">
       {/* Title Section */}
-      <h2 className="text-xl font-semibold text-gray-800 text-center mb-4">
+      <h2 className="text-xl font-semibold text-gray-800 text-center mb-4 font-serif">
         Online Users
       </h2>
 

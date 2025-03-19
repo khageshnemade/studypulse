@@ -93,8 +93,8 @@ export default function TeacherDashboard() {
     };
 
     return (
-      <div className="bg-white shadow-lg rounded-lg p-4">
-        <h2 className="text-xl font-semibold mb-4">Chapters Distribution</h2>
+      <div className="bg-white p-4">
+          <h2 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-red-500 to-red-300 text-white p-2 rounded-md font-serif text-center">Chapters Distribution</h2>
         <select
           className="border px-3 py-2 mb-4 rounded w-full sm:w-2/3 mx-auto"
           value={selectedClass}
@@ -118,68 +118,137 @@ export default function TeacherDashboard() {
       ) : (
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 mb-6">
-            <div className="bg-blue-400 shadow-xl rounded-lg p-6 sm:p-8 flex flex-col justify-between transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer outline outline-2 outline-gray-300">
-              <div className="flex flex-col items-center gap-4 mb-4">
-                <div className="bg-white text-blue-600 p-3 rounded-full shadow-md">
-                  <BookOpen className="text-3xl" />
-                </div>
-                <h3 className="text-xl font-semibold text-center text-white">Available Subjects</h3>
+
+            {/* Available Subjects */}
+            <div className="bg-red-500 rounded-2xl p-6 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer">
+              {/* Title Row */}
+              <div className="text-center mb-4">
+                <h3 className="font-bold text-white font-serif">Available Subjects</h3>
               </div>
-              <p className="text-3xl sm:text-4xl font-bold text-white bg-blue-600 rounded-lg py-3 text-center">{dashboard.totalSubjectsCount}</p>
+
+              {/* Icon and Count Row */}
+              <div className="flex justify-center items-center gap-4 mb-4">
+                <div className="bg-white text-blue-600 p-4 rounded-full shadow-lg">
+                  <BookOpen className="text-4xl" />
+                </div>
+                <p className="text-5xl font-extrabold text-white rounded-lg py-2">
+                  {dashboard.totalSubjectsCount}
+                </p>
+              </div>
+
+              {/* Subtitle Row */}
+              <div className="text-center text-lg text-white font-sans">
+                <p>Number of subjects currently registered.</p>
+              </div>
             </div>
 
-
-            <div className="bg-green-400 shadow-xl rounded-lg p-6 sm:p-8 flex flex-col justify-between transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer outline outline-2 outline-gray-300">
-              <div className="flex flex-col items-center gap-4 mb-4">
-                <div className="bg-white text-green-600 p-3 rounded-full shadow-md">
-                  <FileText className="text-3xl" />
-                </div>
-                <h3 className="text-xl text-center font-semibold text-white">Available Chapters</h3>
+            {/* Available Chapters */}
+            <div className="bg-gradient-to-r from-green-600 to-teal-600 rounded-2xl p-6 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer">
+              {/* Title Row */}
+              <div className="text-center mb-4">
+                <h3 className="font-bold text-white font-serif">Available Chapters</h3>
               </div>
-              <p className="text-3xl sm:text-4xl font-bold text-white bg-green-600 rounded-lg py-3 text-center">{dashboard.totalChaptersCount}</p>
+
+              {/* Icon and Count Row */}
+              <div className="flex justify-center items-center gap-4 mb-4">
+                <div className="bg-white text-green-700 p-4 rounded-full shadow-lg">
+                  <FileText className="text-4xl" />
+                </div>
+                <p className="text-5xl font-extrabold text-white rounded-lg py-2">
+                  {dashboard.totalChaptersCount}
+                </p>
+              </div>
+
+              {/* Subtitle Row */}
+              <div className="text-center text-lg text-white font-sans">
+                <p>Number of chapters currently available.</p>
+              </div>
             </div>
 
-            <div className="bg-yellow-400  shadow-xl rounded-lg p-6 sm:p-8 flex flex-col justify-between transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer outline outline-2 outline-gray-300">
-              <div className="flex flex-col items-center gap-4 mb-4">
-                <div className="bg-white text-yellow-600 p-3 rounded-full shadow-md">
-                  <Layers className="text-3xl" />
-                </div>
-                <h3 className="text-xl text-center font-semibold text-white">Available Assignments</h3>
+            {/* Available Assignments */}
+            <div className="bg-gradient-to-r from-yellow-500 to-yellow-700 rounded-2xl p-6 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer">
+              {/* Title Row */}
+              <div className="text-center mb-4">
+                <h3 className="font-bold text-white font-serif">Available Assignments</h3>
               </div>
-              <p className="text-3xl sm:text-4xl font-bold text-white bg-yellow-600 rounded-lg py-3 text-center">{dashboard.totalAssignmentsCount}</p>
+
+              {/* Icon and Count Row */}
+              <div className="flex justify-center items-center gap-4 mb-4">
+                <div className="bg-white text-yellow-700 p-4 rounded-full shadow-lg">
+                  <Layers className="text-4xl" />
+                </div>
+                <p className="text-5xl font-extrabold text-white rounded-lg py-2">
+                  {dashboard.totalAssignmentsCount}
+                </p>
+              </div>
+
+              {/* Subtitle Row */}
+              <div className="text-center text-lg text-white font-sans">
+                <p>Number of assignments available for completion.</p>
+              </div>
             </div>
 
-            <div className="bg-purple-400 shadow-xl rounded-lg p-6 sm:p-8 flex flex-col justify-between transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer outline outline-2 outline-gray-300">
-              <div className="flex flex-col items-center gap-4 mb-4">
-                <div className="bg-white text-purple-600 p-3 rounded-full shadow-md">
-                  <Users className="text-3xl" />
-                </div>
-                <h3 className="text-xl text-center font-semibold text-white">Available Classes</h3>
+            {/* Available Classes */}
+            <div className="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl p-6 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer">
+              {/* Title Row */}
+              <div className="text-center mb-4">
+                <h3 className="font-bold text-white font-serif">Available Classes</h3>
               </div>
-              <p className="text-3xl sm:text-4xl font-bold text-white bg-purple-600 rounded-lg py-3 text-center">{dashboard.totalClassesCount}</p>
+
+              {/* Icon and Count Row */}
+              <div className="flex justify-center items-center gap-4 mb-4">
+                <div className="bg-white text-purple-700 p-4 rounded-full shadow-lg">
+                  <Users className="text-4xl" />
+                </div>
+                <p className="text-5xl font-extrabold text-white rounded-lg py-2">
+                  {dashboard.totalClassesCount}
+                </p>
+              </div>
+
+              {/* Subtitle Row */}
+              <div className="text-center text-lg text-white font-sans">
+                <p>Number of classes available for enrollment.</p>
+              </div>
             </div>
 
-            <div className="bg-red-400 shadow-xl rounded-lg p-6 sm:p-8 flex flex-col justify-between transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer outline outline-2 outline-gray-300">
-              <div className="flex flex-col items-center gap-4 mb-4">
-                <div className="bg-white text-red-600 p-3 rounded-full shadow-md">
-                  <Users className="text-3xl" />
-                </div>
-                <h3 className="text-xl text-center font-semibold text-white">Available Curriculums</h3>
+            {/* Available Curriculums */}
+            <div className="bg-gradient-to-r from-red-600 to-red-800 rounded-2xl p-6 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer">
+              {/* Title Row */}
+              <div className="text-center mb-4">
+                <h3 className="font-bold text-white font-serif">Available Curriculums</h3>
               </div>
-              <p className="text-3xl sm:text-4xl font-bold text-white bg-red-600 rounded-lg py-3 text-center">{dashboard.totalCurriculumsCount}</p>
+
+              {/* Icon and Count Row */}
+              <div className="flex justify-center items-center gap-4 mb-4">
+                <div className="bg-white text-red-700 p-4 rounded-full shadow-lg">
+                  <Users className="text-4xl" />
+                </div>
+                <p className="text-5xl font-extrabold text-white rounded-lg py-2">
+                  {dashboard.totalCurriculumsCount}
+                </p>
+              </div>
+
+              {/* Subtitle Row */}
+              <div className="text-center text-lg text-white font-sans">
+                <p>Number of curriculums currently available.</p>
+              </div>
             </div>
+
           </div>
 
 
 
+
+
+
           <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            <div className="bg-white shadow-lg rounded-lg p-6 outline outline-3 outline-gray-400">
+            <div className=" rounded-lg p-6 shadow-sm">
               <HollowPieChart classes={classes} />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
-              <div className="bg-white shadow-lg rounded-lg p-6 outline outline-3 outline-gray-400">
-                <p className="font-semibold text-xl">Recently Added Assignments</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 ">
+              <div className="rounded-lg p-6 shadow-sm">
+              <p className="text-2xl font-semibold mb-4 bg-gradient-to-r from-purple-500 to-purple-300 text-white p-2 rounded-md shadow-md font-serif">Recently Added Assignments</p>
                 {iassignments.map((assignment) => (
                   <div key={assignment.id} className="flex items-center py-2 border-b border-gray-200">
                     <div className="w-10 h-10 rounded-full bg-blue-500 mr-4" />
@@ -188,8 +257,8 @@ export default function TeacherDashboard() {
                 ))}
               </div>
 
-              <div className="bg-white shadow-lg rounded-lg p-6 outline outline-3 outline-gray-400">
-                <p className="font-semibold text-xl">Recently Added Curriculums</p>
+              <div className="rounded-lg p-6 shadow-sm">
+              <p className="text-2xl font-semibold mb-4 bg-gradient-to-r from-purple-500 to-purple-300 text-white p-2 rounded-md shadow-md font-serif">Recently Added Curriculums</p>
                 {icurriculums.map((curriculum) => (
                   <div key={curriculum.id} className="flex items-center py-2 border-b border-gray-200">
                     <div className="w-10 h-10 rounded-full bg-green-500 mr-4" />
@@ -201,7 +270,6 @@ export default function TeacherDashboard() {
           </div>
         </>
       )}
-<TeacherSubjectLimits/>
     </div>
   );
 }

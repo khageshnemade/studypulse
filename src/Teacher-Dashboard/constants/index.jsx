@@ -12,32 +12,38 @@ import ProductImage from "../assets/product-image.jpg";
 export const navbarLinks = [
   {
     title: "Teacher Dashboard",
+
     links: [
       {
         label: "Home", // Shortened label for clarity
         icon: Home, // Dashboard icon
         path: "/teacher-dashboard",
+        color: '#e74c3c' 
       },
       {
         label: "Classes", // Shortened label for clarity
         icon: Layers, // Represents classes, layers
         path: "/teacher-dashboard/cls",
+        color: '#4a90e2'
       },
       {
         label: "Subjects", // Shortened label for clarity
         icon: BookOpen, // Icon represents academic materials
         path: "/teacher-dashboard/subjects",
+        color: '#f39c12' 
       },
      
       {
         label: "Course Content",
         icon: FileText,
         path: "/teacher-dashboard/chapters",
+        color: '#e74c3c' 
       },
       {
         label: "Curriculum & chat", 
         icon: FileText, 
         path: "/teacher-dashboard/chapterCurrs",
+        color: '#3498db'
       },
     ],
   },

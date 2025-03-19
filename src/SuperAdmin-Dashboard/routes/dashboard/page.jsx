@@ -13,7 +13,7 @@ import {
 } from "chart.js";
 import { data } from "autoprefixer";
 import { ToastContainer } from "react-toastify";
-import { Home } from "lucide-react";
+import { User, Users, School, Book , Home } from "lucide-react";
 import { makeRequest } from "../../../axios";
 import StudentList from "./StudentList";
 
@@ -240,99 +240,101 @@ export default function SuperAdminDashboard() {
 
   return (
     <div className="min-h-screen py-8 px-4">
-      {/* Page Title */}
-      <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold bg-blue-400 p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
-        <Home className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 mimin-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
-        SuperAdmin Dashboard
-      </p>
-
+    
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 p-6">
-        {[
-          {
-            title: "Teachers Registered",
-            count: 100, // Static count for teachers
-            color: "bg-gradient-to-r from-blue-500 to-blue-700",
-            icon: "fas fa-user",
-          },
-          {
-            title: "Admin Registered",
-            count: 5, // Static count for admins
-            color: "bg-gradient-to-r from-blue-500 to-blue-700",
-            icon: "fas fa-user",
-          },
-          {
-            title: "Students Registered",
-            count: 500, // Static count for students
-            color: "bg-gradient-to-r from-green-500 to-green-700",
-            icon: "fas fa-users",
-          },
-          {
-            title: "Classes Created",
-            count: 30, // Static count for classes
-            color: "bg-gradient-to-r from-yellow-500 to-yellow-700",
-            icon: "fas fa-school",
-          },
-        ].map(({ title, count, color, icon }, index) => (
-          <div
-            key={index}
-            className="bg-white shadow-lg rounded-xl p-6 flex flex-col items-center text-center transition-transform transform hover:scale-105 hover:shadow-2xl"
-          >
-            <div className="flex justify-center items-center mb-6">
-              <div className={`${color} p-4 rounded-full`}>
-                <i className={`${icon} text-3xl text-white`} />
-              </div>
-            </div>
-            <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
-            <p className="text-4xl font-bold text-gray-900 mt-4">{count}</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-6 mb-6">
+      {[
+        {
+          title: "Teachers Registered",
+          count: 100, // Static count for teachers
+          color: "bg-gradient-to-r from-blue-500 to-blue-700",
+          icon: <Book className="text-4xl" />,
+          description: "Number of teachers registered in the system."
+        },
+        {
+          title: "Admins Registered",
+          count: 5, // Static count for admins
+          color: "bg-gradient-to-r from-purple-500 to-purple-700",
+          icon: <User className="text-4xl" />,
+          description: "Number of admin accounts created."
+        },
+        {
+          title: "Students Registered",
+          count: 500, // Static count for students
+          color: "bg-gradient-to-r from-green-500 to-green-700",
+          icon: <Users className="text-4xl" />,
+          description: "Total number of students registered."
+        },
+        {
+          title: "Classes Created",
+          count: 30, // Static count for classes
+          color: "bg-gradient-to-r from-yellow-500 to-yellow-700",
+          icon: <School className="text-4xl" />,
+          description: "Number of classes currently created."
+        },
+      ].map(({ title, count, color, icon, description }, index) => (
+        <div
+          key={index}
+          className={`${color} rounded-2xl p-6 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer`}
+        >
+          {/* Title Row */}
+          <div className="text-center mb-4">
+            <h3 className="font-bold text-white font-serif">{title}</h3>
           </div>
-        ))}
-      </div>
+
+          {/* Icon and Count Row */}
+          <div className="flex justify-center items-center gap-4 mb-4">
+            <div className="bg-white text-blue-600 p-4 rounded-full shadow-lg">
+              {icon}
+            </div>
+            <p className="text-5xl font-extrabold text-white rounded-lg py-2">
+              {count}
+            </p>
+          </div>
+
+          {/* Subtitle Row */}
+          <div className="text-center text-lg text-white font-sans">
+            <p>{description}</p>
+          </div>
+        </div>
+      ))}
+    </div>
 
       {/* Recently Added Teachers & Students */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
-        {[
-          {
-            title: "Recently Added Teachers",
-            data: dashboard.recentlyAddedTeachers, // This would be replaced by static data or mock data
-          },
-          {
-            title: "Recently Added Students",
-            data: dashboard.recentlyAddedStudents, // This would be replaced by static data or mock data
-          },
-        ]?.map(({ title, data }, index) => (
-          <div
-            key={index}
-            className="bg-white shadow-lg rounded-xl p-6 hover:scale-105 hover:shadow-2xl transition-transform duration-300"
-          >
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">
-              {title}
-            </h2>
-            {data?.map((person) => (
-              <div
-                key={person._id || person.id}
-                className="flex items-center p-3 border-b last:border-b-0"
-              >
-                <div className="w-12 h-12 rounded-full bg-gray-300 mr-4">
-                  <img
-                    src={""} // Replace with static image URL if needed
-                    alt="Profile"
-                    className="w-full h-full object-cover rounded-full"
-                  />
-                </div>
-                <p className="text-gray-800 text-sm">
-                  {person.firstName + " " + person.lastName}
-                </p>
+      {[{ title: "Recently Added Teachers", data: dashboard.recentlyAddedTeachers }, { title: "Recently Added Students", data: dashboard.recentlyAddedStudents }].map(
+          ({ title, data }, index) => (
+            <div
+              key={index}
+              className="bg-white shadow rounded-xl p-6 transform transition-transform duration-300 hover:scale-105 max-h-96 overflow-y-auto text-center"
+            >
+              <h2 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-blue-500 to-blue-300 text-white p-2 rounded-md shadow-md font-serif">
+                {title}
+              </h2>
+
+              <div className="space-y-4">
+                {data?.map((person) => (
+                  <div key={person._id || person.id} className="flex items-center p-4 border-b last:border-b-0 space-x-4">
+                    <div className="w-14 h-14 rounded-full bg-gray-200 overflow-hidden">
+                      <img src={""} alt="Profile" className="w-full h-full object-cover" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-lg font-semibold text-gray-800">{person.firstName} {person.lastName}</p>
+                      <p className="text-sm text-gray-600">{person.email}</p>
+                      <p className="text-sm text-gray-600">{person.phoneNumber}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        ))}
+            </div>
+          )
+        )}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
         {/* Student Pass/Fail Stats */}
         <div className="bg-white shadow-lg rounded-xl p-6 mt-6 hover:scale-105 hover:shadow-2xl transition-transform duration-300">
-          <h2 className="text-2xl font-semibold text-gray-800 text-center">
+        <h2 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-blue-500 to-blue-300 text-white p-2 rounded-md shadow-md font-serif text-center">
             Student Pass/Fail Stats
           </h2>
           <p className="text-gray-600 text-center mt-2 mb-4">

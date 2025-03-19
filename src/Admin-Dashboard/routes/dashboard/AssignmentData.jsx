@@ -37,7 +37,7 @@ const AssignmentData = () => {
     return (
       <div className="p-6 flex flex-col h-full justify-between">
         {/* Title Section */}
-        <h1 className="text-2xl font-semibold  mb-4 bg-gradient-to-r from-red-500 to-red-300 text-white p-2 rounded-md shadow-md">Student Assignment Attempts Dashboard</h1>
+        <h1 className="text-2xl font-semibold  mb-4 bg-gradient-to-r from-red-500 to-red-300 text-white p-2 rounded-md shadow-md font-serif text-center">Student Assignment Attempts Dashboard</h1>
     
       
     

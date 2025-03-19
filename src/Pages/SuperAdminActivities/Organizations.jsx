@@ -168,9 +168,9 @@ export default function Organizations() {
     <div className="p-4  shadow-lg">
       <ToastContainer />
 
-      <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold bg-blue-400 p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
-        <PlusCircle className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
-        Organizations
+     <p className="text-center text-2xl sm:text-3xl md:text-4xl font-serif p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto m-3 drop-shadow-lg border-[1.5px] border-blue-800">
+        <PlusCircle className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce text-blue-600" />
+        <span className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent"> Organizations</span>
       </p>
       <button
         className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-all mb-4"

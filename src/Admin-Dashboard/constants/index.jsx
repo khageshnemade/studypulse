@@ -14,26 +14,29 @@ export const navbarLinks = [
     title: "Admin Dashboard",
     links: [
       {
-        label: "Home", // Shortened and clear label
-        icon: Home, // Icon for the main dashboard or landing page
+        label: "Home", 
+        icon: Home, 
         path: "/admin-dashboard",
-        
+        color: '#4a90e2'
       },
       {
-        label: "Teachers", // Shortened and relevant label
-        icon: UserCheck, // Icon representing teachers or multiple users
+        label: "Teachers", 
+        icon: UserCheck, 
         path: "/admin-dashboard/teachers",
+        color: '#f39c12' 
       },
       {
-        label: "Students", // Shortened and relevant label
-        icon: Users, // Icon representing students (graduation cap)
+        label: "Students", 
+        icon: Users,
         path: "/admin-dashboard/students",
+        color: '#e74c3c' 
       },
       {
-        label: "Classes & Subjects", // Shortened and more descriptive label
-        icon: BookOpen, // Icon representing academic materials (books)
+        label: "Classes & Subjects",
+        icon: BookOpen, 
         path: "/admin-dashboard/class_subject",
+        color: '#3498db'
       },
-    ],
+    ]    
   },
 ];

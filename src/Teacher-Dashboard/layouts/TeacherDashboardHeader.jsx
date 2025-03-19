@@ -85,7 +85,7 @@ export const TeacherDashboardHeader = ({ collapsed, setCollapsed }) => {
   const pathnames = location.pathname.split("/").filter((x) => x);
 
   return (
-    <header className="relative z-10 flex h-[60px] items-center justify-between px-4 shadow-md transition-colors bg-blue-500">
+    <header className="relative z-10 flex h-[60px] items-center justify-between px-4 shadow-md transition-colors bg-gradient-to-r from-teal-400 via-teal-500 to-blue-500">
       <div className="flex self-end gap-x-3 relative bottom-2">
         <button
           className="btn-ghost size-10 text-gray-100"
@@ -99,7 +99,10 @@ export const TeacherDashboardHeader = ({ collapsed, setCollapsed }) => {
         <nav aria-label="breadcrumb">
           <ol className="hidden sm:flex flex-wrap space-x-2 text-sm bg-light-blue-500 text-white">
             <li>
-              <Link to="/" className="hover:text-blue-600 dark:hover:text-blue-400">
+              <Link 
+                to="/"
+                className="hover:text-blue-600 text-white text-xl dark:hover:text-blue-400 font-bold"
+              >
                 Home
               </Link>
             </li>
@@ -109,9 +112,9 @@ export const TeacherDashboardHeader = ({ collapsed, setCollapsed }) => {
                 <li key={to} className="flex items-center space-x-2">
                   <span>/</span>
                   <Link
-                    to={to}
-                    className="text-white hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
-                  >
+                      to={to}
+                      className="hover:text-blue-600 text-white text-xl dark:hover:text-blue-400 font-bold"
+                      >
                     {segment.charAt(0).toUpperCase() + segment.slice(1)}
                   </Link>
                 </li>

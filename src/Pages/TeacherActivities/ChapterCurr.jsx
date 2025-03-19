@@ -146,9 +146,9 @@ export default function ChapterCurr() {
   return (
     <div className="max-w-5xl mx-auto my-8 p-6  shadow-lg rounded-lg">
       {/* Title */}
-      <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold bg-blue-400 p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
-        <Book className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
-        Chapter Curriculums
+     <p className="text-center text-2xl sm:text-3xl md:text-4xl font-serif p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto m-3 drop-shadow-lg border-[1.5px] border-blue-800">
+        <Book className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce text-blue-600" />
+        <span className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent"> Chapter Curriculums</span>
       </p>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-2 bg-gradient-to-r from-blue-400 to-purple-600 text-black p-3">
         {/* Class Selector */}

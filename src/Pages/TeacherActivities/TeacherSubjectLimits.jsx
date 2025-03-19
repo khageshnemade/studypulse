@@ -29,8 +29,9 @@ const TeacherSubjectLimits = () => {
   }, []);
 
   return (
-    <div className="p-6 max-w-5xl mx-auto bg-white text-gray-800 rounded-xl shadow-lg">
-      <h2 className="text-3xl font-bold mb-6 text-center text-gray-900">Teacher's Subject Upload Limits</h2>
+    <div className="p-6 max-w-5xl mx-auto bg-white text-gray-800 rounded-xl shadow-lg">    
+      <h2 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-red-500 to-red-300 text-white p-2 rounded-md shadow-md font-serif text-center">
+        Teacher's Subject Upload Limits</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {subjects.length > 0 ? (
           subjects.map((subject, index) => {

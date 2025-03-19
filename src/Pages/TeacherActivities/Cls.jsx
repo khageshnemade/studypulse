@@ -51,9 +51,9 @@ export default function Cls() {
   return (
     <>
       {" "}
-      <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold bg-blue-400 p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto text-gray-700 m-3">
-        <Layers className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce" />
-        Classes
+     <p className="text-center text-2xl sm:text-3xl md:text-4xl font-serif p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto m-3 drop-shadow-lg border-[1.5px] border-blue-800">
+        <Layers className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce text-blue-600" />
+        <span className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">Classes</span>
       </p>
       <div className="mx-auto p-4 sm:p-6 bg-white shadow-lg rounded-lg overflow-x-auto">
         <table className="table-auto w-full border-collapse border border-gray-300 whitespace-nowrap">

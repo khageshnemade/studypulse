@@ -13,7 +13,7 @@ app.use(cookieParser());
 app.use(cors({
   origin: ['http://localhost:3000', 'http://localhost:3001'],  // List of allowed origins
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true,  // Allow cookies and authentication headers
+ // credentials: true,  // Allow cookies and authentication headers
 }));
 
 // Simulate a login route that sets the refreshToken cookie

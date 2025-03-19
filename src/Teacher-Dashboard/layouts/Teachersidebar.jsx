@@ -48,7 +48,7 @@ export const TeacherSidebar = forwardRef(({ collapsed, setCollapsed }, ref) => {
         <aside
           ref={ref}
           className={cn(
-            "fixed z-[100] flex h-full w-[240px] flex-col overflow-x-hidden border-r border-slate-300  bg-gradient-to-b to-red-400 from-blue-900[transition:_width_300ms_cubic-bezier(0.4,_0,_0.2,_1),_left_300ms_cubic-bezier(0.4,_0,_0.2,_1),_background-color_150ms_cubic-bezier(0.4,_0,_0.2,_1),_border_150ms_cubic-bezier(0.4,_0,_0.2,_1)] dark:border-slate-700 dark:bg-slate-900",
+            "fixed z-[100] flex h-full w-[240px] flex-col overflow-x-hidden border-r border-slate-300  bg-gradient-to-b to-blue-400 from-teal-400 [transition:_width_300ms_cubic-bezier(0.4,_0,_0.2,_1),_left_300ms_cubic-bezier(0.4,_0,_0.2,_1),_background-color_150ms_cubic-bezier(0.4,_0,_0.2,_1),_border_150ms_cubic-bezier(0.4,_0,_0.2,_1)] dark:border-slate-700 dark:bg-slate-900",
             collapsed ? "md:w-[70px] md:items-center" : "md:w-[240px]",
             collapsed ? "max-md:-left-full" : "max-md:left-0"
           )}
@@ -79,27 +79,30 @@ export const TeacherSidebar = forwardRef(({ collapsed, setCollapsed }, ref) => {
 
           <div className="flex flex-col items-center justify-center p-3">
             <div className="flex items-center justify-center gap-x-3">
-              <img
-                src={logoLight}
-                alt="Study Pulse"
-                className="dark:hidden"
-                height="80px"
-                width="80px"
-              />
-              <img
-                src={logoDark}
-                alt="Study Pulse"
-                className="hidden dark:block"
-                height="40px"
-                width="40px"
-              />
-            </div>
+            <img
+            src={logoLight}
+            alt="Study Pulse"
+            className="dark:hidden"
+            height="120px"
+            width="120px"
+          />
+          <img
+            src={logoDark}
+            alt="Study Pulse"
+            className="hidden dark:block"
+            height="40px"
+            width="40px"
+          />
+        </div>
 
             {/* Pulse text */}
             {!collapsed && (
-              <p className="font-bold text-sm text-gray-700 mt-2 transition-colors dark:text-slate-50 absolute top-16">
-                Pulse
-              </p>
+             <p
+             className="font-bold text-2xl text-white text-transparent bg-clip-text transition-colors dark:text-slate-50 absolute top-[120px]"
+             style={{ fontFamily: 'Poppins, sans-serif' }}
+           >
+             Study Pulse
+           </p>
             )}
           </div>
           <hr className="border-t-2 border-gray-700 my-2" />
@@ -126,11 +129,11 @@ export const TeacherSidebar = forwardRef(({ collapsed, setCollapsed }, ref) => {
                     to={link.path}
                     //end
                     className={cn(
-                      "sidebar-item font-bold text-black hover:text-white bg-blue-200",
+                      "sidebar-item font-bold text-black hover:text-gray-800 border-2 border-slate-500 ",
                       collapsed && "md:w-[45px]"
                     )}
                   >
-                    <link.icon size={22} className="flex-shrink-0" />
+                    <link.icon  style={{ color: link.color }} size={22} className="flex-shrink-0" />
                     {!collapsed && (
                       <p className="whitespace-nowrap">{link.label}</p>
                     )}
@@ -175,7 +178,7 @@ export const TeacherSidebar = forwardRef(({ collapsed, setCollapsed }, ref) => {
         <aside
           ref={ref}
           className={cn(
-            "fixed z-[100] flex h-full w-[240px] flex-col overflow-x-hidden border-r border-slate-300  bg-blue-500 [transition:_width_300ms_cubic-bezier(0.4,_0,_0.2,_1),_left_300ms_cubic-bezier(0.4,_0,_0.2,_1),_background-color_150ms_cubic-bezier(0.4,_0,_0.2,_1),_border_150ms_cubic-bezier(0.4,_0,_0.2,_1)] dark:border-slate-700 dark:bg-slate-900",
+            "fixed z-[100] flex h-full w-[240px] flex-col overflow-x-hidden border-r border-slate-300 bg-gradient-to-b to-blue-400 from-teal-400  [transition:_width_300ms_cubic-bezier(0.4,_0,_0.2,_1),_left_300ms_cubic-bezier(0.4,_0,_0.2,_1),_background-color_150ms_cubic-bezier(0.4,_0,_0.2,_1),_border_150ms_cubic-bezier(0.4,_0,_0.2,_1)] dark:border-slate-700 dark:bg-slate-900",
             collapsed ? "md:w-[70px] md:items-center" : "md:w-[240px]",
             collapsed ? "max-md:-left-full" : "max-md:left-0"
           )}
