@@ -31,7 +31,7 @@ export const AdminSidebar = forwardRef(({ collapsed }, ref) => {
       ref={ref}
       className={cn(
         "fixed z-[100] flex h-full w-[240px] flex-col overflow-x-hidden border-r border-slate-300 bg-gradient-to-b to-blue-700 from-teal-600  [transition:_width_300ms_cubic-bezier(0.4,_0,_0.2,_1),_left_300ms_cubic-bezier(0.4,_0,_0.2,_1),_background-color_150ms_cubic-bezier(0.4,_0,_0.2,_1),_border_150ms_cubic-bezier(0.4,_0,_0.2,_1)] dark:border-slate-700 dark:bg-slate-900",
-        collapsed ? "md:w-[70px] md:items-center" : "md:w-[260px]",
+        collapsed ? "md:w-[70px] md:items-center" : "md:w-[240px]",
         collapsed ? "max-md:-left-full" : "max-md:left-0"
       )}
     >
@@ -86,15 +86,15 @@ export const AdminSidebar = forwardRef(({ collapsed }, ref) => {
                 to={link.path}
                 end
                 className={cn(
-                  "sidebar-item font-bold text-xl",
+                  "sidebar-item font-serif",
                   collapsed && "md:w-[45px]"
                 )}
               >
                 <link.icon
                   size={22}
                   className="flex-shrink-0"
-                  // style={{ color: link.color }} 
-                  />
+                  style={{ color: link.color }}
+                />
                 {!collapsed && (
                   <p className="whitespace-nowrap">{link.label}</p>
                 )}

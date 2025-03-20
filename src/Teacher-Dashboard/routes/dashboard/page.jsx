@@ -270,6 +270,7 @@ export default function TeacherDashboard() {
           </div>
         </>
       )}
+      <TeacherSubjectLimits/>
     </div>
   );
 }
