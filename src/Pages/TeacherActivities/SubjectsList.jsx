@@ -34,9 +34,11 @@ const SubjectsList = () => {
   // Rendering the component
   return (
     <div className="container mx-auto p-6">
-     <p className="text-center text-2xl sm:text-3xl md:text-4xl font-serif p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto m-3 drop-shadow-lg border-[1.5px] border-blue-800">
-        <BookOpen className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce text-blue-600" />
-        <span className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">Subjects List</span>
+      <p className="text-center text sm:text-xl md:text-2xl font-serif p-2 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto m-3 drop-shadow-lg border-[1.5px] border-blue-800">
+        <BookOpen className="text sm:text-xl md:text-2xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce text-blue-600" />
+        <span className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
+          Subjects List
+        </span>
       </p>
 
       {loading ? (
@@ -69,13 +71,12 @@ const SubjectsList = () => {
                 subjects.map((subject) => (
                   <tr key={subject._id} className="border-b hover:bg-gray-50">
                     <td className="px-4 py-2 border">
-              <img
-                className="w-10 h-10 rounded-full"
-                src={`https://api.studypulse.live/${subject.image}`}
-
-                alt="Profile"
-              />
-            </td>
+                      <img
+                        className="w-10 h-10 rounded-full"
+                        src={`https://api.studypulse.live/${subject.image}`}
+                        alt="Profile"
+                      />
+                    </td>
                     <td className="px-6 py-4">{subject.name}</td>
                     <td className="px-6 py-4">
                       {new Date(subject.createdAt).toLocaleDateString()}

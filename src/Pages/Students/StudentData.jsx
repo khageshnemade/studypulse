@@ -17,15 +17,17 @@ const Table = () => {
   const [pageSize, setPageSize] = useState(10);
   const [profileComplete, setProfileComplete] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const { classId: initialClassId, page, isp } = useSelector(
-    (state) => state.admin.adminDetails
-  );
+  const {
+    classId: initialClassId,
+    page,
+    isp,
+  } = useSelector((state) => state.admin.adminDetails);
 
   useEffect(() => {
-    setClassId(initialClassId)
-    setPageSize(page)
-    setProfileComplete(isp)
-  }, [classId, page])
+    setClassId(initialClassId);
+    setPageSize(page);
+    setProfileComplete(isp);
+  }, [classId, page]);
   const fetchStudents = async (classId, pageSize, page, profileComplete) => {
     const url = `/admin/get-all-students?classId=${classId}&page=${page}&limit=${pageSize}&isProfileComplete=${profileComplete}`;
     try {
@@ -104,7 +106,7 @@ const Table = () => {
           onChange={(e) => {
             dispatch(setAdminDetails({ classId: e.target.value }));
 
-            setClassId(e.target.value)
+            setClassId(e.target.value);
           }}
           className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white w-1/3"
         >
@@ -122,7 +124,7 @@ const Table = () => {
           onChange={(e) => {
             dispatch(setAdminDetails({ page: e.target.value }));
 
-            setPageSize(Number(e.target.value))
+            setPageSize(Number(e.target.value));
           }}
           className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white w-1/3"
         >
@@ -145,8 +147,8 @@ const Table = () => {
         <div className="text-lg font-semibold">Page: {currentPage}</div>
       </div>
 
-      {classId
-        ? <div className="overflow-x-auto">
+      {classId ? (
+        <div className="overflow-x-auto">
           <table className="min-w-full bg-white rounded-lg shadow-md whitespace-nowrap">
             <thead className="bg-purple-200">
               <tr>
@@ -166,7 +168,6 @@ const Table = () => {
                     <img
                       className="w-10 h-10 rounded-full"
                       src={`https://api.studypulse.live/${row?.studentData?.profilePic}`}
-
                       alt="Profile"
                     />
                   </td>
@@ -178,10 +179,6 @@ const Table = () => {
                   <td className="px-4 py-2 border">{row?.cityData?.name}</td>
                   {profileComplete && (
                     <td className="border border-gray-300 px-4 py-2 max-w-min">
-
-
-
-
                       <div className="flex space-x-3 items-center">
                         <button
                           onClick={() => {
@@ -192,20 +189,17 @@ const Table = () => {
                         >
                           <ArrowRight />
                         </button>
-
-
                       </div>
                     </td>
-
-
                   )}
                   <td className="px-4 py-2 border">
                     <button
                       onClick={() => handleStatusChange(row)}
-                      className={`px-4 py-2 rounded-md text-white ${row.status === "active"
-                        ? "bg-green-500 hover:bg-green-600"
-                        : "bg-red-500 hover:bg-red-600"
-                        }`}
+                      className={`px-4 py-2 rounded-md text-white ${
+                        row.status === "active"
+                          ? "bg-green-500 hover:bg-green-600"
+                          : "bg-red-500 hover:bg-red-600"
+                      }`}
                     >
                       {row.status}
                     </button>
@@ -214,12 +208,12 @@ const Table = () => {
               ))}
             </tbody>
           </table>
-        </div> :
+        </div>
+      ) : (
         <p className="text-center text-gray-700 bg-gray-100 p-3 rounded-lg shadow-md  mx-auto text-lg font-medium hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1">
-
           Please Select Class Name and Page Size...
         </p>
-      }
+      )}
 
       <div className="flex justify-between mt-4">
         <button
@@ -244,10 +238,11 @@ const Table = () => {
 export default function StudentData() {
   return (
     <div className="flex flex-col gap-y-4">
-      <p className="text-center text-2xl sm:text-3xl md:text-4xl font-serif p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto m-3 drop-shadow-lg border-[1.5px] border-blue-800">
-        <Users2 className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce text-blue-600" />
+      <p className="text-center text sm:text-xl md:text-2xl font-serif p-2 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto m-3 drop-shadow-lg border-[1.5px] border-blue-800">
+        <Users2 className="text sm:text-xl md:text-2xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce text-blue-600" />
         <span className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
-        Students</span>
+          Students
+        </span>
       </p>
 
       <Table />

@@ -24,9 +24,11 @@ const CreateChapterCurriculum = () => {
   const userData = localStorage.getItem("user");
   const parsedData = JSON.parse(userData);
   console.log("Parsed Data:", parsedData?.token);
-  const { classId:initialclassId, subjectId:initialsubjectId, chapterId:initialChapterId } = useSelector(
-    (state) => state.ids.classDetails
-  );
+  const {
+    classId: initialclassId,
+    subjectId: initialsubjectId,
+    chapterId: initialChapterId,
+  } = useSelector((state) => state.ids.classDetails);
   useEffect(() => {
     fetchSubjects();
   }, [classId]);
@@ -139,9 +141,12 @@ const CreateChapterCurriculum = () => {
   return (
     <div className="">
       <div className="">
-     <p className="text-center text-2xl sm:text-3xl md:text-4xl font-serif p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto m-3 drop-shadow-lg border-[1.5px] border-blue-800">
-        <Plus className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce text-blue-600" />
-        <span className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">Create Chapter Curriculum</span></p>
+        <p className="text-center text sm:text-xl md:text-2xl font-serif p-2 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto m-3 drop-shadow-lg border-[1.5px] border-blue-800">
+          <Plus className="text sm:text-xl md:text-2xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce text-blue-600" />
+          <span className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
+            Create Chapter Curriculum
+          </span>
+        </p>
       </div>
       <div className="card-body bg-white transition-colors dark:bg-slate-950">
         <div className="mt-6">

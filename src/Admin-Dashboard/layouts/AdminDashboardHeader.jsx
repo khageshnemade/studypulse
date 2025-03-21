@@ -47,15 +47,13 @@ export const AdminDashboardHeader = ({ collapsed, setCollapsed }) => {
         {/* Breadcrumb section aligned to the left */}
         <div className="flex-1 flex items-center justify-start">
           <nav aria-label="breadcrumb">
-            <ol className="hidden sm:flex flex-wrap space-x-2 text-xl bg-light-blue-500 text-white">
+            <ol className="hidden sm:flex flex-wrap space-x-2 bg-light-blue-500 text-white">
               {/* Always display Home */}
               <li>
-              <Link
-  to="/"
-  className="hover:text-blue-600 text-white text-xl dark:hover:text-blue-400 font-bold"
->
-
-
+                <Link
+                  to="/"
+                  className="hover:text-blue-600 text-white dark:hover:text-blue-400 font-bold"
+                >
                   Home
                 </Link>
               </li>
@@ -67,8 +65,8 @@ export const AdminDashboardHeader = ({ collapsed, setCollapsed }) => {
                     <span>/</span>
                     <Link
                       to={to}
-                      className="hover:text-blue-600 text-white text-xl dark:hover:text-blue-400 font-bold"
-                      >
+                      className="hover:text-blue-600 text-white dark:hover:text-blue-400 font-bold"
+                    >
                       {segment.charAt(0).toUpperCase() + segment.slice(1)}
                     </Link>
                   </li>
@@ -76,7 +74,6 @@ export const AdminDashboardHeader = ({ collapsed, setCollapsed }) => {
               })}
             </ol>
           </nav>
-
         </div>
 
         <div className="flex items-center justify-center text-white gap-1 font-bold mr-4">
@@ -99,15 +96,17 @@ export const AdminDashboardHeader = ({ collapsed, setCollapsed }) => {
                 .toUpperCase()}
             </div>
           </button>
-          <button onClick={''} className="w-10 h-10 flex items-center justify-center">
+          <button
+            onClick={""}
+            className="w-10 h-10 flex items-center justify-center"
+          >
             <Bell
-              onClick={
-                () => { navigate('notifications') }
-              }
+              onClick={() => {
+                navigate("notifications");
+              }}
               className={`text-white transition-transform duration-300`}
               size={24}
             />
-
           </button>
         </div>
       </header>

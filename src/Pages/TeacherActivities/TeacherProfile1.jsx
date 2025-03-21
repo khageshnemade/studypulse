@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { makeRequest } from "../../axios";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Plus, User } from "lucide-react";
 
 const TeacherProfile = () => {
@@ -97,7 +97,6 @@ const TeacherProfile = () => {
   };
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
     try {
       const modifiedFormData = {
@@ -131,7 +130,7 @@ const TeacherProfile = () => {
         toast.success("Profile completed successfully");
 
         setTimeout(() => {
-          navigate('/login')
+          navigate("/login");
         }, 2000);
       }
     } catch (error) {
@@ -190,7 +189,6 @@ const TeacherProfile = () => {
     console.log("Updated Classes Mapping:", classIds);
     console.log("Updated Subjects Mapping:", subjectIds);
   }, [s_c, classIds, subjectIds]);
-
 
   const getPreviousData = async () => {
     try {
@@ -325,9 +323,11 @@ const TeacherProfile = () => {
 
   return (
     <div>
-     <p className="text-center text-2xl sm:text-3xl md:text-4xl font-serif p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto m-3 drop-shadow-lg border-[1.5px] border-blue-800">
-        <User className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce text-blue-600" />
-        <span className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">Teacher Complete Profile</span>
+      <p className="text-center text sm:text-xl md:text-2xl font-serif p-2 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto m-3 drop-shadow-lg border-[1.5px] border-blue-800">
+        <User className="text sm:text-xl md:text-2xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce text-blue-600" />
+        <span className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
+          Teacher Complete Profile
+        </span>
       </p>
       <form
         onSubmit={handleSubmit}
@@ -370,24 +370,28 @@ const TeacherProfile = () => {
             />
           </div>
           <div className="overflow-hidden">
-            <label className="block text-sm font-medium mb-1 whitespace-nowrap" htmlFor="fil">Profile Picture</label>
+            <label
+              className="block text-sm font-medium mb-1 whitespace-nowrap"
+              htmlFor="fil"
+            >
+              Profile Picture
+            </label>
             <input
               id="fil"
               className="w-full px-3 py-2 border rounded-lg"
               type="file"
               onChange={(e) => {
-                setFile(e.target.files[0])
+                setFile(e.target.files[0]);
                 setTimeout(() => {
-                  handleFileUpload(e.target.files[0])
-                }, 0)
+                  handleFileUpload(e.target.files[0]);
+                }, 0);
               }}
-
             />
-
-
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">Date Of Birth</label>
+            <label className="block text-sm font-medium mb-1">
+              Date Of Birth
+            </label>
             <input
               type="date"
               name="dob"
@@ -416,8 +420,6 @@ const TeacherProfile = () => {
               className="w-full px-3 py-2 border rounded-lg"
             />
           </div>
-
-
         </div>
         {/* Qualifications */}
         <div className="mt-6">
@@ -460,9 +462,7 @@ const TeacherProfile = () => {
             <input
               type="text"
               name="totalYearsOfExperience"
-              value={
-                formData.totalYearsOfExperience
-              }
+              value={formData.totalYearsOfExperience}
               onChange={handleInputChange}
               className="w-full px-3 py-2 border rounded-lg mb-2"
             />

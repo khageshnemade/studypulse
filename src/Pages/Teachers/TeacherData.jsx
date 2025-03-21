@@ -20,7 +20,7 @@ import {
   Users,
   ArrowRight,
   Delete,
-  Trash2
+  Trash2,
 } from "lucide-react";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -129,24 +129,20 @@ export const Table = () => {
                   {row?.teacherData?.totalYearsOfExperience}
                 </td>
 
-
                 <td className="border border-gray-300 px-4 py-2 max-w-min">
-  <div className="flex space-x-3 items-center">
-    {/* Update Button */}
-    <button
-      className="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all"
-      onClick={() => {
-        setCurrentId(row._id);
-        setShowUpdateTeacher(true);
-      }}
-    >
-      <ArrowRight className="w-5 h-5" />
-    </button>
-
-   
-  </div>
-</td>
-
+                  <div className="flex space-x-3 items-center">
+                    {/* Update Button */}
+                    <button
+                      className="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all"
+                      onClick={() => {
+                        setCurrentId(row._id);
+                        setShowUpdateTeacher(true);
+                      }}
+                    >
+                      <ArrowRight className="w-5 h-5" />
+                    </button>
+                  </div>
+                </td>
 
                 <td className="p-3 border border-gray-300">
                   <button
@@ -171,10 +167,11 @@ const TeacherData = () => {
 
   return (
     <div className="flex flex-col gap-y-4">
-    <p className="text-center text-2xl sm:text-3xl md:text-4xl font-serif p-3 sm:p-4 md:p-5 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto m-3 drop-shadow-lg border-[1.5px] border-blue-800">
-
-        <User className="text-xl sm:text-2xl md:text-3xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce text-blue-600" />
-        <span className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">Teachers</span>
+      <p className="text-center text sm:text-xl md:text-2xl font-serif p-2 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto m-3 drop-shadow-lg border-[1.5px] border-blue-800">
+        <User className="text sm:text-xl md:text-2xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce text-blue-600" />
+        <span className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
+          Teachers
+        </span>
       </p>
 
       <Table />
