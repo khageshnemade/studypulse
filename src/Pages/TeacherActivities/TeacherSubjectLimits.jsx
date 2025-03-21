@@ -30,7 +30,7 @@ const TeacherSubjectLimits = () => {
 
   return (
     <div className="p-6 max-w-5xl mx-auto bg-white text-gray-800 rounded-xl shadow-lg">    
-      <h2 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-red-500 to-red-300 text-white p-2 rounded-md shadow-md font-serif text-center">
+      <h2 className="text-xl font-semibold mb-4 bg-gradient-to-r from-red-500 to-red-300 text-white p-2 rounded-md shadow-md font-serif text-center">
         Teacher's Subject Upload Limits</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {subjects.length > 0 ? (
@@ -43,9 +43,9 @@ const TeacherSubjectLimits = () => {
                 className="bg-gray-100 text-gray-800 p-6 rounded-xl shadow-xl transform transition-transform duration-300 hover:scale-105"
               >
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-2xl font-semibold text-gray-900">{subject.name}</h3>
+                  <h3 className="text-xl font-semibold text-gray-900">{subject.name}</h3>
                   <div
-                    className={`text-xl ${
+                    className={`${
                       monthlyRemaining <= 0 ? 'text-red-500' : 'text-green-500'
                     }`}
                   >

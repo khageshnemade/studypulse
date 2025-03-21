@@ -48,7 +48,7 @@ const AddSubject = ({ addclass }) => {
 
     try {
       const response = await makeRequest.post(
-        "https://api.studypulse.live/web/api/file-upload/profile-pic",
+        "https://api.studypulse.live/web/api/file-upload/subject-pic",
         formData
       );
 

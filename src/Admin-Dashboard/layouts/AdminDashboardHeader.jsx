@@ -35,14 +35,15 @@ export const AdminDashboardHeader = ({ collapsed, setCollapsed }) => {
   return (
     <>
       <header className="relative z-10 flex h-[60px] items-center justify-between bg-gradient-to-r from-teal-400 via-teal-500 to-blue-500 px-4 shadow-md transition-colors">
-        <div className="flex self-end gap-x-3  relative bottom-2 mr-2">
+        <div className="flex self-end gap-x-3 relative bottom-[10px] mr-2">
           <button
             className="btn-ghost size-10 text-gray-100"
             onClick={() => setCollapsed(!collapsed)}
           >
-            <Menu className={collapsed && "rotate-180"} />
+            <Menu className={collapsed && "rotate-180"} strokeWidth={2} />
           </button>
         </div>
+
 
         {/* Breadcrumb section aligned to the left */}
         <div className="flex-1 flex items-center justify-start">

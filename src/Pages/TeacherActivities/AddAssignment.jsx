@@ -24,7 +24,7 @@ const AddAssignment = () => {
     classId: initialClassId,
     subjectId: initialSubjectId,
     chapterId: initialChapterId,
-  } = location.state;
+  } = location.state||{};
   const userData = localStorage.getItem("user");
   const parsedData = JSON.parse(userData);
   const navigate = useNavigate();

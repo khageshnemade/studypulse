@@ -99,7 +99,7 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
     }
   };
 
-  const handleFileUpload = async (file) => {
+  const handleProfileUpload = async (file) => {
 
     if (!file) {
       toast.error("Please select an image to upload.");
@@ -141,7 +141,7 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
 
     try {
       const response = await makeRequest.post(
-        "https://api.studypulse.live/web/api/file-upload/profile-pic",
+        "https://api.studypulse.live/web/api/file-upload/documents",
         formData
       );
 
@@ -156,11 +156,11 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
     }
   };
 
-  const handleFileChange = (e) => {
+  const handleProfileChange = (e) => {
     const selectedFile = e.target.files[0]; // Access the selected file
     if (selectedFile) {
       setFile(selectedFile); // Store the file in the state
-      handleFileUpload(selectedFile); // Trigger the upload function
+      handleProfileUpload(selectedFile); // Trigger the upload function
     }
   };
 
@@ -272,7 +272,7 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
                   id="profilePic"
                   name="profilePic"
                   className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  onChange={handleFileChange}
+                  onChange={handleProfileChange}
                 />
               </div>
 
