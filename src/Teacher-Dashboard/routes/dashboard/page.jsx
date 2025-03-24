@@ -7,7 +7,6 @@ import TeacherProfile from "../../../Pages/TeacherActivities/TeacherProfile1";
 import { makeRequest } from "../../../axios";
 import TeacherSubjectLimits from "../../../Pages/TeacherActivities/TeacherSubjectLimits";
 
-// Registering necessary Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function TeacherDashboard() {

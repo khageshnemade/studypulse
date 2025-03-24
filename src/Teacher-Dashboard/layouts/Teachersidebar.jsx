@@ -111,12 +111,12 @@ export const TeacherSidebar = forwardRef(({ collapsed, setCollapsed }, ref) => {
             {navbarLinks.map((navbarLink) => (
               <nav
                 key={navbarLink.title}
-                className={cn("sidebar-group", collapsed && "md:items-center")}
+                className={cn("sidebar-group", collapsed && "md:items-center") }
               >
                 {!collapsed && (
                   <p
                     className={cn(
-                      "sidebar-group-title font-bold",
+                      "sidebar-group-title  font-bold",
                       collapsed && "md:w-[45px]"
                     )}
                   >
