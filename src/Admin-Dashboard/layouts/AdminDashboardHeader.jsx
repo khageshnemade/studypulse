@@ -44,7 +44,6 @@ export const AdminDashboardHeader = ({ collapsed, setCollapsed }) => {
           </button>
         </div>
 
-
         {/* Breadcrumb section aligned to the left */}
         <div className="flex-1 flex items-center justify-start">
           <nav aria-label="breadcrumb">

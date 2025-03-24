@@ -34,7 +34,9 @@ export default function Classes() {
     }
   };
   const showSubject = (classId, className) => {
-    navigate(`/admin-dashboard/class_subject/subjects`, { state: { classId, className } });
+    navigate(`/admin-dashboard/class_subject/subjects`, {
+      state: { classId, className },
+    });
   };
 
   return (
@@ -42,10 +44,10 @@ export default function Classes() {
       <div className="mx-auto p-6 shadow-lg rounded-lg overflow-x-auto">
         <p className="text-center text sm:text-xl md:text-2xl font-serif p-2 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto m-3 drop-shadow-lg border-[1.5px] border-blue-800">
           <Layers3 className="text sm:text-xl md:text-2xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce text-blue-600" />
-          <span className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">Classes</span>
+          <span className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
+            Classes
+          </span>
         </p>
-
-
 
         <div className="flex justify-end mb-2">
           <button
@@ -110,8 +112,6 @@ export default function Classes() {
               </tr>
             ))}
           </tbody>
-
-
         </table>
       </div>
 
