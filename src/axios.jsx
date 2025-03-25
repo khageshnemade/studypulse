@@ -11,7 +11,8 @@ const getCookie = (name) => document.cookie.split(`; ${name}=`)?.[1]?.split(';')
 export const refreshToken = async () => {
   try {
     const refreshToken = getCookie('refreshToken');
-    const { data } = await axios.post('https://api.studypulse.live/web/api/refresh-token', { refreshToken }, { withCredentials: true });
+    console.log("refresh token",refreshToken);
+    const { data } = await axios.post('https://api.studypulse.live/web/api/refresh-token',{ withCredentials: true });
     return data.token;
   } catch (error) {
     console.error("Failed to refresh token:", error);

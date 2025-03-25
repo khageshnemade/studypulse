@@ -13,7 +13,7 @@ app.use(cookieParser());
 app.use(cors({
   origin: ['http://localhost:3000', 'http://localhost:3001'],  // List of allowed origins
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
- credentials: true,  // Allow cookies and authentication headers
+  credentials: true,  // Allow cookies and authentication headers
 }));
 
 // Simulate a login route that sets the refreshToken cookie
@@ -22,7 +22,7 @@ app.post('/login', (req, res) => {
 
   // Set the refreshToken as a cookie (Secure & HttpOnly in real deployment)
   res.cookie('refreshToken', refreshToken, {
-    httpOnly: true,  // Prevents JavaScript from accessing the cookie
+    //httpOnly: true,  // Prevents JavaScript from accessing the cookie
     secure: process.env.NODE_ENV === 'production',   // Set to true if using HTTPS (needed in production)
     maxAge: 60 * 60 * 24 * 7 * 1000, // 7 days expiration
     sameSite: 'Strict',  // Prevents CSRF attacks
@@ -36,6 +36,9 @@ app.post('/login', (req, res) => {
 app.get('/app', (req, res) => {
   const refreshToken = req.cookies.refreshToken;
 
+  // Print the refreshToken to the console (for debugging)
+  console.log("Refresh Token in /app route:", refreshToken);
+
   // Check if refresh token exists
   if (!refreshToken) {
     return res.status(403).json({ error: 'Authentication required' });
@@ -48,6 +51,9 @@ app.get('/app', (req, res) => {
 // Route to refresh token using the refreshToken cookie
 app.post('/refresh-token', (req, res) => {
   const refreshToken = req.cookies.refreshToken;
+
+  // Print the refreshToken to the console (for debugging)
+  console.log("Refresh Token in /refresh-token route:", refreshToken);
 
   if (!refreshToken) {
     return res.status(403).json({ error: 'No refresh token found' });

@@ -252,3 +252,23 @@ const user = {
 
 const updatedString = s.replace(/@\w+/g, match => user[match] ? user[match].id : match);
 console.log(updatedString);
+
+
+
+
+
+
+
+
+
+
+
+1.Errors on Frontwend-------------- teacher-dashboard/chapterCurrs/chat
+Unexpected Application Error!
+Cannot read properties of undefined (reading 'title')
+TypeError: Cannot read properties of undefined (reading 'title')
+2.show all fields show password button
+3.assignment Passing and total marks convert into string
+4.teacher-dashboard/add_assignment  fetch class and subject from redux
+     
+New organization -- 

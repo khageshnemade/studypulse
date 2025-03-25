@@ -61,7 +61,7 @@ export default function CreateAdmin() {
       setName("");
     } catch (error) {
       console.error("Error creating Admin:", error.response.data.message);
-      toast.error(error.response.data.message);
+      toast.error(error?.response?.data.message);
     } finally {
       setIsLoading(false);
     }
@@ -71,11 +71,12 @@ export default function CreateAdmin() {
       const res = await makeRequest.get("/districts");
 
       setDistricts(res?.data?.data);
-
+setTalukas([]);
+      setCities([]);
       setName("");
     } catch (error) {
-      console.error("Error creating Taluka:", error.message);
-      toast.error(error.message);
+      console.error("Error : ", error.message);
+      toast.error("Error: ",error.message);
     }
   };
   const fetchCities = async (tId) => {
@@ -89,8 +90,9 @@ export default function CreateAdmin() {
 
       setName("");
     } catch (error) {
-      console.error("Error creating Taluka:", error.message);
-      toast.error(error.message);
+      console.error("Error:", error?.message);
+      
+        toast.error("Please select Taluka Name");
     }
   };
   const fetchTalukas = async (Id) => {
@@ -103,8 +105,11 @@ export default function CreateAdmin() {
 
       setTalukas(res?.data?.data);
       setName("");
+      setCities([])
     } catch (error) {
-      console.error("Error creating Taluka:", error.message);
+      console.error("Error :", error?.response.data.message);
+      if(error?.response.data.message==='District id is required')
+        toast.error("Please select district Name");else
       toast.error(error.message);
     }
   };
@@ -120,7 +125,7 @@ export default function CreateAdmin() {
       console.log("Organizations", res?.data?.data);
       setName("");
     } catch (error) {
-      console.error("Error creating Taluka:", error.message);
+      console.error("Error No organizations are in this:", error.message);
       toast.error("please select city Name or No organisation in this City");
       setOrgs([]);
     }
@@ -253,7 +258,7 @@ export default function CreateAdmin() {
                   required
                   className="block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 >
-                  <option value="" disabled selected>
+                  <option value="">
                     Select {label}
                   </option>
                   {options?.map((option) => (

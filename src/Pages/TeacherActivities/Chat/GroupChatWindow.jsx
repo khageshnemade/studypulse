@@ -593,9 +593,10 @@ setNotifications(0)
       >
         {/* Chat messages */}
         {messages.map((msg, index) => {
-          const isSender =
-            msg.senderDetails?.[0]?.email ===
-            JSON.parse(localStorage.getItem("user")).user;
+         const isSender =
+         msg.senderDetails?.[0]?.email?.toLowerCase() ===
+         JSON.parse(localStorage.getItem("user"))?.user?.toLowerCase();
+       
           return (
             <div
               key={index}
