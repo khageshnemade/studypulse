@@ -3,7 +3,7 @@ import { makeRequest } from "../../axios";
 import { setStudent } from "../../redux/features/studentSlice";
 import { UpdateStudent } from "../AdminActivities/UpdateStudent";
 import { toast, ToastContainer } from "react-toastify";
-import { ArrowRight, Trash2, Users2 } from "lucide-react";
+import { ArrowRight, ChevronDown, Trash2, Users2 } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import { setAdminDetails } from "../../redux/features/adminSlice";
 const Table = () => {
@@ -141,8 +141,8 @@ const Table = () => {
           className={`px-4 py-2 rounded-lg text-white ${profileComplete ? "bg-green-500" : "bg-red-500"}`}
         >
           {profileComplete
-            ? "Show Incomplete Profiles"
-            : "Show Completed Profiles"}
+            ? "Completed Profiles"
+            : "Incompleted Profiles"}
         </button>
         <div className="text-lg font-semibold">Page: {currentPage}</div>
       </div>
@@ -150,7 +150,7 @@ const Table = () => {
       {classId ? (
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white rounded-lg shadow-md whitespace-nowrap">
-            <thead className="bg-purple-200">
+            <thead className="bg-teal-700 font-serif  text-white ">
               <tr>
                 <th className="px-4 py-2 border">Profile</th>
                 <th className="px-4 py-2 border">Name</th>
@@ -165,11 +165,20 @@ const Table = () => {
               {students.map((row) => (
                 <tr key={row._id} className="hover:bg-gray-50">
                   <td className="px-4 py-2 border">
-                    <img
-                      className="w-10 h-10 rounded-full"
-                      src={`https://api.studypulse.live/${row?.studentData?.profilePic}`}
-                      alt="Profile"
-                    />
+
+                    {row?.profilePic ? (
+                      <img
+                        src={`https://api.studypulse.live/${row.profilePic}`}
+                        alt="Profile"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-16 h-16 flex items-center justify-center bg-blue-600 text-white text-2xl font-bold rounded-full">
+                        {`${row.firstName[0]}${row.lastName[0]}`.toUpperCase()}
+                      </div>
+  )}
+
+
                   </td>
                   <td className="px-4 py-2 border">
                     {row.firstName} {row.lastName}
@@ -187,7 +196,7 @@ const Table = () => {
                           }}
                           className="px-2 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
                         >
-                          <ArrowRight />
+                          <ChevronDown />
                         </button>
                       </div>
                     </td>
@@ -195,11 +204,10 @@ const Table = () => {
                   <td className="px-4 py-2 border">
                     <button
                       onClick={() => handleStatusChange(row)}
-                      className={`px-4 py-2 rounded-md text-white ${
-                        row.status === "active"
+                      className={`px-4 py-2 rounded-md text-white ${row.status === "active"
                           ? "bg-green-500 hover:bg-green-600"
                           : "bg-red-500 hover:bg-red-600"
-                      }`}
+                        }`}
                     >
                       {row.status}
                     </button>

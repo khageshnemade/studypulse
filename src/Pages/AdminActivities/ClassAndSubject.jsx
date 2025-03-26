@@ -60,11 +60,9 @@ export default function Classes() {
         </div>
 
         <table className="table-auto w-full border-collapse border whitespace-nowrap border-gray-300">
-          <thead className="bg-purple-300">
+          <thead className="bg-teal-700 font-serif">
             <tr>
-              <th className="border border-gray-300 px-4 py-2 text-left text-gray-700">
-                Picture
-              </th>
+             
               <th className="border border-gray-300 px-4 py-2 text-left text-gray-700">
                 Classes
               </th>
@@ -85,13 +83,7 @@ export default function Classes() {
                 key={index}
                 className="hover:bg-gray-200 hover:text-gray-900 transition-all" // Adjust hover to ensure contrast
               >
-                <td className="px-4 py-2 border">
-                  <img
-                    className="w-10 h-10 rounded-full"
-                    src={`https://api.studypulse.live/${item.image}`}
-                    alt="Profile"
-                  />
-                </td>
+                
                 <td className="border border-gray-800 px-4 py-2">
                   {item.name}
                 </td>

@@ -1,456 +1,456 @@
-// import React, { useEffect, useState } from "react";
-// import { useSelector, useDispatch } from "react-redux";
-// import { Bar, Pie } from "react-chartjs-2";
-// import { setAdminDetails } from "../../../redux/features/adminSlice";
-// import {
-//   Chart as ChartJS,
-//   CategoryScale,
-//   LinearScale,
-//   Tooltip,
-//   Legend,
-//   BarElement,
-//   Title,
-//   ArcElement,
-// } from "chart.js";
-// import { makeRequest } from "../../../axios";
-// import { BookOpen, FileText, Layers } from "lucide-react";
-// import StudentsRegistered from "./StudentsRegistered";
-// import { useNavigate } from "react-router-dom";
-// import OnlineUsers from "../../../Pages/AdminActivities/OnlineUsers";
-// import AssignmentData from "./AssignmentData";
-// import { div } from "framer-motion/client";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Bar, Pie } from "react-chartjs-2";
+import { setAdminDetails } from "../../../redux/features/adminSlice";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend,
+  BarElement,
+  Title,
+  ArcElement,
+} from "chart.js";
+import { makeRequest } from "../../../axios";
+import { BookOpen, FileText, Layers } from "lucide-react";
+import StudentsRegistered from "./StudentsRegistered";
+import { useNavigate } from "react-router-dom";
+import OnlineUsers from "../../../Pages/AdminActivities/OnlineUsers";
+import AssignmentData from "./AssignmentData";
+import { div } from "framer-motion/client";
 
-// // Registering chart components
-// ChartJS.register(
-//   CategoryScale,
-//   LinearScale,
-//   BarElement,
-//   Title,
-//   ArcElement,
-//   Tooltip,
-//   Legend
-// );
-
-// export default function AdminDashboard() {
-//   const [dashboard, setDashboard] = useState({});
-//   const [labels, setLabels] = useState([]);
-//   const [dataset, setDataset] = useState([]);
-//   const [users, setUsers] = useState([]);
-//   const navigate = useNavigate();
-//   const dispatch = useDispatch();
-
-//   useEffect(() => {
-//     fetchDashboardData();
-//     fetchOnlineUsers();
-//   }, []);
-
-//   const fetchOnlineUsers = async () => {
-//     try {
-//       const res = await makeRequest.get(`/admin/get-online-users`);
-//       console.log("Online Users: ", res?.data?.data);
-//       setUsers(res?.data?.data.slice(0, 5));
-//     } catch (error) {
-//       console.error("Request Error:", error.message);
-//     }
-//   };
-
-//   const fetchDashboardData = async () => {
-//     const res = await makeRequest.get("admin/get-dashboard-details");
-//     const data = res?.data?.data?.passFailedStudents || {};
-
-//     // Process the data
-//     setLabels(Object.keys(data));
-//     setDataset(Object.values(data));
-//     setDashboard(res?.data?.data || {});
-//   };
-
-//   // PieChart Component
-//   const PieChart = ({ labels, datasets }) => {
-//     const passedData = datasets.map((item) => item.passed);
-//     const failedData = datasets.map((item) => item.failed);
-
-//     const data = {
-//       labels,
-//       datasets: [
-//         {
-//           label: "Passed Students",
-//           backgroundColor: "rgba(75, 192, 192, 0.6)",
-//           borderColor: "rgba(75, 192, 192, 1)",
-//           borderWidth: 1,
-//           data: passedData,
-//         },
-//         {
-//           label: "Failed Students",
-//           backgroundColor: "rgba(255, 99, 132, 0.6)",
-//           borderColor: "rgba(255, 99, 132, 1)",
-//           borderWidth: 1,
-//           data: failedData,
-//         },
-//       ],
-//     };
-
-//     return (
-//       <Pie
-//         data={data}
-//         options={{
-//           responsive: true,
-//           plugins: { legend: { position: "top" }, tooltip: { enabled: true } },
-//         }}
-//       />
-//     );
-//   };
-
-//   // Student Passed/Failed Stats Component
-//   const StudentPassedFailed = () => {
-//     const classes = [
-//       {
-//         className: "Class 1",
-//         subjects: [
-//           { name: "Math", passed: 40, failed: 10 },
-//           { name: "Science", passed: 35, failed: 15 },
-//           { name: "English", passed: 38, failed: 12 },
-//         ],
-//       },
-//       {
-//         className: "Class 2",
-//         subjects: [
-//           { name: "Math", passed: 50, failed: 5 },
-//           { name: "Science", passed: 48, failed: 7 },
-//           { name: "English", passed: 45, failed: 10 },
-//         ],
-//       },
-//     ];
-
-//     const [selectedClassIndex, setSelectedClassIndex] = useState(0);
-//     const [selectedSubjectIndex, setSelectedSubjectIndex] = useState(0);
-
-//     const getPieChartData = (subject) => ({
-//       labels: ["Passed", "Failed"],
-//       datasets: [
-//         {
-//           data: [subject.passed, subject.failed],
-//           backgroundColor: ["#4CAF50", "#F44336"],
-//         },
-//       ],
-//     });
-
-//     const handleClassChange = (event) => {
-//       setSelectedClassIndex(event.target.value);
-//       setSelectedSubjectIndex(0);
-//     };
-
-//     const handleSubjectChange = (event) => {
-//       setSelectedSubjectIndex(event.target.value);
-//     };
-
-//     const selectedClass = classes[selectedClassIndex];
-//     const selectedSubject = selectedClass.subjects[selectedSubjectIndex];
-
-//     const options = {
-//       responsive: true,
-//       plugins: {
-//         legend: {
-//           position: "top",
-//         },
-//         tooltip: {
-//           enabled: true,
-//         },
-//       },
-//       // Handle click event on the pie chart
-//       onClick: (event, chartElement) => {
-//         if (chartElement.length > 0) {
-//           // Get the index of the clicked element
-//           const clickedIndex = chartElement[0].index;
-//           const label = getPieChartData(selectedSubject).labels[clickedIndex]; // Get the label of the clicked section
-//           console.log(`Clicked on ${label} section ${selectedSubject.name} with`);
-//           dispatch(setAdminDetails({ classId: selectedSubject.name, isPassed: label === 'Passed' ? true : false }));
-//           navigate('student');
-//         }
-//       },
-//     };
-
-//     return (
-//       <div>
-//         <h2 className="text-xl font-semibold mb-4 bg-gradient-to-r from-green-500 to-teal-300 text-white p-2 rounded-md w-full text-center font-serif">
-//           Class Performance
-//         </h2>
-
-//         <div className="bg-white shadow rounded-xl p-6 transform transition-transform duration-300 hover:scale-105">
-//           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
-//             <div>
-//               <select
-//                 id="classSelector"
-//                 value={selectedClassIndex || ""}
-//                 onChange={handleClassChange}
-//                 className="w-full p-1 border rounded-lg focus:ring focus:ring-blue-300"
-//               >
-//                 <option value={""}>Select ClassName</option>
-//                 {classes?.map((classData, index) => (
-//                   <option key={index} value={index}>
-//                     {classData.className}
-//                   </option>
-//                 ))}
-//               </select>
-//             </div>
-
-//             <div>
-//               <select
-//                 id="subjectSelector"
-//                 value={selectedSubjectIndex || ""}
-//                 onChange={handleSubjectChange}
-//                 className="w-full p-1 border rounded-lg focus:ring focus:ring-blue-300"
-//               >
-//                 <option value="">Select Subject</option>
-//                 {selectedClass?.subjects?.map((subject, index) => (
-//                   <option key={index} value={index}>
-//                     {subject.name}
-//                   </option>
-//                 ))}
-//               </select>
-//             </div>
-//           </div>
-
-//           {/* Pie Chart Section */}
-//           <div className="bg-gray-50 w-full p-6 rounded-lg flex justify-center">
-//             <div className="text-center">
-//               <div className="flex justify-center">
-//                 <Pie
-//                   options={options}
-//                   className="w-full min-h-full"
-//                   data={getPieChartData(selectedSubject)}
-//                 />
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-
-//       </div>
-//     );
-//   };
-
-//   return (
-//     <div className="min-h-screen p-2">
-//       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-10 p-8">
-//         {/* Teachers Registered Card */}
-//         <div className="bg-red-300 rounded-2xl p-2 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer">
-//           {/* Title Row */}
-//           <div className="text-center mb-4">
-//             <h3 className="text-xl font-bold text-white font-serif">
-//               Teachers Registered
-//             </h3>
-//           </div>
-  
-//           {/* Icon and Count Row */}
-//           <div className="flex justify-center items-center gap-4 mb-4">
-//             <div className="bg-blue-500 text-white p-2 rounded-full"> {/* Reduced padding */}
-//               <BookOpen className="text-4xl" /> {/* Reduced icon size */}
-//             </div>
-//             <p className="text-2xl font-extrabold text-blue-600 rounded-lg py-1"> {/* Reduced font size and padding */}
-//               {dashboard.totalTeachersCount}
-//             </p>
-//           </div>
-  
-//           {/* Subtitle Row */}
-//           <div className="text-center  text-black font-sans">
-//             <p>Number of teachers currently registered.</p>
-//           </div>
-//         </div>
-  
-//         {/* Students Registered Card */}
-//         <div className="bg-teal-400 rounded-2xl p-2 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer" onClick={() => navigate("student")}>
-//           {/* Title Row */}
-//           <div className="text-center mb-4">
-//             <h3 className="text-xl font-semibold text-white font-serif">
-//               Students Registered
-//             </h3>
-//           </div>
-  
-//           {/* Icon and Count Row */}
-//           <div className="flex justify-center items-center gap-4 mb-4">
-//             <div className="bg-green-600 text-white p-3 rounded-full"> {/* Reduced padding */}
-//               <FileText className="text-2xl" /> {/* Reduced icon size */}
-//             </div>
-//             <p className="text-2xl font-extrabold text-green-600 rounded-lg py-1"> {/* Reduced font size and padding */}
-//               {dashboard.totalStudentCount}
-//             </p>
-//           </div>
-  
-//           {/* Subtitle Row */}
-//           <div className="text-center text-md text-black font-sans">
-//             <p>Number of students currently registered.</p>
-//           </div>
-//         </div>
-  
-//         {/* Classes Created Card */}
-//         <div className="bg-orange-400 rounded-2xl p-2 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer">
-//           {/* Title Row */}
-//           <div className="text-center mb-4">
-//             <h3 className="text-xl font-bold text-white font-serif">
-//               Classes Created
-//             </h3>
-//           </div>
-  
-//           {/* Icon and Count Row */}
-//           <div className="flex justify-center items-center gap-4 mb-4">
-//             <div className="bg-indigo-500 text-white p-2 rounded-full"> {/* Reduced padding */}
-//               <Layers className="text-2xl" /> {/* Reduced icon size */}
-//             </div>
-//             <p className="text-2xl font-extrabold text-indigo-500 rounded-lg py-1"> {/* Reduced font size and padding */}
-//               {dashboard.totalClassCount}
-//             </p>
-//           </div>
-  
-//           {/* Subtitle Row */}
-//           <div className="text-center text-md text-black font-sans">
-//             <p>Number of classes currently created.</p>
-//           </div>
-//         </div>
-//       </div>
-  
-//       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
-//         {/* Recently Added Teachers & Students */}
-//         {[{ title: "Recently Added Teachers", data: dashboard.recentlyAddedTeachers }, { title: "Recently Added Students", data: dashboard.recentlyAddedStudents }].map(
-//           ({ title, data }, index) => (
-//             <div
-//               key={index}
-//               className="bg-white shadow rounded-xl p-3 transform transition-transform duration-300 hover:scale-105 max-h-96 overflow-y-auto text-center"
-//             >
-//               <h2 className="text-xl font-semibold mb-4 bg-gradient-to-r from-blue-500 to-blue-300 text-white p-2 rounded-md shadow-md font-serif">
-//                 {title}
-//               </h2>
-  
-//               <div className="space-y-4">
-//                 {data?.map((person) => (
-//                   <div key={person._id || person.id} className="flex items-center p-4 border-b last:border-b-0 space-x-4">
-//                     <div className="w-14 h-14 rounded-full bg-gray-200 overflow-hidden">
-//                       <img src={""} alt="Profile" className="w-full h-full object-cover" />
-//                     </div>
-//                     <div className="flex-1">
-//                       <p className="text-md font-semibold text-gray-800">{person.firstName} {person.lastName}</p>
-//                       <p className="text-sm text-gray-600">{person.email}</p>
-//                       <p className="text-sm text-gray-600">{person.phoneNumber}</p>
-//                     </div>
-//                   </div>
-//                 ))}
-//               </div>
-//             </div>
-//           )
-//         )}
-  
-//         {/* Student Pass/Fail Stats */}
-//         <div className="bg-white shadow rounded-xl p-6 duration-300 hover:scale-105 mb-8">
-//           <h2 className="text-xl font-semibold text-center mb-4 bg-gradient-to-r from-green-500 to-teal-300 text-white p-2 rounded-md shadow-md font-serif">
-//             Student Pass/Fail Stats
-//           </h2>
-//           <p className="text-gray-600 text-center mb-6">Visualization of Passed vs Failed Students</p>
-//           <div className="flex justify-center">
-//             <PieChart labels={labels} datasets={dataset} />
-//           </div>
-//         </div>
-  
-//         {/* Student Pass/Fail Table */}
-//         <div className="bg-white shadow rounded-xl p-6 duration-300 hover:scale-105 mb-8">
-//           <StudentPassedFailed />
-//         </div>
-  
-//         {/* Assignment Data */}
-//         <div className="bg-white shadow rounded-xl p-6 duration-300 hover:scale-105 mb-8">
-//           <AssignmentData />
-//         </div>
-  
-//         {/* Online Users */}
-//         <div className="bg-white shadow rounded-xl p-6 duration-300 hover:scale-105 mb-8">
-//           <OnlineUsers users={users} />
-//         </div>
-//       </div>
-//     </div>
-//   );
-  
-// }
-
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import Cookies from 'js-cookie';
+// Registering chart components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  ArcElement,
+  Tooltip,
+  Legend
+);
 
 export default function AdminDashboard() {
-  const [refreshToken, setRefreshToken] = useState(null);
+  const [dashboard, setDashboard] = useState({});
+  const [labels, setLabels] = useState([]);
+  const [dataset, setDataset] = useState([]);
+  const [users, setUsers] = useState([]);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    // Log all cookies stored in the browser
-    console.log("All Cookies:", document.cookie);
-
-    // Fetch the refresh token from cookies after component mounts (it should be available after login)
-    // We cannot access HttpOnly cookies directly via JavaScript, so the token must be sent with the request
-    // if it's set in the backend.
-    const token = Cookies.get('refreshToken'); // You won't be able to use this directly as refreshToken is HttpOnly.
-    if (token) {
-      console.log("Found refresh token:", token);
-      setRefreshToken(token);
-    } else {
-      console.log('No refresh token found');
-    }
-
-    // The refresh token will be automatically included in requests made with withCredentials: true
+    fetchDashboardData();
+    fetchOnlineUsers();
   }, []);
 
-  const refreshTokenRequest = async () => {
+  const fetchOnlineUsers = async () => {
     try {
-      const response = await axios.post(
-         'https://api.studypulse.live/web/api/refresh-token', // Use the correct API endpoint
-        //'http://localhost:5000/refresh-token',
-        {},
-        {
-          withCredentials: true, // Make sure credentials are sent with the request (cookies included)
-        }
-      );
-
-      console.log('Token refreshed:', response.data);
-      // The new token should be provided by the backend (either access token or refresh token)
-      // In this example, we are assuming that the server will send a new token if successful.
-      // You can handle the response as per your backend logic.
+      const res = await makeRequest.get(`/admin/get-online-users`);
+      console.log("Online Users: ", res?.data?.data);
+      setUsers(res?.data?.data.slice(0, 5));
     } catch (error) {
-      console.error('Failed to refresh token:', error.response ? error.response.data : error.message);
+      console.error("Request Error:", error.message);
     }
   };
 
-  const login = async () => {
-    try {
-      // Send login request with credentials to set the refreshToken cookie
-      const response = await axios.post(
-        'https://api.studypulse.live/web/api/login',
-        //'http://localhost:5000/login',
+  const fetchDashboardData = async () => {
+    const res = await makeRequest.get("admin/get-dashboard-details");
+    const data = res?.data?.data?.passFailedStudents || {};
+
+    // Process the data
+    setLabels(Object.keys(data));
+    setDataset(Object.values(data));
+    setDashboard(res?.data?.data || {});
+  };
+
+  // PieChart Component
+  const PieChart = ({ labels, datasets }) => {
+    const passedData = datasets.map((item) => item.passed);
+    const failedData = datasets.map((item) => item.failed);
+
+    const data = {
+      labels,
+      datasets: [
         {
-          email: 'admin@gmail.com',
-          password: 'password123',
+          label: "Passed Students",
+          backgroundColor: "rgba(75, 192, 192, 0.6)",
+          borderColor: "rgba(75, 192, 192, 1)",
+          borderWidth: 1,
+          data: passedData,
         },
         {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          withCredentials: true, // Make sure credentials are included in the request to set cookies
+          label: "Failed Students",
+          backgroundColor: "rgba(255, 99, 132, 0.6)",
+          borderColor: "rgba(255, 99, 132, 1)",
+          borderWidth: 1,
+          data: failedData,
+        },
+      ],
+    };
+
+    return (
+      <Pie
+        data={data}
+        options={{
+          responsive: true,
+          plugins: { legend: { position: "top" }, tooltip: { enabled: true } },
+        }}
+      />
+    );
+  };
+
+  // Student Passed/Failed Stats Component
+  const StudentPassedFailed = () => {
+    const classes = [
+      {
+        className: "Class 1",
+        subjects: [
+          { name: "Math", passed: 40, failed: 10 },
+          { name: "Science", passed: 35, failed: 15 },
+          { name: "English", passed: 38, failed: 12 },
+        ],
+      },
+      {
+        className: "Class 2",
+        subjects: [
+          { name: "Math", passed: 50, failed: 5 },
+          { name: "Science", passed: 48, failed: 7 },
+          { name: "English", passed: 45, failed: 10 },
+        ],
+      },
+    ];
+
+    const [selectedClassIndex, setSelectedClassIndex] = useState(0);
+    const [selectedSubjectIndex, setSelectedSubjectIndex] = useState(0);
+
+    const getPieChartData = (subject) => ({
+      labels: ["Passed", "Failed"],
+      datasets: [
+        {
+          data: [subject.passed, subject.failed],
+          backgroundColor: ["#4CAF50", "#F44336"],
+        },
+      ],
+    });
+
+    const handleClassChange = (event) => {
+      setSelectedClassIndex(event.target.value);
+      setSelectedSubjectIndex(0);
+    };
+
+    const handleSubjectChange = (event) => {
+      setSelectedSubjectIndex(event.target.value);
+    };
+
+    const selectedClass = classes[selectedClassIndex];
+    const selectedSubject = selectedClass.subjects[selectedSubjectIndex];
+
+    const options = {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: "top",
+        },
+        tooltip: {
+          enabled: true,
+        },
+      },
+      // Handle click event on the pie chart
+      onClick: (event, chartElement) => {
+        if (chartElement.length > 0) {
+          // Get the index of the clicked element
+          const clickedIndex = chartElement[0].index;
+          const label = getPieChartData(selectedSubject).labels[clickedIndex]; // Get the label of the clicked section
+          console.log(`Clicked on ${label} section ${selectedSubject.name} with`);
+          dispatch(setAdminDetails({ classId: selectedSubject.name, isPassed: label === 'Passed' ? true : false }));
+          navigate('student');
         }
-      );
+      },
+    };
 
-      console.log('Login successful:', response.data);
+    return (
+      <div>
+        <h2 className="text-xl font-semibold mb-4 bg-gradient-to-r from-green-500 to-teal-300 text-white p-2 rounded-md w-full text-center font-serif">
+          Class Performance
+        </h2>
 
-      // The refresh token should be set in cookies automatically by the backend
-    } catch (error) {
-      if (error.response) {
-        console.error('Login error response:', error.response);
-      } else if (error.request) {
-        console.error('Login error request:', error.request);
-      } else {
-        console.error('Login error message:', error.message);
-      }
-    }
+        <div className="bg-white shadow rounded-xl p-6 transform transition-transform duration-300 hover:scale-105">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+            <div>
+              <select
+                id="classSelector"
+                value={selectedClassIndex || ""}
+                onChange={handleClassChange}
+                className="w-full p-1 border rounded-lg focus:ring focus:ring-blue-300"
+              >
+                <option value={""}>Select ClassName</option>
+                {classes?.map((classData, index) => (
+                  <option key={index} value={index}>
+                    {classData.className}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <select
+                id="subjectSelector"
+                value={selectedSubjectIndex || ""}
+                onChange={handleSubjectChange}
+                className="w-full p-1 border rounded-lg focus:ring focus:ring-blue-300"
+              >
+                <option value="">Select Subject</option>
+                {selectedClass?.subjects?.map((subject, index) => (
+                  <option key={index} value={index}>
+                    {subject.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Pie Chart Section */}
+          <div className="bg-gray-50 w-full p-6 rounded-lg flex justify-center">
+            <div className="text-center">
+              <div className="flex justify-center">
+                <Pie
+                  options={options}
+                  className="w-full min-h-full"
+                  data={getPieChartData(selectedSubject)}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    );
   };
 
   return (
-    <div>
-      <h1>Admin Dashboard</h1>
-      <button onClick={refreshTokenRequest}>Refresh Token</button>
-      <button onClick={login}>Login</button>
-      <p>Refresh Token: {refreshToken ? refreshToken : 'No refresh token available'}</p>
+    <div className="min-h-screen p-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-10 p-8">
+        {/* Teachers Registered Card */}
+        <div className="bg-red-300 rounded-2xl p-2 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer">
+          {/* Title Row */}
+          <div className="text-center mb-4">
+            <h3 className="text-xl font-bold text-white font-serif">
+              Teachers Registered
+            </h3>
+          </div>
+  
+          {/* Icon and Count Row */}
+          <div className="flex justify-center items-center gap-4 mb-4">
+            <div className="bg-blue-500 text-white p-2 rounded-full"> {/* Reduced padding */}
+              <BookOpen className="text-4xl" /> {/* Reduced icon size */}
+            </div>
+            <p className="text-2xl font-extrabold text-blue-600 rounded-lg py-1"> {/* Reduced font size and padding */}
+              {dashboard.totalTeachersCount}
+            </p>
+          </div>
+  
+          {/* Subtitle Row */}
+          <div className="text-center  text-black font-sans">
+            <p>Number of teachers currently registered.</p>
+          </div>
+        </div>
+  
+        {/* Students Registered Card */}
+        <div className="bg-teal-400 rounded-2xl p-2 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer" onClick={() => navigate("student")}>
+          {/* Title Row */}
+          <div className="text-center mb-4">
+            <h3 className="text-xl font-semibold text-white font-serif">
+              Students Registered
+            </h3>
+          </div>
+  
+          {/* Icon and Count Row */}
+          <div className="flex justify-center items-center gap-4 mb-4">
+            <div className="bg-green-600 text-white p-3 rounded-full"> {/* Reduced padding */}
+              <FileText className="text-2xl" /> {/* Reduced icon size */}
+            </div>
+            <p className="text-2xl font-extrabold text-green-600 rounded-lg py-1"> {/* Reduced font size and padding */}
+              {dashboard.totalStudentCount}
+            </p>
+          </div>
+  
+          {/* Subtitle Row */}
+          <div className="text-center text-md text-black font-sans">
+            <p>Number of students currently registered.</p>
+          </div>
+        </div>
+  
+        {/* Classes Created Card */}
+        <div className="bg-orange-400 rounded-2xl p-2 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer">
+          {/* Title Row */}
+          <div className="text-center mb-4">
+            <h3 className="text-xl font-bold text-white font-serif">
+              Classes Created
+            </h3>
+          </div>
+  
+          {/* Icon and Count Row */}
+          <div className="flex justify-center items-center gap-4 mb-4">
+            <div className="bg-indigo-500 text-white p-2 rounded-full"> {/* Reduced padding */}
+              <Layers className="text-2xl" /> {/* Reduced icon size */}
+            </div>
+            <p className="text-2xl font-extrabold text-indigo-500 rounded-lg py-1"> {/* Reduced font size and padding */}
+              {dashboard.totalClassCount}
+            </p>
+          </div>
+  
+          {/* Subtitle Row */}
+          <div className="text-center text-md text-black font-sans">
+            <p>Number of classes currently created.</p>
+          </div>
+        </div>
+      </div>
+  
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
+        {/* Recently Added Teachers & Students */}
+        {[{ title: "Recently Added Teachers", data: dashboard.recentlyAddedTeachers }, { title: "Recently Added Students", data: dashboard.recentlyAddedStudents }].map(
+          ({ title, data }, index) => (
+            <div
+              key={index}
+              className="bg-white shadow rounded-xl p-3 transform transition-transform duration-300 hover:scale-105 max-h-96 overflow-y-auto text-center"
+            >
+              <h2 className="text-xl font-semibold mb-4 bg-gradient-to-r from-blue-500 to-blue-300 text-white p-2 rounded-md shadow-md font-serif">
+                {title}
+              </h2>
+  
+              <div className="space-y-4">
+                {data?.map((person) => (
+                  <div key={person._id || person.id} className="flex items-center p-4 border-b last:border-b-0 space-x-4">
+                    <div className="w-14 h-14 rounded-full bg-gray-200 overflow-hidden">
+                      <img src={""} alt="Profile" className="w-full h-full object-cover" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-md font-semibold text-gray-800">{person.firstName} {person.lastName}</p>
+                      <p className="text-sm text-gray-600">{person.email}</p>
+                      <p className="text-sm text-gray-600">{person.phoneNumber}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )
+        )}
+  
+        {/* Student Pass/Fail Stats */}
+        <div className="bg-white shadow rounded-xl p-6 duration-300 hover:scale-105 mb-8">
+          <h2 className="text-xl font-semibold text-center mb-4 bg-gradient-to-r from-green-500 to-teal-300 text-white p-2 rounded-md shadow-md font-serif">
+            Student Pass/Fail Stats
+          </h2>
+          <p className="text-gray-600 text-center mb-6">Visualization of Passed vs Failed Students</p>
+          <div className="flex justify-center">
+            <PieChart labels={labels} datasets={dataset} />
+          </div>
+        </div>
+  
+        {/* Student Pass/Fail Table */}
+        <div className="bg-white shadow rounded-xl p-6 duration-300 hover:scale-105 mb-8">
+          <StudentPassedFailed />
+        </div>
+  
+        {/* Assignment Data */}
+        <div className="bg-white shadow rounded-xl p-6 duration-300 hover:scale-105 mb-8">
+          <AssignmentData />
+        </div>
+  
+        {/* Online Users */}
+        <div className="bg-white shadow rounded-xl p-6 duration-300 hover:scale-105 mb-8">
+          <OnlineUsers users={users} />
+        </div>
+      </div>
     </div>
   );
+  
 }
+
+// import axios from 'axios';
+// import React, { useEffect, useState } from 'react';
+// import Cookies from 'js-cookie';
+
+// export default function AdminDashboard() {
+//   const [refreshToken, setRefreshToken] = useState(null);
+
+//   useEffect(() => {
+//     // Log all cookies stored in the browser
+//     console.log("All Cookies:", document.cookie);
+
+//     // Fetch the refresh token from cookies after component mounts (it should be available after login)
+//     // We cannot access HttpOnly cookies directly via JavaScript, so the token must be sent with the request
+//     // if it's set in the backend.
+//     const token = Cookies.get('refreshToken'); // You won't be able to use this directly as refreshToken is HttpOnly.
+//     if (token) {
+//       console.log("Found refresh token:", token);
+//       setRefreshToken(token);
+//     } else {
+//       console.log('No refresh token found');
+//     }
+
+//     // The refresh token will be automatically included in requests made with withCredentials: true
+//   }, []);
+
+//   const refreshTokenRequest = async () => {
+//     try {
+//       const response = await axios.post(
+//          'https://api.studypulse.live/web/api/refresh-token', // Use the correct API endpoint
+//         // 'http://localhost:5000/refresh-token',
+//         {},
+//         {
+//           withCredentials: true, // Make sure credentials are sent with the request (cookies included)
+//         }
+//       );
+
+//       console.log('Token refreshed:', response.data);
+//       // The new token should be provided by the backend (either access token or refresh token)
+//       // In this example, we are assuming that the server will send a new token if successful.
+//       // You can handle the response as per your backend logic.
+//     } catch (error) {
+//       console.error('Failed to refresh token:', error.response ? error.response.data : error.message);
+//     }
+//   };
+
+//   const login = async () => {
+//     try {
+//       // Send login request with credentials to set the refreshToken cookie
+//       const response = await axios.post(
+//         'https://api.studypulse.live/web/api/login',
+//         // 'http://localhost:5000/login',
+//         {
+//           email: 'admin@gmail.com',
+//           password: 'password123',
+//         },
+//         {
+//           headers: {
+//             'Content-Type': 'application/json',
+//           },
+//           withCredentials: true, // Make sure credentials are included in the request to set cookies
+//         }
+//       );
+
+//       console.log('Login successful:', response.data);
+
+//       // The refresh token should be set in cookies automatically by the backend
+//     } catch (error) {
+//       if (error.response) {
+//         console.error('Login error response:', error.response);
+//       } else if (error.request) {
+//         console.error('Login error request:', error.request);
+//       } else {
+//         console.error('Login error message:', error.message);
+//       }
+//     }
+//   };
+
+//   return (
+//     <div>
+//       <h1>Admin Dashboard</h1>
+//       <button onClick={refreshTokenRequest}>Refresh Token</button>
+//       <button onClick={login}>Login</button>
+//       <p>Refresh Token: {refreshToken ? refreshToken : 'No refresh token available'}</p>
+//     </div>
+//   );
+// }

@@ -21,6 +21,7 @@ import {
   ArrowRight,
   Delete,
   Trash2,
+  ChevronDown,
 } from "lucide-react";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -91,8 +92,8 @@ export const Table = () => {
     <div className="overflow-x-auto">
       <div className="w-full overflow-x-auto">
         <table className="min-w-full table-auto border-collapse whitespace-nowrap">
-          <thead>
-            <tr className="bg-purple-200">
+          <thead className="bg-teal-700 font-serif text-white">
+            <tr >
               <th className="px-4 py-2 border border-gray-300">Profile</th>
               <th className="px-4 py-2 border border-gray-300">Name</th>
               <th className="px-4 py-2 border border-gray-300">Email</th>
@@ -107,11 +108,17 @@ export const Table = () => {
             {teachers.map((row, index) => (
               <tr key={index} className="bg-white hover:bg-gray-100">
                 <td className="px-4 py-2 border border-gray-300">
-                  <img
-                    style={{ width: "40px", height: "40px" }}
-                    src={row?.teacherData?.profilePic}
-                    alt="User Pic"
-                  />
+                {row?.profilePic ? (
+                      <img
+                      src={`https://api.studypulse.live/${row.profilePic}`}
+                        alt="Profile"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-16 h-16 flex items-center justify-center bg-blue-600 text-white text-2xl font-bold rounded-full">
+                        {`${row.firstName[0]}${row.lastName[0]}`.toUpperCase()}
+                      </div>
+  )}
                 </td>
                 <td className="px-4 py-2 border border-gray-300">
                   {row.firstName + " " + row.lastName}
@@ -139,7 +146,7 @@ export const Table = () => {
                         setShowUpdateTeacher(true);
                       }}
                     >
-                      <ArrowRight className="w-5 h-5" />
+                      <ChevronDown className="w-5 h-5" />
                     </button>
                   </div>
                 </td>

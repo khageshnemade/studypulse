@@ -22,7 +22,7 @@ app.post('/login', (req, res) => {
 
   // Set the refreshToken as a cookie (Secure & HttpOnly in real deployment)
   res.cookie('refreshToken', refreshToken, {
-    //httpOnly: true,  // Prevents JavaScript from accessing the cookie
+    httpOnly: true,  // Prevents JavaScript from accessing the cookie
     secure: process.env.NODE_ENV === 'production',   // Set to true if using HTTPS (needed in production)
     maxAge: 60 * 60 * 24 * 7 * 1000, // 7 days expiration
     sameSite: 'Strict',  // Prevents CSRF attacks

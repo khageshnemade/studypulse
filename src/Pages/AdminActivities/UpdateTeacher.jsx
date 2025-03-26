@@ -29,41 +29,41 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
   }, [teachersData, id]);
 
   const handleFileUpload = async (file) => {
+    console.log("File Upload", file);
+    if (!file) {
+      toast.error("Please select a file before uploading.");
+      return;
+    }
   
-      console.log("File Upload",file);
-      if (!file) {
-        toast.error("Please select a file before uploading.");
-        return;
+    const formData = new FormData();
+    formData.append("files", file);
+  
+    console.log("Form Data before upload:", formData);
+  
+    try {
+      const response = await makeRequest.post(
+        "https://api.studypulse.live/web/api/file-upload/profile-pic",
+        formData
+      );
+  
+      console.log("API response:", response);
+  
+      if (response.data.success) {
+        const imageUrl = response.data.url;
+        setUserData((prevData) => ({
+          ...prevData,
+          profilePic: imageUrl, // Store the uploaded image URL in userData
+        }));
+        toast.success("Image uploaded successfully!");
+      } else {
+        toast.error("Image upload failed. Please try again.");
       }
-    
-      const formData = new FormData();
-      formData.append("files", file); // Ensure 'file' is not null or undefined
-    
-      console.log("Form Data before upload:", formData);
-    
-      try {
-        const response = await makeRequest.post(
-          "https://api.studypulse.live/web/api/file-upload/profile-pic",
-          formData
-        );
-    
-        console.log("API response:", response);
-    
-        if (response.data.success) {
-          setImageUrl(response.data.url); // Store the uploaded image URL
-          setTeacherData((prevData) => ({
-            ...prevData,
-            profilePic: response.data.url, // Update teacher data with the new image URL
-          }));
-          toast.success("Image uploaded successfully!");
-        } else {
-          toast.error("Image upload failed. Please try again.");
-        }
-      } catch (error) {
-        console.error("Error during file upload:", error);
-        toast.error("Failed to upload image.");
-      }
+    } catch (error) {
+      console.error("Error during file upload:", error);
+      toast.error("Failed to upload image.");
+    }
   };
+  
   
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0]; // Access the selected file
@@ -86,37 +86,35 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
       console.log("UserData", userData);
-      console.log("Teachdata", teacherData);
-
-      // Make PUT request with only the updated fields
+      console.log("TeacherData", teacherData);
+  
+      // Make PUT request with the updated fields
       const res = await makeRequest.put("/admin/update-teacher-data", {
         userData: {
           id: userData._id,
           firstName: userData.firstName,
           lastName: userData.lastName,
           phoneNumber: userData.phoneNumber,
+          profilePic: userData.profilePic, // Send profilePic in userData
         },
         teacherData: {
-          totalYearsOfExperience: teacherData.totalYearsOfExperience,
-          gender: teacherData.gender,
-          profilePic: `https://api.studypulse.live/${teacherData.profilePic}`,
-          status: teacherData.status,
-          address: teacherData.address,
+          totalYearsOfExperience: teacherData?.totalYearsOfExperience,
+          gender: teacherData?.gender,
+          status: teacherData?.status,
+          address: teacherData?.address,
         },
       });
-
-      // Log response for debugging
+  
       const message = res.data.message;
       console.log("Response Message:", message);
-
-      // Check if the message exists and is valid
+  
       if (message) {
         toast.success(message); // Display the success message from the response
         console.log("RESPONSE SUCCESS", message);
-
+  
         // Optional: Close the update modal and navigate
         setShowUpdateTeacher(false);
         navigate("/admin-dashboard/teachers");
@@ -124,11 +122,11 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
         toast.error("Unexpected response format.");
       }
     } catch (error) {
-      // Display error message if there's an issue with the request
       console.error(error);
       toast.error(error.response?.data?.error || "An error occurred.");
     }
   };
+  
 
   return (
     <div className="p-4 bg-white rounded-lg shadow-md">
@@ -222,31 +220,32 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
         </div>
 
         {/* Profile Picture */}
-        <div className="mb-4 flex flex-col sm:space-x-4">
-          <div className="flex-1 block">
-            <label htmlFor="profilePic" className="block text-sm font-medium text-gray-700">
-              Profile Picture
-            </label>
-            <input
-              type="file"
-              id="profilePic"
-              name="profilePic"
-              className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              onChange={handleFileChange}
-            />
-          </div>
+      {/* Profile Picture Section */}
+<div className="mb-4 flex flex-col sm:space-x-4">
+  <div className="flex-1 block">
+    <label htmlFor="profilePic" className="block text-sm font-medium text-gray-700">
+      Profile Picture
+    </label>
+    <input
+      type="file"
+      id="profilePic"
+      name="profilePic"
+      className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+      onChange={handleFileChange}
+    />
+  </div>
 
-          {imageUrl && (
-            <div className="mt-4 w-full ">
-              {/* This will force the image to be on a new line */}
-              <img
-                src={`https://api.studypulse.live/${imageUrl}`}
-                alt="Profile"
-                className="w-24 h-24 rounded-full mx-auto"
-              />
-            </div>
-          )}
-        </div>
+  {userData.profilePic && (  // Use userData.profilePic here
+    <div className="mt-4 w-full ">
+      <img
+        src={`https://api.studypulse.live/${userData.profilePic}`}  // Use userData.profilePic here
+        alt="Profile"
+        className="w-24 h-24 rounded-full mx-auto"
+      />
+    </div>
+  )}
+</div>
+
 
         {/* Experience and Gender */}
         <div className="mb-4 flex flex-col sm:flex-row sm:space-x-4">

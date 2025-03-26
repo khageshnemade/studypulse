@@ -99,7 +99,7 @@ export default function StudentsRegistered() {
           <select
             value={selectedClass}
             onChange={(e) => setSelectedClass(e.target.value)}
-            className="w-full p-1 border-2 border-red-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+            className="w-full p-1 border rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
           >
             <option value="">All Classes</option>
             <option value="Class A">Class A</option>
@@ -115,7 +115,7 @@ export default function StudentsRegistered() {
           <select
             value={selectedSubject}
             onChange={(e) => setSelectedSubject(e.target.value)}
-            className="w-full p-1 border-2 border-red-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+            className="w-full p-1 border rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
           >
             <option value="">All Subjects</option>
             {Array.from(
@@ -140,7 +140,7 @@ export default function StudentsRegistered() {
           <select
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value)}
-            className="w-full p-1 border-2 border-red-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+            className="w-full p-1 border rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
           >
             <option value="">Select Status</option>
             <option value="Pass">Pass</option>

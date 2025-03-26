@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { makeRequest } from "../../axios";
 import { toast, ToastContainer } from "react-toastify";
-import { PlusCircle } from "lucide-react";
+import { PlusCircle,Building } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { setSuperAdminDetails } from "../../redux/features/superAdminSlice";
 
@@ -169,18 +169,20 @@ export default function Organizations() {
       <ToastContainer />
 
       <p className="text-center text sm:text-xl md:text-2xl font-serif p-2 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto m-3 drop-shadow-lg border-[1.5px] border-blue-800">
-        <PlusCircle className="text sm:text-xl md:text-2xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce text-blue-600" />
+        <Building className="text sm:text-xl md:text-2xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce text-blue-600" />
         <span className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
           {" "}
           Organizations
         </span>
       </p>
       <button
-        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-all mb-4"
-        onClick={() => setIsModalOpen(true)}
-      >
-        Add Organization
-      </button>
+  className="bg-gradient-to-r from-teal-500 to-blue-500 text-white px-4 py-2 rounded-lg hover:from-teal-600 hover:to-blue-600 transition-all mb-4 flex items-center"
+  onClick={() => setIsModalOpen(true)}
+>
+  <PlusCircle className="mr-2 " /> Add Organization
+</button>
+
+
 
       <Orgs />
       {/* Modal */}
