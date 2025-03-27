@@ -22,7 +22,7 @@ const SubjectsList = () => {
         console.log("Subject List returned", subjects);
       } catch (error) {
         console.error("Error fetching subjects:", error);
-        toast.error("Failed to fetch subjects");
+        toast.error(error?.response.data.message);
       } finally {
         setLoading(false);
       }
@@ -50,7 +50,7 @@ const SubjectsList = () => {
       ) : (
         <div className="overflow-x-auto w-full">
           <table className="min-w-full table-auto bg-white shadow-lg rounded-lg whitespace-nowrap overflow-x-auto">
-            <thead className="bg-gradient-to-r from-blue-500 to-purple-600 text-white ">
+            <thead className="bg-teal-500 text-white ">
               <tr>
                 <th className="px-6 py-3 text-sm font-semibold text-left">
                   Picture
@@ -89,7 +89,7 @@ const SubjectsList = () => {
                               state: { subject },
                             })
                           }
-                          className="bg-blue-400 text-white px-3 py-2 rounded-md w-full sm:w-auto hover:bg-blue-700 focus:outline-none transition duration-300"
+                          className="bg-teal-400 text-white px-3 py-2 rounded-md w-full sm:w-auto hover:bg-teal-700 focus:outline-none transition duration-300"
                           title="Chapters"
                         >
                           <Book className="h-5 w-5 mr-2 inline" />

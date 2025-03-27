@@ -44,7 +44,7 @@ export default function CreateRegion() {
       <div className="max-w-md mx-auto p-4 bg-white rounded-lg shadow-md">
         <form onSubmit={createRegion} className="space-y-4">
           <div className="mb-4">
-            <p className="text-center bg-gradient-to-r from-blue-500 to-purple-600 text-white  p-3 rounded-lg shadow-md  mx-auto text-lg font-medium hover:shadow-xl transition-all duration-300 mb-4">
+            <p className="text-center bg-teal-600 text-white  p-3 rounded-lg shadow-md  mx-auto text-lg font-medium hover:shadow-xl transition-all duration-300 mb-4">
               Create District Taluka and City
             </p>
             <label htmlFor="districtName" className="block text-gray-700 mb-1">
@@ -89,10 +89,11 @@ export default function CreateRegion() {
 
           <button
             type="submit"
-            className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            class="w-full bg-teal-500 hover:bg-teal-700 hover:text-white text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           >
             Create
           </button>
+
         </form>
       </div>
       <ToastContainer />

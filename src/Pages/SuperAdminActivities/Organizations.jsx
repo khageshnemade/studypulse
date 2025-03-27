@@ -301,8 +301,8 @@ export default function Organizations() {
             Organizations
           </h3>
           <table className="min-w-full table-auto border-collapse whitespace-nowrap">
-            <thead className="bg-gray-200 text-gray-700">
-              <tr className="bg-gradient-to-r from-blue-400 to-purple-500">
+            <thead className="bg-gray-200 text-white">
+              <tr className="bg-teal-600">
                 {["Name", "District", "Taluka", "City"].map((header) => (
                   <th
                     key={header}

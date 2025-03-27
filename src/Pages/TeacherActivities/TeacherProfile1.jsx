@@ -72,14 +72,7 @@ const TeacherProfile = () => {
     }));
   };
 
-  const handleArrayInputChange = (section, index, value) => {
-    const updatedArray = [...formData[section]];
-    updatedArray[index] = value;
-    setFormData((prev) => ({
-      ...prev,
-      [section]: updatedArray,
-    }));
-  };
+
 
   const handleNestedInputChange = (section, key, nestedKey, value) => {
     setFormData({
@@ -91,11 +84,6 @@ const TeacherProfile = () => {
     });
   };
 
-  const handleAddToArray = (section) => {
-    const updatedArray = [...formData[section], { name: "" }];
-    setFormData({ ...formData, [section]: updatedArray });
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -103,7 +91,7 @@ const TeacherProfile = () => {
         ...formData,
         classId: classIds,
         subjectId: subjectIds,
-        profilePic: `https://api.studypulse.live/${imageUrl}`,
+        profilePic: imageUrl,
         experience: formData.experience.map((exp) => {
           // Create a new object without the _id field
           const { _id, ...expWithoutId } = exp;
@@ -137,7 +125,28 @@ const TeacherProfile = () => {
       console.error("Error submitting form:", error.message);
     }
   };
-
+  const handleRemoveFromClassAndSubjects = (classId, subjectIndex) => {
+    // Remove the subjectId from the selected classId
+    setS_c((prev) => {
+      const updatedState = { ...prev };
+  
+      // Remove the subjectId from the array of subjects for the given classId
+      const updatedSubjects = updatedState[classId].filter((_, index) => index !== subjectIndex);
+  
+      if (updatedSubjects.length > 0) {
+        updatedState[classId] = updatedSubjects;
+      } else {
+        delete updatedState[classId]; // If no subjects left, remove the classId entirely
+      }
+  
+      return updatedState;
+    });
+  
+    // Now, update classIds and subjectIds
+    setClassIds(Object.keys(s_c)); // Get class IDs
+    setSubjectIds(Object.values(s_c).flat()); // Flatten and get all subject IDs
+  };
+  
   const handleC_SSubmit = async () => {
     console.log("Classes and Subjects", selectedClassId, selectedSubjectId); // Debugging output
 
@@ -184,11 +193,7 @@ const TeacherProfile = () => {
       toast.error("Failed to upload image.");
     }
   };
-  useEffect(() => {
-    console.log("Updated Class-Subject Mapping:", s_c);
-    console.log("Updated Classes Mapping:", classIds);
-    console.log("Updated Subjects Mapping:", subjectIds);
-  }, [s_c, classIds, subjectIds]);
+
 
   const getPreviousData = async () => {
     try {
@@ -266,7 +271,7 @@ const TeacherProfile = () => {
     setFormData((prev) => ({ ...prev, experience: updatedExperience }));
   };
 
-  // Handler to add a new experience
+  
   const handleAddExperience = () => {
     const newExperience = {
       startDate: "",
@@ -280,46 +285,6 @@ const TeacherProfile = () => {
     }));
   };
 
-  const handleAddClass = () => {
-    const newClass = { name: "", subjects: [] }; // New class with empty subjects
-    setFormData((prev) => ({
-      ...prev,
-      classes: [...prev.classes, newClass], // Add new class to the classes array
-    }));
-  };
-
-  const handleAddSubject = (classIndex) => {
-    const updatedClasses = [...formData.classes];
-    const updatedSubjects = [...formData.subjects];
-
-    // Add a new subject to the selected class
-    updatedClasses[classIndex].subjects.push({ _id: "", name: "" });
-
-    // Ensure subjects array is aligned with classes
-    updatedSubjects[classIndex] = updatedSubjects[classIndex] || [];
-    updatedSubjects[classIndex].push({ _id: "", name: "" });
-
-    setFormData({
-      ...formData,
-      classes: updatedClasses,
-      subjects: updatedSubjects,
-    });
-  };
-
-  // Handle subject change
-  const handleSubjectChange = (classIndex, subjectIndex, e) => {
-    const updatedSubjects = [...formData.subjects];
-    updatedSubjects[classIndex] = updatedSubjects[classIndex] || [];
-    updatedSubjects[classIndex][subjectIndex] = {
-      _id: e.target.value,
-      name: e.target.options[e.target.selectedIndex].text,
-    };
-
-    setFormData({
-      ...formData,
-      subjects: updatedSubjects,
-    });
-  };
 
   return (
     <div>
@@ -571,32 +536,30 @@ const TeacherProfile = () => {
           </div>
           <div>
             <div className="grid grid-cols-2 gap-2">
-              {Object.entries(s_c).map(([key, value]) => {
-                return (
-                  <div
-                    key={key}
-                    className="card p-4 border rounded-lg shadow-lg"
-                  >
-                    {classes.find((cls) => cls._id === key)?.name}
+            {Object.entries(s_c).map(([key, value]) => {
+  return (
+    <div key={key} className="card p-4 border rounded-lg shadow-lg">
+      {classes.find((cls) => cls._id === key)?.name}
 
-                    {value.map((item, index) => (
-                      <div key={index} className="subject-item mb-2">
-                        {subjects.find((subject) => subject._id === item)?.name}
-                        {/* Print subject or item */}
-                        <button
-                          type="button"
-                          onClick={() =>
-                            handleRemoveFromClassAndSubjects(key, index)
-                          }
-                          className="btn btn-danger ml-2"
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                );
-              })}
+      {value.map((item, index) => (
+        <div key={index} className="subject-item mb-2">
+          {subjects.find((subject) => subject._id === item)?.name}
+          {/* Print subject or item */}
+          <button
+            type="button"
+            onClick={() =>
+              handleRemoveFromClassAndSubjects(key, index) // Pass the classId and index to remove
+            }
+            className="btn btn-danger ml-2"
+          >
+            Remove
+          </button>
+        </div>
+      ))}
+    </div>
+  );
+})}
+
             </div>
           </div>
         </div>

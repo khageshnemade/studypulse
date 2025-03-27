@@ -13,7 +13,8 @@ function RegisterForm() {
   const [taluka, setTaluka] = useState([]);
   const [city, setCity] = useState([]);
   const [organization, setOrganization] = useState([]);
-
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [selectedTaluka, setSelectedTaluka] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
@@ -21,7 +22,6 @@ function RegisterForm() {
 
 
   useEffect(() => {
-    fetchDistrict()
   }, []);
 
   // Update taluka based on selected district
@@ -48,6 +48,14 @@ function RegisterForm() {
     }
   }, [selectedDistrict]);
 
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible((prev) => !prev);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setIsConfirmPasswordVisible((prev) => !prev);
+  };
   // Update cities based on selected taluka
   useEffect(() => {
     console.log('====================================');
@@ -334,7 +342,7 @@ function RegisterForm() {
         <div className="col-md-6 mb-1 d-flex justify-content-center align-items-center">
           <label className="col-md-4 new_label" htmlFor="password">Password :</label>
           <input
-            type="password"
+            type={isPasswordVisible ? 'text' : 'password'}
             name="password"
             id="password"
             value={formData.password}
@@ -344,17 +352,29 @@ function RegisterForm() {
             minLength={4}
             className="form-control text-center col-md-8 border border-black focus:border-blue-700"
           />
+          <span
+            onClick={togglePasswordVisibility}
+            className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer text-xl"
+          >
+            {isPasswordVisible ? "🔓" : "🔒"}
+          </span>
         </div>
 
         <div className="col-md-6 mb-1 d-flex justify-content-center align-items-center">
           <label className="col-md-4 new_label" htmlFor="confirm">Confirm Password:</label>
           <input
-            type="password"
+            type={isConfirmPasswordVisible ? 'text' : 'password'}
             name="confirm"
             id="confirm"
             required
             className="form-control text-center col-md-8 border border-black focus:border-blue-700"
           />
+          <span
+            onClick={toggleConfirmPasswordVisibility}
+            className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer text-xl"
+          >
+            {isConfirmPasswordVisible ? "🔓" : "🔒"}
+          </span>
         </div>
 
         {/* District Dropdown */}

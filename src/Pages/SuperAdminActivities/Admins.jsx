@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { makeRequest } from "../../axios";
 import { Link, useLocation, useNavigate } from "react-router-dom"; // For navigation
-import { Pencil, User2 } from "lucide-react";
+import { ArrowLeft, Pencil, User2 } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { setSuperAdminDetails } from "../../redux/features/superAdminSlice";
@@ -78,12 +78,12 @@ export default function Admins() {
           Admin List
         </span>
       </p>
-      <div className="flex justify-between items-center mb-6 mx-auto bg-gradient-to-r from-blue-500 to-purple-600 text-white p-3">
+      <div className="flex justify-between items-center mb-6 mx-auto bg-teal-600 text-white p-3">
         <Link
           to="/superadmin-dashboard"
           className="text-lg font-semibold text-white hover:text-gray-200 transition"
         >
-          Back
+          <ArrowLeft/>
         </Link>
 
         <select
@@ -138,16 +138,17 @@ export default function Admins() {
               </div>
 
               <button
-                onClick={() =>
-                  navigate(`/superadmin-dashboard/admins/updateAdmin`, {
-                    state: { admin: admin },
-                  })
-                }
-                className="w-full py-2 bg-blue-500 text-white font-semibold hover:bg-blue-600 transition"
-              >
-                <Pencil size={18} className="inline-block mr-2" />
-                Update
-              </button>
+  onClick={() =>
+    navigate(`/superadmin-dashboard/admins/updateAdmin`, {
+      state: { admin: admin },
+    })
+  }
+  className="w-full py-2 bg-teal-500 text-white font-semibold hover:bg-teal-600 transition"
+>
+  <Pencil size={18} className="inline-block mr-2" />
+  Update
+</button>
+
             </div>
           ))}
         </div>

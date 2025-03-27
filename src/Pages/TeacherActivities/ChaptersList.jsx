@@ -161,7 +161,7 @@ const ChaptersList = () => {
             onClick={() => {
               navigate("/teacher-dashboard/chapters/add_chapter");
             }}
-            className="flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600 text-white w-10 h-10 rounded-full hover:bg-blue-700 transition duration-300 mt-4 relative bottom-3"
+            className="flex items-center justify-center bg-gradient-to-r from-teal-500 via-teal-600 to-blue-600 text-white w-10 h-10 rounded-full hover:bg-blue-700 transition duration-300 mt-4 relative bottom-3"
             title="Add Chapter"
           >
             <Plus className="w-6 h-6" />
@@ -179,7 +179,7 @@ const ChaptersList = () => {
       ) : (
         <div className="w-full overflow-x-auto">
           <table className="w-full bg-white shadow-md rounded-lg">
-            <thead className="bg-gradient-to-r from-blue-400 to-purple-600 text-white">
+            <thead className="bg-teal-500 text-white">
               <tr>
                 <th className="px-6 py-4 text-sm font-semibold text-left min-w-[150px]">
                   Chapter Title

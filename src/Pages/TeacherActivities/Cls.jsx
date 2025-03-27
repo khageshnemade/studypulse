@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import { makeRequest } from "../../axios";
 
-import { Layers } from "lucide-react";
+import { Eye, Layers } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Cls() {
@@ -59,7 +59,7 @@ export default function Cls() {
       </p>
       <div className="mx-auto p-4 sm:p-6 bg-white shadow-lg rounded-lg overflow-x-auto">
         <table className="table-auto w-full border-collapse border border-gray-300 whitespace-nowrap">
-          <thead className="bg-gradient-to-r from-blue-400 to-purple-600 text-white">
+          <thead className="bg-teal-500 text-white font-serif">
             <tr>
               <th className="border border-gray-300 px-4 py-2 text-left">
                 Profile
@@ -73,21 +73,11 @@ export default function Cls() {
               <th className="border border-gray-300 px-4 py-2 text-left ">
                 Created At
               </th>
-              <th className="border border-gray-300 px-4 py-2 text-left ">
-                Action
-              </th>
             </tr>
           </thead>
           <tbody>
             {classes.map((item, index) => (
               <tr key={index} className="hover:bg-gray-100 transition-all">
-                <td className="px-4 py-2 border">
-                  <img
-                    className="w-10 h-10 rounded-full"
-                    src={`https://api.studypulse.live/${item.image}`}
-                    alt="Profile"
-                  />
-                </td>
                 <td className="border border-gray-300 px-4 py-2">
                   {item.name}
                 </td>
@@ -99,10 +89,10 @@ export default function Cls() {
                 </td>
                 <td className="border border-gray-300 px-4 py-2">
                   <button
-                    className="bg-blue-400 text-white px-3 py-1 rounded-lg hover:bg-blue-600 transition-all"
+                    className="bg-teal-700 text-white px-2 py-1 rounded-lg hover:bg-teal-600 transition-all"
                     onClick={() => showStudents(item._id, item.name)}
                   >
-                    View Students
+                    <Eye className="text-white" />
                   </button>
                 </td>
               </tr>
