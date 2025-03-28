@@ -158,9 +158,6 @@ const router = createBrowserRouter(
         { path: "student", element: <StudentsRegistered /> },
         { path: "teachers", element: <TeacherData /> },
         { path: "class_subject/addclass", element: <AddClass /> },
-
-        { path: "students", element: <StudentData /> },
-        { path: "teachers", element: <TeacherData /> },
         { path: "class_subject", element: <Classes /> },
         { path: "class_subject/addSubject", element: <AddSubject /> },
         { path: "class_subject/subjects", element: <Subject /> },

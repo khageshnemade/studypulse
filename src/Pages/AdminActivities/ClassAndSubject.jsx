@@ -62,7 +62,9 @@ export default function Classes() {
         <table className="table-auto w-full border-collapse border whitespace-nowrap border-gray-300">
           <thead className="bg-teal-700 font-serif text-white">
             <tr>
-             
+            <th className="border border-gray-300 px-4 py-2 text-left ">
+                Profile
+              </th>
               <th className="border border-gray-300 px-4 py-2 text-left ">
                 Classes
               </th>
@@ -83,7 +85,9 @@ export default function Classes() {
                 key={index}
                 className="hover:bg-gray-200 hover:text-gray-900 transition-all" // Adjust hover to ensure contrast
               >
-                
+                <td className="border border-gray-800 px-4 py-2">
+                 <img src={`https://api.studypulse.live/`} alt="" />
+                </td>
                 <td className="border border-gray-800 px-4 py-2">
                   {item.name}
                 </td>

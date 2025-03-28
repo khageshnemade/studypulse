@@ -29,7 +29,7 @@ const AddClass = () => {
 
     try {
       const response = await makeRequest.post(
-        "https://api.studypulse.live/web/api/file-upload/class-pic",
+        "file-upload/class-pic",
         formData
       );
 
@@ -149,7 +149,7 @@ const AddClass = () => {
                   Image Uploaded Successfully!
                 </p>
                 <img
-                  src={`https://api.studypulse.live/${imageUrl}`}
+                  src={`http://localhost:5000/${imageUrl}`}
                   alt="Uploaded Profile"
                   className="mt-2 max-w-xs mx-auto rounded-full"
                 />

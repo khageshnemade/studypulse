@@ -1,4 +1,4 @@
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
@@ -112,8 +112,11 @@ export const Table = () => {
 const TeacherData = () => {
   return (
     <div className="flex flex-col gap-y-4">
-      <p className="text-center text-xl font-serif p-2 rounded-2xl flex justify-center items-center mx-auto m-3 border-[1.5px] border-blue-800">
-        Teachers
+    <p className="text-center text sm:text-xl md:text-2xl font-serif p-2 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto m-3 drop-shadow-lg border-[1.5px] border-blue-800">
+        <User className="text sm:text-xl md:text-2xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce text-blue-600" />
+        <span className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
+          Teachers
+        </span>
       </p>
       <Table />
     </div>
