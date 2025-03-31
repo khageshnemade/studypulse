@@ -140,9 +140,7 @@ const Table = () => {
           onClick={handleToggle}
           className={`px-4 py-2 rounded-lg text-white ${profileComplete ? "bg-green-500" : "bg-red-500"}`}
         >
-          {profileComplete
-            ? "Completed Profiles"
-            : "Incompleted Profiles"}
+          {profileComplete ? "Completed Profiles" : "Incompleted Profiles"}
         </button>
         <div className="text-lg font-semibold">Page: {currentPage}</div>
       </div>
@@ -165,21 +163,19 @@ const Table = () => {
               {students.map((row) => (
                 <tr key={row._id} className="hover:bg-gray-50">
                   <td className="px-4 py-2 border">
-
                     {row?.profilePic ? (
                       <img
                         src={`https://api.studypulse.live/${row.profilePic}`}
                         alt="Profile"
-                        className="w-full h-full object-cover"
+                        className="w-16 h-16 object-cover rounded-full" // Set explicit width and height here
                       />
                     ) : (
                       <div className="w-16 h-16 flex items-center justify-center bg-blue-600 text-white text-2xl font-bold rounded-full">
                         {`${row.firstName[0]}${row.lastName[0]}`.toUpperCase()}
                       </div>
-  )}
-
-
+                    )}
                   </td>
+
                   <td className="px-4 py-2 border">
                     {row.firstName} {row.lastName}
                   </td>
@@ -204,10 +200,11 @@ const Table = () => {
                   <td className="px-4 py-2 border">
                     <button
                       onClick={() => handleStatusChange(row)}
-                      className={`px-4 py-2 rounded-md text-white ${row.status === "active"
+                      className={`px-4 py-2 rounded-md text-white ${
+                        row.status === "active"
                           ? "bg-green-500 hover:bg-green-600"
                           : "bg-red-500 hover:bg-red-600"
-                        }`}
+                      }`}
                     >
                       {row.status}
                     </button>

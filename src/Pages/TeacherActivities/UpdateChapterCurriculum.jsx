@@ -34,7 +34,7 @@ const UpdateChapterCurriculum = () => {
       chapterCurriculumId: curr._id, // Assuming curr has an _id field
       chapterId: curr.chapterId._id,
       subjectId: curr.subjectId._id,
-      classId: curr.classId._id,
+      classId: curr.classId,
       title,
       description,
       videoUrl,

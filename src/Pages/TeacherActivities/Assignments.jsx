@@ -1,9 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { makeRequest } from "../../axios";
-import { ArrowLeft, Plus, Edit, ChevronRight, ChevronDown, ChevronUp } from "lucide-react"; // Import Lucid React Icons
+import {
+  ArrowLeft,
+  Plus,
+  Edit,
+  ChevronRight,
+  ChevronDown,
+  ChevronUp,
+  ClipboardList,
+} from "lucide-react"; // Import Lucid React Icons
 import { ToastContainer } from "react-toastify";
-import { useSelector } from 'react-redux';  // Import useSelector from Redux
+import { useSelector } from "react-redux"; // Import useSelector from Redux
 import { useDispatch } from "react-redux";
 import { setClassDetails } from "../../redux/features/idsSlice";
 export default function Assignments() {
@@ -11,7 +19,9 @@ export default function Assignments() {
   const dispatch = useDispatch();
 
   // Use useSelector to get data from Redux store
-  const { classId, subjectId, chapterId } = useSelector(state => state.ids.classDetails); // Assume classDetails is set in redux
+  const { classId, subjectId, chapterId } = useSelector(
+    (state) => state.ids.classDetails
+  ); // Assume classDetails is set in redux
 
   const [openAssignment, setOpenAssignment] = useState(null); // Track which assignment is open
   const [assignments, setAssignments] = useState([]);
@@ -23,7 +33,7 @@ export default function Assignments() {
 
   useEffect(() => {
     fetchAssignment();
-    console.log("In fetch assignment",classId,subjectId,chapterId);
+    console.log("In fetch assignment", classId, subjectId, chapterId);
   }, [chapterId]); // Only refetch when chapterId changes
 
   const fetchAssignment = async () => {
@@ -33,7 +43,7 @@ export default function Assignments() {
       );
       console.log("Assignment fetched", res?.data);
       setAssignments(res?.data?.data);
-dispatch(setClassDetails({assignments:res?.data?.data}))
+      dispatch(setClassDetails({ assignments: res?.data?.data }));
     } catch (error) {
       console.error("Request Error:", error.message);
     }
@@ -58,7 +68,7 @@ dispatch(setClassDetails({assignments:res?.data?.data}))
         <button
           onClick={() => {
             navigate("/teacher-dashboard/add_assignment", {
-              // No need to pass location state here, fetch it from Redux
+              state: { classId, subjectId, chapterId },
             });
           }}
           className="flex items-center justify-center bg-blue-500 text-white p-3 rounded-full hover:bg-blue-600 transition duration-300 transform hover:scale-110"
@@ -89,9 +99,12 @@ dispatch(setClassDetails({assignments:res?.data?.data}))
                 {/* Edit Button */}
                 <button
                   onClick={() =>
-                    navigate("/teacher-dashboard/chapters/assignments/update_assignment", {
-                      state: { assignment },
-                    })
+                    navigate(
+                      "/teacher-dashboard/chapters/assignments/update_assignment",
+                      {
+                        state: { assignment },
+                      }
+                    )
                   }
                   className="p-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
                   title="Edit Assignment"
@@ -102,14 +115,17 @@ dispatch(setClassDetails({assignments:res?.data?.data}))
                 {/* View Results Button */}
                 <button
                   onClick={() =>
-                    navigate("/teacher-dashboard/chapters/assignments/assignRes", {
-                      state: { assignment },
-                    })
+                    navigate(
+                      "/teacher-dashboard/chapters/assignments/assignRes",
+                      {
+                        state: { assignment },
+                      }
+                    )
                   }
                   className="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
                   title="View Results"
                 >
-                  <ChevronRight className="w-5 h-5" />
+                  <ClipboardList className="w-5 h-5" />
                 </button>
 
                 {/* Dropdown Button */}

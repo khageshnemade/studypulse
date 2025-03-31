@@ -45,18 +45,20 @@ export const Table = () => {
     <UpdateTeacher id={currentId} setShowUpdateTeacher={setShowUpdateTeacher} />
   ) : (
     <div className="overflow-x-auto">
-      <table className="min-w-full bg-white rounded-lg shadow-md whitespace-nowrap">        <thead className="bg-teal-700 text-white">
-        <tr>
-          <th className="px-4 py-2">Profile</th>
-          <th className="px-4 py-2">Name</th>
-          <th className="px-4 py-2">Email</th>
-          <th className="px-4 py-2">Phone Number</th>
-          <th className="px-4 py-2">Address</th>
-          <th className="px-4 py-2">Experience</th>
-          <th className="px-4 py-2">More</th>
-          <th className="px-4 py-2">Status</th>
-        </tr>
-      </thead>
+      <table className="min-w-full bg-white rounded-lg shadow-md whitespace-nowrap">
+        {" "}
+        <thead className="bg-teal-700 text-white">
+          <tr>
+            <th className="px-4 py-2">Profile</th>
+            <th className="px-4 py-2">Name</th>
+            <th className="px-4 py-2">Email</th>
+            <th className="px-4 py-2">Phone Number</th>
+            <th className="px-4 py-2">Address</th>
+            <th className="px-4 py-2">Experience</th>
+            <th className="px-4 py-2">More</th>
+            <th className="px-4 py-2">Status</th>
+          </tr>
+        </thead>
         <tbody>
           {teachers.map((row, index) => (
             <tr key={index} className="bg-white hover:bg-gray-100">
@@ -77,7 +79,9 @@ export const Table = () => {
               <td className="px-4 py-2">{row.email}</td>
               <td className="px-4 py-2">{row.phoneNumber}</td>
               <td className="px-4 py-2">{`${row?.cityData?.name}, ${row?.cityData?.name}`}</td>
-              <td className="px-4 py-2">{row?.teacherData?.totalYearsOfExperience}</td>
+              <td className="px-4 py-2">
+                {row?.teacherData?.totalYearsOfExperience}
+              </td>
               <td className="px-4 py-2">
                 <button
                   className="p-2 bg-blue-500 text-white rounded-lg"
@@ -91,10 +95,9 @@ export const Table = () => {
               </td>
               <td className="p-3">
                 <button
-                  className={`text-white p-1 rounded-md ${row.status === "active"
-                      ? "bg-green-500"
-                      : "bg-red-500"
-                    }`}
+                  className={`text-white p-1 rounded-md ${
+                    row.status === "active" ? "bg-green-500" : "bg-red-500"
+                  }`}
                   onClick={() => handleClick(row)}
                 >
                   {row.status}
@@ -112,7 +115,7 @@ export const Table = () => {
 const TeacherData = () => {
   return (
     <div className="flex flex-col gap-y-4">
-    <p className="text-center text sm:text-xl md:text-2xl font-serif p-2 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto m-3 drop-shadow-lg border-[1.5px] border-blue-800">
+      <p className="text-center text sm:text-xl md:text-2xl font-serif p-2 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto m-3 drop-shadow-lg border-[1.5px] border-blue-800">
         <User className="text sm:text-xl md:text-2xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce text-blue-600" />
         <span className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
           Teachers

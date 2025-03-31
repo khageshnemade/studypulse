@@ -31,7 +31,7 @@ export default function AdminSignup() {
 
     try {
       const response = await axios.post(
-        "https://api.studypulse.live/web/api/superAdmin/admin/signup",
+        "superAdmin/admin/signup",
         formData
       );
       setSuccess("Signup successful!");

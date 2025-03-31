@@ -1,7 +1,7 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { makeRequest } from "../../axios";
 import { Link, useLocation } from "react-router-dom";
+import { Eye } from "lucide-react";
 
 export default function Students() {
   const location = useLocation();
@@ -35,20 +35,17 @@ export default function Students() {
       const userData = localStorage.getItem("user");
       const parsedData = JSON.parse(userData);
 
-      const response = await axios.get(
-        "https://api.studypulse.live/web/api/teacher/get-all-students",
-        {
-          headers: {
-            Authorization: `Bearer ${parsedData.token}`, // Pass token if required
-          },
-          params: {
-            classId: classId,
-            page: 1,
-            limit: 100,
-            isProfileComplete: true,
-          },
-        }
-      );
+      const response = await makeRequest.get("teacher/get-all-students", {
+        headers: {
+          Authorization: `Bearer ${parsedData.token}`, // Pass token if required
+        },
+        params: {
+          classId: classId,
+          page: 1,
+          limit: 100,
+          isProfileComplete: true,
+        },
+      });
 
       setStudents(response?.data?.data || []);
       console.log("Students Data:", response?.data?.data);
@@ -79,6 +76,9 @@ export default function Students() {
           <thead className="bg-blue-100 text-left">
             <tr>
               <th className="px-6 py-3 text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                Profile Picture
+              </th>
+              <th className="px-6 py-3 text-sm font-semibold text-gray-700 uppercase tracking-wider">
                 Full Name
               </th>
               <th className="px-6 py-3 text-sm font-semibold text-gray-700 uppercase tracking-wider">
@@ -93,9 +93,7 @@ export default function Students() {
               <th className="px-6 py-3 text-sm font-semibold text-gray-700 uppercase tracking-wider">
                 Address
               </th>
-              <th className="px-6 py-3 text-sm font-semibold text-gray-700 uppercase tracking-wider">
-                Profile Picture
-              </th>
+
               <th className="px-6 py-3 text-sm font-semibold text-gray-700 uppercase tracking-wider">
                 Documents
               </th>
@@ -107,6 +105,22 @@ export default function Students() {
                 key={student._id}
                 className="border-b hover:bg-blue-50 transition-colors duration-300"
               >
+                <td className="px-6 py-4 text-sm text-center">
+                  {student?.innerData.profilePic ? (
+                    <img
+                      src={`https://api.studypulse.live/${student?.innerData.profilePic}`}
+                      alt="Profile"
+                      className="w-12 h-12 rounded-full border-2 border-blue-500"
+                    />
+                  ) : (
+                    <div className="w-16 h-16 flex items-center justify-center mx-auto bg-blue-600 text-white text-2xl rounded-full">
+                      {student?.innerData?.firstName && student?.innerData?.lastName
+                        ? `${student?.innerData.firstName[0] || ""}${student?.innerData.lastName[0] || ""}`.toUpperCase()
+                        : "NN"}{" "}
+                      {/* Fallback initials */}
+                    </div>
+                  )}
+                </td>
                 <td className="px-6 py-4 text-sm text-gray-900">
                   {student.innerData.firstName} {student.innerData.lastName}
                 </td>
@@ -122,19 +136,14 @@ export default function Students() {
                 <td className="px-6 py-4 text-sm text-gray-900">
                   {student.address}
                 </td>
-                <td className="px-6 py-4 text-sm text-center">
-                  <img
-                    src={student.profilePic}
-                    alt="Profile"
-                    className="w-12 h-12 rounded-full border-2 border-blue-500"
-                  />
-                </td>
+
                 <td className="px-6 py-4 text-sm">
                   <button
                     onClick={() => openModal(student)}
-                    className="bg-gradient-to-r from-blue-200 to-purple-400 text-white px-4 py-2 rounded hover:bg-blue-800 focus:outline-none"
+                    className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-800 focus:outline-none"
+                    title="Documents"
                   >
-                    View Documents
+                    <Eye />
                   </button>
                 </td>
 
@@ -153,7 +162,6 @@ export default function Students() {
                       <div className="mt-4">
                         {selectedStudent.documents.map((doc, index) => (
                           <div key={index} className="mb-2">
-
                             <Link
                               to={`https://api.studypulse.live/${doc}`}
                               target="_blank"
@@ -161,7 +169,6 @@ export default function Students() {
                             >
                               Document {index + 1}
                             </Link>
-
                           </div>
                         ))}
                       </div>

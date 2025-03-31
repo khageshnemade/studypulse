@@ -4,13 +4,14 @@ import { Link, useLocation } from "react-router-dom";
 const AssignmentData = () => {
   const location = useLocation();
 
-  // Demo data for students, assignments, and subjects
+  // Demo data with class information added
   const demoData = [
     {
       studentId: "S001",
       name: "Alice",
       assignment: "Math Exam",
       subject: "Math",
+      class: "Class 1", // Added class information
       attempts: 3,
       status: "Passed",
     },
@@ -19,6 +20,7 @@ const AssignmentData = () => {
       name: "Bob",
       assignment: "Math Exam",
       subject: "Math",
+      class: "Class 1", // Added class information
       attempts: 2,
       status: "Passed",
     },
@@ -27,6 +29,7 @@ const AssignmentData = () => {
       name: "Charlie",
       assignment: "History Quiz",
       subject: "History",
+      class: "Class 2", // Added class information
       attempts: 4,
       status: "Passed",
     },
@@ -35,6 +38,7 @@ const AssignmentData = () => {
       name: "David",
       assignment: "Math Exam",
       subject: "Math",
+      class: "Class 3", // Added class information
       attempts: 5,
       status: "Failed",
     },
@@ -43,25 +47,36 @@ const AssignmentData = () => {
       name: "Eve",
       assignment: "History Quiz",
       subject: "History",
+      class: "Class 2", // Added class information
       attempts: 1,
       status: "Passed",
     },
   ];
 
   const subjects = ["Math", "History", "Science"];
+  const classes = ["Class 1", "Class 2", "Class 3"]; // Example classes
 
-  // State for the selected subject
+  // State for the selected subject and class
   const [selectedSubject, setSelectedSubject] = useState("");
+  const [selectedClass, setSelectedClass] = useState("");
 
   // Handle subject change
   const handleSubjectChange = (e) => {
     setSelectedSubject(e.target.value);
   };
 
-  // Filter demo data based on the selected subject
-  const filteredData = selectedSubject
-    ? demoData.filter((student) => student.subject === selectedSubject)
-    : demoData;
+  // Handle class change
+  const handleClassChange = (e) => {
+    setSelectedClass(e.target.value);
+  };
+
+  // Filter demo data based on the selected subject and class
+  const filteredData = demoData.filter((student) => {
+    return (
+      (!selectedSubject || student.subject === selectedSubject) &&
+      (!selectedClass || student.class === selectedClass)
+    );
+  });
 
   // Calculate average attempts for the passed students
   const passedStudents = filteredData.filter(
@@ -80,8 +95,23 @@ const AssignmentData = () => {
         Student Assignment Attempts Dashboard
       </h1>
 
-      {/* Subject Selection Dropdown */}
-      <div className="mb-6 flex justify-start">
+      {/* Class and Subject Selection Dropdown */}
+      <div className="mb-6 flex justify-start space-x-4">
+        {/* Class Dropdown */}
+        <select
+          value={selectedClass}
+          onChange={handleClassChange}
+          className="w-56 p-2 border rounded-lg focus:ring focus:ring-blue-300"
+        >
+          <option value="">Select Class</option>
+          {classes.map((classItem, index) => (
+            <option key={index} value={classItem}>
+              {classItem}
+            </option>
+          ))}
+        </select>
+
+        {/* Subject Dropdown */}
         <select
           value={selectedSubject}
           onChange={handleSubjectChange}
@@ -155,4 +185,5 @@ const AssignmentData = () => {
     </div>
   );
 };
+
 export default AssignmentData;

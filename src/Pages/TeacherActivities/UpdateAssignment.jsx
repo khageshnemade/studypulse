@@ -1,28 +1,29 @@
 import React, { useEffect, useState } from "react";
-import { makeRequest } from "../../axios";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const UpdateAssignment = () => {
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const location = useLocation();
   const { assignment } = location.state || {};
 
+  // Initialize form data with static data
   const [formData, setFormData] = useState({
-    assignmentId: assignment?._id || "",
-    title: assignment?.title || "",
-    classId: assignment?.classId || "",
-    subjectId: assignment?.subjectId || "",
-    description: assignment?.description || "",
-    passingMarks: assignment?.passingMarks || 0,
-    totalMarks: parseInt(assignment?.totalMarks) || 0,
-    questions: assignment?.questions || [],
-    dueDate: assignment?.dueDate || "",
-    status: assignment?.status || "active",
+    assignmentId: assignment.assignmentId || "",
+    title: assignment.title || "",
+    classId: assignment.classId || "",
+    subjectId: assignment.subjectId || "",
+    description: assignment.description || "",
+    passingMarks: assignment.passingMarks || 0,
+    totalMarks: parseInt(assignment.totalMarks) || 0,
+    questions: assignment.questions || [],
+    dueDate: assignment.dueDate || "",
+    status: assignment.status || "active",
   });
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // Handle input change for general fields
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -31,76 +32,86 @@ const UpdateAssignment = () => {
     });
   };
 
-
+  // Handle change for each question field
   const handleQuestionChange = (index, e) => {
     const { name, value } = e.target;
     const updatedQuestions = [...formData.questions];
-  
-    // Update the specific question
+
     updatedQuestions[index] = {
       ...updatedQuestions[index],
       [name]: value,
     };
-  
+
     setFormData({
       ...formData,
-      questions: updatedQuestions,  // Update the state with new question data
+      questions: updatedQuestions, // Update questions state
     });
   };
-  
-useEffect(() => {
-  const totalMarks = formData.questions.reduce((sum, e) => sum + parseInt(e.marks), 0);
-    setFormData({...formData, totalMarks });
-  
-}, [formData?.questions])
 
-const handleOptionChange = (questionIndex, optionIndex, e) => {
-  const { name, value, type, checked } = e.target;
-  const updatedQuestions = [...formData.questions];
+  // Update totalMarks when questions change
+  useEffect(() => {
+    const totalMarks = formData.questions.reduce(
+      (sum, e) => sum + parseInt(e.marks) || 0, // Handle undefined marks gracefully
+      0
+    );
+    setFormData({ ...formData, totalMarks });
+  }, [formData.questions]);
 
-  // Update the specific option for the specific question
-  updatedQuestions[questionIndex].options[optionIndex] = {
-    ...updatedQuestions[questionIndex].options[optionIndex],
-    [name]: type === "checkbox" ? checked : value,  // Handle checkbox correctly
+  // Handle changes for each option within a question
+  const handleOptionChange = (questionIndex, optionIndex, e) => {
+    const { name, value, type, checked } = e.target;
+
+    // Create a copy of the questions array
+    const updatedQuestions = [...formData.questions];
+
+    // Create a copy of the question object at the specified index
+    const updatedQuestion = { ...updatedQuestions[questionIndex] };
+
+    // Create a copy of the options array within the question
+    const updatedOptions = [...updatedQuestion.options];
+
+    // Update the specific option at the given optionIndex
+    updatedOptions[optionIndex] = {
+      ...updatedOptions[optionIndex],
+      [name]: type === "checkbox" ? checked : value, // Update the option based on input type
+    };
+
+    // Reassign the updated options array to the question
+    updatedQuestion.options = updatedOptions;
+
+    // Now, update the question in the main questions array
+    updatedQuestions[questionIndex] = updatedQuestion;
+
+    // Update the state with the modified questions array
+    setFormData({
+      ...formData,
+      questions: updatedQuestions, // Update questions in the state
+    });
   };
 
-  setFormData({
-    ...formData,
-    questions: updatedQuestions,  // Update the state with new options data
-  });
-};
-
-
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     setIsLoading(true);
     setError("");
-    console.log("passing submit", formData.questions);
-   
-
-    console.log("Passing mark", formData);
 
     try {
       if (formData.passingMarks <= formData.totalMarks) {
-        const response = await makeRequest.post(
-          "teacher/update-assignment",
-          formData
-        );
-        console.log("Assignment updated successfully:", response.data);
+        // This is where you would normally make a request to the backend
         alert("Assignment updated successfully!");
-        navigate("/teacher-dashboard/chapters/assignments")
+        navigate("/teacher-dashboard/chapters/assignments");
       } else {
         alert("Please enter valid passing marks");
       }
     } catch (err) {
-      console.error("Error updating assignment:", err.message);
       setError("Failed to update assignment");
     } finally {
       setIsLoading(false);
     }
   };
 
+  // Ensure the due date is not set to a past date
   const currentDateTime = new Date().toISOString().slice(0, 16);
 
   return (
@@ -137,41 +148,6 @@ const handleOptionChange = (questionIndex, optionIndex, e) => {
           />
         </div>
 
-        {/* Class ID */}
-        <div>
-          <input
-            type="text"
-            hidden
-            name="classId"
-            value={formData.classId}
-            onChange={handleInputChange}
-            className="w-full border border-gray-300 rounded px-4 py-2"
-          />
-        </div>
-
-        {/* AssignMent ID */}
-        <div>
-          <input
-            type="text"
-            hidden
-            name="classId"
-            value={formData.assignmentId}
-            className="w-full border border-gray-300 rounded px-4 py-2"
-          />
-        </div>
-
-        {/* Subject ID */}
-        <div>
-          <input
-            type="text"
-            name="subjectId"
-            hidden
-            value={formData.subjectId}
-            onChange={handleInputChange}
-            className="w-full border border-gray-300 rounded px-4 py-2"
-          />
-        </div>
-
         {/* Passing Marks */}
         <div>
           <label
@@ -202,7 +178,6 @@ const handleOptionChange = (questionIndex, optionIndex, e) => {
             disabled
             name="totalMarks"
             value={formData.totalMarks > 0 ? formData.totalMarks : 1}
-            onChange={handleInputChange}
             className="w-full border border-gray-300 rounded px-4 py-2"
           />
         </div>

@@ -11,7 +11,6 @@ import {
   Title,
   ArcElement,
 } from "chart.js";
-import { data } from "autoprefixer";
 import { ToastContainer } from "react-toastify";
 import { User, Users, School, Book, Home } from "lucide-react";
 import { makeRequest } from "../../../axios";

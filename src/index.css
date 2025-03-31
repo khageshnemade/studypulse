@@ -202,7 +202,7 @@
 
 /* Hide scrollbar for Firefox */
 .overflow-x-auto {
-  scrollbar-width: none; /* Hide scrollbar */
+  scrollbar-width: thin; /* Hide scrollbar */
 }
 
 /* header  */

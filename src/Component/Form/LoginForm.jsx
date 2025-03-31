@@ -10,7 +10,7 @@ import { setRole } from "../../redux/features/roleSlice";
 // import { setStudentId } from "../../redux/features/studentIdSlice";
 // import { setStudentName } from "../../redux/features/studentNameSlice";
 import { setOrgId } from "../../redux/features/orgSlice";
-const apiUrl = import.meta.env.VITE_APP_API_URL;
+import makeRequest from "../../axios";
 
 function LoginForm() {
   const dispatch = useDispatch();
@@ -42,28 +42,29 @@ function LoginForm() {
       toast.error("Please verify CAPTCHA");
       return;
     }
-  
+
     setLoading(true);
-  
+
     try {
-      console.log(`API${apiUrl}`);
-      const response = await axios.post(`${apiUrl}/login/`, formData, {
-       // withCredentials: true,  // Include cookies in the request
-      }); 
-      console.log('Login successful:', response?.data);
+      console.log("In Login Submit");
+
+      const response = await makeRequest.post(`login/`, formData, {
+        withCredentials: true, // Include cookies in the request
+      });
+      console.log("Login successful:", response?.data);
       if (response.status === 200 || response.status === 201) {
-        const studentId = response?.data?.student_id;
         const userRole = response?.data?.data?.role; // 'Student' or 'Admin'
         const userName = `${response?.data?.data?.firstName} ${response?.data?.data?.lastName}`;
         const token = response?.data?.token;
-        const organizationID = response?.data?.data?.organizationID || "defaultOrgID"; // Fallback value
-        const profileCompletion=response?.data.data.profileCompletion
-      
+        const organizationID =
+          response?.data?.data?.organizationID || "defaultOrgID"; // Fallback value
+        const profileCompletion = response?.data.data.profileCompletion;
+        const organizationName = response?.data?.data?.organizationName;
+        const profilePic = response?.data?.data?.profilePic;
+
         console.log("Response Data:", response.data);
 
-      
         dispatch(setRole(userRole));
-    
 
         // Store user details in local storage
         localStorage.setItem(
@@ -74,20 +75,28 @@ function LoginForm() {
             token,
             userName,
             organizationID,
-            profileCompletion // Save organizationID
+            profileCompletion,
+            organizationName, // Save organization name
+            profilePic, // Save profile picture URL
           })
         );
-      
-        console.log("Stored Organization ID:", profileCompletion);
 
-        // toast.success("Login successful!");
+        console.log("Stored User Data:", {
+          email: formData.email,
+          role: userRole,
+          token,
+          userName,
+          organizationID,
+          profileCompletion,
+          organizationName,
+          profilePic,
+        });
+
         toast.success(response?.data?.message);
 
         setTimeout(() => {
           if (userRole === "admin") {
-            console.log("hello admin", response?.data?.data?.organizationID);
             const orgId = response?.data?.data?.organizationID;
-            
             dispatch(setOrgId(orgId));
             navigate("/admin-dashboard");
           } else if (userRole === "teacher") {
@@ -102,8 +111,8 @@ function LoginForm() {
         toast.error("Login failed. Please try again.");
       }
     } catch (error) {
-      console.error("Error:", error.response.data.message);
-      toast.error(`Error: ${error.response.data.message}`);
+      console.error("Error:", error?.response?.data?.message);
+      toast.error(`Error: ${error?.response?.data?.message}`);
     } finally {
       setLoading(false);
     }
@@ -120,14 +129,14 @@ function LoginForm() {
     if (userData) {
       // Parse the JSON string to an object
       const parsedUserData = JSON.parse(userData);
-      
+
       // Access the userRole
       const userRole = parsedUserData.role;
       const orgId = response?.data?.data?.organizationID;
 
       console.log("User Role:", userRole);
       setTimeout(() => {
-        if (userRole === "admin") {       
+        if (userRole === "admin") {
           dispatch(setOrgId(orgId));
           navigate("/admin-dashboard");
         } else if (userRole === "teacher") {
@@ -141,7 +150,6 @@ function LoginForm() {
     } else {
       console.log("No user data found");
     }
-  
   }, [navigate]);
   return (
     <>
@@ -159,9 +167,7 @@ function LoginForm() {
           <input
             type="text"
             name="email"
-            placeholder={
-               " Username "
-            }
+            placeholder={" Username "}
             value={formData.email}
             onChange={handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -173,9 +179,7 @@ function LoginForm() {
           <input
             type={showPassword ? "text" : "password"}
             name="password"
-            placeholder={
-              "Password"
-            }
+            placeholder={"Password"}
             value={formData.password}
             onChange={handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"

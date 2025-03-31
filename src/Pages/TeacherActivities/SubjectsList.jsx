@@ -50,16 +50,13 @@ const SubjectsList = () => {
       ) : (
         <div className="overflow-x-auto w-full">
           <table className="min-w-full table-auto bg-white shadow-lg rounded-lg whitespace-nowrap overflow-x-auto">
-            <thead className="bg-teal-500 text-white ">
+            <thead className="bg-teal-500 text-white">
               <tr>
                 <th className="px-6 py-3 text-sm font-semibold text-left">
                   Picture
                 </th>
                 <th className="px-6 py-3 text-sm font-semibold text-left">
                   Subject Name
-                </th>
-                <th className="px-6 py-3 text-sm font-semibold text-left">
-                  Subject Created Date
                 </th>
                 <th className="px-6 py-3 text-sm font-semibold text-left">
                   Chapters
@@ -70,18 +67,17 @@ const SubjectsList = () => {
               {subjects.length > 0 ? (
                 subjects.map((subject) => (
                   <tr key={subject._id} className="border-b hover:bg-gray-50">
-                    <td className="px-4 py-2 border">
+                    <td className="px-4 py-2 border border-gray-300">
                       <img
                         className="w-10 h-10 rounded-full"
                         src={`https://api.studypulse.live/${subject.image}`}
                         alt="Profile"
                       />
                     </td>
-                    <td className="px-6 py-4">{subject.name}</td>
-                    <td className="px-6 py-4">
-                      {new Date(subject.createdAt).toLocaleDateString()}
+                    <td className="px-6 py-4 border border-gray-300">
+                      {subject.name}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-4 border border-gray-300">
                       {subject?.chapterIds?.length > 0 ? (
                         <button
                           onClick={() =>

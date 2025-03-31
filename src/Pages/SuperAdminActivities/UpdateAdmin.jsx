@@ -44,7 +44,7 @@ export default function UpdateAdmin() {
     setError(null);
 
     try {
-      const response = await makeRequest.put(`https://api.studypulse.live/web/api/superAdmin/admin/${adminData.admin._id}`,
+      const response = await makeRequest.put(`superAdmin/admin/${adminData.admin._id}`,
         {
           email: adminData.email,
           phoneNumber: adminData.phoneNumber,

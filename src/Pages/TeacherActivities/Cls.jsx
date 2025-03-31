@@ -59,37 +59,36 @@ export default function Cls() {
       </p>
       <div className="mx-auto p-4 sm:p-6 bg-white shadow-lg rounded-lg overflow-x-auto">
         <table className="table-auto w-full border-collapse border border-gray-300 whitespace-nowrap">
-          <thead className="bg-teal-500 text-white font-serif">
+          <thead className="bg-teal-600 text-white font-serif">
             <tr>
-              <th className="border border-gray-300 px-4 py-2 text-left">
-                Profile
-              </th>
-              <th className="border border-gray-300 px-4 py-2 text-left ">
+              <th className="border border-gray-300 px-4 py-2 text-left font-medium">
                 Classes
               </th>
-              <th className="border border-gray-300 px-4 py-2 text-left ">
+              <th className="border border-gray-300 px-4 py-2 text-left font-medium">
                 Stream
               </th>
-              <th className="border border-gray-300 px-4 py-2 text-left ">
-                Created At
+
+              <th className="border border-gray-300 px-4 py-2 text-left font-medium">
+                Students
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="text-gray-800">
             {classes.map((item, index) => (
-              <tr key={index} className="hover:bg-gray-100 transition-all">
+              <tr
+                key={index}
+                className="hover:bg-teal-50 hover:text-teal-700 transition-all"
+              >
                 <td className="border border-gray-300 px-4 py-2">
                   {item.name}
                 </td>
                 <td className="border border-gray-300 px-4 py-2">
                   {item.stream}
                 </td>
-                <td className="border border-gray-300 px-4 py-2">
-                  {new Date(item.createdAt).toLocaleDateString()}
-                </td>
+
                 <td className="border border-gray-300 px-4 py-2">
                   <button
-                    className="bg-teal-700 text-white px-2 py-1 rounded-lg hover:bg-teal-600 transition-all"
+                    className="bg-teal-700 text-white px-4 py-2 rounded-lg hover:bg-teal-800 focus:outline-none focus:ring-2 focus:ring-teal-300 transition-all"
                     onClick={() => showStudents(item._id, item.name)}
                   >
                     <Eye className="text-white" />

@@ -34,20 +34,20 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
       toast.error("Please select a file before uploading.");
       return;
     }
-  
+
     const formData = new FormData();
     formData.append("files", file);
-  
+
     console.log("Form Data before upload:", formData);
-  
+
     try {
       const response = await makeRequest.post(
-        "https://api.studypulse.live/web/api/file-upload/profile-pic",
+        "file-upload/profile-pic",
         formData
       );
-  
+
       console.log("API response:", response);
-  
+
       if (response.data.success) {
         const imageUrl = response.data.url;
         setUserData((prevData) => ({
@@ -63,14 +63,12 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
       toast.error("Failed to upload image.");
     }
   };
-  
-  
+
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0]; // Access the selected file
     if (selectedFile) {
-      setFile(selectedFile); 
+      setFile(selectedFile);
       handleFileUpload(selectedFile);
-   
     }
   };
 
@@ -86,11 +84,11 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       console.log("UserData", userData);
       console.log("TeacherData", teacherData);
-  
+
       // Make PUT request with the updated fields
       const res = await makeRequest.put("/admin/update-teacher-data", {
         userData: {
@@ -107,14 +105,14 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
           address: teacherData?.address,
         },
       });
-  
+
       const message = res.data.message;
       console.log("Response Message:", message);
-  
+
       if (message) {
         toast.success(message); // Display the success message from the response
         console.log("RESPONSE SUCCESS", message);
-  
+
         // Optional: Close the update modal and navigate
         setShowUpdateTeacher(false);
         navigate("/admin-dashboard/teachers");
@@ -126,7 +124,6 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
       toast.error(error.response?.data?.error || "An error occurred.");
     }
   };
-  
 
   return (
     <div className="p-4 bg-white rounded-lg shadow-md">
@@ -139,11 +136,20 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
       </button>
       {/* Profile Picture and Update Button */}
       <div className="text-center">
-        <img
-          src={`${teacherData.profilePic}`}
-          alt="Profile"
-          className="w-28 h-28 mx-auto rounded-full border-4 border-gray-300 shadow-md"
-        />
+        {userData.profilePic ? (
+          <img
+            src={`https://api.studypulse.live/${userData.profilePic}`}
+            alt="NO Image Present"
+            className="w-28 h-28 mx-auto rounded-full border-4 border-gray-300 shadow-md"
+          />
+        ) : (
+          <div className="w-16 h-16 flex items-center justify-center mx-auto bg-blue-600 text-white text-2xl rounded-full">
+            {userData?.firstName && userData?.lastName
+              ? `${userData.firstName[0] || ""}${userData.lastName[0] || ""}`.toUpperCase()
+              : "NN"}{" "}
+            {/* Fallback initials */}
+          </div>
+        )}
         <button
           onClick={() => setShowForm(true)}
           className="mt-4 px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -154,203 +160,228 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
 
       {/* Update Form Modal */}
       {showForm && (
-  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[999] overflow-auto">
-    <div className="relative max-h-[90%] overflow-y-auto bg-white shadow-lg rounded-lg p-6 w-full max-w-lg">
-      <h2 className="text-2xl font-semibold mb-4">Update Information</h2>
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="mb-4 flex flex-col sm:flex-row sm:space-x-4">
-          <div className="flex-1">
-            <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
-              First Name
-            </label>
-            <input
-              type="text"
-              id="firstName"
-              name="firstName"
-              className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={userData.firstName}
-              onChange={handleUserDataChange}
-            />
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[999] overflow-auto">
+          <div className="relative max-h-[90%] overflow-y-auto bg-white shadow-lg rounded-lg p-6 w-full max-w-lg">
+            <h2 className="text-2xl font-semibold mb-4">Update Information</h2>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="mb-4 flex flex-col sm:flex-row sm:space-x-4">
+                <div className="flex-1">
+                  <label
+                    htmlFor="firstName"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    First Name
+                  </label>
+                  <input
+                    type="text"
+                    id="firstName"
+                    name="firstName"
+                    className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={userData.firstName}
+                    onChange={handleUserDataChange}
+                  />
+                </div>
+
+                <div className="flex-1">
+                  <label
+                    htmlFor="lastName"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Last Name
+                  </label>
+                  <input
+                    type="text"
+                    id="lastName"
+                    name="lastName"
+                    className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={userData.lastName}
+                    onChange={handleUserDataChange}
+                  />
+                </div>
+              </div>
+
+              {/* Phone Number and Address */}
+              <div className="mb-4 flex flex-col sm:flex-row sm:space-x-4">
+                <div className="flex-1">
+                  <label
+                    htmlFor="phoneNumber"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Phone Number
+                  </label>
+                  <input
+                    type="number"
+                    id="phoneNumber"
+                    name="phoneNumber"
+                    className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={userData.phoneNumber}
+                    onChange={handleUserDataChange}
+                  />
+                </div>
+
+                <div className="flex-1">
+                  <label
+                    htmlFor="address"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Address
+                  </label>
+                  <input
+                    type="text"
+                    id="address"
+                    name="address"
+                    className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={teacherData.address}
+                    onChange={handleTeacherDataChange}
+                  />
+                </div>
+              </div>
+
+              {/* Profile Picture */}
+              {/* Profile Picture Section */}
+              <div className="mb-4 flex flex-col sm:space-x-4">
+                <div className="flex-1 block">
+                  <label
+                    htmlFor="profilePic"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Profile Picture
+                  </label>
+                  <input
+                    type="file"
+                    id="profilePic"
+                    name="profilePic"
+                    className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    onChange={handleFileChange}
+                  />
+                </div>
+
+                {userData.profilePic && ( // Use userData.profilePic here
+                  <div className="mt-4 w-full ">
+                    <img
+                      src={`https://api.studypulse.live/${userData.profilePic}`} // Use userData.profilePic here
+                      alt="Profile"
+                      className="w-24 h-24 rounded-full mx-auto"
+                    />
+                  </div>
+                )}
+              </div>
+
+              {/* Experience and Gender */}
+              <div className="mb-4 flex flex-col sm:flex-row sm:space-x-4">
+                <div className="flex-1">
+                  <label
+                    htmlFor="totalYearsOfExperience"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Experience Years
+                  </label>
+                  <input
+                    type="number"
+                    id="totalYearsOfExperience"
+                    name="totalYearsOfExperience"
+                    className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={teacherData.totalYearsOfExperience}
+                    onChange={handleTeacherDataChange}
+                  />
+                </div>
+              </div>
+
+              {/* Gender and Status */}
+              <div className="flex-1">
+                <label
+                  htmlFor="gender"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Gender
+                </label>
+                <select
+                  id="gender"
+                  name="gender"
+                  className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={teacherData.gender}
+                  onChange={handleTeacherDataChange}
+                >
+                  <option value="">Select Gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
+              <div className="flex-1">
+                <label
+                  htmlFor="status"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Status
+                </label>
+                <select
+                  id="status"
+                  name="status"
+                  className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={teacherData.status}
+                  onChange={handleTeacherDataChange}
+                >
+                  <option value="">Select Status</option>
+                  <option value="pending">pending</option>
+                  <option value="rejected">rejected</option>
+                  <option value="accepted">accepted</option>
+                </select>
+              </div>
+
+              {/* Buttons */}
+              <div className="mt-6 flex justify-end space-x-3">
+                <button
+                  type="button"
+                  onClick={() => setShowForm(false)}
+                  className="px-4 py-2 bg-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  Save
+                </button>
+              </div>
+            </form>
           </div>
-
-          <div className="flex-1">
-            <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
-              Last Name
-            </label>
-            <input
-              type="text"
-              id="lastName"
-              name="lastName"
-              className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={userData.lastName}
-              onChange={handleUserDataChange}
-            />
-          </div>
         </div>
-
-        {/* Phone Number and Address */}
-        <div className="mb-4 flex flex-col sm:flex-row sm:space-x-4">
-          <div className="flex-1">
-            <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">
-              Phone Number
-            </label>
-            <input
-              type="number"
-              id="phoneNumber"
-              name="phoneNumber"
-              className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={userData.phoneNumber}
-              onChange={handleUserDataChange}
-            />
-          </div>
-
-          <div className="flex-1">
-            <label htmlFor="address" className="block text-sm font-medium text-gray-700">
-              Address
-            </label>
-            <input
-              type="text"
-              id="address"
-              name="address"
-              className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={teacherData.address}
-              onChange={handleTeacherDataChange}
-            />
-          </div>
-        </div>
-
-        {/* Profile Picture */}
-      {/* Profile Picture Section */}
-<div className="mb-4 flex flex-col sm:space-x-4">
-  <div className="flex-1 block">
-    <label htmlFor="profilePic" className="block text-sm font-medium text-gray-700">
-      Profile Picture
-    </label>
-    <input
-      type="file"
-      id="profilePic"
-      name="profilePic"
-      className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-      onChange={handleFileChange}
-    />
-  </div>
-
-  {userData.profilePic && (  // Use userData.profilePic here
-    <div className="mt-4 w-full ">
-      <img
-        src={`https://api.studypulse.live/${userData.profilePic}`}  // Use userData.profilePic here
-        alt="Profile"
-        className="w-24 h-24 rounded-full mx-auto"
-      />
-    </div>
-  )}
-</div>
-
-
-        {/* Experience and Gender */}
-        <div className="mb-4 flex flex-col sm:flex-row sm:space-x-4">
-          <div className="flex-1">
-            <label htmlFor="totalYearsOfExperience" className="block text-sm font-medium text-gray-700">
-              Experience Years
-            </label>
-            <input
-              type="number"
-              id="totalYearsOfExperience"
-              name="totalYearsOfExperience"
-              className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={teacherData.totalYearsOfExperience}
-              onChange={handleTeacherDataChange}
-            />
-          </div>
-        </div>
-
-        {/* Gender and Status */}
-        <div className="flex-1">
-          <label htmlFor="gender" className="block text-sm font-medium text-gray-700">
-            Gender
-          </label>
-          <select
-            id="gender"
-            name="gender"
-            className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={teacherData.gender}
-            onChange={handleTeacherDataChange}
-          >
-            <option value="">Select Gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="other">Other</option>
-          </select>
-        </div>
-
-        <div className="flex-1">
-          <label htmlFor="status" className="block text-sm font-medium text-gray-700">
-            Status
-          </label>
-          <select
-            id="status"
-            name="status"
-            className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={teacherData.status}
-            onChange={handleTeacherDataChange}
-          >
-            <option value="">Select Status</option>
-            <option value="pending">pending</option>
-            <option value="rejected">rejected</option>
-            <option value="accepted">accepted</option>
-          </select>
-        </div>
-
-        {/* Buttons */}
-        <div className="mt-6 flex justify-end space-x-3">
-          <button
-            type="button"
-            onClick={() => setShowForm(false)}
-            className="px-4 py-2 bg-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            Save
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-)}
-
+      )}
 
       {/* Tabs for Data */}
       <div className="mt-8">
         <div className="flex border-b border-gray-300">
           <button
             onClick={() => setActiveTab("about")}
-            className={`flex-1 py-2 text-center font-semibold ${activeTab === "about"
-              ? "text-blue-600 border-b-2 border-blue-600"
-              : "text-gray-600 hover:text-blue-600"
-              }`}
+            className={`flex-1 py-2 text-center font-semibold ${
+              activeTab === "about"
+                ? "text-blue-600 border-b-2 border-blue-600"
+                : "text-gray-600 hover:text-blue-600"
+            }`}
           >
             About
           </button>
 
           <button
             onClick={() => setActiveTab("qualificationData")}
-            className={`flex-1 py-2 text-center font-semibold ${activeTab === "qualificationData"
-              ? "text-blue-600 border-b-2 border-blue-600"
-              : "text-gray-600 hover:text-blue-600"
-              }`}
+            className={`flex-1 py-2 text-center font-semibold ${
+              activeTab === "qualificationData"
+                ? "text-blue-600 border-b-2 border-blue-600"
+                : "text-gray-600 hover:text-blue-600"
+            }`}
           >
             Education
           </button>
           <button
             onClick={() => setActiveTab("experienceData")}
-            className={`flex-1 py-2 text-center font-semibold ${activeTab === "experienceData"
-              ? "text-blue-600 border-b-2 border-blue-600"
-              : "text-gray-600 hover:text-blue-600"
-              }`}
+            className={`flex-1 py-2 text-center font-semibold ${
+              activeTab === "experienceData"
+                ? "text-blue-600 border-b-2 border-blue-600"
+                : "text-gray-600 hover:text-blue-600"
+            }`}
           >
             Experience
           </button>
@@ -364,57 +395,62 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
                 About
               </h2>
 
-
               {/* User and Teacher Information displayed in two rows */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 break-keep">
                 {/* User Information */}
-                <div className="bg-white p-6 rounded-lg shadow-md">
-                  <ul className="space-y-4">
+                <div className="bg-white p-6 rounded-lg shadow-md overflow-auto">
+                  <ul className="space-y-4 break-keep">
                     <li className="grid grid-cols-[150px_1fr]">
                       <strong className="w-40">First Name:</strong>{" "}
-                      <span className="text-gray-900">
+                      <span className="text-gray-900 break-keep">
                         {userData.firstName}
                       </span>
                     </li>
                     <li className="grid grid-cols-[150px_1fr]">
                       <strong className="w-40">Last Name:</strong>{" "}
-                      <span className="text-gray-900">{userData.lastName}</span>
+                      <span className="text-gray-900 break-keep">
+                        {userData.lastName}
+                      </span>
                     </li>
                     <li className="grid grid-cols-[150px_1fr]">
                       <strong className="w-40">Phone Number:</strong>{" "}
-                      <span className="text-gray-900">
+                      <span className="text-gray-900 break-keep">
                         {userData.phoneNumber}
                       </span>
                     </li>
                     <li className="grid grid-cols-[150px_1fr]">
                       <strong className="w-40">Address:</strong>{" "}
-                      <span className="text-gray-900">
+                      <span className="text-gray-900 break-keep">
                         {teacherData.address}
                       </span>
                     </li>
                     <li className="grid grid-cols-[150px_1fr]">
                       <strong className="w-40">Role:</strong>{" "}
-                      <span className="text-gray-900">{userData.role}</span>
+                      <span className="text-gray-900 break-keep">
+                        {userData.role}
+                      </span>
                     </li>
                     <li className="grid grid-cols-[150px_1fr]">
                       <strong className="w-40">Email Address:</strong>{" "}
-                      <span className="text-gray-900">{userData.email}</span>
+                      <span className="text-gray-900 break-keep">
+                        {userData.email}
+                      </span>
                     </li>
                     <li className="grid grid-cols-[150px_1fr]">
                       <strong className="w-40">City:</strong>{" "}
-                      <span className="text-gray-900">
+                      <span className="text-gray-900 break-keep">
                         {userData?.cityData?.name}
                       </span>
                     </li>
                     <li className="grid grid-cols-[150px_1fr]">
                       <strong className="w-40">Taluka:</strong>{" "}
-                      <span className="text-gray-900">
+                      <span className="text-gray-900 break-keep">
                         {userData?.talukaData?.name}
                       </span>
                     </li>
                     <li className="grid grid-cols-[150px_1fr]">
                       <strong className="w-40">District:</strong>{" "}
-                      <span className="text-gray-900">
+                      <span className="text-gray-900 break-keep">
                         {userData?.districtData?.name}
                       </span>
                     </li>
@@ -422,38 +458,48 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
                 </div>
 
                 {/* Teacher Information Section */}
-                <div className="bg-white p-6 rounded-lg shadow-md">
-                  <ul className="space-y-4">
+                <div className="bg-white p-6 rounded-lg shadow-md overflow-auto">
+                  <ul className="space-y-4 break-keep">
                     <li className="grid grid-cols-[150px_1fr]">
                       <strong className="w-40">
                         Total Years of Experience:
                       </strong>{" "}
-                      <span className="text-gray-900">
+                      <span className="text-gray-900 break-keep">
                         {teacherData.totalYearsOfExperience}
                       </span>
                     </li>
                     <li className="grid grid-cols-[150px_1fr]">
                       <strong className="w-40">Gender:</strong>{" "}
-                      <span className="text-gray-900">
+                      <span className="text-gray-900 break-keep">
                         {teacherData.gender}
                       </span>
                     </li>
                     <li className="grid grid-cols-[150px_1fr]">
                       <strong className="w-40">Status:</strong>{" "}
-                      <span className="text-gray-900">
+                      <span className="text-gray-900 break-keep">
                         {teacherData.status}
                       </span>
                     </li>
                     {teacherData?.subjectData?.map((e, i) => (
-                      <li key={i} className="grid grid-cols-[150px_1fr]">
+                      <li
+                        key={i}
+                        className="grid grid-cols-[150px_1fr] break-keep"
+                      >
                         <strong className="w-40">Subject-{i + 1}:</strong>{" "}
-                        <span className="text-gray-900">{e.name}</span>
+                        <span className="text-gray-900 break-keep">
+                          {e.name}
+                        </span>
                       </li>
                     ))}
                     {teacherData.classData?.map((e, i) => (
-                      <li key={i} className="grid grid-cols-[150px_1fr]">
+                      <li
+                        key={i}
+                        className="grid grid-cols-[150px_1fr] break-keep"
+                      >
                         <strong className="w-40">Class-{i + 1}:</strong>{" "}
-                        <span className="text-gray-900">{e.name}</span>
+                        <span className="text-gray-900 break-keep">
+                          {e.name}
+                        </span>
                       </li>
                     ))}
                   </ul>
@@ -472,23 +518,24 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
                 Object.keys(teacherData?.qualification).map((key) => (
                   <div
                     key={key}
-                    className="bg-white shadow-lg rounded-lg p-6 mb-4"
+                    className="bg-white shadow-lg rounded-lg p-6 mb-4 break-keep"
                   >
                     <h3 className="text-xl text-center text-gray-800 mb-4 font-bold">
                       {key.toUpperCase()}
                     </h3>
-                    <ul className="space-y-3 text-gray-600">
+                    <ul className="space-y-3 text-gray-600 break-keep">
                       {Object.entries(teacherData?.qualification[key]).map(
                         ([field, value]) => (
                           <li
                             key={field}
-                            className="grid grid-cols-[150px_1fr] text-wrap"
+                            className="grid grid-cols-[150px_1fr] text-wrap break-keep"
                           >
-
                             <strong className="text-gray-700">
                               {field.replace(/([A-Z])/g, " $1")}:{" "}
                             </strong>
-                            <span className="text-gray-500">{value}</span>
+                            <span className="text-gray-500 break-keep">
+                              {value}
+                            </span>
                           </li>
                         )
                       )}
@@ -507,12 +554,12 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
                 {teacherData?.experience?.map((experience) => (
                   <div
                     key={experience._id}
-                    className="bg-white rounded-lg shadow-lg p-4"
+                    className="bg-white rounded-lg shadow-lg p-4 break-keep"
                   >
                     <h4 className="text-xl font-medium text-gray-700 mb-3">
                       Experience
                     </h4>
-                    <ul className="space-y-2 text-gray-600">
+                    <ul className="space-y-2 text-gray-600 break-keep">
                       <li className="grid grid-cols-[180px_1fr]">
                         <strong>Designation:</strong> {experience.designation}
                       </li>

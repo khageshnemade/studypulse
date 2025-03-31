@@ -11,7 +11,7 @@ import { useEffect, useRef, useState } from "react";
 
 const AdminLayout = () => {
   const [addclass, setAddClass] = useState("");
-  const isDesktopDevice = useMediaQuery("(min-width: 768px)");
+  const isDesktopDevice = useMediaQuery("(min-width: 900px)");
   const [collapsed, setCollapsed] = useState(!isDesktopDevice);
 
   const sidebarRef = useRef(null);

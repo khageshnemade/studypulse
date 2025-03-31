@@ -35,7 +35,7 @@ const AdminModal = ({ onClose }) => {
       className="fixed inset-0 z-[200] flex items-start justify-end bg-black bg-opacity-50"
     >
       <div
-        className="relative bg-white rounded-lg p-6 shadow-2xl max-w-[40%] md:w-[400px] animate-fade-in"
+        className="relative  p-6 max-w-[40%] md:w-[400px] animate-fade-in"
         onClick={(e) => e.stopPropagation()} // Prevent click events from propagating to the overlay
       >
         {/* Modal Content */}
@@ -57,7 +57,7 @@ const AdminModal = ({ onClose }) => {
             <div className="flex flex-col space-y-4">
               <div>
                 <span className="font-semibold text-gray-700">Email:</span>
-                <p className="text-gray-600">{user.user}</p>
+                <p className="text-gray-600">{user.email}</p>
               </div>
 
               <div>

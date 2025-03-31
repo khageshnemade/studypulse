@@ -1,5 +1,3 @@
-import axios from "axios";
-import { a } from "framer-motion/client";
 import React, { useEffect, useState } from "react";
 import { makeRequest } from "../../axios";
 
@@ -30,9 +28,7 @@ export default function TeacherSignup() {
 
   const fetchDistricts = async () => {
     try {
-      const response = await axios.get(
-        "https://api.studypulse.live/web/api/districts"
-      );
+      const response = await makeRequest.get("districts");
       setDistricts(response?.data?.data);
       console.log("Districts", districts);
     } catch (err) {
@@ -96,10 +92,7 @@ export default function TeacherSignup() {
     setSuccess("");
 
     try {
-      const response = await axios.post(
-        "https://api.studypulse.live/web/api/teacher/signup",
-        formData
-      );
+      const response = await makeRequest.post("teacher/signup", formData);
       setSuccess("Signup successful!");
       console.log("Response:", response.data);
     } catch (err) {

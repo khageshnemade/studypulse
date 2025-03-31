@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { makeRequest } from "../../axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
-import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { setClassDetails } from "../../redux/features/idsSlice";
 import { Plus } from "lucide-react";
@@ -64,18 +63,7 @@ const CreateChapterCurriculum = () => {
   const fetchChapters = async () => {
     try {
       // Construct the request URL with query parameters
-      const response = await axios({
-        method: "GET",
-        url: "https://api.studypulse.live/web/api/teacher/get-all-chapter",
-        params: {
-          subjectId,
-          classId,
-        },
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${parsedData?.token}`, // Use token if available
-        },
-      });
+      const response = await makeRequest.get("teacher/get-all-chapter");
       console.log("Chapters", response.data);
       setChapters(response?.data?.data);
       setLoading(false);

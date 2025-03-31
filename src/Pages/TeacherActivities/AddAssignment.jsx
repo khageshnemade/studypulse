@@ -24,7 +24,7 @@ const AddAssignment = () => {
     classId: initialClassId,
     subjectId: initialSubjectId,
     chapterId: initialChapterId,
-  } = location.state||{};
+  } = location.state || {};
   const userData = localStorage.getItem("user");
   const parsedData = JSON.parse(userData);
   const navigate = useNavigate();
@@ -94,12 +94,12 @@ const AddAssignment = () => {
     setQuestions((prevQuestions) => [
       ...prevQuestions,
       {
-        question: "  1.	If p% of p is 36, then p is equal to ?",
-        marks: 1,
+        question: "",
+        marks: "",
         options: [
-          { text: "3600", isCorrect: true },
-          { text: "67", isCorrect: false },
-          { text: "67", isCorrect: false },
+          { text: "", isCorrect: false },
+          { text: "", isCorrect: false },
+          { text: "", isCorrect: false },
         ],
       },
     ]);

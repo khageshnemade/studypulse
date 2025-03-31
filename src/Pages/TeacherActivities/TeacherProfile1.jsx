@@ -72,8 +72,6 @@ const TeacherProfile = () => {
     }));
   };
 
-
-
   const handleNestedInputChange = (section, key, nestedKey, value) => {
     setFormData({
       ...formData,
@@ -129,24 +127,26 @@ const TeacherProfile = () => {
     // Remove the subjectId from the selected classId
     setS_c((prev) => {
       const updatedState = { ...prev };
-  
+
       // Remove the subjectId from the array of subjects for the given classId
-      const updatedSubjects = updatedState[classId].filter((_, index) => index !== subjectIndex);
-  
+      const updatedSubjects = updatedState[classId].filter(
+        (_, index) => index !== subjectIndex
+      );
+
       if (updatedSubjects.length > 0) {
         updatedState[classId] = updatedSubjects;
       } else {
         delete updatedState[classId]; // If no subjects left, remove the classId entirely
       }
-  
+
       return updatedState;
     });
-  
+
     // Now, update classIds and subjectIds
     setClassIds(Object.keys(s_c)); // Get class IDs
     setSubjectIds(Object.values(s_c).flat()); // Flatten and get all subject IDs
   };
-  
+
   const handleC_SSubmit = async () => {
     console.log("Classes and Subjects", selectedClassId, selectedSubjectId); // Debugging output
 
@@ -178,7 +178,7 @@ const TeacherProfile = () => {
 
     try {
       const response = await makeRequest.post(
-        "https://api.studypulse.live/web/api/file-upload/profile-pic",
+        "file-upload/profile-pic",
         formData
       );
 
@@ -193,7 +193,6 @@ const TeacherProfile = () => {
       toast.error("Failed to upload image.");
     }
   };
-
 
   const getPreviousData = async () => {
     try {
@@ -271,7 +270,6 @@ const TeacherProfile = () => {
     setFormData((prev) => ({ ...prev, experience: updatedExperience }));
   };
 
-  
   const handleAddExperience = () => {
     const newExperience = {
       startDate: "",
@@ -284,7 +282,6 @@ const TeacherProfile = () => {
       experience: [...prev.experience, newExperience],
     }));
   };
-
 
   return (
     <div>
@@ -536,30 +533,32 @@ const TeacherProfile = () => {
           </div>
           <div>
             <div className="grid grid-cols-2 gap-2">
-            {Object.entries(s_c).map(([key, value]) => {
-  return (
-    <div key={key} className="card p-4 border rounded-lg shadow-lg">
-      {classes.find((cls) => cls._id === key)?.name}
+              {Object.entries(s_c).map(([key, value]) => {
+                return (
+                  <div
+                    key={key}
+                    className="card p-4 border rounded-lg shadow-lg"
+                  >
+                    {classes.find((cls) => cls._id === key)?.name}
 
-      {value.map((item, index) => (
-        <div key={index} className="subject-item mb-2">
-          {subjects.find((subject) => subject._id === item)?.name}
-          {/* Print subject or item */}
-          <button
-            type="button"
-            onClick={() =>
-              handleRemoveFromClassAndSubjects(key, index) // Pass the classId and index to remove
-            }
-            className="btn btn-danger ml-2"
-          >
-            Remove
-          </button>
-        </div>
-      ))}
-    </div>
-  );
-})}
-
+                    {value.map((item, index) => (
+                      <div key={index} className="subject-item mb-2">
+                        {subjects.find((subject) => subject._id === item)?.name}
+                        {/* Print subject or item */}
+                        <button
+                          type="button"
+                          onClick={
+                            () => handleRemoveFromClassAndSubjects(key, index) // Pass the classId and index to remove
+                          }
+                          className="btn btn-danger ml-2"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

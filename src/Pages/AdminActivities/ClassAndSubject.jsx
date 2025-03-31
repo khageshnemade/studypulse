@@ -62,8 +62,8 @@ export default function Classes() {
         <table className="table-auto w-full border-collapse border whitespace-nowrap border-gray-300">
           <thead className="bg-teal-700 font-serif text-white">
             <tr>
-            <th className="border border-gray-300 px-4 py-2 text-left ">
-                Profile
+              <th className="border border-gray-300 px-4 py-2 text-left ">
+                Picture
               </th>
               <th className="border border-gray-300 px-4 py-2 text-left ">
                 Classes
@@ -83,10 +83,20 @@ export default function Classes() {
             {classes.map((item, index) => (
               <tr
                 key={index}
-                className="hover:bg-gray-200 hover:text-gray-900 transition-all" // Adjust hover to ensure contrast
+                className="hover:bg-gray-200 hover:text-gray-900 transition-all"
               >
                 <td className="border border-gray-800 px-4 py-2">
-                 <img src={`https://api.studypulse.live/`} alt="" />
+                  {item.image ? (
+                    <img
+                      src={`https://api.studypulse.live/${item.image}`}
+                      alt={`No Image`}
+                      className="w-16 h-16 object-cover" // Add this to adjust the image size
+                    />
+                  ) : (
+                    <div className="w-16 h-16 flex items-center justify-center bg-blue-600 text-white text-2xl rounded-full">
+                      {`${item.name[0]}`.toUpperCase()}
+                    </div>
+                  )}
                 </td>
                 <td className="border border-gray-800 px-4 py-2">
                   {item.name}

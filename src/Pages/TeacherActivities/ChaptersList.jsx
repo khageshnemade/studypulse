@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { makeRequest } from "../../axios";
-import { useNavigate } from "react-router-dom";
-import { FileText, BookOpen, Edit, Plus, Book } from "lucide-react"; // Import icons
+import { useLocation, useNavigate } from "react-router-dom";
+import { FileText, Edit, Plus, Book, Video } from "lucide-react"; // Import icons
 import { useSelector, useDispatch } from "react-redux";
 import { setClassDetails } from "../../redux/features/idsSlice";
 import store from "../../redux/store/store";
@@ -16,6 +15,9 @@ const ChaptersList = () => {
   const [classes, setClasses] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const location = useLocation();
+  const { _id: initialSubjectId, classId: initialClassId } =
+    location?.state?.subject || {}; // Ensure location.state and subject exist
 
   // Get the classId, subjectId, chapterId from Redux store
   const { classId, subjectId, chapterId } = useSelector(
@@ -24,9 +26,30 @@ const ChaptersList = () => {
 
   const userData = localStorage.getItem("user");
   const parsedData = JSON.parse(userData);
+
   useEffect(() => {
-    fetchClasses();
-  }, []);
+    // Set classId and subjectId based on location.state if present
+    if (initialClassId && initialSubjectId) {
+      dispatch(
+        setClassDetails({
+          classId: initialClassId,
+          subjectId: initialSubjectId,
+          chapterId,
+        })
+      );
+    } else {
+      // Fall back to Redux state if no location.state
+      dispatch(setClassDetails({ classId, subjectId, chapterId }));
+    }
+    fetchClasses(); // Fetch classes after setting initial state
+  }, [
+    initialClassId,
+    initialSubjectId,
+    classId,
+    subjectId,
+    chapterId,
+    dispatch,
+  ]);
 
   useEffect(() => {
     if (classId) fetchSubjects();
@@ -40,7 +63,7 @@ const ChaptersList = () => {
 
   const fetchClasses = async () => {
     try {
-      const res = await makeRequest.get(`teacher/get-all-classes`);
+      const res = await makeRequest.get("teacher/get-all-classes");
       setClasses(res?.data?.data || []);
     } catch (error) {
       console.error("Request Error:", error.message);
@@ -49,12 +72,13 @@ const ChaptersList = () => {
 
   const fetchSubjects = async () => {
     try {
-      const res = await makeRequest.get(`teacher/get-all-subjects`);
+      const res = await makeRequest.get("teacher/get-all-subjects");
       setSubjects(res?.data?.data || []);
     } catch (error) {
       console.error("Request Error:", error.message);
     }
   };
+
   const handleClassChange = (e) => {
     dispatch(
       setClassDetails({ classId: e.target.value, subjectId, chapterId })
@@ -76,25 +100,20 @@ const ChaptersList = () => {
       })
     );
   };
+
   const fetchChapters = async () => {
     try {
-      const response = await axios({
-        method: "GET",
-        url: "https://api.studypulse.live/web/api/teacher/get-all-chapter",
+      const response = await makeRequest.get("teacher/get-all-chapter", {
         params: {
           subjectId,
           classId,
-        },
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${parsedData?.token}`,
         },
       });
       setChapters(response?.data?.data || []);
       setLoading(false);
     } catch (error) {
-      toast.error("Error fetching chapters: " + error.message);
-      console.error("Error fetching chapters:", error.message);
+      toast.error("Error fetching chapters: " + error.response.data.message);
+      console.error("Error fetching chapters:", error.response.data.message);
     }
   };
 
@@ -242,7 +261,7 @@ const ChaptersList = () => {
                         className="bg-blue-500 text-white p-3 rounded-full hover:bg-blue-600 transition duration-200"
                         title="Chapter Curriculum"
                       >
-                        <BookOpen className="w-5 h-5" />
+                        <Video className="w-5 h-5" />
                       </button>
 
                       {/* Update Button */}

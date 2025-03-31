@@ -30,7 +30,7 @@ const ProfilePicUploadModal = ({ setUploadedImageUrl }) => {
 
     try {
       const response = await makeRequest.post(
-        "https://api.studypulse.live/web/api/file-upload/profile-pic",
+        "file-upload/profile-pic",
         formData
       );
       console.log("response: ", response?.data.url);

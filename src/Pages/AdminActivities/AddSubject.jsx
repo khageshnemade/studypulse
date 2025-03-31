@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { makeRequest } from "../../axios";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
@@ -48,7 +47,7 @@ const AddSubject = ({ addclass }) => {
 
     try {
       const response = await makeRequest.post(
-        "https://api.studypulse.live/web/api/file-upload/subject-pic",
+        "file-upload/subject-pic",
         formData
       );
 

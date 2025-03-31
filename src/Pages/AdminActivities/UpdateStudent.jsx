@@ -19,8 +19,6 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
   const [fileName, setFileName] = useState("");
   const [newDocument, setNewDocument] = useState("");
 
-
-
   // Handle removing a document
   const handleRemoveDocument = (docToRemove) => {
     setDocs(docs.filter((doc) => doc !== docToRemove));
@@ -68,6 +66,7 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
           address: studentData.address,
           dob: studentData.dob,
           status: userData.status,
+          profilePic: studentData.profilePic || "",
         },
         studentData: {
           address: studentData.address,
@@ -75,7 +74,6 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
           grade: studentData.grade,
           gender: studentData.gender,
           classId: studentData.classId || "",
-          profilePic: studentData.profilePic || "",
           documents: docs || [],
         },
       });
@@ -100,7 +98,6 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
   };
 
   const handleProfileUpload = async (file) => {
-
     if (!file) {
       toast.error("Please select an image to upload.");
       return;
@@ -111,7 +108,7 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
 
     try {
       const response = await makeRequest.post(
-        "https://api.studypulse.live/web/api/file-upload/profile-pic",
+        "file-upload/profile-pic",
         formData
       );
 
@@ -141,7 +138,7 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
 
     try {
       const response = await makeRequest.post(
-        "https://api.studypulse.live/web/api/file-upload/documents",
+        "file-upload/documents",
         formData
       );
 
@@ -167,11 +164,20 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
   return (
     <div className="p-4 bg-white rounded-lg shadow-md max-h-fit max-w-fit mx-auto">
       <div className="text-center">
-        <img
-          src={`https://api.studypulse.live/${studentData.profilePic}`}
-          alt="Profile"
-          className="w-28 h-28 mx-auto rounded-full border-4 border-gray-300 shadow-md"
-        />
+        {userData.profilePic ? (
+          <img
+            src={`https://api.studypulse.live/${userData.profilePic}`}
+            alt="NO Image Present"
+            className="w-28 h-28 mx-auto rounded-full border-4 border-gray-300 shadow-md"
+          />
+        ) : (
+          <div className="w-16 h-16 flex items-center justify-center mx-auto bg-blue-600 text-white text-2xl rounded-full">
+            {userData?.firstName && userData?.lastName
+              ? `${userData.firstName[0] || ""}${userData.lastName[0] || ""}`.toUpperCase()
+              : "NN"}{" "}
+            {/* Fallback initials */}
+          </div>
+        )}
         <button
           onClick={() => setShowForm(true)}
           className="mt-4 px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -259,7 +265,6 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
                 </div>
               </div>
 
-
               <div className="flex-1">
                 <label
                   htmlFor="profilePic"
@@ -278,11 +283,13 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
 
               {imageUrl && (
                 <div className="mt-4">
-                  <img src={`https://api.studypulse.live/${imageUrl}`} alt="Profile" className="w-24 h-24 rounded-full" />
+                  <img
+                    src={`https://api.studypulse.live/${imageUrl}`}
+                    alt="Profile"
+                    className="w-24 h-24 rounded-full"
+                  />
                 </div>
               )}
-
-
 
               <div className="flex-1">
                 <label
@@ -392,20 +399,22 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
           <div className="mt-4 flex border-b">
             <button
               onClick={() => setActiveTab("about")}
-              className={`flex-1 py-2 text-center font-semibold ${activeTab === "about"
-                ? "text-blue-600 border-b-2 border-blue-600"
-                : "text-gray-600 hover:text-blue-600"
-                }`}
+              className={`flex-1 py-2 text-center font-semibold ${
+                activeTab === "about"
+                  ? "text-blue-600 border-b-2 border-blue-600"
+                  : "text-gray-600 hover:text-blue-600"
+              }`}
             >
               About
             </button>
 
             <button
               onClick={() => setActiveTab("studentData")}
-              className={`flex-1 py-2 text-center font-semibold ${activeTab === "studentData"
-                ? "text-blue-600 border-b-2 border-blue-600"
-                : "text-gray-600 hover:text-blue-600"
-                }`}
+              className={`flex-1 py-2 text-center font-semibold ${
+                activeTab === "studentData"
+                  ? "text-blue-600 border-b-2 border-blue-600"
+                  : "text-gray-600 hover:text-blue-600"
+              }`}
             >
               Other Details
             </button>
@@ -414,11 +423,11 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
           {/* Data Content */}
           <div className="mt-4">
             {activeTab === "about" && (
-              <div className="p-4 bg-white rounded-lg shadow-md">
+              <div className="p-4 bg-white rounded-lg shadow-md break-keep">
                 <h2 className="text-xl font-semibold mb-4 text-gray-700 text-center">
                   About
                 </h2>
-                <div className="space-y-4">
+                <div className="space-y-4 ">
                   <div className="p-4 rounded-lg shadow-sm">
                     <ul className="space-y-3 text-gray-600">
                       {[
@@ -453,11 +462,11 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
             )}
 
             {activeTab === "studentData" && (
-              <div className="p-4 bg-white rounded-lg shadow-md">
+              <div className="p-4 bg-white rounded-lg shadow-md break-keep">
                 <h2 className="text-xl font-semibold mb-4 text-gray-700 text-center">
                   Other Details
                 </h2>
-                <div className="space-y-4">
+                <div className="space-y-4 overflow-auto">
                   <div className="p-4 rounded-lg shadow-sm">
                     <ul className="space-y-3 text-gray-600">
                       {studentData ? (
@@ -469,36 +478,43 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
                           },
                           {
                             label: "DOB:",
-                            value: new Date(studentData.dob).toLocaleDateString(),
+                            value: new Date(
+                              studentData.dob
+                            ).toLocaleDateString(),
                           },
                           {
                             label: "Documents:",
-                            value: studentData.documents.length > 0 ? (
-                              studentData.documents.map((doc, index) => (
-                                <div key={index} className="mb-2">
-                                  <Link
-                                    to={`https://api.studypulse.live/${doc}`}
-                                    target="_blank"
-                                    className="text-blue-600 hover:text-blue-800 hover:underline"
-                                  >
-                                    Document {index + 1}
-                                  </Link>
-                                </div>
-                              ))
-                            ) : (
-                              "No documents available"
-                            ),
+                            value:
+                              studentData.documents.length > 0
+                                ? studentData.documents.map((doc, index) => (
+                                    <div key={index} className="mb-2">
+                                      <Link
+                                        to={`https://api.studypulse.live/${doc}`}
+                                        target="_blank"
+                                        className="text-blue-600 hover:text-blue-800 hover:underline"
+                                      >
+                                        Document {index + 1}
+                                      </Link>
+                                    </div>
+                                  ))
+                                : "No documents available",
                           },
                         ].map((item, index) => (
-                          <li key={index} className="grid grid-cols-[150px_1fr]">
+                          <li
+                            key={index}
+                            className="grid grid-cols-[150px_1fr]"
+                          >
                             <strong>{item.label}</strong>
-                            <span className="text-sm">{item.value || "N/A"}</span>
+                            <span className="text-sm">
+                              {item.value || "N/A"}
+                            </span>
                           </li>
                         ))
                       ) : (
-                        <li className="text-center text-gray-500">No student data available.</li>
+                        <li className="text-center text-gray-500">
+                          No student data available.
+                        </li>
                       )}
-
                     </ul>
                   </div>
                 </div>
@@ -507,7 +523,6 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
           </div>
         </div>
       </div>
-
     </div>
   );
 };

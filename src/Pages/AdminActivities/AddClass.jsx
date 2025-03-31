@@ -149,7 +149,7 @@ const AddClass = () => {
                   Image Uploaded Successfully!
                 </p>
                 <img
-                  src={`http://localhost:5000/${imageUrl}`}
+                  src={`https://api.studypulse.live/${imageUrl}`}
                   alt="Uploaded Profile"
                   className="mt-2 max-w-xs mx-auto rounded-full"
                 />

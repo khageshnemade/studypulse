@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Optional, for toast notifications
 import { makeRequest } from "../../axios";
@@ -14,6 +13,7 @@ import {
   ChevronDown,
   ChevronUp,
   Book,
+  Video,
 } from "lucide-react";
 
 export default function ChapterCurr() {
@@ -77,7 +77,11 @@ export default function ChapterCurr() {
   // Fetch subjects based on class
   const fetchSubjects = async () => {
     try {
-      const res = await makeRequest.get("teacher/get-all-subjects");
+      const res = await makeRequest.get("teacher/get-all-subjects", {
+        params: {
+          classId,
+        },
+      });
       setSubjects(res?.data?.data || []);
     } catch (error) {
       console.error("Request Error:", error.message);
@@ -87,35 +91,33 @@ export default function ChapterCurr() {
   // Fetch chapters based on subject and class
   const fetchChapters = async () => {
     try {
-      const response = await axios({
-        method: "GET",
-        url: "https://api.studypulse.live/web/api/teacher/get-all-chapter",
-        params: { subjectId, classId },
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${parsedData?.token}`,
+      const response = await makeRequest.get("teacher/get-all-chapter", {
+        params: {
+          subjectId,
+          classId,
         },
       });
       setChapters(response?.data?.data || []);
       setLoading(false);
     } catch (error) {
-      toast.error("Error fetching chapters: " + error.message);
-      console.error("Error fetching chapters:", error.message);
+      toast.error("Error fetching chapters: " + error.response.data.message);
+      console.error("Error fetching chapters:", error.response.data.message);
     }
   };
 
   // Fetch chapter curriculum based on chapterId, subjectId, classId
   const fetchChapterCurr = async () => {
     try {
-      const response = await axios({
-        method: "GET",
-        url: "https://api.studypulse.live/web/api/teacher/get-all-chapterCurriculum",
-        params: { chapterId, subjectId, classId },
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${parsedData?.token}`,
-        },
-      });
+      const response = await makeRequest.get(
+        "teacher/get-all-chapterCurriculum",
+        {
+          params: {
+            chapterId,
+            subjectId,
+            classId,
+          },
+        }
+      );
       setChapterCurr(response?.data?.data || []);
       setLoading(false);
     } catch (error) {
@@ -327,7 +329,7 @@ export default function ChapterCurr() {
                         rel="noopener noreferrer"
                         className="text-blue-500 hover:text-blue-600 font-medium transition"
                       >
-                        Watch Video
+                        <Video />
                       </a>
                     ) : (
                       <span className="text-gray-500">No video available</span>

@@ -14,6 +14,21 @@ export const SuperAdminDashboardHeader = ({ collapsed, setCollapsed }) => {
   const location = useLocation();
   const pathnames = location.pathname.split("/").filter((x) => x);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [profile, setProfile] = useState({
+    profilePic: "",
+    organizationName: "",
+  });
+
+  useEffect(() => {
+    // Fetch the data from localStorage
+    const userData = JSON.parse(localStorage.getItem("user"));
+    if (userData) {
+      setProfile({
+        profilePic: userData.profilePic,
+        organizationName: userData.organizationName,
+      });
+    }
+  }, []);
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -74,27 +89,40 @@ export const SuperAdminDashboardHeader = ({ collapsed, setCollapsed }) => {
           </nav>
         </div>
 
-        <div className="flex items-center justify-center text-white gap-1 font-bold mr-4">
-          <p>Welcome Back,</p>
-          <h2 className=" text-inherit "> {userName} </h2>
-          <p></p>
-          {/* Display other user data as needed */}
-        </div>
+        {/* Organization and User Name (on hover) */}
+        <div className="flex items-center gap-2 text-white font-semibold mr-6 group ">
+          {/* Profile Picture with Hover Effect */}
 
-        <div className="flex items-center gap-x-3">
           <button
             onClick={toggleModal}
-            className="w-10 h-10 overflow-hidden rounded-full cursor-pointer"
+            className="w-12 h-12 rounded-full overflow-hidden cursor-pointer bg-teal-600 flex items-center justify-center"
           >
-            <div className="w-full h-full flex items-center justify-center bg-blue-600 text-white text-2xl font-bold">
-              {userName
-                .split(" ")
-                .map((name) => name[0])
-                .join("")
-                .toUpperCase()}
-            </div>
+            {profile.profilePic ? (
+              <img
+                src={profile.profilePic}
+                alt="Profile"
+                className="w-full h-full object-cover rounded-full transition-opacity duration-300"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-blue-600 text-white text-lg font-bold">
+                {userName
+                  .split(" ")
+                  .map((name) => name[0])
+                  .join("")
+                  .toUpperCase()}
+              </div>
+            )}
           </button>
+
+          {/* Show Organization Name and Username on Hover (Only the Text) */}
+          <div className="absolute bottom-full top-8 transform -translate-x-2/3 mb-2 group-hover:block group-hover:opacity-80 hidden rounded-xl w-[300px] text-center transition-opacity duration-300 opacity-0">
+            <div className="bg-gradient-to-r from-teal-500 via-blue-500 to-purple-500 p-4 rounded-lg shadow-lg">
+              <p className="text-white">{profile?.organizationName}</p>
+              <p className="text-white mt-1">{userName}</p>
+            </div>
+          </div>
         </div>
+        
       </header>
       {isModalOpen && <AdminModal onClose={toggleModal} />}
     </>
