@@ -58,50 +58,16 @@ export default function AdminDashboard() {
     const res = await makeRequest.get("admin/get-dashboard-details");
     const data = res?.data?.data?.passFailedStudents || {};
 
-    // Process the data
-    setLabels(Object.keys(data));
-    setDataset(Object.values(data));
+   console.log("Dashboard Details",res?.data?.data);
     setDashboard(res?.data?.data || {});
   };
 
   // PieChart Component
-  const PieChart = ({ labels, datasets }) => {
-    const passedData = datasets.map((item) => item.passed);
-    const failedData = datasets.map((item) => item.failed);
-
-    const data = {
-      labels,
-      datasets: [
-        {
-          label: "Passed Students",
-          backgroundColor: "rgba(75, 192, 192, 0.6)",
-          borderColor: "rgba(75, 192, 192, 1)",
-          borderWidth: 1,
-          data: passedData,
-        },
-        {
-          label: "Failed Students",
-          backgroundColor: "rgba(255, 99, 132, 0.6)",
-          borderColor: "rgba(255, 99, 132, 1)",
-          borderWidth: 1,
-          data: failedData,
-        },
-      ],
-    };
-
-    return (
-      <Pie
-        data={data}
-        options={{
-          responsive: true,
-          plugins: { legend: { position: "top" }, tooltip: { enabled: true } },
-        }}
-      />
-    );
-  };
+ 
 
   // Student Passed/Failed Stats Component
   const StudentPassedFailed = () => {
+    // const classes=dashboard?.passFailedStudents;
     const classes = [
       {
         className: "Class 1",
@@ -376,18 +342,7 @@ export default function AdminDashboard() {
           </div>
         ))}
 
-        {/* Student Pass/Fail Stats */}
-        <div className="bg-white shadow rounded-xl p-6 duration-300 hover:scale-105 mb-8">
-          <h2 className="text-xl font-semibold text-center mb-4 bg-gradient-to-r from-green-500 to-teal-300 text-white p-2 rounded-md shadow-md font-serif">
-            Student Pass/Fail Stats
-          </h2>
-          <p className="text-gray-600 text-center mb-6">
-            Visualization of Passed vs Failed Students
-          </p>
-          <div className="flex justify-center">
-            <PieChart labels={labels} datasets={dataset} />
-          </div>
-        </div>
+    
 
         {/* Student Pass/Fail Table */}
         <div className="bg-white shadow rounded-xl p-6 duration-300 hover:scale-105 mb-8">
@@ -408,70 +363,3 @@ export default function AdminDashboard() {
   );
 }
 
-// import React, { useEffect, useState } from "react";
-// import makeRequest from "../../../axios";
-
-// export default function AdminDashboard() {
-//   const refreshTokenRequest = async () => {
-//     try {
-//       const response = await fetch(
-//         "https://api.studypulse.live/web/api/refresh-token",
-//         // "http://localhost:5000/web/api/refresh-token",
-//         {
-//           method: "POST",
-//           headers: {
-//             "Content-Type": "application/json",
-//           },
-//           credentials: "include", // to send cookies along with the request
-//         }
-//       );
-
-//       if (!response.ok) {
-//         throw new Error("Failed to refresh token");
-//       }
-
-//       const data = await response.json();
-//       console.log("Token refreshed:", data);
-//     } catch (error) {
-//       console.error("Failed to refresh token:", error.message);
-//     }
-//   };
-
-//   const login = async () => {
-//     try {
-//       const response = await fetch(
-//         "https://api.studypulse.live/web/api/login",
-//         // "http://localhost:5000/web/api/login",
-//         {
-//           method: "POST",
-//           headers: {
-//             "Content-Type": "application/json",
-//           },
-//           body: JSON.stringify({
-//             email: "admin@gmail.com",
-//             password: "password123",
-//           }),
-//           credentials: "include", // this sends the cookies (for refresh token)
-//         }
-//       );
-
-//       if (!response.ok) {
-//         throw new Error("Login failed");
-//       }
-
-//       const data = await response.json();
-//       console.log("Login successful:", data);
-//       // The refresh token should be set in cookies automatically by the backend
-//     } catch (error) {
-//       console.error("Login error:", error.message);
-//     }
-//   };
-
-//   return (
-//     <div>
-//       <h1>Admin Dashboard</h1>
-//       <button onClick={refreshTokenRequest}>Refresh Token</button>
-//       <button onClick={login}>Login</button>
-//     </div>
-//   );
-// }

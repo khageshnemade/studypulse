@@ -19,9 +19,9 @@ export const navbarLinks = [
         label: "Create Admin",
         icon: UserPlus, // Represents adding or creating a new admin
         path: "/superadmin-dashboard/createAdmin",
-        color: '#4a90e2'
-
+        color: '#34a853' // Changed to green
       },
+      
       {
         label: "Organizations",
         icon: Building, // Represents organizations or business entities

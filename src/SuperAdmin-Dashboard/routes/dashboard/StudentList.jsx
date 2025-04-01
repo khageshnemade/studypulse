@@ -167,7 +167,7 @@ const StudentList = () => {
   };
 
   return (
-    <div className="space-y-6 p-8 bg-gray-50 rounded-lg shadow-lg">
+    <div className="space-y-6 p-8 bg-gray-50 rounded-lg shadow-lg max-h-[650px] overflow-y-auto text-center">
       <h1 className="text-center text-xl font-semibold">Student List</h1>
 
       {/* Dropdown filters */}

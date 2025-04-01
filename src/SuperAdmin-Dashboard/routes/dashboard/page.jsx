@@ -36,6 +36,18 @@ export default function SuperAdminDashboard() {
   const [teachers, setTeachers] = useState([]);
   const [students, setStudents] = useState([]);
   const [classes, setClassses] = useState([]);
+  useEffect(() => {
+    setData(prev => {
+      return {
+        ...prev, recentlyAddedStudents: [{ _id: "67e7ce90c2b6fcb54012d9a5", firstName: "demo", lastName: "demo", email: "demo@gmail.com", phoneNumber: "9856325568" },
+        { _id: "67e7cb6bc2b6fcb54012d936", firstName: "neha", lastName: "patil", email: "neha1@gmail.com", phoneNumber: "9875412589" },
+        { _id: "67e7b40cc2b6fcb54012d886", firstName: "khagesh", lastName: "nemade", email: "khagesh97@gmail.com", phoneNumber: "9852147856" },
+        { _id: "67e79100c2b6fcb54012d74b", firstName: "akansha", lastName: "hake", email: "akanksha@gmail.com", phoneNumber: "9856523325" },
+        { _id: "67e69119c2b6fcb54012d3b4", firstName: "surva", lastName: "patil", email: "surya@gmail.com", phoneNumber: "8698761734" }],
+        recentlyAddedTeachers: [{ _id: "67eb8429ea3df6dea4f2ef1c", firstName: "Teacher", lastName: "Demo", email: "teacherdemo@gmail.com", phoneNumber: "9809453212" }],
+      }
+    });
+  }, [])
 
   useEffect(() => {
     setTeachers(teacherData);
@@ -127,53 +139,74 @@ export default function SuperAdminDashboard() {
     ],
   };
 
+
   const Dashboard = () => {
-    const classes = [
+    const organizations = [
       {
-        className: "Class 1",
-        subjects: [
-          { name: "Math", passed: 40, failed: 10 },
-          { name: "Science", passed: 35, failed: 15 },
-          { name: "English", passed: 38, failed: 12 },
+        orgName: "Organization A",
+        classes: [
+          {
+            className: "Class 1",
+            subjects: [
+              { name: "Math", passed: 40, failed: 10 },
+              { name: "Science", passed: 35, failed: 15 },
+              { name: "English", passed: 38, failed: 12 },
+            ],
+          },
+          {
+            className: "Class 2",
+            subjects: [
+              { name: "Math", passed: 50, failed: 5 },
+              { name: "Science", passed: 48, failed: 7 },
+              { name: "English", passed: 45, failed: 10 },
+            ],
+          },
         ],
       },
       {
-        className: "Class 2",
-        subjects: [
-          { name: "Math", passed: 50, failed: 5 },
-          { name: "Science", passed: 48, failed: 7 },
-          { name: "English", passed: 45, failed: 10 },
+        orgName: "Organization B",
+        classes: [
+          {
+            className: "Class 3",
+            subjects: [
+              { name: "Math", passed: 30, failed: 20 },
+              { name: "Science", passed: 28, failed: 22 },
+              { name: "English", passed: 33, failed: 17 },
+            ],
+          },
+          {
+            className: "Class 4",
+            subjects: [
+              { name: "Math", passed: 55, failed: 5 },
+              { name: "Science", passed: 52, failed: 8 },
+              { name: "English", passed: 49, failed: 11 },
+            ],
+          },
         ],
       },
     ];
 
+    const [selectedOrgIndex, setSelectedOrgIndex] = useState(0);
     const [selectedClassIndex, setSelectedClassIndex] = useState(0);
     const [selectedSubjectIndex, setSelectedSubjectIndex] = useState(0);
 
     const getPieChartData = (subject) => {
       if (!subject) {
-        // If subject is undefined or null, return a default value or handle the error
         return {
           labels: ["Passed", "Failed"],
-          datasets: [
-            {
-              data: [0, 0], // Default data in case of missing subject
-              backgroundColor: ["#4CAF50", "#F44336"],
-            },
-          ],
+          datasets: [{ data: [0, 0], backgroundColor: ["#4CAF50", "#F44336"] }],
         };
       }
-
-      // If subject is defined, proceed with the normal logic
       return {
         labels: ["Passed", "Failed"],
-        datasets: [
-          {
-            data: [subject.passed, subject.failed],
-            backgroundColor: ["#4CAF50", "#F44336"],
-          },
-        ],
+        datasets: [{ data: [subject.passed, subject.failed], backgroundColor: ["#4CAF50", "#F44336"] }],
       };
+    };
+
+    const handleOrgChange = (event) => {
+      setSelectedOrgIndex(event.target.value);
+      setSelectedClassIndex(0);
+      setSelectedSubjectIndex(0);
     };
 
     const handleClassChange = (event) => {
@@ -185,25 +218,40 @@ export default function SuperAdminDashboard() {
       setSelectedSubjectIndex(event.target.value);
     };
 
-    const selectedClass = classes[selectedClassIndex];
-    const selectedSubject = selectedClass.subjects[selectedSubjectIndex];
+    const selectedOrg = organizations[selectedOrgIndex];
+    const selectedClass = selectedOrg.classes[selectedClassIndex];
+    const selectedSubject = selectedClass?.subjects[selectedSubjectIndex];
 
     return (
       <div className="min-h-screen bg-white flex flex-col items-center py-10">
-        <h1 className="text-3xl font-bold text-gray-700 mb-6 text-center">
-          Class Performance
-        </h1>
+        <h1 className="text-3xl font-bold text-gray-700 mb-6 text-center">Class Performance</h1>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+          <div>
+            <select
+              id="orgSelector"
+              value={selectedOrgIndex}
+              onChange={handleOrgChange}
+              className="w-full p-1 border rounded-lg focus:ring focus:ring-blue-300"
+            >
+              <option value="">Select Organization</option>
+              {organizations.map((org, index) => (
+                <option key={index} value={index}>
+                  {org.orgName}
+                </option>
+              ))}
+            </select>
+          </div>
+
           <div>
             <select
               id="classSelector"
-              value={selectedClassIndex || ""}
+              value={selectedClassIndex}
               onChange={handleClassChange}
               className="w-full p-1 border rounded-lg focus:ring focus:ring-blue-300"
             >
-              <option value={""}>Select ClassName</option>
-              {classes?.map((classData, index) => (
+              <option value="">Select Class</option>
+              {selectedOrg?.classes?.map((classData, index) => (
                 <option key={index} value={index}>
                   {classData.className}
                 </option>
@@ -214,7 +262,7 @@ export default function SuperAdminDashboard() {
           <div>
             <select
               id="subjectSelector"
-              value={selectedSubjectIndex || ""}
+              value={selectedSubjectIndex}
               onChange={handleSubjectChange}
               className="w-full p-1 border rounded-lg focus:ring focus:ring-blue-300"
             >
@@ -227,19 +275,14 @@ export default function SuperAdminDashboard() {
             </select>
           </div>
         </div>
+
         <div className="bg-gray-50 w-full p-6 rounded-lg shadow-md flex justify-center">
-          <div className="text-center">
-            <div className="flex justify-center">
-              <Pie
-                className="w-full min-h-full"
-                data={getPieChartData(selectedSubject)}
-              />
-            </div>
-          </div>
+          <Pie data={getPieChartData(selectedSubject)} />
         </div>
       </div>
     );
   };
+
 
   return (
     <div className="min-h-screen py-8 px-4">
@@ -352,21 +395,7 @@ export default function SuperAdminDashboard() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
-        {/* Student Pass/Fail Stats */}
-        <div className="bg-white shadow-lg rounded-xl p-6 mt-6 hover:scale-105 hover:shadow-2xl transition-transform duration-300">
-          <h2 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-blue-500 to-blue-300 text-white p-2 rounded-md shadow-md font-serif text-center">
-            Student Pass/Fail Stats
-          </h2>
-          <p className="text-gray-600 text-center mt-2 mb-4">
-            Visualization of Passed vs Failed Students
-          </p>
-          <div className="bg-gray-50 p-6 rounded-lg shadow-md flex justify-center">
-            <Pie
-              style={{ minHeight: "250px" }}
-              data={data} // Replace with static chart data
-            />
-          </div>
-        </div>
+
         <div className="bg-white shadow-lg rounded-xl p-6 mt-6 hover:scale-105 hover:shadow-2xl transition-transform duration-300">
           <Dashboard />
         </div>

@@ -24,7 +24,7 @@ export const navbarLinks = [
         label: "Classes", // Shortened label for clarity
         icon: Layers, // Represents classes, layers
         path: "/teacher-dashboard/cls",
-        color: '#4a90e2'
+        color: '#8e44ad'  // Updated color
       },
       {
         label: "Subjects", // Shortened label for clarity
@@ -32,7 +32,6 @@ export const navbarLinks = [
         path: "/teacher-dashboard/subjects",
         color: '#f39c12' 
       },
-     
       {
         label: "Course Content",
         icon: FileText,
@@ -40,12 +39,13 @@ export const navbarLinks = [
         color: '#e74c3c' 
       },
       {
-        label: "Curriculum & chat", 
+        label: "Curriculum & Chat", 
         icon: FileText, 
         path: "/teacher-dashboard/chapterCurrs",
-        color: '#3498db'
+        color: '#2ecc71'  // Updated color
       },
-    ],
+    ]
+    
   },
 ];
 

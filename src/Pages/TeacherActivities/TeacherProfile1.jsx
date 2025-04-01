@@ -114,7 +114,7 @@ const TeacherProfile = () => {
       console.log("Form submitted successfully:", res.data);
       if (res.status === 200 || res.status === 201) {
         toast.success("Profile completed successfully");
-
+        localStorage.clear();
         setTimeout(() => {
           navigate("/login");
         }, 2000);
@@ -484,84 +484,86 @@ const TeacherProfile = () => {
 
         {/* Classes and Subjects */}
         <div className="m-3">
-          {/* Select Class */}
-          <div className="m-2">
-            <select
-              value={selectedClassId}
-              onChange={(e) => {
-                setSelectedClassId(e.target.value);
-                fetchSubjectsByClassId(e.target.value);
-              }}
-              name="classes"
-              className="w-full px-3 py-2 border rounded-lg"
-            >
-              <option value="">Select Class</option>
-              {classes.map((classItem) => (
-                <option key={classItem._id} value={classItem._id}>
-                  {classItem.name}
-                </option>
-              ))}
-            </select>
-          </div>
+      {/* Select Class */}
+      <div className="m-2">
+        <select
+          value={selectedClassId}
+          onChange={(e) => {
+            const selectedClass = e.target.value;
+            setSelectedClassId(selectedClass);
+            fetchSubjectsByClassId(selectedClass); // Fetch subjects when class changes
+          }}
+          name="classes"
+          className="w-full px-3 py-2 border rounded-lg"
+        >
+          <option value="">Select Class</option>
+          {classes.map((classItem) => (
+            <option key={classItem._id} value={classItem._id}>
+              {classItem.name}
+            </option>
+          ))}
+        </select>
+      </div>
 
-          {/* Select Subject */}
-          <div className="m-2">
-            <select
-              value={selectedSubjectId}
-              onChange={(e) => setSelectedSubjectId(e.target.value)} // Update selected subject id
-              name="subjects"
-              className="w-full px-3 py-2 border rounded-lg"
-            >
-              <option value="">Select Subject</option>
-              {subjects.map((subjectItem) => (
-                <option key={subjectItem._id} value={subjectItem._id}>
-                  {subjectItem.name}
-                </option>
-              ))}
-            </select>
-          </div>
+      {/* Select Subject */}
+      <div className="m-2">
+        <select
+          value={selectedSubjectId}
+          onChange={(e) => setSelectedSubjectId(e.target.value)} // Update selected subject id
+          name="subjects"
+          className="w-full px-3 py-2 border rounded-lg"
+        >
+          <option value="">Select Subject</option>
+          {subjects.map((subjectItem) => (
+            <option key={subjectItem._id} value={subjectItem._id}>
+              {subjectItem.name}
+            </option>
+          ))}
+        </select>
+      </div>
 
-          {/* Add Button */}
-          <div>
-            <button
-              type="button" // Ensure it's not a submit button
-              onClick={handleC_SSubmit}
-              className="btn btn-info m-2"
-            >
-              Add
-            </button>
-          </div>
-          <div>
-            <div className="grid grid-cols-2 gap-2">
-              {Object.entries(s_c).map(([key, value]) => {
-                return (
-                  <div
-                    key={key}
-                    className="card p-4 border rounded-lg shadow-lg"
-                  >
-                    {classes.find((cls) => cls._id === key)?.name}
+      {/* Add Button */}
+      <div>
+        <button
+          type="button" // Ensure it's not a submit button
+          onClick={handleC_SSubmit}
+          className="btn btn-info m-2"
+        >
+          Add
+        </button>
+      </div>
 
-                    {value.map((item, index) => (
-                      <div key={index} className="subject-item mb-2">
-                        {subjects.find((subject) => subject._id === item)?.name}
-                        {/* Print subject or item */}
-                        <button
-                          type="button"
-                          onClick={
-                            () => handleRemoveFromClassAndSubjects(key, index) // Pass the classId and index to remove
-                          }
-                          className="btn btn-danger ml-2"
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+      {/* Display Classes and Subjects */}
+      <div>
+        <div className="grid grid-cols-2 gap-2">
+          {Object.entries(s_c).map(([classId, subjectIds]) => {
+            const className = classes.find((cls) => cls._id === classId)?.name;
+            return (
+              <div key={classId} className="card p-4 border rounded-lg shadow-lg">
+                <h3>{className}</h3>
+                {subjectIds.map((subjectId, index) => {
+                  const subjectName = subjects.find(
+                    (subject) => subject._id === subjectId
+                  )?.name;
+                  return (
+                    <div key={index} className="subject-item mb-2">
+                      {subjectName || "Subject not found"}
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveFromClassAndSubjects(classId, index)}
+                        className="btn btn-danger ml-2"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })}
         </div>
+      </div>
+    </div>
         <button
           type="submit"
           className="w-full mt-6 py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg"
@@ -569,7 +571,7 @@ const TeacherProfile = () => {
           Submit
         </button>
       </form>
-
+     
       <ToastContainer />
     </div>
   );

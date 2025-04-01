@@ -59,6 +59,7 @@ import StudentReport from "./Pages/AdminActivities/StudentReport";
 import TeacherSubjectLimits from "./Pages/TeacherActivities/TeacherSubjectLimits";
 import PieClick from "./Pages/AdminActivities/PieClick";
 import Invoice from "./Invoice";
+import RefreshToken from "./Admin-Dashboard/RefreshToken";
 
 const user = localStorage.getItem("user"); // Check if the user is logged in
 
@@ -147,6 +148,7 @@ const router = createBrowserRouter(
         { index: true, element: <AdminDashboard /> },
         { path: "users", element: <OnlineUsers /> },
         { path: "subjects", element: <TeacherSubjectLimits /> },
+        { path: "refreshToken", element: <RefreshToken /> },
         { path: "notifications", element: <Notifications /> },
         { path: "studentsReport", element: <StudentReport /> },
         { path: "ass_stat", element: <AssignmentData /> },

@@ -4,17 +4,17 @@ import makeRequest from '../../axios';
 const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false); // Loading state
 
-  // Corrected useEffect hook to call fetchNotifications function
   useEffect(() => {
     fetchNotifications();
-  }, []);  // Empty dependency array means this runs only once when the component mounts
+  }, []);
 
   const fetchNotifications = async () => {
+    setLoading(true); // Show loading
     try {
       const response = await makeRequest.get('/admin/get-all-notifications');
       const { success, data } = response.data;
-      console.log("Data received", data);
       if (success) {
         setNotifications(data);
       } else {
@@ -22,6 +22,35 @@ const Notifications = () => {
       }
     } catch (error) {
       setError('Error fetching notifications');
+    } finally {
+      setLoading(false); // Hide loading
+    }
+  };
+
+  const toggleNotificationStatus = async (notificationId, currentStatus) => {
+    setLoading(true); // Show loading
+    try {
+      const response = await makeRequest.patch(
+        `admin/active-inactive-notification?notificationId=${notificationId}&isActive=${!currentStatus}`
+      );
+      const { success } = response.data;
+
+      if (success) {
+        setNotifications((prevNotifications) =>
+          prevNotifications.map((notification) =>
+            notification._id === notificationId
+              ? { ...notification, isActive: !currentStatus }
+              : notification
+          )
+        );
+      } else {
+        alert('Failed to update notification status');
+      }
+    } catch (error) {
+      console.error('Error toggling notification status:', error);
+      alert('An error occurred while updating the notification status');
+    } finally {
+      setLoading(false); // Hide loading
     }
   };
 
@@ -31,14 +60,19 @@ const Notifications = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <h2 className="text-3xl font-semibold text-center mb-12 text-gray-900">Notifications</h2>
 
-      {/* No notifications message */}
-      {notifications.length === 0 ? (
+      {loading ? (
+        <div className="flex justify-center items-center h-64">
+          <div className="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12"></div>
+          <p className="ml-4 text-gray-600">Loading...</p>
+        </div>
+      ) : notifications.length === 0 ? (
         <p className="text-center text-lg text-gray-500">No notifications available.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {notifications.map(
             ({
               _id,
+              title,
               text,
               startDate,
               endDate,
@@ -47,18 +81,29 @@ const Notifications = () => {
               createdAt,
               updatedAt,
             }) => {
-              // Date formatting
               const formattedStartDate = new Date(startDate).toLocaleDateString('en-US', {
-                year: 'numeric', month: 'long', day: 'numeric',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
               });
               const formattedEndDate = new Date(endDate).toLocaleDateString('en-US', {
-                year: 'numeric', month: 'long', day: 'numeric',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
               });
               const formattedCreatedAt = new Date(createdAt).toLocaleString('en-US', {
-                year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
               });
               const formattedUpdatedAt = new Date(updatedAt).toLocaleString('en-US', {
-                year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
               });
 
               return (
@@ -68,13 +113,17 @@ const Notifications = () => {
                 >
                   <div className="flex items-center justify-between mb-6">
                     <div>
-                      <h3 className="text-xl font-semibold text-gray-800">{text}</h3>
+                      <p className="text-xl font-semibold text-gray-800">{title}</p>
+                      <p className="text-xl font-semibold text-gray-800">{text}</p>
                     </div>
-                    <div
-                      className={`px-3 py-1 text-sm font-medium rounded-full ${isActive ? "bg-green-100 text-green-600" : "bg-gray-100 text-gray-600"}`}
+                    <button
+                      onClick={() => toggleNotificationStatus(_id, isActive)}
+                      className={`px-3 py-1 text-sm font-medium rounded-full whitespace-nowrap ${
+                        isActive ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-600'
+                      }`}
                     >
-                      {isActive ? "Active" : "Inactive"}
-                    </div>
+                      {isActive ? 'Active' : 'Inactive'}
+                    </button>
                   </div>
 
                   <div className="space-y-3">
@@ -110,13 +159,3 @@ const Notifications = () => {
 };
 
 export default Notifications;
-
-
-
-
-
-
-
-
-
-
