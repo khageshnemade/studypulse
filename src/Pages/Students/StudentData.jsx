@@ -23,16 +23,19 @@ const Table = () => {
     isp,
   } = useSelector((state) => state.admin.adminDetails);
 
+
   useEffect(() => {
     setClassId(initialClassId);
     setPageSize(page);
     setProfileComplete(isp);
   }, [classId, page]);
+
   const fetchStudents = async (classId, pageSize, page, profileComplete) => {
-    const url = `/admin/get-all-students?classId=${classId}&page=${page}&limit=${pageSize}&isProfileComplete=${profileComplete}`;
+    const url = classId ? `/admin/get-all-students?classId=${classId}&page=${page}&limit=${pageSize}&isProfileComplete=${profileComplete}` : `/admin/get-all-students?page=${page}&limit=${pageSize}&isProfileComplete=${profileComplete}`;
     try {
       const res = await makeRequest.get(url);
       setStudents(res?.data?.data);
+      console.log("Set In THe Fetch Student Success", res?.data?.data);
       dispatch(setStudent(res?.data?.data));
     } catch (error) {
       console.error("Error fetching students:", error?.response?.data?.message);
@@ -54,10 +57,12 @@ const Table = () => {
     }
   };
 
+
   useEffect(() => {
-    if (classId) {
+    if (classId)
       fetchStudents(classId, pageSize, currentPage, profileComplete);
-    }
+    else if (!classId&&!profileComplete) fetchStudents(classId, pageSize, currentPage, profileComplete);
+
   }, [currentPage, classId, pageSize, profileComplete, showUpdateStudent]);
 
   const fetchClasses = async () => {
@@ -100,23 +105,37 @@ const Table = () => {
   ) : (
     <div className="container mx-auto p-6">
       <div className="flex justify-between mb-4">
-        <select
-          id="classId"
-          value={classId}
-          onChange={(e) => {
-            dispatch(setAdminDetails({ classId: e.target.value }));
+        {!profileComplete ?
+          <select
+            disabled
+            id="classId"
+            value={classId}
+            onChange={(e) => {
+              dispatch(setAdminDetails({ classId: e.target.value }));
 
-            setClassId(e.target.value);
-          }}
-          className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white w-1/3"
-        >
-          <option value="">Select Class</option>
-          {classes.map((cls) => (
-            <option key={cls._id} value={cls._id}>
-              {cls.name}
-            </option>
-          ))}
-        </select>
+              setClassId(e.target.value);
+            }}
+            className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white w-1/3"
+          >
+            <option value="" selected>Not Required</option>
+
+          </select> : <select
+            id="classId"
+            value={classId}
+            onChange={(e) => {
+              dispatch(setAdminDetails({ classId: e.target.value }));
+
+              setClassId(e.target.value);
+            }}
+            className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white w-1/3"
+          >
+            <option value="">Select Class</option>
+            {classes.map((cls) => (
+              <option key={cls._id} value={cls._id}>
+                {cls.name}
+              </option>
+            ))}
+          </select>}
 
         <select
           id="pageSize"
@@ -145,80 +164,77 @@ const Table = () => {
         <div className="text-lg font-semibold">Page: {currentPage}</div>
       </div>
 
-      {classId ? (
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white rounded-lg shadow-md whitespace-nowrap">
-            <thead className="bg-teal-700 font-serif  text-white ">
-              <tr>
-                <th className="px-4 py-2 border">Profile</th>
-                <th className="px-4 py-2 border">Name</th>
-                <th className="px-4 py-2 border">Email</th>
-                <th className="px-4 py-2 border">Phone</th>
-                <th className="px-4 py-2 border">City</th>
-                {profileComplete && <th className="px-4 py-2 border">More</th>}
-                <th className="px-4 py-2 border">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {students.map((row) => (
-                <tr key={row._id} className="hover:bg-gray-50">
-                  <td className="px-4 py-2 border">
-                    {row?.profilePic ? (
-                      <img
-                        src={`https://api.studypulse.live/${row.profilePic}`}
-                        alt="Profile"
-                        className="w-16 h-16 object-cover rounded-full" // Set explicit width and height here
-                      />
-                    ) : (
-                      <div className="w-16 h-16 flex items-center justify-center bg-blue-600 text-white text-2xl font-bold rounded-full">
-                        {`${row.firstName[0]}${row.lastName[0]}`.toUpperCase()}
-                      </div>
-                    )}
-                  </td>
 
-                  <td className="px-4 py-2 border">
-                    {row.firstName} {row.lastName}
-                  </td>
-                  <td className="px-4 py-2 border">{row.email}</td>
-                  <td className="px-4 py-2 border">{row.phoneNumber}</td>
-                  <td className="px-4 py-2 border">{row?.cityData?.name}</td>
-                  {profileComplete && (
-                    <td className="border border-gray-300 px-4 py-2 max-w-min">
-                      <div className="flex space-x-3 items-center">
-                        <button
-                          onClick={() => {
-                            setCurrentId(row._id);
-                            setShowUpdateStudent(true);
-                          }}
-                          className="px-2 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-                        >
-                          <ChevronDown />
-                        </button>
-                      </div>
-                    </td>
+
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white rounded-lg shadow-md whitespace-nowrap">
+          <thead className="bg-teal-700 font-serif  text-white ">
+            <tr>
+              <th className="px-4 py-2 border">Profile</th>
+              <th className="px-4 py-2 border">Name</th>
+              <th className="px-4 py-2 border">Email</th>
+              <th className="px-4 py-2 border">Phone</th>
+              <th className="px-4 py-2 border">City</th>
+              {profileComplete && <th className="px-4 py-2 border">More</th>}
+              <th className="px-4 py-2 border">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {students.map((row) => (
+              <tr key={row._id} className="hover:bg-gray-50">
+                <td className="px-4 py-2 border">
+                  {row?.profilePic ? (
+                    <img
+                      src={`https://api.studypulse.live/${row.profilePic}`}
+                      alt="Profile"
+                      className="w-16 h-16 object-cover rounded-full" // Set explicit width and height here
+                    />
+                  ) : (
+                    <div className="w-16 h-16 flex items-center justify-center bg-blue-600 text-white text-2xl font-bold rounded-full">
+                      {`${row.firstName[0]}${row.lastName[0]}`.toUpperCase()}
+                    </div>
                   )}
-                  <td className="px-4 py-2 border">
-                    <button
-                      onClick={() => handleStatusChange(row)}
-                      className={`px-4 py-2 rounded-md text-white ${
-                        row.status === "active"
-                          ? "bg-green-500 hover:bg-green-600"
-                          : "bg-red-500 hover:bg-red-600"
-                      }`}
-                    >
-                      {row.status}
-                    </button>
+                </td>
+
+                <td className="px-4 py-2 border">
+                  {row.firstName} {row.lastName}
+                </td>
+                <td className="px-4 py-2 border">{row.email}</td>
+                <td className="px-4 py-2 border">{row.phoneNumber}</td>
+                <td className="px-4 py-2 border">{row?.cityData?.name}</td>
+                {profileComplete && (
+                  <td className="border border-gray-300 px-4 py-2 max-w-min">
+                    <div className="flex space-x-3 items-center">
+                      <button
+                        onClick={() => {
+                          setCurrentId(row._id);
+                          setShowUpdateStudent(true);
+                        }}
+                        className="px-2 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                      >
+                        <ChevronDown />
+                      </button>
+                    </div>
                   </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        <p className="text-center text-gray-700 bg-gray-100 p-3 rounded-lg shadow-md  mx-auto text-lg font-medium hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1">
-          Please Select Class Name and Page Size...
-        </p>
-      )}
+                )}
+                <td className="px-4 py-2 border">
+                  <button
+                    onClick={() => handleStatusChange(row)}
+                    className={`px-4 py-2 rounded-md text-white ${row.status === "active"
+                        ? "bg-green-500 hover:bg-green-600"
+                        : "bg-red-500 hover:bg-red-600"
+                      }`}
+                  >
+                    {row.status}
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+
 
       <div className="flex justify-between mt-4">
         <button

@@ -10,22 +10,10 @@ import TeacherSubjectLimits from "../../../Pages/TeacherActivities/TeacherSubjec
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function TeacherDashboard() {
-  const iassignments = [
-    { id: 1, title: "Math Assignment - Algebra" },
-    { id: 2, title: "Science Assignment - Physics" },
-    { id: 3, title: "History Assignment - Ancient Civilizations" },
-  ];
-
-  const icurriculums = [
-    { id: 1, title: "Math Curriculum - Algebra 101" },
-    { id: 2, title: "Science Curriculum - Basic Physics" },
-    { id: 3, title: "History Curriculum - World War II" },
-  ];
   const user = localStorage.getItem("user");
   const profileCompletion = JSON.parse(user)?.profileCompletion;
   const [dashboard, setData] = useState({});
-  const [assignments, setAssignments] = useState([]);
-  const [curriculums, setCurriculums] = useState([]);
+
 
   useEffect(() => {
     fetchDashboardData();
@@ -247,44 +235,48 @@ export default function TeacherDashboard() {
             </div>
           </div>
 
-          <TeacherSubjectLimits />
+
 
           <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             <div className=" rounded-lg p-6 shadow-sm">
               <HollowPieChart classes={classes} />
             </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 ">
-              <div className="rounded-lg p-6 shadow-sm">
-                <p className="text-xl font-semibold mb-4 bg-gradient-to-r from-purple-500 to-purple-300 text-white p-2 rounded-md shadow-md font-serif">
-                  Recently Added Assignments
-                </p>
-                {iassignments.map((assignment) => (
-                  <div
-                    key={assignment.id}
-                    className="flex items-center py-2 border-b border-gray-200"
-                  >
-                    <div className="w-10 h-10 rounded-full bg-blue-500 mr-4" />
-                    <p className="text-gray-700">{assignment.title}</p>
-                  </div>
-                ))}
-              </div>
-
-              <div className="rounded-lg p-6 shadow-sm">
-                <p className="text-xl font-semibold mb-4 bg-gradient-to-r from-purple-500 to-purple-300 text-white p-2 rounded-md shadow-md font-serif">
-                  Recently Added Curriculums
-                </p>
-                {icurriculums.map((curriculum) => (
-                  <div
-                    key={curriculum.id}
-                    className="flex items-center py-2 border-b border-gray-200"
-                  >
-                    <div className="w-10 h-10 rounded-full bg-green-500 mr-4" />
-                    <p className="text-gray-700">{curriculum.title}</p>
-                  </div>
-                ))}
-              </div>
+            <TeacherSubjectLimits />
+            <div className="rounded-lg p-6 shadow-sm">
+              <p className="text-xl font-semibold mb-4 bg-gradient-to-r from-purple-500 to-purple-300 text-white p-2 rounded-md shadow-md font-serif">
+                Recently Added Assignments
+              </p>
+              {dashboard?.recentAssignments?.map((assignment) => (
+                <div
+                  key={assignment._id}
+                  className="flex flex-col py-2 border-b border-gray-200"
+                >
+                  <p className="text-gray-700 font-semibold text-lg">{assignment.title}</p>
+                  <p className="text-gray-900 font-bold text-sm">{assignment.subjectId.name}</p>
+                  <p className="text-gray-500 text-xs">{assignment.chapterId.title}</p>
+                </div>
+              ))}
             </div>
+
+            <div className="rounded-lg p-6 shadow-sm">
+              <p className="text-xl font-semibold mb-4 bg-gradient-to-r from-purple-500 to-purple-300 text-white p-2 rounded-md shadow-md font-serif">
+                Recently Added Curriculums
+              </p>
+              {dashboard?.recentChapterCurriculums?.map((curriculum) => (
+                <div
+                  key={curriculum._id}
+                  className="flex flex-col py-2 border-b border-gray-200"
+                >
+                  <p className="text-gray-700 font-semibold text-lg">{curriculum.title}</p>
+                  <p className="text-gray-900 font-bold text-sm">{curriculum.subjectId.name}</p>
+                  <p className="text-gray-500 text-xs">{curriculum.chapterId.title}</p>
+                </div>
+              ))}
+            </div>
+
+
+
+
           </div>
         </>
       )}
