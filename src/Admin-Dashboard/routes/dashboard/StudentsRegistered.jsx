@@ -1,87 +1,76 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react"; // Importing only the necessary icons
-
-const demoData = [
-  {
-    id: 1,
-    name: "John Doe",
-    class: "Class A",
-    status: "Pass",
-    subjects: [
-      { subject: "Math", marks: 80 },
-      { subject: "Science", marks: 75 },
-    ],
-  },
-  {
-    id: 2,
-    name: "Jane Smith",
-    class: "Class B",
-    status: "Fail",
-    subjects: [
-      { subject: "Math", marks: 45 },
-      { subject: "Science", marks: 50 },
-    ],
-  },
-  {
-    id: 3,
-    name: "Sam Brown",
-    class: "Class A",
-    status: "Pass",
-    subjects: [
-      { subject: "Math", marks: 90 },
-      { subject: "Science", marks: 85 },
-    ],
-  },
-  {
-    id: 4,
-    name: "Alice Green",
-    class: "Class B",
-    status: "Pass",
-    subjects: [
-      { subject: "Math", marks: 95 },
-      { subject: "Science", marks: 92 },
-    ],
-  },
-  {
-    id: 5,
-    name: "Tom White",
-    class: "Class A",
-    status: "Fail",
-    subjects: [
-      { subject: "Math", marks: 60 },
-      { subject: "Science", marks: 65 },
-    ],
-  },
-];
+import { ArrowLeft } from "lucide-react";
+import { useSelector } from "react-redux";
+import makeRequest from "../../../axios";
 
 export default function StudentsRegistered() {
+  const [classes, setClasses] = useState([]);
+  const [subjects, setSubjects] = useState([]);
+  const [students, setStudents] = useState([]);
+  const orgId = useSelector((state) => state.org.orgId);
   const [selectedClass, setSelectedClass] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
   const navigate = useNavigate();
 
-  // Filter the students based on the selected criteria
-  const filteredStudents = demoData.filter((student) => {
-    const isClassMatch = selectedClass ? student.class === selectedClass : true;
-    const isStatusMatch = selectedStatus
-      ? student.status === selectedStatus
-      : true;
-    const isSubjectMatch = selectedSubject
-      ? student.subjects.some((f) => f.subject === selectedSubject)
-      : true;
+  useEffect(() => {
+    if (orgId) {
+      fetchClasses();
+    }
+  }, [orgId]);
 
-    return isClassMatch && isStatusMatch && isSubjectMatch;
-  });
+  useEffect(() => {
+    if (selectedClass) {
+      fetchSubjects(selectedClass);
+    }
+  }, [selectedClass]);
 
-  // Go back function for navigation
+  useEffect(() => {
+    if (selectedClass && selectedSubject && selectedStatus) {
+      fetchStudentsResults();
+    }
+  }, [selectedClass, selectedSubject, selectedStatus]);
+
+  const fetchClasses = async () => {
+    try {
+      const res = await makeRequest.get(
+        `/get-classes-by-org-id?organizationId=${orgId}`
+      );
+      setClasses(res?.data?.data || []);
+    } catch (error) {
+      console.error("Error fetching classes:", error.response?.data || error.message);
+    }
+  };
+
+  const fetchSubjects = async (classId) => {
+    try {
+      const res = await makeRequest.get(
+        `/get-subjects-by-class-id?classId=${classId}`
+      );
+      setSubjects(res?.data?.data || []);
+    } catch (error) {
+      console.error("Error fetching subjects:", error.response?.data || error.message);
+    }
+  };
+
+  const fetchStudentsResults = async () => {
+    try {
+      const res = await makeRequest.get(
+        `/admin/get-students-results-by-class?classId=${selectedClass}&subjectId=${selectedSubject}&page=1&limit=30&resultStatus=${selectedStatus}`
+      );
+      setStudents(res?.data?.data || []);
+    } catch (error) {
+      console.error("Error fetching students results:", error.response?.data || error.message);
+    }
+  };
+
   const handleGoBack = () => {
-    navigate(-1); // Go back to the previous page
+    navigate(-1);
   };
 
   return (
     <div className="p-6">
-      {/* Go Back Button */}
       <button
         onClick={handleGoBack}
         className="mb-4 p-2 text-white bg-blue-500 rounded-lg flex items-center"
@@ -91,119 +80,85 @@ export default function StudentsRegistered() {
       </button>
 
       <div className="mb-4 flex space-x-4">
-        {/* Dropdown for Select Class */}
+        {/* Class Selection */}
         <div className="w-1/3">
-          <label className="block text-lg font-semibold mb-2">
-            Select Class
-          </label>
+          <label className="block text-lg font-semibold mb-2">Select Class</label>
           <select
             value={selectedClass}
             onChange={(e) => setSelectedClass(e.target.value)}
-            className="w-full p-1 border rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+            className="w-full p-1 border rounded-lg"
           >
             <option value="">All Classes</option>
-            <option value="Class A">Class A</option>
-            <option value="Class B">Class B</option>
-          </select>
-        </div>
-
-        {/* Dropdown for Select Subject */}
-        <div className="w-1/3">
-          <label className="block text-lg font-semibold mb-2">
-            Select Subject
-          </label>
-          <select
-            value={selectedSubject}
-            onChange={(e) => setSelectedSubject(e.target.value)}
-            className="w-full p-1 border rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
-          >
-            <option value="">All Subjects</option>
-            {Array.from(
-              new Set(
-                demoData.flatMap((student) =>
-                  student.subjects.map((subject) => subject.subject)
-                )
-              )
-            ).map((subject) => (
-              <option key={subject} value={subject}>
-                {subject}
+            {classes.map((cls) => (
+              <option key={cls._id} value={cls._id}>
+                {cls.name}
               </option>
             ))}
           </select>
         </div>
 
-        {/* Dropdown for Select Status */}
+        {/* Subject Selection */}
         <div className="w-1/3">
-          <label className="block text-lg font-semibold mb-2">
-            Select Status
-          </label>
+          <label className="block text-lg font-semibold mb-2">Select Subject</label>
+          <select
+            value={selectedSubject}
+            onChange={(e) => setSelectedSubject(e.target.value)}
+            className="w-full p-1 border rounded-lg"
+            disabled={!selectedClass}
+          >
+            <option value="">All Subjects</option>
+            {subjects.map((subject) => (
+              <option key={subject._id} value={subject._id}>
+                {subject.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Status Selection */}
+        <div className="w-1/3">
+          <label className="block text-lg font-semibold mb-2">Select Status</label>
           <select
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value)}
-            className="w-full p-1 border rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+            className="w-full p-1 border rounded-lg"
           >
             <option value="">Select Status</option>
-            <option value="Pass">Pass</option>
-            <option value="Fail">Fail</option>
+            <option value="pass">Pass</option>
+            <option value="fail">Fail</option>
+            <option value="absent">Absent</option>
           </select>
         </div>
       </div>
 
-      {/* Table to display filtered students */}
-      <table className="w-full table-auto border-collapse border border-gray-300">
+      <table className="w-full border-collapse border border-gray-300">
         <thead>
           <tr>
             <th className="border p-3">Name</th>
-            <th className="border p-3">Class</th>
+            <th className="border p-3">Email</th>
+            <th className="border p-3">Phone</th>
             <th className="border p-3">Status</th>
-            <th className="border p-3">Subject Marks</th>{" "}
-            {/* Column for specific subject marks */}
-            <th className="border p-3">View Score Card</th>
+            <th className="border p-3">Marks</th>
+            <th className="border p-3">Profile</th>
           </tr>
         </thead>
         <tbody>
-          {filteredStudents.length > 0 ? (
-            filteredStudents.map((student) => {
-              // Find the selected subject's marks
-              const selectedSubjectMarks = student.subjects.find(
-                (subject) => subject.subject === selectedSubject
-              );
-              return (
-                <tr
-                  key={student.id}
-                  className="hover:bg-gray-100 transition-all"
-                >
-                  <td className="border p-3">{student.name}</td>
-                  <td className="border p-3">{student.class}</td>
-                  <td className="border p-3">{student.status}</td>
-                  <td className="border p-3">
-                    {/* Display only the selected subject's marks */}
-                    {selectedSubjectMarks ? (
-                      <div className="flex items-center">
-                        <span className="mr-2">
-                          {selectedSubjectMarks.subject} -{" "}
-                          {selectedSubjectMarks.marks}
-                        </span>
-                      </div>
-                    ) : (
-                      <span>No data available</span>
-                    )}
-                  </td>
-                  <td>
-                    <button
-                      onClick={() =>
-                        navigate("/admin-dashboard/studentsReport")
-                      }
-                    >
-                      View
-                    </button>
-                  </td>
-                </tr>
-              );
-            })
+          {students.length > 0 ? (
+            students.map((student) => (
+              <tr key={student._id} className="hover:bg-gray-100 transition-all">
+                <td className="border p-3">{student.firstName} {student.lastName}</td>
+                <td className="border p-3">{student.email}</td>
+                <td className="border p-3">{student.phoneNumber}</td>
+                <td className="border p-3">{student.result}</td>
+                <td className="border p-3">{student.marks}</td>
+                <td className="border p-3">
+                  <img src={student.profilePic} alt="Profile" className="w-10 h-10 rounded-full" />
+                </td>
+              </tr>
+            ))
           ) : (
             <tr>
-              <td colSpan="4" className="border p-3 text-center">
+              <td colSpan="6" className="border p-3 text-center">
                 No data available
               </td>
             </tr>

@@ -32,6 +32,12 @@ export const navbarLinks = [
         color: '#e74c3c' // Red shade
       },
       {
+        label: "Student", 
+        icon: Users,
+        path: "/admin-dashboard/student",
+        color: '#e74c3c' // Red shade
+      },
+      {
         label: "Classes & Subjects",
         icon: BookOpen, 
         path: "/admin-dashboard/class_subject",

@@ -18,7 +18,6 @@ import StudentsRegistered from "./StudentsRegistered";
 import { useNavigate } from "react-router-dom";
 import OnlineUsers from "../../../Pages/AdminActivities/OnlineUsers";
 import AssignmentData from "./AssignmentData";
-import { div } from "framer-motion/client";
 
 // Registering chart components
 ChartJS.register(
@@ -32,63 +31,88 @@ ChartJS.register(
 );
 
 export default function AdminDashboard() {
+  const [loading, setLoading] = useState(false);
+
   const [dashboard, setDashboard] = useState({});
   const [labels, setLabels] = useState([]);
   const [dataset, setDataset] = useState([]);
   const [users, setUsers] = useState([]);
+  const [classes, setClasses] = useState([]);
+  const [subjects, setSubjects] = useState([]);
+  const [selectedClass, setSelectedClass] = useState("");
+  const [selectedSubject, setSelectedSubject] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("");
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const orgId = useSelector((state) => state.org.orgId);
+
+  useEffect(() => {
+    if (orgId) {
+      fetchClasses();
+    }
+  }, [orgId]);
+
+  useEffect(() => {
+    if (selectedClass) {
+      fetchSubjects(selectedClass);
+    }
+  }, [selectedClass]);
+
+  useEffect(() => {
+    if (selectedClass && selectedSubject && selectedStatus) {
+      fetchStudentsResults();
+    }
+  }, [selectedClass, selectedSubject, selectedStatus]);
 
   useEffect(() => {
     fetchDashboardData();
     fetchOnlineUsers();
   }, []);
 
-  const fetchOnlineUsers = async () => {
+  const fetchClasses = async () => {
+
     try {
-      const res = await makeRequest.get(`/admin/get-online-users`);
-      console.log("Online Users: ", res?.data?.data);
-      setUsers(res?.data?.data.slice(0, 5));
+      const res = await makeRequest.get(
+        `/get-classes-by-org-id?organizationId=${orgId}`
+      );
+      setClasses(res?.data?.data || []);
     } catch (error) {
-      console.error("Request Error:", error.message);
+      console.error("Error fetching classes:", error.response?.data || error.message);
+    }
+  };
+
+  const fetchSubjects = async (classId) => {
+    try {
+      const res = await makeRequest.get(
+        `/get-subjects-by-class-id?classId=${classId}`
+      );
+      setSubjects(res?.data?.data || []);
+    } catch (error) {
+      console.error("Error fetching subjects:", error.response?.data || error.message);
     }
   };
 
   const fetchDashboardData = async () => {
-    const res = await makeRequest.get("admin/get-dashboard-details");
-    const data = res?.data?.data?.passFailedStudents || {};
-
-    console.log("Dashboard Details", res?.data?.data);
-    setDashboard(res?.data?.data || {});
+    try {
+      const res = await makeRequest.get("admin/get-dashboard-details");
+      setDashboard(res?.data?.data || {});
+    } catch (error) {
+      console.error("Error fetching dashboard data:", error.message);
+    }
   };
 
-  // PieChart Component
+  const fetchOnlineUsers = async () => {
+    try {
+      const res = await makeRequest.get(`/admin/get-online-users`);
+      setUsers(res?.data?.data.slice(0, 5));
+    } catch (error) {
+      console.error("Error fetching online users:", error.message);
+    }
+  };
 
   // Student Passed/Failed Stats Component
   const StudentPassedFailed = () => {
-    // const classes=dashboard?.passFailedStudents;
-    const classes = [
-      {
-        className: "Class 1",
-        subjects: [
-          { name: "Math", passed: 40, failed: 10 },
-          { name: "Science", passed: 35, failed: 15 },
-          { name: "English", passed: 38, failed: 12 },
-        ],
-      },
-      {
-        className: "Class 2",
-        subjects: [
-          { name: "Math", passed: 50, failed: 5 },
-          { name: "Science", passed: 48, failed: 7 },
-          { name: "English", passed: 45, failed: 10 },
-        ],
-      },
-    ];
-
-    const [selectedClassIndex, setSelectedClassIndex] = useState(0);
-    const [selectedSubjectIndex, setSelectedSubjectIndex] = useState(0);
-
     const getPieChartData = (subject) => ({
       labels: ["Passed", "Failed"],
       datasets: [
@@ -100,16 +124,13 @@ export default function AdminDashboard() {
     });
 
     const handleClassChange = (event) => {
-      setSelectedClassIndex(event.target.value);
-      setSelectedSubjectIndex(0);
+      setSelectedClass(event.target.value);
+      setSelectedSubject("");
     };
 
     const handleSubjectChange = (event) => {
-      setSelectedSubjectIndex(event.target.value);
+      setSelectedSubject(event.target.value);
     };
-
-    const selectedClass = classes[selectedClassIndex];
-    const selectedSubject = selectedClass.subjects[selectedSubjectIndex];
 
     const options = {
       responsive: true,
@@ -124,15 +145,11 @@ export default function AdminDashboard() {
       // Handle click event on the pie chart
       onClick: (event, chartElement) => {
         if (chartElement.length > 0) {
-          // Get the index of the clicked element
           const clickedIndex = chartElement[0].index;
-          const label = getPieChartData(selectedSubject).labels[clickedIndex]; // Get the label of the clicked section
-          console.log(
-            `Clicked on ${label} section ${selectedSubject.name} with`
-          );
+          const label = getPieChartData(subjects[clickedIndex]).labels[clickedIndex];
           dispatch(
             setAdminDetails({
-              classId: selectedSubject.name,
+              classId: selectedClass,
               isPassed: label === "Passed" ? true : false,
             })
           );
@@ -146,19 +163,24 @@ export default function AdminDashboard() {
         <h2 className="text-xl font-semibold mb-4 bg-gradient-to-r from-green-500 to-teal-300 text-white p-2 rounded-md w-full text-center font-serif">
           Class Performance
         </h2>
-
+ {/* Loading Spinner */}
+ {loading && (
+            <div className="mb-2 flex justify-center items-center">
+              <div className="animate-spin border-4 border-blue-500 border-t-transparent w-6 h-6 rounded-full"></div>
+            </div>
+          )}
         <div className="bg-white shadow rounded-xl p-6 transform transition-transform duration-300 hover:scale-105">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
             <div>
               <select
                 id="classSelector"
-                value={selectedClassIndex || ""}
+                value={selectedClass || ""}
                 onChange={handleClassChange}
                 className="w-full p-1 border rounded-lg focus:ring focus:ring-blue-300"
               >
-                <option value={""}>Select ClassName</option>
+                <option value={""}>Select Class</option>
                 {classes?.map((classData, index) => (
-                  <option key={index} value={index}>
+                  <option key={index} value={classData.className}>
                     {classData.className}
                   </option>
                 ))}
@@ -168,13 +190,13 @@ export default function AdminDashboard() {
             <div>
               <select
                 id="subjectSelector"
-                value={selectedSubjectIndex || ""}
+                value={selectedSubject || ""}
                 onChange={handleSubjectChange}
                 className="w-full p-1 border rounded-lg focus:ring focus:ring-blue-300"
               >
                 <option value="">Select Subject</option>
-                {selectedClass?.subjects?.map((subject, index) => (
-                  <option key={index} value={index}>
+                {subjects?.map((subject, index) => (
+                  <option key={index} value={subject.name}>
                     {subject.name}
                   </option>
                 ))}
@@ -189,7 +211,7 @@ export default function AdminDashboard() {
                 <Pie
                   options={options}
                   className="w-full min-h-full"
-                  data={getPieChartData(selectedSubject)}
+                  data={getPieChartData(subjects.find(sub => sub.name === selectedSubject) || {})}
                 />
               </div>
             </div>
@@ -204,28 +226,19 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-10 p-8">
         {/* Teachers Registered Card */}
         <div className="bg-red-300 rounded-2xl p-2 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer">
-          {/* Title Row */}
           <div className="text-center mb-4">
             <h3 className="text-xl font-bold text-white font-serif">
               Teachers Registered
             </h3>
           </div>
-
-          {/* Icon and Count Row */}
           <div className="flex justify-center items-center gap-4 mb-4">
             <div className="bg-blue-500 text-white p-2 rounded-full">
-              {" "}
-              {/* Reduced padding */}
-              <BookOpen className="text-4xl" /> {/* Reduced icon size */}
+              <BookOpen className="text-4xl" />
             </div>
             <p className="text-2xl font-extrabold text-blue-600 rounded-lg py-1">
-              {" "}
-              {/* Reduced font size and padding */}
               {dashboard.totalTeachersCount}
             </p>
           </div>
-
-          {/* Subtitle Row */}
           <div className="text-center  text-black font-sans">
             <p>Number of teachers currently registered.</p>
           </div>
@@ -236,28 +249,19 @@ export default function AdminDashboard() {
           className="bg-teal-400 rounded-2xl p-2 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer"
           onClick={() => navigate("student")}
         >
-          {/* Title Row */}
           <div className="text-center mb-4">
             <h3 className="text-xl font-semibold text-white font-serif">
               Students Registered
             </h3>
           </div>
-
-          {/* Icon and Count Row */}
           <div className="flex justify-center items-center gap-4 mb-4">
             <div className="bg-green-600 text-white p-3 rounded-full">
-              {" "}
-              {/* Reduced padding */}
-              <FileText className="text-2xl" /> {/* Reduced icon size */}
+              <FileText className="text-2xl" />
             </div>
             <p className="text-2xl font-extrabold text-green-600 rounded-lg py-1">
-              {" "}
-              {/* Reduced font size and padding */}
               {dashboard.totalStudentCount}
             </p>
           </div>
-
-          {/* Subtitle Row */}
           <div className="text-center text-md text-black font-sans">
             <p>Number of students currently registered.</p>
           </div>
@@ -265,93 +269,20 @@ export default function AdminDashboard() {
 
         {/* Classes Created Card */}
         <div className="bg-orange-400 rounded-2xl p-2 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer">
-          {/* Title Row */}
           <div className="text-center mb-4">
             <h3 className="text-xl font-bold text-white font-serif">
               Classes Created
             </h3>
           </div>
-
-          {/* Icon and Count Row */}
           <div className="flex justify-center items-center gap-4 mb-4">
-            <div className="bg-indigo-500 text-white p-2 rounded-full">
-              {" "}
-              {/* Reduced padding */}
-              <Layers className="text-2xl" /> {/* Reduced icon size */}
-            </div>
-            <p className="text-2xl font-extrabold text-indigo-500 rounded-lg py-1">
-              {" "}
-              {/* Reduced font size and padding */}
-              {dashboard.totalClassCount}
-            </p>
-          </div>
-
-          {/* Subtitle Row */}
-          <div className="text-center text-md text-black font-sans">
-            <p>Number of classes currently created.</p>
-          </div>
-        </div>
-      </div>
-
+            <div className="bg-indigo-500 text-white p-2 rounded-full"> <Layers className="text-2xl" /> </div> <p className="text-2xl font-extrabold text-indigo-500 rounded-lg py-1"> {dashboard.totalClassCount} </p> </div> <div className="text-center text-md text-black font-sans"> <p>Number of classes currently created.</p> </div> </div> </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
-        {/* Recently Added Teachers & Students */}
-        {[
-          {
-            title: "Recently Added Teachers",
-            data: dashboard.recentlyAddedTeachers,
-          },
-          {
-            title: "Recently Added Students",
-            data: dashboard.recentlyAddedStudents,
-          },
-        ].map(({ title, data }, index) => (
-          <div
-            key={index}
-            className="bg-white shadow rounded-xl p-3 transform transition-transform duration-300 hover:scale-105 max-h-96 overflow-y-auto text-center"
-          >
-            <h2 className="text-xl font-semibold mb-4 bg-gradient-to-r from-blue-500 to-blue-300 text-white p-2 rounded-md shadow-md font-serif">
-              {title}
-            </h2>
-
-            <div className="space-y-4">
-              {data?.map((person) => (
-                <div
-                  key={person._id || person.id}
-                  className="flex items-center p-4 border-b last:border-b-0 space-x-4"
-                >
-                  <div className="w-14 h-14 rounded-full bg-gray-200 overflow-hidden">
-                    <img
-                      src={""}
-                      alt="Profile"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-md font-semibold text-gray-800">
-                      {person.firstName} {person.lastName}
-                    </p>
-                    <p className="text-sm text-gray-600">{person.email}</p>
-                    <p className="text-sm text-gray-600">
-                      {person.phoneNumber}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-
-        {/* Student Pass/Fail Table */}
         <div className="bg-white shadow rounded-xl p-6 duration-300 hover:scale-105 mb-8">
           <StudentPassedFailed />
         </div>
-
-        {/* Assignment Data */}
         <div className="bg-white shadow rounded-xl p-6 duration-300 hover:scale-105 mb-8">
           <AssignmentData />
         </div>
-
-        {/* Online Users */}
         <div className="bg-white shadow rounded-xl p-6 duration-300 hover:scale-105 mb-8">
           <OnlineUsers users={users} />
         </div>

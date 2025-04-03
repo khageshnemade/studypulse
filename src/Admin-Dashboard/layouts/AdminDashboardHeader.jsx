@@ -97,7 +97,7 @@ export const AdminDashboardHeader = ({ collapsed, setCollapsed }) => {
           {/* Profile Picture with Hover Effect */}
 
           <button
-            onClick={toggleModal}
+            onClick={()=>toggleModal()}
             className="w-12 h-12 rounded-full overflow-hidden cursor-pointer bg-teal-600 flex items-center justify-center"
           >
             {profile.profilePic ? (
@@ -129,7 +129,7 @@ export const AdminDashboardHeader = ({ collapsed, setCollapsed }) => {
         <div className="flex items-center gap-x-3">
          
           <button
-            onClick={""}
+          
             className="w-10 h-10 flex items-center justify-center"
           >
             <Bell
