@@ -17,6 +17,7 @@ import { setClassDetails } from "../../redux/features/idsSlice";
 export default function Assignments() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
 
   // Use useSelector to get data from Redux store
   const { classId, subjectId, chapterId } = useSelector(
@@ -37,6 +38,7 @@ export default function Assignments() {
   }, [chapterId]); // Only refetch when chapterId changes
 
   const fetchAssignment = async () => {
+    setLoading(true);
     try {
       const res = await makeRequest.get(
         `/teacher/get-all-assignment?chapterId=${chapterId}`
@@ -46,6 +48,8 @@ export default function Assignments() {
       dispatch(setClassDetails({ assignments: res?.data?.data }));
     } catch (error) {
       console.error("Request Error:", error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -64,7 +68,12 @@ export default function Assignments() {
         >
           <ArrowLeft className="w-5 h-5 transition-all" />
         </button>
-
+        {/* Loading Spinner */}
+        {loading && (
+          <div className="mt-2 flex justify-center items-center">
+            <div className="animate-spin border-4 border-blue-500 border-t-transparent w-6 h-6 rounded-full"></div>
+          </div>
+        )}
         <button
           onClick={() => {
             navigate("/teacher-dashboard/add_assignment", {

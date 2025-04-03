@@ -4,18 +4,22 @@ import makeRequest from "../../axios"; // Import the appropriate function for ma
 
 export default function OnlineUsers() {
   const [onlineUsers, setOnlineUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchOnlineUsers();
   }, []);
 
   const fetchOnlineUsers = async () => {
+    setLoading(true);
     try {
       const res = await makeRequest.get(`/teacher/get-online-users`);
       console.log("Online Users: ", res?.data?.data);
       setOnlineUsers(res?.data?.data);
     } catch (error) {
       console.error("Request Error:", error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -25,7 +29,12 @@ export default function OnlineUsers() {
       <h2 className="text-xl font-semibold text-gray-800 text-center mb-4 font-serif">
         Online Users
       </h2>
-
+      {/* Loading Spinner */}
+      {loading && (
+        <div className="mt-2 flex justify-center items-center">
+          <div className="animate-spin border-4 border-blue-500 border-t-transparent w-6 h-6 rounded-full"></div>
+        </div>
+      )}
       {/* Users List */}
       <div className="space-y-4 flex-1">
         {onlineUsers.length > 0 ? (
@@ -54,7 +63,7 @@ export default function OnlineUsers() {
       </div>
 
       {/* View More Button */}
-      {location.pathname !== '/admin-dashboard/users' && (
+      {location.pathname !== "/admin-dashboard/users" && (
         <div className="text-center mt-auto">
           <Link
             className="btn bg-red-400 hover:bg-red-500 text-white mt-2 py-2 px-4 rounded-full"

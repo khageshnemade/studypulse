@@ -17,12 +17,12 @@ const Table = () => {
   const [pageSize, setPageSize] = useState(10);
   const [profileComplete, setProfileComplete] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(false);
   const {
     classId: initialClassId,
     page,
     isp,
   } = useSelector((state) => state.admin.adminDetails);
-
 
   useEffect(() => {
     setClassId(initialClassId);
@@ -30,16 +30,18 @@ const Table = () => {
     setProfileComplete(isp);
   }, [classId, page]);
 
-  const fetchStudents = async (classId, pageSize, page, profileComplete) => {
-    const url = classId ? `/admin/get-all-students?classId=${classId}&page=${page}&limit=${pageSize}&isProfileComplete=${profileComplete}` : `/admin/get-all-students?page=${page}&limit=${pageSize}&isProfileComplete=${profileComplete}`;
+  const fetchStudents = async () => {
+    setLoading(true);
+    const url = `/admin/get-all-students?classId=${classId}&page=${page}&limit=${pageSize}&isProfileComplete=${profileComplete}`;
     try {
       const res = await makeRequest.get(url);
       setStudents(res?.data?.data);
-      console.log("Set In THe Fetch Student Success", res?.data?.data);
       dispatch(setStudent(res?.data?.data));
     } catch (error) {
       console.error("Error fetching students:", error?.response?.data?.message);
-      toast.error("Failed to fetch students. Please try again.");
+      toast.error("Please try to select Class.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -57,12 +59,8 @@ const Table = () => {
     }
   };
 
-
   useEffect(() => {
-    if (classId)
-      fetchStudents(classId, pageSize, currentPage, profileComplete);
-    else if (!classId&&!profileComplete) fetchStudents(classId, pageSize, currentPage, profileComplete);
-
+    if (classId) fetchStudents();
   }, [currentPage, classId, pageSize, profileComplete, showUpdateStudent]);
 
   const fetchClasses = async () => {
@@ -93,7 +91,7 @@ const Table = () => {
         studentId: student?._id,
       });
       toast.success("Status updated successfully");
-      fetchStudents(classId, pageSize, currentPage, profileComplete);
+      fetchStudents();
     } catch (error) {
       console.error("Error updating status:", error.message);
       toast.error("Failed to update status");
@@ -105,7 +103,7 @@ const Table = () => {
   ) : (
     <div className="container mx-auto p-6">
       <div className="flex justify-between mb-4">
-        {!profileComplete ?
+        {!profileComplete ? (
           <select
             disabled
             id="classId"
@@ -117,9 +115,12 @@ const Table = () => {
             }}
             className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white w-1/3"
           >
-            <option value="" selected>Not Required</option>
-
-          </select> : <select
+            <option value="" selected>
+              Not Required
+            </option>
+          </select>
+        ) : (
+          <select
             id="classId"
             value={classId}
             onChange={(e) => {
@@ -135,8 +136,13 @@ const Table = () => {
                 {cls.name}
               </option>
             ))}
-          </select>}
-
+          </select>
+        )}
+        {loading && (
+          <div className="mt-2 flex justify-center items-center">
+            <div className="animate-spin border-4 border-blue-500 border-t-transparent w-6 h-6 rounded-full"></div>
+          </div>
+        )}
         <select
           id="pageSize"
           value={pageSize}
@@ -163,8 +169,6 @@ const Table = () => {
         </button>
         <div className="text-lg font-semibold">Page: {currentPage}</div>
       </div>
-
-
 
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white rounded-lg shadow-md whitespace-nowrap">
@@ -220,10 +224,11 @@ const Table = () => {
                 <td className="px-4 py-2 border">
                   <button
                     onClick={() => handleStatusChange(row)}
-                    className={`px-4 py-2 rounded-md text-white ${row.status === "active"
+                    className={`px-4 py-2 rounded-md text-white ${
+                      row.status === "active"
                         ? "bg-green-500 hover:bg-green-600"
                         : "bg-red-500 hover:bg-red-600"
-                      }`}
+                    }`}
                   >
                     {row.status}
                   </button>
@@ -233,8 +238,6 @@ const Table = () => {
           </tbody>
         </table>
       </div>
-
-
 
       <div className="flex justify-between mt-4">
         <button

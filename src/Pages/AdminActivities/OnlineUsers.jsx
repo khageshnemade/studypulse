@@ -3,7 +3,8 @@ import { Link, useLocation } from "react-router-dom";
 import makeRequest from "../../axios"; // Import the appropriate function for making API requests
 
 export default function OnlineUsers() {
-  const location=useLocation();
+  const [loading, setLoading] = useState(false);
+  const location = useLocation();
   const [onlineUsers, setOnlineUsers] = useState([]);
 
   useEffect(() => {
@@ -11,23 +12,31 @@ export default function OnlineUsers() {
   }, []);
 
   const fetchOnlineUsers = async () => {
+    setLoading(true);
     try {
       const res = await makeRequest.get(`/teacher/get-online-users`);
       console.log("Online Users: ", res?.data?.data);
       setOnlineUsers(res?.data?.data);
     } catch (error) {
       console.error("Request Error:", error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="p-6 space-y-4 flex flex-col justify-between h-full">
       {/* Title Section */}
-      
+
       <h2 className="text-xl font-semibold  mb-4 bg-gradient-to-r from-red-400 to-red-300 text-white p-2 rounded-md shadow-md font-serif text-center">
         Online Users
       </h2>
-
+      {/* Loading Spinner */}
+      {loading && (
+        <div className="mt-2 flex justify-center items-center">
+          <div className="animate-spin border-4 border-blue-500 border-t-transparent w-6 h-6 rounded-full"></div>
+        </div>
+      )}
       {/* Users List */}
       <div className="space-y-4 flex-1">
         {onlineUsers.length > 0 ? (
@@ -57,7 +66,7 @@ export default function OnlineUsers() {
 
       {/* View More Button */}
 
-      {location.pathname !== '/admin-dashboard/users' && (
+      {location.pathname !== "/admin-dashboard/users" && (
         <div className="text-center mt-auto">
           <Link
             className="btn bg-red-400 hover:bg-red-500 text-white mt-2 py-2 px-4 rounded-full"

@@ -16,6 +16,7 @@ const ChaptersList = () => {
   const [subjects, setSubjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const location = useLocation();
+
   const { _id: initialSubjectId, classId: initialClassId } =
     location?.state?.subject || {}; // Ensure location.state and subject exist
 
@@ -62,20 +63,26 @@ const ChaptersList = () => {
   }, [classId, subjectId]);
 
   const fetchClasses = async () => {
+    setLoading(true);
     try {
       const res = await makeRequest.get("teacher/get-all-classes");
       setClasses(res?.data?.data || []);
     } catch (error) {
       console.error("Request Error:", error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   const fetchSubjects = async () => {
+    setLoading(true);
     try {
       const res = await makeRequest.get("teacher/get-all-subjects");
       setSubjects(res?.data?.data || []);
     } catch (error) {
       console.error("Request Error:", error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -102,6 +109,7 @@ const ChaptersList = () => {
   };
 
   const fetchChapters = async () => {
+    setLoading(true);
     try {
       const response = await makeRequest.get("teacher/get-all-chapter", {
         params: {
@@ -114,6 +122,8 @@ const ChaptersList = () => {
     } catch (error) {
       toast.error("Error fetching chapters: " + error.response.data.message);
       console.error("Error fetching chapters:", error.response.data.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -132,7 +142,12 @@ const ChaptersList = () => {
           Chapters List
         </span>
       </p>
-
+      {/* Loading Spinner */}
+      {loading && (
+        <div className="mt-2 flex justify-center items-center">
+          <div className="animate-spin border-4 border-blue-500 border-t-transparent w-6 h-6 rounded-full"></div>
+        </div>
+      )}
       <div className="flex items-center gap-6 mb-8">
         {/* Class Selector */}
         <div className="w-full sm:w-1/3 relative">

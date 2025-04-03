@@ -21,6 +21,7 @@ const GroupChatWindow = () => {
   const [notifications, setNotifications] = useState(0);
   const navigate = useNavigate();
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (curr?.discussionId) {
@@ -82,7 +83,7 @@ const GroupChatWindow = () => {
 
   const fetchDiscussion = useCallback(async () => {
     if (!curr?.discussionId || !hasMore) return;
-
+    setLoading(true);
     try {
       const res = await makeRequest.get(
         `get-discussions?discussionId=${curr.discussionId}&limit=10&page=${page}`
@@ -97,6 +98,8 @@ const GroupChatWindow = () => {
       scrollToPosition();
     } catch (error) {
       console.error("Error fetching discussion:", error);
+    } finally {
+      setLoading(false);
     }
   }, [curr?.discussionId, page, hasMore]);
   useEffect(() => {
@@ -206,7 +209,7 @@ const GroupChatWindow = () => {
   return (
     <div className="flex flex-col h-screen rounded-2xl bg-gray-50">
       {/* Header */}
-      <div className="flex items-center space-x-4 p-2 sticky top-[-25px] rounded-t-md bg-white shadow-xl z-10">
+      <div className="flex items-center space-x-4 p-2 sticky top-[-25px] rounded-t-md bg-white shadow-xl">
         <button
           className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full"
           onClick={() =>
@@ -220,7 +223,12 @@ const GroupChatWindow = () => {
         </h2>
         <div className="w-8"></div>
       </div>
-
+      {/* Loading Spinner */}
+      {loading && (
+        <div className="mt-2 flex justify-center items-center">
+          <div className="animate-spin border-4 border-blue-500 border-t-transparent w-6 h-6 rounded-full"></div>
+        </div>
+      )}
       {/* Chat container */}
       <div
         ref={chatContainerRef}

@@ -14,6 +14,7 @@ export default function Cls() {
   const userData = localStorage.getItem("user");
   const [organizationID, setOrganizationID] = useState("");
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const parsedData = localStorage.getItem("user");
@@ -39,6 +40,7 @@ export default function Cls() {
     });
   };
   const fetchClasses = async (id) => {
+    setLoading(true);
     try {
       const res = await makeRequest.get(`/teacher/get-all-classes`);
       setClasses(res?.data?.data);
@@ -46,6 +48,8 @@ export default function Cls() {
       console.log("Classes: ", res?.data?.data);
     } catch (error) {
       console.error("Request Error:", error.message);
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -57,6 +61,12 @@ export default function Cls() {
           Classes
         </span>
       </p>
+      {/* Loading Spinner */}
+      {loading && (
+        <div className="mb-2 flex justify-center items-center">
+          <div className="animate-spin border-4 border-blue-500 border-t-transparent w-6 h-6 rounded-full"></div>
+        </div>
+      )}
       <div className="mx-auto p-4 sm:p-6 bg-white shadow-lg rounded-lg overflow-x-auto">
         <table className="table-auto w-full border-collapse border border-gray-300 whitespace-nowrap">
           <thead className="bg-teal-600 text-white font-serif">

@@ -58,12 +58,11 @@ export default function AdminDashboard() {
     const res = await makeRequest.get("admin/get-dashboard-details");
     const data = res?.data?.data?.passFailedStudents || {};
 
-   console.log("Dashboard Details",res?.data?.data);
+    console.log("Dashboard Details", res?.data?.data);
     setDashboard(res?.data?.data || {});
   };
 
   // PieChart Component
- 
 
   // Student Passed/Failed Stats Component
   const StudentPassedFailed = () => {
@@ -342,8 +341,6 @@ export default function AdminDashboard() {
           </div>
         ))}
 
-    
-
         {/* Student Pass/Fail Table */}
         <div className="bg-white shadow rounded-xl p-6 duration-300 hover:scale-105 mb-8">
           <StudentPassedFailed />
@@ -362,4 +359,3 @@ export default function AdminDashboard() {
     </div>
   );
 }
-

@@ -7,6 +7,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { Layers3, Plus, PlusCircle } from "lucide-react";
 
 export default function Classes() {
+  const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const dispatch = useDispatch();
   const orgId = useSelector((state) => state.org.orgId);
@@ -22,6 +23,7 @@ export default function Classes() {
   }, []);
   dispatch(setClassess(classes));
   const fetchClasses = async () => {
+    setLoading(true);
     try {
       const res = await makeRequest.get(
         `/get-classes-by-org-id?organizationId=${orgId}`
@@ -31,6 +33,8 @@ export default function Classes() {
       console.log("Classes: ", res?.data?.data);
     } catch (error) {
       console.error("Request Error:", error.message);
+    } finally {
+      setLoading(false);
     }
   };
   const showSubject = (classId, className) => {
@@ -48,7 +52,12 @@ export default function Classes() {
             Classes
           </span>
         </p>
-
+        {/* Loading Spinner */}
+        {loading && (
+          <div className="mt-2 flex justify-center items-center">
+            <div className="animate-spin border-4 border-blue-500 border-t-transparent w-6 h-6 rounded-full"></div>
+          </div>
+        )}
         <div className="flex justify-end mb-2">
           <button
             className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-all flex items-center justify-center space-x-2 text-xl"

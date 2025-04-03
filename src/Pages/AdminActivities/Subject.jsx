@@ -18,6 +18,7 @@ export default function Subject() {
   const [classes, setClasses] = useState([]);
   const [file, setFile] = useState(null);
   const [imageUrl, setImageUrl] = useState(""); // Store uploaded image URL
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (classId) {
@@ -26,6 +27,7 @@ export default function Subject() {
   }, [classId]);
 
   const fetchSubjectsByClassId = async () => {
+    setLoading(true);
     try {
       const res = await makeRequest.get(
         `/get-subjects-by-class-id?classId=${classId}`
@@ -34,6 +36,8 @@ export default function Subject() {
       console.log("Subjects Data:", res?.data?.data);
     } catch (error) {
       console.error("Request Error:", error.message);
+    } finally {
+      setLoading(false);
     }
   };
   const handleFileUpload = async (e) => {
@@ -110,6 +114,7 @@ export default function Subject() {
           className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-75 z-[999]"
           onClick={() => setIsModalOpen(false)} // Close modal on backdrop click
         >
+          
           <div
             className="bg-white rounded-lg shadow-xl p-8 w-full max-w-lg relative max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside modal

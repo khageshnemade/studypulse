@@ -11,6 +11,7 @@ export default function Admins() {
   const [orgs, setOrgs] = useState([]);
   const [orgId, setOrgId] = useState("");
   const [adminId, setAdminId] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate(); // Hook for navigation
   const { orgId: initialOrgId } = useSelector(
     (state) => state.superAdmin.superAdminDetails
@@ -21,6 +22,7 @@ export default function Admins() {
 
   const dispatch = useDispatch();
   const fetchOrgs = async () => {
+    setLoading(true);
     try {
       const res = await makeRequest.get(`/superAdmin/admin/get-all-org`);
 
@@ -32,10 +34,13 @@ export default function Admins() {
     } catch (error) {
       console.error("Error fetching Admins:", error.message);
       toast.error(error.response.data.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   const fetchAdmins = async (Id) => {
+    setLoading(true);
     try {
       const res = await makeRequest.get(
         `/superAdmin/admin/get-all-admin?organisationID=${orgId}`
@@ -56,6 +61,8 @@ export default function Admins() {
 
       console.error("Admin Problem:", error.response.data.message);
       toast.error(error.response.data.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -78,12 +85,17 @@ export default function Admins() {
           Admin List
         </span>
       </p>
+      {loading && (
+        <div className="mb-2 flex justify-center items-center">
+          <div className="animate-spin border-4 border-blue-500 border-t-transparent w-6 h-6 rounded-full"></div>
+        </div>
+      )}
       <div className="flex justify-between items-center mb-6 mx-auto bg-teal-600 text-white p-3">
         <Link
           to="/superadmin-dashboard"
           className="text-lg font-semibold text-white hover:text-gray-200 transition"
         >
-          <ArrowLeft/>
+          <ArrowLeft />
         </Link>
 
         <select
@@ -138,19 +150,19 @@ export default function Admins() {
               </div>
 
               <button
-  onClick={() =>
-    navigate(`/superadmin-dashboard/admins/updateAdmin`, {
-      state: { admin: admin },
-    })
-  }
-  className="w-full py-2 bg-teal-500 text-white font-semibold hover:bg-teal-600 transition"
->
-  <Pencil size={18} className="inline-block mr-2" />
-  Update
-</button>
-
+                onClick={() =>
+                  navigate(`/superadmin-dashboard/admins/updateAdmin`, {
+                    state: { admin: admin },
+                  })
+                }
+                className="w-full py-2 bg-teal-500 text-white font-semibold hover:bg-teal-600 transition"
+              >
+                <Pencil size={18} className="inline-block mr-2" />
+                Update
+              </button>
             </div>
           ))}
+          {/* Loading Spinner */}
         </div>
       ) : (
         <p className="text-center text-gray-700 bg-gray-50 p-3 rounded-lg shadow-md  mx-auto text-lg font-medium hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1">

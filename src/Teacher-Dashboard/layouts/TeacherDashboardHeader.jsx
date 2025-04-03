@@ -148,28 +148,27 @@ export const TeacherDashboardHeader = ({ collapsed, setCollapsed }) => {
       {/* Organization and User Name (on hover) */}
       <div className="flex items-center gap-2 text-white font-semibold mr-6 group relative">
         {/* Profile Picture with Hover Effect */}
-      
-          <button
-            onClick={toggleModal}
-            className="w-12 h-12 rounded-full overflow-hidden cursor-pointer bg-teal-600 flex items-center justify-center"
-          >
-            {profile.profilePic ? (
-              <img
-                src={profile.profilePic}
-                alt="Profile"
-                className="w-full h-full object-cover rounded-full transition-opacity duration-300"
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center bg-blue-600 text-white text-lg font-bold">
-                {userName
-                  .split(" ")
-                  .map((name) => name[0])
-                  .join("")
-                  .toUpperCase()}
-              </div>
-            )}
-          </button>
-      
+
+        <button
+          onClick={toggleModal}
+          className="w-12 h-12 rounded-full overflow-hidden cursor-pointer bg-teal-600 flex items-center justify-center"
+        >
+          {profile.profilePic ? (
+            <img
+              src={profile.profilePic}
+              alt="Profile"
+              className="w-full h-full object-cover rounded-full transition-opacity duration-300"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-blue-600 text-white text-lg font-bold">
+              {userName
+                .split(" ")
+                .map((name) => name[0])
+                .join("")
+                .toUpperCase()}
+            </div>
+          )}
+        </button>
 
         {/* Show Organization Name and Username on Hover (Only the Text) */}
         <div className="absolute bottom-full top-8 transform -translate-x-2/3 mb-2 group-hover:block group-hover:opacity-80 hidden rounded-xl w-[300px] text-center transition-opacity duration-300 opacity-0">

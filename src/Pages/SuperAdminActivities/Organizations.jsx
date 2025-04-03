@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { makeRequest } from "../../axios";
 import { toast, ToastContainer } from "react-toastify";
-import { PlusCircle,Building } from "lucide-react";
+import { PlusCircle, Building } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { setSuperAdminDetails } from "../../redux/features/superAdminSlice";
 
@@ -15,6 +15,7 @@ export default function Organizations() {
   const [districtId, setDistrictId] = useState("");
   const [talukaId, settalukaId] = useState("");
   const [cityId, setCityId] = useState("");
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const {
     districtId: initialDistrictId,
@@ -63,14 +64,18 @@ export default function Organizations() {
   }, [initialDistrictId, initialTalukaId, initialCityId]);
 
   const fetchDistricts = async () => {
+    setLoading(true);
     try {
       const res = await makeRequest.get("/districts");
       setDistricts(res?.data?.data);
     } catch (error) {
       console.error("Error fetching District:", error.message);
+    } finally {
+      setLoading(false);
     }
   };
   const fetchCities = async () => {
+    setLoading(true);
     try {
       const res = await makeRequest.get(
         `/get-cities-by-district-id-and-taluka-id?districtId=${districtId}&talukaId=${talukaId}`
@@ -79,9 +84,12 @@ export default function Organizations() {
     } catch (error) {
       console.error("Fetch Cities:", error.message);
       toast.error(error.message);
+    } finally {
+      setLoading(false);
     }
   };
   const fetchTalukas = async () => {
+    setLoading(true);
     try {
       const res = await makeRequest.get(
         `/get-taluka-by-district-id?districtId=${districtId}`
@@ -90,10 +98,13 @@ export default function Organizations() {
     } catch (error) {
       console.error("Fetch Taluka:", error.message);
       toast.error(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   const fetchOrgs = async () => {
+    setLoading(true);
     try {
       const res = await makeRequest.get(
         `/get-org-by-district-taluka-city-id?talukaId=${talukaId}&cityId=${cityId}&districtId=${districtId}`
@@ -104,6 +115,8 @@ export default function Organizations() {
       setOrgs([]);
       console.error("Submit Orgs:", error.response.data.message);
       toast.error(error.response.data.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -176,13 +189,11 @@ export default function Organizations() {
         </span>
       </p>
       <button
-  className="bg-gradient-to-r from-teal-500 to-blue-500 text-white px-4 py-2 rounded-lg hover:from-teal-600 hover:to-blue-600 transition-all mb-4 flex items-center"
-  onClick={() => setIsModalOpen(true)}
->
-  <PlusCircle className="mr-2 " /> Add Organization
-</button>
-
-
+        className="bg-gradient-to-r from-teal-500 to-blue-500 text-white px-4 py-2 rounded-lg hover:from-teal-600 hover:to-blue-600 transition-all mb-4 flex items-center"
+        onClick={() => setIsModalOpen(true)}
+      >
+        <PlusCircle className="mr-2 " /> Add Organization
+      </button>
 
       <Orgs />
       {/* Modal */}
@@ -292,6 +303,12 @@ export default function Organizations() {
               </div>
             </form>
           </div>
+        </div>
+      )}
+      {/* Loading Spinner */}
+      {loading && (
+        <div className="mt-2 flex justify-center items-center">
+          <div className="animate-spin border-4 border-blue-500 border-t-transparent w-6 h-6 rounded-full"></div>
         </div>
       )}
       {/* Organizations Table */}

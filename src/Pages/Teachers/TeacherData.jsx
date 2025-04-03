@@ -8,6 +8,7 @@ import { UpdateTeacher } from "../AdminActivities/UpdateTeacher";
 import "react-toastify/dist/ReactToastify.css";
 
 export const Table = () => {
+  const [loading, setLoading] = useState(false);
   const [currentId, setCurrentId] = useState("");
   const dispatch = useDispatch();
   const [showUpdateTeacher, setShowUpdateTeacher] = useState(false);
@@ -18,12 +19,15 @@ export const Table = () => {
   }, [showUpdateTeacher]);
 
   const fetchTeachers = async () => {
+    setLoading(true);
     try {
       const res = await makeRequest.get("/admin/get-all-teachers");
       setTeachers(res?.data?.data);
       dispatch(setTeacher(res?.data?.data));
     } catch (error) {
       toast.error("Failed to fetch teachers, Please try to login again");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -45,6 +49,12 @@ export const Table = () => {
     <UpdateTeacher id={currentId} setShowUpdateTeacher={setShowUpdateTeacher} />
   ) : (
     <div className="overflow-x-auto">
+      {/* Loading Spinner */}
+      {loading && (
+        <div className="m-2 flex justify-center items-center">
+          <div className="animate-spin border-4 border-blue-500 border-t-transparent w-6 h-6 rounded-full"></div>
+        </div>
+      )}
       <table className="min-w-full bg-white rounded-lg shadow-md whitespace-nowrap">
         {" "}
         <thead className="bg-teal-700 text-white">
@@ -121,6 +131,7 @@ const TeacherData = () => {
           Teachers
         </span>
       </p>
+
       <Table />
     </div>
   );

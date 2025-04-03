@@ -19,7 +19,6 @@ import {
 export default function ChapterCurr() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const {
     classId: selectedClassId,
     subjectId: selectedSubjectId,
@@ -66,16 +65,20 @@ export default function ChapterCurr() {
 
   // Fetch classes from API
   const fetchClasses = async () => {
+    setLoading(true);
     try {
       const res = await makeRequest.get("teacher/get-all-classes");
       setClasses(res?.data?.data || []);
     } catch (error) {
       console.error("Request Error:", error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   // Fetch subjects based on class
   const fetchSubjects = async () => {
+    setLoading(true);
     try {
       const res = await makeRequest.get("teacher/get-all-subjects", {
         params: {
@@ -85,11 +88,14 @@ export default function ChapterCurr() {
       setSubjects(res?.data?.data || []);
     } catch (error) {
       console.error("Request Error:", error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   // Fetch chapters based on subject and class
   const fetchChapters = async () => {
+    setLoading(true);
     try {
       const response = await makeRequest.get("teacher/get-all-chapter", {
         params: {
@@ -102,11 +108,14 @@ export default function ChapterCurr() {
     } catch (error) {
       toast.error("Error fetching chapters: " + error.response.data.message);
       console.error("Error fetching chapters:", error.response.data.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   // Fetch chapter curriculum based on chapterId, subjectId, classId
   const fetchChapterCurr = async () => {
+    setLoading(true);
     try {
       const response = await makeRequest.get(
         "teacher/get-all-chapterCurriculum",
@@ -127,6 +136,8 @@ export default function ChapterCurr() {
         "Error fetching chapter curriculum:",
         error.response.data.message
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -155,6 +166,12 @@ export default function ChapterCurr() {
           Chapter Curriculums
         </span>
       </p>
+      {/* Loading Spinner */}
+      {loading && (
+        <div className="mb-2 flex justify-center items-center">
+          <div className="animate-spin border-4 border-blue-500 border-t-transparent w-6 h-6 rounded-full"></div>
+        </div>
+      )}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-2 bg-gradient-to-r from-blue-400 to-purple-600 text-black p-3">
         {/* Class Selector */}
         <div>

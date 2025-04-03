@@ -16,6 +16,7 @@ const SubjectsList = () => {
   // Fetch subjects from the API
   useEffect(() => {
     const fetchSubjects = async () => {
+      setLoading(true);
       try {
         const response = await makeRequest.get("/teacher/get-all-subjects");
         setSubjects(response.data.data); // Assuming data is in response.data.data
@@ -40,7 +41,12 @@ const SubjectsList = () => {
           Subjects List
         </span>
       </p>
-
+      {/* Loading Spinner */}
+      {loading && (
+        <div className="mt-2 flex justify-center items-center">
+          <div className="animate-spin border-4 border-blue-500 border-t-transparent w-6 h-6 rounded-full"></div>
+        </div>
+      )}
       {loading ? (
         <div className="text-center py-4">
           <span className="text-xl">

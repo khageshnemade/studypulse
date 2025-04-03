@@ -7,15 +7,15 @@ import "react-toastify/dist/ReactToastify.css";
 import { ClipLoader } from "react-spinners";
 import { useDispatch } from "react-redux";
 import { setRole } from "../../redux/features/roleSlice";
-// import { setStudentId } from "../../redux/features/studentIdSlice";
-// import { setStudentName } from "../../redux/features/studentNameSlice";
+
+import { setAdminDetails } from "../../redux/features/adminSlice";
+
 import { setOrgId } from "../../redux/features/orgSlice";
 import makeRequest from "../../axios";
 
 function LoginForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const [loading, setLoading] = useState(false);
   const [captchaVerified, setCaptchaVerified] = useState(false);
   const [formData, setFormData] = useState({
@@ -98,6 +98,9 @@ function LoginForm() {
           if (userRole === "admin") {
             const orgId = response?.data?.data?.organizationID;
             dispatch(setOrgId(orgId));
+            dispatch(
+              setAdminDetails({ classId: "demoForFetchinfInactiveStudent" })
+            );
             navigate("/admin-dashboard");
           } else if (userRole === "teacher") {
             navigate("/teacher-dashboard");

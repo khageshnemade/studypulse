@@ -10,21 +10,24 @@ import TeacherSubjectLimits from "../../../Pages/TeacherActivities/TeacherSubjec
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function TeacherDashboard() {
+  const [loading, setLoading] = useState(false);
   const user = localStorage.getItem("user");
   const profileCompletion = JSON.parse(user)?.profileCompletion;
   const [dashboard, setData] = useState({});
-
 
   useEffect(() => {
     fetchDashboardData();
   }, []);
 
   const fetchDashboardData = async () => {
+    setLoading(true);
     try {
       const res = await makeRequest.get("/teacher/get-dashboard-details");
       setData(res?.data?.data || {});
     } catch (error) {
       console.error("Error fetching dashboard data:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -108,6 +111,12 @@ export default function TeacherDashboard() {
         <TeacherProfile />
       ) : (
         <>
+          {/* Loading Spinner */}
+          {loading && (
+            <div className="mb-2 flex justify-center items-center">
+              <div className="animate-spin border-4 border-blue-500 border-t-transparent w-6 h-6 rounded-full"></div>
+            </div>
+          )}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 mb-6">
             {/* Available Subjects */}
             <div className="bg-blue-200 rounded-2xl p-4 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer shadow-lg">
@@ -235,8 +244,6 @@ export default function TeacherDashboard() {
             </div>
           </div>
 
-
-
           <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             <div className=" rounded-lg p-6 shadow-sm">
               <HollowPieChart classes={classes} />
@@ -251,9 +258,15 @@ export default function TeacherDashboard() {
                   key={assignment._id}
                   className="flex flex-col py-2 border-b border-gray-200"
                 >
-                  <p className="text-gray-700 font-semibold text-lg">{assignment.title}</p>
-                  <p className="text-gray-900 font-bold text-sm">{assignment.subjectId.name}</p>
-                  <p className="text-gray-500 text-xs">{assignment.chapterId.title}</p>
+                  <p className="text-gray-700 font-semibold text-lg">
+                    {assignment.title}
+                  </p>
+                  <p className="text-gray-900 font-bold text-sm">
+                    {assignment.subjectId.name}
+                  </p>
+                  <p className="text-gray-500 text-xs">
+                    {assignment.chapterId.title}
+                  </p>
                 </div>
               ))}
             </div>
@@ -267,16 +280,18 @@ export default function TeacherDashboard() {
                   key={curriculum._id}
                   className="flex flex-col py-2 border-b border-gray-200"
                 >
-                  <p className="text-gray-700 font-semibold text-lg">{curriculum.title}</p>
-                  <p className="text-gray-900 font-bold text-sm">{curriculum.subjectId.name}</p>
-                  <p className="text-gray-500 text-xs">{curriculum.chapterId.title}</p>
+                  <p className="text-gray-700 font-semibold text-lg">
+                    {curriculum.title}
+                  </p>
+                  <p className="text-gray-900 font-bold text-sm">
+                    {curriculum.subjectId.name}
+                  </p>
+                  <p className="text-gray-500 text-xs">
+                    {curriculum.chapterId.title}
+                  </p>
                 </div>
               ))}
             </div>
-
-
-
-
           </div>
         </>
       )}
