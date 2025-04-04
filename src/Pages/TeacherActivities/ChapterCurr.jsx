@@ -14,6 +14,7 @@ import {
   ChevronUp,
   Book,
   Video,
+  Eye,
 } from "lucide-react";
 
 export default function ChapterCurr() {
@@ -24,8 +25,6 @@ export default function ChapterCurr() {
     subjectId: selectedSubjectId,
     chapterId: selectedChapterId,
   } = useSelector((state) => state.ids.classDetails);
-
-  // State variables
   const [classId, setClassId] = useState(selectedClassId || "");
   const [subjectId, setSubjectId] = useState(selectedSubjectId || "");
   const [chapterId, setChapterId] = useState(selectedChapterId || "");
@@ -35,8 +34,15 @@ export default function ChapterCurr() {
   const [subjects, setSubjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [openChapter, setOpenChapter] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const userData = localStorage.getItem("user");
+  const handleShowStudentInfo = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  }; const userData = localStorage.getItem("user");
   const parsedData = JSON.parse(userData);
 
   // Update selected class, subject, chapter
@@ -269,6 +275,7 @@ export default function ChapterCurr() {
         >
           <Plus className="w-4 h-4" />
         </button>
+
       </div>
 
       {/* Chapter List */}
@@ -318,7 +325,46 @@ export default function ChapterCurr() {
                   >
                     <MessageSquare className="w-5 h-5" />
                   </button>
+                  <button
+                    onClick={handleShowStudentInfo}
+                    className="flex items-center justify-center bg-green-500 text-white p-2 rounded-full hover:bg-green-600 transition duration-300"
+                    title="Show Watched By Students"
+                  >
+                    <Eye className="w-4 h-4" />
+                  </button>
 
+                  {/* Modal Popup */}
+                  {isModalOpen && curr?.watchedByStudentId && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                      <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+                        <div className="flex justify-between items-center mb-4">
+                          <h3 className="text-xl font-bold">Watched By Student{curr?.watchedByStudentId?.firstName}</h3>
+                          <button
+                            onClick={handleCloseModal}
+                            className="text-gray-500 hover:text-black"
+                            title="Close"
+                          >
+                            ×
+                          </button>
+                        </div>
+
+                        <div className="flex items-center space-x-4">
+                          <img
+                            src={curr.watchedByStudentId.profilePic}
+                            alt="Student Profile"
+                            className="w-16 h-16 rounded-full"
+                          />
+                          <div>
+                            <p className="text-lg font-semibold">
+                              {curr.watchedByStudentId.firstName} {curr.watchedByStudentId.lastName}
+                            </p>
+                            <p className="text-sm text-gray-600">{curr.watchedByStudentId.email}</p>
+                            <p className="text-sm text-gray-600">{curr.watchedByStudentId.phoneNumber}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                   {/* Dropdown Button */}
                   <button
                     onClick={() => toggleChapterDetails(curr._id)}

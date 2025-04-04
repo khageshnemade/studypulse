@@ -7,6 +7,7 @@ const initialState = {
     subjectId: null,
     isPassed: false,
     page:null,
+    passedStatus:null,
     isp:false
   }
 };
@@ -25,6 +26,7 @@ const adminSlice = createSlice({
         classId: null,
         subjectId: null,
         isPassed: false,
+        passedStatus:null,
         page:null,
         isp:false
       };

@@ -32,7 +32,7 @@ ChartJS.register(
 
 export default function AdminDashboard() {
   const [loading, setLoading] = useState(false);
-
+  const [students, setStudents] = useState([])
   const [dashboard, setDashboard] = useState({});
   const [labels, setLabels] = useState([]);
   const [dataset, setDataset] = useState([]);
@@ -42,10 +42,12 @@ export default function AdminDashboard() {
   const [selectedClass, setSelectedClass] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const orgId = useSelector((state) => state.org.orgId);
+  const classId = useSelector((state) => state.org.classId);
+  const subjectId = useSelector((state) => state.org.subjectId);
+  const status = useSelector((state) => state.org.passedStatus);
 
   useEffect(() => {
     if (orgId) {
@@ -59,17 +61,24 @@ export default function AdminDashboard() {
     }
   }, [selectedClass]);
 
-  useEffect(() => {
-    if (selectedClass && selectedSubject && selectedStatus) {
-      fetchStudentsResults();
-    }
-  }, [selectedClass, selectedSubject, selectedStatus]);
+
+
 
   useEffect(() => {
     fetchDashboardData();
     fetchOnlineUsers();
   }, []);
 
+  const fetchStudentsResults = async () => {
+    try {
+      const res = await makeRequest.get(
+        `/admin/get-students-results-by-class?classId=${selectedClass}&subjectId=${selectedSubject}&page=1&limit=30&resultStatus=${selectedStatus}`
+      );
+      setStudents(res?.data?.data || []);
+    } catch (error) {
+      console.error("Error fetching students results:", error.response?.data || error.message);
+    }
+  };
   const fetchClasses = async () => {
 
     try {
@@ -113,24 +122,93 @@ export default function AdminDashboard() {
 
   // Student Passed/Failed Stats Component
   const StudentPassedFailed = () => {
-    const getPieChartData = (subject) => ({
-      labels: ["Passed", "Failed"],
+
+    const [statusCounts, setStatusCounts] = useState({
+      pass: 0,
+      fail: 0,
+      absent: 0,
+    });
+    const [loadingResults, setLoadingResults] = useState(false);
+
+    const getPieChartData = () => ({
+      labels: ["Passed", "Failed", "Absent"],
       datasets: [
         {
-          data: [subject.passed, subject.failed],
-          backgroundColor: ["#4CAF50", "#F44336"],
+          data: [statusCounts.pass, statusCounts.fail, statusCounts.absent],
+          backgroundColor: ["#4CAF50", "#F44336", "#FFC107"],
         },
       ],
     });
 
     const handleClassChange = (event) => {
       setSelectedClass(event.target.value);
+      dispatch(
+        setAdminDetails({
+          classId: event.target.value
+        })
+      );
       setSelectedSubject("");
     };
 
     const handleSubjectChange = (event) => {
       setSelectedSubject(event.target.value);
+      dispatch(
+        setAdminDetails({
+          subjectId: event.target.value
+        })
+      );
     };
+
+    const fetchStudentsResults = async (status) => {
+      if (classId && subjectId && status) {
+        setLoadingResults(true);
+        try {
+          const res = await makeRequest.get(
+            `/admin/get-students-results-by-class?classId=${classId}&subjectId=${subjectId}&page=1&limit=1&resultStatus=${status}`
+          );
+          setStudents(res?.data?.data || []);
+        } catch (error) {
+          console.error(`Error fetching ${status} students:`, error.response?.data || error.message);
+        } finally {
+          setLoadingResults(false);
+        }
+      }
+      try {
+        const res = await makeRequest.get(
+          `/admin/get-students-results-by-class?classId=${selectedClass}&subjectId=${selectedSubject}&page=1&limit=1&resultStatus=${status}`
+        );
+        // Extracting totalRecords for the specific status
+        return res?.data?.totalRecords || 0;
+      } catch (error) {
+        console.error(`Error fetching ${status} students:`, error.response?.data || error.message);
+        return 0;
+      }
+    };
+
+    const fetchAllStatusData = async () => {
+      setLoadingResults(true);
+      try {
+        const [passCount, failCount, absentCount] = await Promise.all([
+          fetchStudentsResults("pass"),
+          fetchStudentsResults("fail"),
+          fetchStudentsResults("absent"),
+        ]);
+
+        setStatusCounts({
+          pass: passCount,
+          fail: failCount,
+          absent: absentCount,
+        });
+      } finally {
+        setLoadingResults(false);
+      }
+    };
+
+    useEffect(() => {
+      if (selectedClass && selectedSubject) {
+        fetchAllStatusData();
+      }
+    }, [selectedClass, selectedSubject]);
 
     const options = {
       responsive: true,
@@ -142,15 +220,15 @@ export default function AdminDashboard() {
           enabled: true,
         },
       },
-      // Handle click event on the pie chart
       onClick: (event, chartElement) => {
         if (chartElement.length > 0) {
           const clickedIndex = chartElement[0].index;
-          const label = getPieChartData(subjects[clickedIndex]).labels[clickedIndex];
+          const label = ["Passed", "Failed", "Absent"][clickedIndex];
           dispatch(
             setAdminDetails({
               classId: selectedClass,
-              isPassed: label === "Passed" ? true : false,
+              subjectId: selectedSubject, 
+              status: selectedStatus
             })
           );
           navigate("student");
@@ -163,13 +241,12 @@ export default function AdminDashboard() {
         <h2 className="text-xl font-semibold mb-4 bg-gradient-to-r from-green-500 to-teal-300 text-white p-2 rounded-md w-full text-center font-serif">
           Class Performance
         </h2>
- {/* Loading Spinner */}
- {loading && (
+        <div className="bg-white shadow rounded-xl p-6 transform transition-transform duration-300 hover:scale-105">
+          {loadingResults && (
             <div className="mb-2 flex justify-center items-center">
-              <div className="animate-spin border-4 border-blue-500 border-t-transparent w-6 h-6 rounded-full"></div>
+              <div className="animate-spin border-4 border-blue-500 border-t-transparent w-6 h-6 rounded-full "></div>
             </div>
           )}
-        <div className="bg-white shadow rounded-xl p-6 transform transition-transform duration-300 hover:scale-105">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
             <div>
               <select
@@ -178,10 +255,10 @@ export default function AdminDashboard() {
                 onChange={handleClassChange}
                 className="w-full p-1 border rounded-lg focus:ring focus:ring-blue-300"
               >
-                <option value={""}>Select Class</option>
-                {classes?.map((classData, index) => (
-                  <option key={index} value={classData.className}>
-                    {classData.className}
+                <option value="">Select Class</option>
+                {classes?.map((classData) => (
+                  <option key={classData._id} value={classData._id}>
+                    {classData.name}
                   </option>
                 ))}
               </select>
@@ -195,8 +272,8 @@ export default function AdminDashboard() {
                 className="w-full p-1 border rounded-lg focus:ring focus:ring-blue-300"
               >
                 <option value="">Select Subject</option>
-                {subjects?.map((subject, index) => (
-                  <option key={index} value={subject.name}>
+                {subjects?.map((subject) => (
+                  <option key={subject._id} value={subject._id}>
                     {subject.name}
                   </option>
                 ))}
@@ -204,22 +281,19 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          {/* Pie Chart Section */}
           <div className="bg-gray-50 w-full p-6 rounded-lg flex justify-center">
-            <div className="text-center">
-              <div className="flex justify-center">
-                <Pie
-                  options={options}
-                  className="w-full min-h-full"
-                  data={getPieChartData(subjects.find(sub => sub.name === selectedSubject) || {})}
-                />
-              </div>
-            </div>
+            <Pie
+              options={options}
+              data={getPieChartData()}
+            />
           </div>
         </div>
       </div>
     );
   };
+
+
+
 
   return (
     <div className="min-h-screen p-2">
