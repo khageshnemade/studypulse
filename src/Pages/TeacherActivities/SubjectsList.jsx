@@ -76,7 +76,12 @@ const SubjectsList = () => {
                     <td className="px-4 py-2 border border-gray-300">
                       <img
                         className="w-10 h-10 rounded-full"
-                        src={`https://api.studypulse.live/${subject.image}`}
+
+                        src={
+                          subject.image.startsWith('https://api.studypulse.live')
+                            ? subject.image
+                            : `https://api.studypulse.live/${subject.image}`
+                        }
                         alt="Profile"
                       />
                     </td>

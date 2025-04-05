@@ -138,7 +138,11 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
       <div className="text-center">
         {userData.profilePic ? (
           <img
-            src={`https://api.studypulse.live/${userData.profilePic}`}
+          src={
+            userData.profilePic.startsWith('https://api.studypulse.live')
+              ? userData.profilePic
+              : `https://api.studypulse.live/${userData.profilePic}`
+          }
             alt="NO Image Present"
             className="w-28 h-28 mx-auto rounded-full border-4 border-gray-300 shadow-md"
           />
@@ -259,7 +263,11 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
                 {userData.profilePic && ( // Use userData.profilePic here
                   <div className="mt-4 w-full ">
                     <img
-                      src={`https://api.studypulse.live/${userData.profilePic}`} // Use userData.profilePic here
+                     src={
+                      userData.profilePic.startsWith('https://api.studypulse.live')
+                        ? userData.profilePic
+                        : `https://api.studypulse.live/${userData.profilePic}`
+                    }
                       alt="Profile"
                       className="w-24 h-24 rounded-full mx-auto"
                     />

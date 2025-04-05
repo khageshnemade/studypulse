@@ -189,7 +189,11 @@ const Table = () => {
                 <td className="px-4 py-2 border">
                   {row?.profilePic ? (
                     <img
-                      src={`https://api.studypulse.live/${row.profilePic}`}
+                    src={
+                      row.profilePic.startsWith('https://api.studypulse.live')
+                        ? row.profilePic
+                        : `https://api.studypulse.live/${row.profilePic}`
+                    }
                       alt="Profile"
                       className="w-16 h-16 object-cover rounded-full" // Set explicit width and height here
                     />

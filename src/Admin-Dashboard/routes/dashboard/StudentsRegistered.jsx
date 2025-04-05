@@ -196,7 +196,12 @@ export default function StudentsRegistered() {
               >
                 <td className="border p-3">
                   <img
-                    src={`https://api.studypulse.live/${student.profilePic}`}
+                   src={
+                    student.profilePic.startsWith('https://api.studypulse.live')
+                      ? student.profilePic
+                      : `https://api.studypulse.live/${student.profilePic}`
+                  }
+                   
                     alt="Profile"
                     className="w-10 h-10 rounded-full"
                   />

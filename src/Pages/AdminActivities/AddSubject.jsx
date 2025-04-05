@@ -160,7 +160,11 @@ const AddSubject = ({ addclass }) => {
                   Image Uploaded Successfully!
                 </p>
                 <img
-                  src={`https://api.studypulse.live/${imageUrl}`}
+                 src={
+                  imageUrl.startsWith('https://api.studypulse.live')
+                    ? imageUrl
+                    : `https://api.studypulse.live/${imageUrl}`
+                }
                   alt="Uploaded Profile"
                   className="mt-2 max-w-xs mx-auto rounded-full"
                 />

@@ -336,9 +336,9 @@ export default function ChapterCurr() {
                   {/* Modal Popup */}
                   {isModalOpen && curr?.watchedByStudentId && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                      <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+                      <div className="bg-white p-6 rounded-lg shadow-lg w-96 max-h-screen flex flex-col">
                         <div className="flex justify-between items-center mb-4">
-                          <h3 className="text-xl font-bold">Watched By Student{curr?.watchedByStudentId?.firstName}</h3>
+                          <h3 className="text-xl font-bold">Watched By Students</h3>
                           <button
                             onClick={handleCloseModal}
                             className="text-gray-500 hover:text-black"
@@ -348,23 +348,38 @@ export default function ChapterCurr() {
                           </button>
                         </div>
 
-                        <div className="flex items-center space-x-4">
-                          <img
-                            src={curr.watchedByStudentId.profilePic}
-                            alt="Student Profile"
-                            className="w-16 h-16 rounded-full"
-                          />
-                          <div>
-                            <p className="text-lg font-semibold">
-                              {curr.watchedByStudentId.firstName} {curr.watchedByStudentId.lastName}
-                            </p>
-                            <p className="text-sm text-gray-600">{curr.watchedByStudentId.email}</p>
-                            <p className="text-sm text-gray-600">{curr.watchedByStudentId.phoneNumber}</p>
-                          </div>
+                        {/* Scrollable Container */}
+                        <div className="overflow-y-auto max-h-80">
+                          {curr.watchedByStudentId.length > 0 ? (
+                            curr.watchedByStudentId.map((student, index) => (
+                              <div key={index} className="flex items-center space-x-4 mb-4 border-b pb-2">
+                                <img
+                                  src={
+                                    student.profilePic.startsWith('https://api.studypulse.live')
+                                      ? student.profilePic
+                                      : `https://api.studypulse.live/${student.profilePic}`
+                                  }
+                                  alt="Student Profile"
+                                  className="w-16 h-16 rounded-full"
+                                />
+                                <div>
+                                  <p className="text-lg font-semibold">
+                                    {student.firstName} {student.lastName}
+                                  </p>
+                                  <p className="text-sm text-gray-600">{student.email}</p>
+                                  <p className="text-sm text-gray-600">{student.phoneNumber}</p>
+                                </div>
+                              </div>
+                            ))
+                          ) : (
+                            <p className="text-center text-gray-500">No students have watched this yet.</p>
+                          )}
                         </div>
                       </div>
                     </div>
                   )}
+
+
                   {/* Dropdown Button */}
                   <button
                     onClick={() => toggleChapterDetails(curr._id)}

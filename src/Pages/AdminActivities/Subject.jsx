@@ -219,8 +219,11 @@ export default function Subject() {
                     </p>
                     {
                       <img
-                        src={`https://api.studypulse.live/${imageUrl}`}
-                        alt="Uploaded Profile"
+                      src={
+                        imageUrl.startsWith('https://api.studypulse.live')
+                          ? imageUrl
+                          : `https://api.studypulse.live/${imageUrl}`
+                      }                        alt="Uploaded Profile"
                         className="mt-2 max-w-xs mx-auto rounded-full"
                       />
                     }
@@ -303,7 +306,11 @@ export default function Subject() {
                   {item.image ? (
                     <img
                       className="w-10 h-10 rounded-full"
-                      src={`https://api.studypulse.live/${item.image}`}
+                      src={
+                        item.image.startsWith('https://api.studypulse.live')
+                          ? item.image
+                          : `https://api.studypulse.live/${item.image}`
+                      }
                       alt="Profile"
                     />
                   ) : (

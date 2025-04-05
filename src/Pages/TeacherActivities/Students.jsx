@@ -108,7 +108,11 @@ export default function Students() {
                 <td className="px-6 py-4 text-sm text-center">
                   {student?.innerData.profilePic ? (
                     <img
-                      src={`https://api.studypulse.live/${student?.innerData.profilePic}`}
+                    src={
+                      student?.innerData.profilePic.startsWith('https://api.studypulse.live')
+                        ? student?.innerData.profilePic
+                        : `https://api.studypulse.live/${student?.innerData.profilePic}`
+                    }
                       alt="Profile"
                       className="w-12 h-12 rounded-full border-2 border-blue-500"
                     />

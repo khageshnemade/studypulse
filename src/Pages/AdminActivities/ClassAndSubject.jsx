@@ -97,7 +97,12 @@ export default function Classes() {
                 <td className="border border-gray-800 px-4 py-2">
                   {item.image ? (
                     <img
-                      src={`https://api.studypulse.live/${item.image}`}
+                    src={
+                      item.image.startsWith('https://api.studypulse.live')
+                        ? item.image
+                        : `https://api.studypulse.live/${item.image}`
+                    }
+                     
                       alt={`No Image`}
                       className="w-16 h-16 object-cover" // Add this to adjust the image size
                     />
