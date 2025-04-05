@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import makeRequest from "../../../axios";
+import { setAdminDetails } from "../../../redux/features/adminSlice";
 
 export default function StudentsRegistered() {
   const [classes, setClasses] = useState([]);
@@ -13,12 +14,20 @@ export default function StudentsRegistered() {
   const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
   const navigate = useNavigate();
-
+  const classId = useSelector((state) => state.admin.adminDetails.classId);
+  const subjectId = useSelector((state) => state.admin.adminDetails.subjectId);
+  const status = useSelector((state) => state.admin.adminDetails.status);
+  const dispatch = useDispatch();
   useEffect(() => {
     if (orgId) {
       fetchClasses();
     }
   }, [orgId]);
+  useEffect(() => {
+    setSelectedClass(classId);
+    setSelectedSubject(subjectId);
+    setSelectedStatus(status);
+  }, [status]);
 
   useEffect(() => {
     if (selectedClass) {
@@ -39,7 +48,10 @@ export default function StudentsRegistered() {
       );
       setClasses(res?.data?.data || []);
     } catch (error) {
-      console.error("Error fetching classes:", error.response?.data || error.message);
+      console.error(
+        "Error fetching classes:",
+        error.response?.data || error.message
+      );
     }
   };
 
@@ -50,7 +62,10 @@ export default function StudentsRegistered() {
       );
       setSubjects(res?.data?.data || []);
     } catch (error) {
-      console.error("Error fetching subjects:", error.response?.data || error.message);
+      console.error(
+        "Error fetching subjects:",
+        error.response?.data || error.message
+      );
     }
   };
 
@@ -61,7 +76,10 @@ export default function StudentsRegistered() {
       );
       setStudents(res?.data?.data || []);
     } catch (error) {
-      console.error("Error fetching students results:", error.response?.data || error.message);
+      console.error(
+        "Error fetching students results:",
+        error.response?.data || error.message
+      );
     }
   };
 
@@ -82,10 +100,19 @@ export default function StudentsRegistered() {
       <div className="mb-4 flex space-x-4">
         {/* Class Selection */}
         <div className="w-1/3">
-          <label className="block text-lg font-semibold mb-2">Select Class</label>
+          <label className="block text-lg font-semibold mb-2">
+            Select Class
+          </label>
           <select
             value={selectedClass}
-            onChange={(e) => setSelectedClass(e.target.value)}
+            onChange={(e) => {
+              setSelectedClass(e.target.value);
+              dispatch(
+                setAdminDetails({
+                  classId: e.target.value,
+                })
+              );
+            }}
             className="w-full p-1 border rounded-lg"
           >
             <option value="">All Classes</option>
@@ -99,10 +126,19 @@ export default function StudentsRegistered() {
 
         {/* Subject Selection */}
         <div className="w-1/3">
-          <label className="block text-lg font-semibold mb-2">Select Subject</label>
+          <label className="block text-lg font-semibold mb-2">
+            Select Subject
+          </label>
           <select
             value={selectedSubject}
-            onChange={(e) => setSelectedSubject(e.target.value)}
+            onChange={(e) => {
+              setSelectedSubject(e.target.value);
+              dispatch(
+                setAdminDetails({
+                  subjectId: e.target.value,
+                })
+              );
+            }}
             className="w-full p-1 border rounded-lg"
             disabled={!selectedClass}
           >
@@ -117,10 +153,19 @@ export default function StudentsRegistered() {
 
         {/* Status Selection */}
         <div className="w-1/3">
-          <label className="block text-lg font-semibold mb-2">Select Status</label>
+          <label className="block text-lg font-semibold mb-2">
+            Select Status
+          </label>
           <select
             value={selectedStatus}
-            onChange={(e) => setSelectedStatus(e.target.value)}
+            onChange={(e) => {
+              setSelectedStatus(e.target.value);
+              dispatch(
+                setAdminDetails({
+                  status: e.target.value,
+                })
+              );
+            }}
             className="w-full p-1 border rounded-lg"
           >
             <option value="">Select Status</option>
@@ -134,26 +179,35 @@ export default function StudentsRegistered() {
       <table className="w-full border-collapse border border-gray-300">
         <thead>
           <tr>
+            <th className="border p-3">Profile</th>
             <th className="border p-3">Name</th>
             <th className="border p-3">Email</th>
             <th className="border p-3">Phone</th>
             <th className="border p-3">Status</th>
             <th className="border p-3">Marks</th>
-            <th className="border p-3">Profile</th>
           </tr>
         </thead>
         <tbody>
           {students.length > 0 ? (
             students.map((student) => (
-              <tr key={student._id} className="hover:bg-gray-100 transition-all">
-                <td className="border p-3">{student.firstName} {student.lastName}</td>
+              <tr
+                key={student._id}
+                className="hover:bg-gray-100 transition-all"
+              >
+                <td className="border p-3">
+                  <img
+                    src={`https://api.studypulse.live/${student.profilePic}`}
+                    alt="Profile"
+                    className="w-10 h-10 rounded-full"
+                  />
+                </td>
+                <td className="border p-3">
+                  {student.firstName} {student.lastName}
+                </td>
                 <td className="border p-3">{student.email}</td>
                 <td className="border p-3">{student.phoneNumber}</td>
                 <td className="border p-3">{student.result}</td>
                 <td className="border p-3">{student.marks}</td>
-                <td className="border p-3">
-                  <img src={student.profilePic} alt="Profile" className="w-10 h-10 rounded-full" />
-                </td>
               </tr>
             ))
           ) : (
