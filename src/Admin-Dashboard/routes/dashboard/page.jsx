@@ -14,7 +14,6 @@ import {
 } from "chart.js";
 import { makeRequest } from "../../../axios";
 import { BookOpen, FileText, Layers } from "lucide-react";
-import StudentsRegistered from "./StudentsRegistered";
 import { useNavigate } from "react-router-dom";
 import OnlineUsers from "../../../Pages/AdminActivities/OnlineUsers";
 import AssignmentData from "./AssignmentData";
@@ -33,6 +32,9 @@ ChartJS.register(
 function StudentPassedFailed({
   selectedClass,
   selectedSubject,
+  selectedStatus,
+  setSelectedClass,
+  setSelectedSubject,
   setSelectedStatus,
   classes,
   subjects,
@@ -362,6 +364,9 @@ export default function AdminDashboard() {
           <StudentPassedFailed
             selectedClass={selectedClass}
             selectedSubject={selectedSubject}
+            selectedStatus={selectedStatus}
+            setSelectedClass={setSelectedClass}
+            setSelectedSubject={setSelectedSubject}
             setSelectedStatus={setSelectedStatus}
             classes={classes}
             subjects={subjects}
