@@ -101,7 +101,7 @@ export const TeacherDashboardHeader = ({ collapsed, setCollapsed }) => {
   const pathnames = location.pathname.split("/").filter((x) => x);
 
   return (
-    <header className="relative z-10 flex h-[70px] items-center justify-between px-6 shadow-xl transition-colors bg-gradient-to-r from-teal-500 via-teal-600 to-blue-600 rounded-b-xl">
+    <header className="relative z-10 flex h-[70px] items-center justify-between px-6 shadow-xl transition-colors bg-gradient-to-r from-teal-500 via-teal-600 to-blue-600">
       {/* Menu Button */}
       <div className="flex items-center gap-x-3 mr-2">
         <button
@@ -153,21 +153,24 @@ export const TeacherDashboardHeader = ({ collapsed, setCollapsed }) => {
           onClick={toggleModal}
           className="w-12 h-12 rounded-full overflow-hidden cursor-pointer bg-teal-600 flex items-center justify-center"
         >
-          {profile.profilePic ? (
-            <img
-              src={profile.profilePic}
-              alt="Profile"
-              className="w-full h-full object-cover rounded-full transition-opacity duration-300"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center bg-blue-600 text-white text-lg font-bold">
-              {userName
-                .split(" ")
-                .map((name) => name[0])
-                .join("")
-                .toUpperCase()}
-            </div>
-          )}
+          {
+            profile.profilePic && profile.profilePic.startsWith('http') ? (
+              <img
+                src={profile.profilePic}
+                alt="Profile"
+                className="w-full h-full object-cover rounded-full transition-opacity duration-300"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-blue-600 text-white text-lg font-bold">
+                {userName
+                  .split(" ")
+                  .map((name) => name[0])
+                  .join("")
+                  .toUpperCase()}
+              </div>
+            )
+          }
+
         </button>
 
         {/* Show Organization Name and Username on Hover (Only the Text) */}

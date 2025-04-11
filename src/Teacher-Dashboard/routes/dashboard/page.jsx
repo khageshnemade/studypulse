@@ -6,11 +6,13 @@ import { ToastContainer } from "react-toastify";
 import TeacherProfile from "../../../Pages/TeacherActivities/TeacherProfile1";
 import { makeRequest } from "../../../axios";
 import TeacherSubjectLimits from "../../../Pages/TeacherActivities/TeacherSubjectLimits";
+import { useNavigate } from "react-router-dom";
 
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function TeacherDashboard() {
+  const navigate=useNavigate();
   const [loading, setLoading] = useState(false);
   const user = localStorage.getItem("user");
   const profileCompletion = JSON.parse(user)?.profileCompletion;
@@ -38,7 +40,6 @@ export default function TeacherDashboard() {
     className,
     subjects: dashboard?.chapterDistribution[className],
   }));
-
   // Pie chart component
   const HollowPieChart = ({ classes }) => {
     const [selectedClass, setSelectedClass] = useState(
@@ -91,7 +92,7 @@ export default function TeacherDashboard() {
           Chapters Distribution
         </h2>
         <select
-          className="border px-3 py-2 mb-4 rounded w-full sm:w-2/3 mx-auto"
+          className="border px-3 py-2 mb-4 rounded w-full max-w-3xl mx-auto"
           value={selectedClass}
           onChange={handleClassChange}
         >
@@ -101,6 +102,7 @@ export default function TeacherDashboard() {
             </option>
           ))}
         </select>
+
         <Doughnut data={pieData} options={options} />
       </div>
     );
@@ -120,7 +122,7 @@ export default function TeacherDashboard() {
           )}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 mb-6">
             {/* Available Subjects */}
-            <div className="bg-blue-200 rounded-2xl p-4 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer shadow-lg">
+            <div className="bg-blue-200 rounded-2xl p-4 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer shadow-lg" onClick={() => navigate("subjects")}>
               {/* Title Row */}
               <div className="text-center mb-2">
                 <h3 className="font-bold text-gray-800 text-xl font-serif">
@@ -145,7 +147,7 @@ export default function TeacherDashboard() {
             </div>
 
             {/* Available Chapters */}
-            <div className="bg-gradient-to-r from-teal-200 to-teal-300 rounded-2xl p-4 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer shadow-lg">
+            <div className="bg-gradient-to-r from-teal-200 to-teal-300 rounded-2xl p-4 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer shadow-lg" onClick={() => navigate("chapters")}>
               {/* Title Row */}
               <div className="text-center mb-2">
                 <h3 className="font-bold text-gray-800 text-xl font-serif">
@@ -170,7 +172,7 @@ export default function TeacherDashboard() {
             </div>
 
             {/* Available Assignments */}
-            <div className="bg-gradient-to-r from-yellow-200 to-yellow-300 rounded-2xl p-4 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer shadow-lg">
+            <div className="bg-gradient-to-r from-yellow-200 to-yellow-300 rounded-2xl p-4 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer shadow-lg"          onClick={() => navigate("chapters/assignments")}>
               {/* Title Row */}
               <div className="text-center mb-2">
                 <h3 className="font-bold text-gray-800 text-xl font-serif">
@@ -195,7 +197,7 @@ export default function TeacherDashboard() {
             </div>
 
             {/* Available Classes */}
-            <div className="bg-gradient-to-r from-red-200 to-red-300 rounded-2xl p-4 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer shadow-lg">
+            <div className="bg-gradient-to-r from-red-200 to-red-300 rounded-2xl p-4 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer shadow-lg" onClick={()=>navigate('cls')}>
               {/* Title Row */}
               <div className="text-center mb-2">
                 <h3 className="font-bold text-gray-800 text-xl font-serif">
@@ -220,7 +222,7 @@ export default function TeacherDashboard() {
             </div>
 
             {/* Available Curriculums */}
-            <div className="bg-gradient-to-r from-pink-200 to-pink-300 rounded-2xl p-4 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer shadow-lg">
+            <div className="bg-gradient-to-r from-pink-200 to-pink-300 rounded-2xl p-4 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer shadow-lg" onClick={()=>navigate('chapterCurrs')}>
               {/* Title Row */}
               <div className="text-center mb-2">
                 <h3 className="font-bold text-gray-800 text-xl font-serif">

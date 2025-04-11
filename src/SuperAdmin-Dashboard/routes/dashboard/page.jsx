@@ -1,352 +1,371 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { Bar, Pie } from "react-chartjs-2";
+import { useDispatch, useSelector } from "react-redux";
+import { setSuperAdminDetails } from "../../../redux/features/superAdminSlice"; 
+import { Pie } from "react-chartjs-2";
 import {
   Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
+  ArcElement,
   Tooltip,
   Legend,
-  BarElement,
-  Title,
-  ArcElement,
-} from "chart.js";
+} from 'chart.js';
+ChartJS.register(ArcElement, Tooltip, Legend);
 import { ToastContainer } from "react-toastify";
 import { User, Users, School, Book, Home } from "lucide-react";
 import { makeRequest } from "../../../axios";
 import StudentList from "./StudentList";
-// Registering chart components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  ArcElement,
-  Tooltip,
-  Legend
-);
+const DashboardChart = ({ classPerformance,setIds }) => {
+  const[loading,setLoading]=useState(false)
+  const [districts, setDistricts] = useState([]);
+  const [talukas, setTalukas] = useState([]);
+  const [classes, setClasses] = useState([]);
+  const [cities, setCities] = useState([]);
+  const [orgs, setOrgs] = useState([]);
+  const [districtId, setDistrictId] = useState("");
+  const [talukaId, settalukaId] = useState("");
+  const [cityId, setCityId] = useState("");
+  const [orgId, setOrgId] = useState("");
+  const [classId, setClassId] = useState("");
+  const dispatch = useDispatch();
 
-export default function SuperAdminDashboard() {
-  const reduxState = useSelector((state) => state); // Get entire state
-
-  const teacherData = useSelector((state) => state?.teachers?.teachersData);
-  const studentsData = useSelector((state) => state?.students?.studentsData);
-  const classDta = useSelector((state) => state.class.classData);
-  const [dashboard, setData] = useState({});
-  const [teachers, setTeachers] = useState([]);
-  const [students, setStudents] = useState([]);
-  const [classes, setClassses] = useState([]);
   useEffect(() => {
-    setData(prev => {
-      return {
-        ...prev, recentlyAddedStudents: [{ _id: "67e7ce90c2b6fcb54012d9a5", firstName: "demo", lastName: "demo", email: "demo@gmail.com", phoneNumber: "9856325568" },
-        { _id: "67e7cb6bc2b6fcb54012d936", firstName: "neha", lastName: "patil", email: "neha1@gmail.com", phoneNumber: "9875412589" },
-        { _id: "67e7b40cc2b6fcb54012d886", firstName: "khagesh", lastName: "nemade", email: "khagesh97@gmail.com", phoneNumber: "9852147856" },
-        { _id: "67e79100c2b6fcb54012d74b", firstName: "akansha", lastName: "hake", email: "akanksha@gmail.com", phoneNumber: "9856523325" },
-        { _id: "67e69119c2b6fcb54012d3b4", firstName: "surva", lastName: "patil", email: "surya@gmail.com", phoneNumber: "8698761734" }],
-        recentlyAddedTeachers: [{ _id: "67eb8429ea3df6dea4f2ef1c", firstName: "Teacher", lastName: "Demo", email: "teacherdemo@gmail.com", phoneNumber: "9809453212" }],
-      }
-    });
+    if (districtId) fetchTalukas();
+  }, [districtId]);
+  useEffect(() => {
+    if (talukaId) fetchCities();
+  }, [talukaId]);
+  useEffect(() => {
+    if (cityId) fetchOrgs();
+  }, [cityId]);
+  useEffect(() => {
+    if (orgId) fetchClasses();
+    setIds((prev) => ({
+      ...prev,
+      orgId: orgId,
+    }));
+    
+  }, [orgId]);
+  useEffect(() => {
+   fetchDistricts()
   }, [])
-
-  useEffect(() => {
-    setTeachers(teacherData);
-    setStudents(studentsData);
-    setClassses(classDta);
-    fetchData();
-    fetchDashboardData();
-    console.log("Hello");
-
-    console.log("Redux State:", reduxState);
-    console.log("Classes: ", classes.length);
-  }, [reduxState]);
-
-  const fetchData = async () => {
-    setStudents([
-      { id: 1, title: "Alice Johnson" },
-      { id: 2, title: "Bob Martin" },
-      { id: 3, title: "Charlie Wilson" },
-      { id: 4, title: "David Lee" },
-      { id: 5, title: "Eva Harris" },
-    ]);
-    setTeachers([
-      { _id: 1, title: "Mr. John Doe" },
-      { _id: 2, title: "Ms. Jane Smith" },
-      { _id: 3, title: "Dr. Michael Brown" },
-      { _id: 4, title: "Prof. Sarah Williams" },
-      { _id: 5, title: "Mrs. Emily Davis" },
-    ]);
+  
+  const fetchDistricts = async () => {
+    setLoading(true);
+    try {
+      const res = await makeRequest.get("/districts");
+      console.log("Hello I am from FetchDistrict");
+      setDistricts(res?.data?.data);
+    } catch (error) {
+      console.error("Error fetching District:", error.message);
+    } finally {
+      setLoading(false);
+    }
   };
-
-  const fetchDashboardData = async () => {
-    const res = await makeRequest.get("admin/get-dashboard-details");
-    console.log("Dashboard Data: ", res?.data.data);
-    setData(res?.data.data);
-    res && console.log("Dashboard Data: ", dashboard);
+  const fetchCities = async () => {
+    setLoading(true);
+    try {
+      const res = await makeRequest.get(
+        `/get-cities-by-district-id-and-taluka-id?districtId=${districtId}&talukaId=${talukaId}`
+      );
+      setCities(res?.data?.data);
+    } catch (error) {
+      console.error("Fetch Cities:", error.message);
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
+  const fetchTalukas = async () => {
+    setLoading(true);
+    try {
+      const res = await makeRequest.get(
+        `/get-taluka-by-district-id?districtId=${districtId}`
+      );
+      setTalukas(res?.data?.data);
+    } catch (error) {
+      console.error("Fetch Taluka:", error.message);
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const fetchClasses = async () => {
+    try {
+      const res = await makeRequest.get(
+        `/get-classes-by-org-id?organizationId=${orgId}`
+      );
+      setClasses(res?.data?.data || []);
+    } catch (error) {
+      console.error(
+        "Error fetching classes:",
+        error.response?.data || error.message
+      );
+    }
+  };
+  const fetchOrgs = async () => {
+    setLoading(true);
+    try {
+      const res = await makeRequest.get(
+        `/get-org-by-district-taluka-city-id?talukaId=${talukaId}&cityId=${cityId}&districtId=${districtId}`
+      );
+      setOrgs(res?.data?.data);
+      console.log("Organizations", res?.data?.data);
+    } catch (error) {
+      setOrgs([]);
+      console.error("Submit Orgs:", error.response.data.message);
+      toast.error(error.response.data.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const classKeys = Object.keys(classPerformance || {});
+  const [selectedClass, setSelectedClass] = useState(classKeys[0] || "");
 
-  const BarChart = ({ data, options }) => (
-    <div className="p-4 bg-white shadow-lg rounded-lg !min-h-48">
-      <Bar data={data} options={options} />
-    </div>
-  );
 
-  const data = {
-    labels: ["Class1", "Class2", "Class3", "Class4", "Class5", "Class6"],
+  const stats = classPerformance?.[selectedClass];
+
+  const chartData = {
+    labels: ['Passed', 'Failed'],
     datasets: [
       {
-        label: "Passed Students",
-        data: [12, 19, 3, 5, 2, 3],
-        backgroundColor: [
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(54, 162, 235, 0.2)",
-          "rgba(255, 206, 86, 0.2)",
-          "rgba(75, 192, 192, 0.2)",
-          "rgba(153, 102, 255, 0.2)",
-          "rgba(255, 159, 64, 0.2)",
-        ],
-        borderColor: [
-          "rgba(255, 99, 132, 1)",
-          "rgba(54, 162, 235, 1)",
-          "rgba(255, 206, 86, 1)",
-          "rgba(75, 192, 192, 1)",
-          "rgba(153, 102, 255, 1)",
-          "rgba(255, 159, 64, 1)",
-        ],
-        borderWidth: 1,
-      },
-      {
-        label: "Failed Students",
-        data: [10, 20, 12, 12, 32, 12],
-        backgroundColor: [
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(54, 162, 235, 0.2)",
-          "rgba(255, 206, 86, 0.2)",
-          "rgba(75, 192, 192, 0.2)",
-          "rgba(153, 102, 255, 0.2)",
-          "rgba(255, 159, 64, 0.2)",
-        ],
-        borderColor: [
-          "rgba(255, 99, 132, 1)",
-          "rgba(54, 162, 235, 1)",
-          "rgba(255, 206, 86, 1)",
-          "rgba(75, 192, 192, 1)",
-          "rgba(153, 102, 255, 1)",
-          "rgba(255, 159, 64, 1)",
-        ],
+        data: stats ? [stats.passed, stats.failed] : [0, 0],
+        backgroundColor: ['#4ade80', '#f87171'],
         borderWidth: 1,
       },
     ],
   };
 
+  return (
+    <div className="bg-white shadow rounded-xl p-6 transform transition-transform duration-300 hover:scale-105 max-h-[800px] overflow-y-auto text-center">
+      <h2 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-blue-500 to-blue-300 text-white p-2 rounded-md w-full text-center font-serif">
+        {selectedClass} Class Performance
+      </h2>
 
-  const Dashboard = () => {
-    const organizations = [
-      {
-        orgName: "Organization A",
-        classes: [
-          {
-            className: "Class 1",
-            subjects: [
-              { name: "Math", passed: 40, failed: 10 },
-              { name: "Science", passed: 35, failed: 15 },
-              { name: "English", passed: 38, failed: 12 },
-            ],
-          },
-          {
-            className: "Class 2",
-            subjects: [
-              { name: "Math", passed: 50, failed: 5 },
-              { name: "Science", passed: 48, failed: 7 },
-              { name: "English", passed: 45, failed: 10 },
-            ],
-          },
-        ],
-      },
-      {
-        orgName: "Organization B",
-        classes: [
-          {
-            className: "Class 3",
-            subjects: [
-              { name: "Math", passed: 30, failed: 20 },
-              { name: "Science", passed: 28, failed: 22 },
-              { name: "English", passed: 33, failed: 17 },
-            ],
-          },
-          {
-            className: "Class 4",
-            subjects: [
-              { name: "Math", passed: 55, failed: 5 },
-              { name: "Science", passed: 52, failed: 8 },
-              { name: "English", passed: 49, failed: 11 },
-            ],
-          },
-        ],
-      },
-    ];
+      {/* Dropdown */}
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3 ">
+      <select
+        name="district"
+        id="district"
+        value={districtId}
+        onChange={(e) => {
+          dispatch(setSuperAdminDetails({ districtId: e.target.value }));
+          setDistrictId(e.target.value);
+        }}
+        className="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        <option value="">Select District</option>
+        {districts.map(({ _id, name }) => (
+          <option key={_id} value={_id}>
+            {name}
+          </option>
+        ))}
+      </select>
 
-    const [selectedOrgIndex, setSelectedOrgIndex] = useState(0);
-    const [selectedClassIndex, setSelectedClassIndex] = useState(0);
-    const [selectedSubjectIndex, setSelectedSubjectIndex] = useState(0);
+      <select
+        name="talukas"
+        id="talukas"
+        value={talukaId}
+        onChange={(e) => {
+          dispatch(setSuperAdminDetails({ talukaId: e.target.value }));
+          settalukaId(e.target.value);
+        }}
+        className="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        <option value="">Select Taluka</option>
+        {talukas.map(({ _id, name }) => (
+          <option key={_id} value={_id}>
+            {name}
+          </option>
+        ))}
+      </select>
 
-    const getPieChartData = (subject) => {
-      if (!subject) {
-        return {
-          labels: ["Passed", "Failed"],
-          datasets: [{ data: [0, 0], backgroundColor: ["#4CAF50", "#F44336"] }],
-        };
-      }
-      return {
-        labels: ["Passed", "Failed"],
-        datasets: [{ data: [subject.passed, subject.failed], backgroundColor: ["#4CAF50", "#F44336"] }],
-      };
-    };
+      <select
+        name="city"
+        value={cityId}
+        onChange={(e) => {
+          dispatch(setSuperAdminDetails({ cityId: e.target.value }));
+          setCityId(e.target.value);
+        }}
+        className="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+        required
+      >
+        <option value="">Select City</option>
+        {cities.map(({ _id, name }) => (
+          <option key={_id} value={_id}>
+            {name}
+          </option>
+        ))}
+      </select>
 
-    const handleOrgChange = (event) => {
-      setSelectedOrgIndex(event.target.value);
-      setSelectedClassIndex(0);
-      setSelectedSubjectIndex(0);
-    };
+      <select
+        name="org"
+        value={orgId}
+        onChange={(e) => {
+          dispatch(setSuperAdminDetails({ orgId: e.target.value }));
+          setOrgId(e.target.value);
+        }}
+        className="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+        required
+      >
+        <option value="">Select Organization</option>
+        {orgs.map(({ _id, name }) => (
+          <option key={_id} value={_id}>
+            {name}
+          </option>
+        ))}
+      </select>
 
-    const handleClassChange = (event) => {
-      setSelectedClassIndex(event.target.value);
-      setSelectedSubjectIndex(0);
-    };
+      <select
+          id="classSelect"
+          value={selectedClass}
+          onChange={(e) => {setSelectedClass(e.target.value)
+            setIds((prev) => ({
+              ...prev,
+              classId:e.target.value,
+            }));
+            
+          }}
+          className="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm"
+        >        <option value="">Select Class</option>
 
-    const handleSubjectChange = (event) => {
-      setSelectedSubjectIndex(event.target.value);
-    };
+          {classes.map((className) => (
+            <option key={className._id} value={className._id}>
+              {className.name}
+            </option>
+            
+          ))}
+        </select>
+      
+    </div>
+      
 
-    const selectedOrg = organizations[selectedOrgIndex];
-    const selectedClass = selectedOrg.classes[selectedClassIndex];
-    const selectedSubject = selectedClass?.subjects[selectedSubjectIndex];
-
-    return (
-      <div className="min-h-screen bg-white flex flex-col items-center py-10">
-        <h1 className="text-3xl font-bold text-gray-700 mb-6 text-center">Class Performance</h1>
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
-          <div>
-            <select
-              id="orgSelector"
-              value={selectedOrgIndex}
-              onChange={handleOrgChange}
-              className="w-full p-1 border rounded-lg focus:ring focus:ring-blue-300"
-            >
-              <option value="">Select Organization</option>
-              {organizations.map((org, index) => (
-                <option key={index} value={index}>
-                  {org.orgName}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <select
-              id="classSelector"
-              value={selectedClassIndex}
-              onChange={handleClassChange}
-              className="w-full p-1 border rounded-lg focus:ring focus:ring-blue-300"
-            >
-              <option value="">Select Class</option>
-              {selectedOrg?.classes?.map((classData, index) => (
-                <option key={index} value={index}>
-                  {classData.className}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <select
-              id="subjectSelector"
-              value={selectedSubjectIndex}
-              onChange={handleSubjectChange}
-              className="w-full p-1 border rounded-lg focus:ring focus:ring-blue-300"
-            >
-              <option value="">Select Subject</option>
-              {selectedClass?.subjects?.map((subject, index) => (
-                <option key={index} value={index}>
-                  {subject.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        <div className="bg-gray-50 w-full p-6 rounded-lg shadow-md flex justify-center">
-          <Pie data={getPieChartData(selectedSubject)} />
+      {/* Chart */}
+      <div className="w-full text-center">
+        <div className="w-80 h-80 mx-auto">
+          <Pie data={chartData} />
         </div>
       </div>
-    );
+    </div>
+  );
+};
+
+export default function SuperAdminDashboard() {
+ const[ids,setIds]=useState({orgId:"",classId:""})
+  const [dashboard, setData] = useState([])
+  const [classPerformance, setClassPerformance] = useState({});
+ 
+  useEffect(() => {
+    fetchDashboardData()
+    getClassPerformance()
+  }, [ids])
+  useEffect(() => {
+    console.log("Class Performance", classPerformance.passFailedStudents);
+  }, [classPerformance])
+
+
+  const fetchDashboardData = async () => {
+    try {
+      const res = await makeRequest.get("superAdmin/get-dashboard-details");
+      setData(res?.data.data);
+    } catch (error) {
+      console.error("Failed to fetch dashboard data:", error);
+      toast.error("Failed to load dashboard data. Please try again.");
+    }
+  }
+
+  const getClassPerformance = async () => {
+    try {
+      const res = await makeRequest.get(`superAdmin/get-dashboard-class-performance?organizationID=${ids.orgId}&classId=${ids.classId}`);
+      console.log("Setting classPerformance:", res.data);
+      setClassPerformance(res?.data?.data); // Expect this to have .passFailedStudents
+    } catch (error) {
+      console.error("Failed to fetch class performance:", error);
+      toast.error("Failed to load class performance data. Please try again.");
+    }
   };
+  
 
 
   return (
     <div className="min-h-screen py-8 px-4">
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-6 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-6">
         {[
           {
             title: "Teachers Registered",
-            count: 100, // Static count for teachers
+            activeCount: dashboard.totalActiveTeachersCount,
+            inactiveCount: dashboard.totalInActiveTeachersCount,
             color: "bg-gradient-to-r from-blue-500 to-blue-700",
             icon: <Book className="text-2xl" />,
             description: "Number of teachers registered in the system.",
           },
           {
             title: "Admins Registered",
-            count: 5, // Static count for admins
+            activeCount: dashboard.totalActiveOrgCount,
+            inactiveCount: dashboard.totalInActiveOrgCount,
             color: "bg-gradient-to-r from-purple-500 to-purple-700",
             icon: <User className="text-2xl" />,
-            description: "Number of admin accounts created.",
+            description: "Number of Organizations and Admins.",
           },
           {
             title: "Students Registered",
-            count: 500, // Static count for students
+            activeCount: dashboard.totalActiveStudentsCount,
+            inactiveCount: dashboard.totalInActiveStudentsCount,
             color: "bg-gradient-to-r from-green-500 to-green-700",
             icon: <Users className="text-2xl" />,
             description: "Total number of students registered.",
           },
           {
             title: "Classes Created",
-            count: 30, // Static count for classes
+            count: dashboard.totalClassCount,
             color: "bg-gradient-to-r from-yellow-500 to-yellow-700",
             icon: <School className="text-2xl" />,
             description: "Number of classes currently created.",
           },
-        ].map(({ title, count, color, icon, description }, index) => (
-          <div
-            key={index}
-            className={`${color} rounded-2xl p-3 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer`}
-          >
-            {/* Title Row */}
-            <div className="text-center mb-4">
-              <h3 className="font-bold text-white font-serif">{title}</h3>
-            </div>
-
-            {/* Icon and Count Row */}
-            <div className="flex justify-center items-center gap-4 mb-4">
-              <div className="bg-white text-blue-600 p-4 rounded-full shadow-lg">
-                {icon}
+        ].map(({ title, activeCount, inactiveCount, count, color, icon, description }, index) => {
+          const total = count ?? (activeCount + inactiveCount);
+          return (
+            <div
+              key={index}
+              className={`group relative ${color} rounded-2xl p-4 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer shadow-md overflow-hidden`}
+            >
+              {/* Title */}
+              <div className="text-center mb-2">
+                <h3 className="text-lg font-semibold text-white">{title}</h3>
               </div>
-              <p className="text-2xl font-extrabold text-white rounded-lg py-2">
-                {count}
-              </p>
-            </div>
 
-            {/* Subtitle Row */}
-            <div className="text-center text-lg text-white font-sans">
-              <p>{description}</p>
+              {/* Icon and Count */}
+              <div className="flex justify-center items-center gap-4 mb-2">
+                <div className="bg-white text-blue-600 p-3 rounded-full shadow-md">
+                  {icon}
+                </div>
+                <p className="text-3xl font-bold text-white">{total}</p>
+              </div>
+
+              {/* Hidden hover content */}
+              {(typeof activeCount !== 'undefined' && typeof inactiveCount !== 'undefined') && (
+                <div className="absolute inset-0 bg-black/40 backdrop-blur-sm flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white text-sm space-y-2">
+                  <span className="bg-white/20 px-3 py-1 rounded-full font-medium">
+                    Active: {activeCount}
+                  </span>
+                  <span className="bg-white/20 px-3 py-1 rounded-full font-medium">
+                    Inactive: {inactiveCount}
+                  </span>
+                </div>
+              )}
+
+              {/* Description (always visible) */}
+              <div className="text-center text-white text-xs mt-2">
+                {description}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
+
+
       {/* Recently Added Teachers & Students */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 my-6">
         {[
           {
             title: "Recently Added Teachers",
@@ -359,9 +378,9 @@ export default function SuperAdminDashboard() {
         ].map(({ title, data }, index) => (
           <div
             key={index}
-            className="bg-white shadow rounded-xl p-6 transform transition-transform duration-300 hover:scale-105 max-h-96 overflow-y-auto text-center"
+            className="bg-white shadow rounded-xl p-6 transform transition-transform duration-300 hover:scale-105 max-h-[800px] overflow-y-auto text-center"
           >
-            <h2 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-blue-500 to-blue-300 text-white p-2 rounded-md shadow-md font-serif">
+            <h2 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-blue-500 to-blue-300 text-white p-2 rounded-md w-full text-center font-serif">
               {title}
             </h2>
 
@@ -371,12 +390,8 @@ export default function SuperAdminDashboard() {
                   key={person._id || person.id}
                   className="flex items-center p-4 border-b last:border-b-0 space-x-4"
                 >
-                  <div className="w-14 h-14 rounded-full bg-gray-200 overflow-hidden">
-                    <img
-                      src={""}
-                      alt="Profile"
-                      className="w-full h-full object-cover"
-                    />
+                  <div className="w-14 h-14 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold text-lg">
+                    {person.firstName[0]}{person.lastName[0]}
                   </div>
                   <div className="flex-1">
                     <p className="text-lg font-semibold text-gray-800">
@@ -395,14 +410,13 @@ export default function SuperAdminDashboard() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
-
-        <div className="bg-white shadow-lg rounded-xl p-6 mt-6 hover:scale-105 hover:shadow-2xl transition-transform duration-300">
-          <Dashboard />
-        </div>
-
+      <DashboardChart classPerformance={classPerformance.passFailedStudents} setIds={setIds}/>
+      
         <StudentList />
         <ToastContainer />
       </div>
     </div>
   );
 }
+
+

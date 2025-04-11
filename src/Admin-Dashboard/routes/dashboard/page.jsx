@@ -152,7 +152,7 @@ function StudentPassedFailed({
   return (
     <div>
       <h2 className="text-xl font-semibold mb-4 bg-gradient-to-r from-green-500 to-teal-300 text-white p-2 rounded-md w-full text-center font-serif">
-        Class Performance
+        Subjectwise Class Performance
       </h2>
       <div className="bg-white shadow rounded-xl p-6 transform transition-transform duration-300 hover:scale-105">
         {loadingResults && (
@@ -296,7 +296,8 @@ export default function AdminDashboard() {
     <div className="min-h-screen p-2">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-10 p-8">
         {/* Teachers Registered Card */}
-        <div className="bg-red-300 rounded-2xl p-2 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer">
+        <div className="bg-red-300 rounded-2xl p-2 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer"
+          onClick={() => navigate("teachers")}>
           <div className="text-center mb-4">
             <h3 className="text-xl font-bold text-white font-serif">
               Teachers Registered
@@ -317,7 +318,7 @@ export default function AdminDashboard() {
         {/* Students Registered Card */}
         <div
           className="bg-teal-400 rounded-2xl p-2 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer"
-          onClick={() => navigate("student")}
+          onClick={() => navigate("students")}
         >
           <div className="text-center mb-4">
             <h3 className="text-xl font-semibold text-white font-serif">
@@ -337,7 +338,9 @@ export default function AdminDashboard() {
           </div>
         </div>
         {/* Classes Created Card */}
-        <div className="bg-orange-400 rounded-2xl p-2 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer">
+        <div className="bg-orange-400 rounded-2xl p-2 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer"
+          onClick={() => navigate("class_subject")}>
+
           <div className="text-center mb-4">
             <h3 className="text-xl font-bold text-white font-serif">
               Classes Created
@@ -359,6 +362,51 @@ export default function AdminDashboard() {
           </div>{" "}
         </div>{" "}
       </div>
+      {/* Recently Added Teachers & Students */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 my-6">
+        {[
+          {
+            title: "Recently Added Teachers",
+            data: dashboard.recentlyAddedTeachers,
+          },
+          {
+            title: "Recently Added Students",
+            data: dashboard.recentlyAddedStudents,
+          },
+        ].map(({ title, data }, index) => (
+          <div
+            key={index}
+            className="bg-white shadow rounded-xl p-6 transform transition-transform duration-300 hover:scale-105 max-h-96 overflow-y-auto text-center"
+          >
+            <h2 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-blue-500 to-blue-300 text-white p-2 rounded-md w-full text-center font-serif">
+              {title}
+            </h2>
+
+            <div className="space-y-4">
+              {data?.map((person) => (
+                <div
+                  key={person._id || person.id}
+                  className="flex items-center p-4 border-b last:border-b-0 space-x-4"
+                >
+                  <div className="w-14 h-14 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold text-lg">
+                    {person.firstName[0]}{person.lastName[0]}
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-lg font-semibold text-gray-800">
+                      {person.firstName} {person.lastName}
+                    </p>
+                    <p className="text-sm text-gray-600">{person.email}</p>
+                    <p className="text-sm text-gray-600">
+                      {person.phoneNumber}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
         <div className="bg-white shadow rounded-xl p-6 duration-300 hover:scale-105 mb-8">
           <StudentPassedFailed
@@ -372,6 +420,7 @@ export default function AdminDashboard() {
             subjects={subjects}
           />
         </div>
+
         <div className="bg-white shadow rounded-xl p-6 duration-300 hover:scale-105 mb-8">
           <AssignmentData />
         </div>

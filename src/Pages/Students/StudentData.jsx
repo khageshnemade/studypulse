@@ -12,6 +12,7 @@ const Table = () => {
   const [showUpdateStudent, setShowUpdateStudent] = useState(false);
   const [students, setStudents] = useState([]);
   const orgId = useSelector((state) => state.org.orgId);
+
   const [classes, setClasses] = useState([]);
   const [classId, setClassId] = useState("");
   const [pageSize, setPageSize] = useState(10);
@@ -25,6 +26,7 @@ const Table = () => {
   } = useSelector((state) => state.admin.adminDetails);
 
   useEffect(() => {
+    console.log("OrgId",orgId);
     setClassId(initialClassId);
     setPageSize(page);
     setProfileComplete(isp);
