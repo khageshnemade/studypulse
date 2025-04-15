@@ -4,7 +4,7 @@ import { setSuperAdminDetails } from "../../../redux/features/superAdminSlice";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 ChartJS.register(ArcElement, Tooltip, Legend);
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { User, Users, School, Book, Home } from "lucide-react";
 import { makeRequest } from "../../../axios";
 import StudentList from "./StudentList";
@@ -19,8 +19,20 @@ const DashboardChart = ({ classPerformance, setIds }) => {
   const [talukaId, settalukaId] = useState("");
   const [cityId, setCityId] = useState("");
   const [orgId, setOrgId] = useState("");
-  const [classId, setClassId] = useState("");
   const dispatch = useDispatch();
+  console.log("Received in chart:", classPerformance); // Try this
+  const idsFromRedux = useSelector((state) => state.superAdmin.superAdminDetails);
+  
+useEffect(() => {
+ if(idsFromRedux){
+  setDistrictId(idsFromRedux.districtId)
+ settalukaId(idsFromRedux.talukaId)
+ setCityId(idsFromRedux.cityId)
+ setOrgId(idsFromRedux.orgId)
+ setSelectedClassId(idsFromRedux.classId)
+ setSelectedClass(idsFromRedux.class)
+ }
+}, [idsFromRedux])
 
   useEffect(() => {
     if (districtId) fetchTalukas();
@@ -46,7 +58,6 @@ const DashboardChart = ({ classPerformance, setIds }) => {
     setLoading(true);
     try {
       const res = await makeRequest.get("/districts");
-      console.log("Hello I am from FetchDistrict");
       setDistricts(res?.data?.data);
     } catch (error) {
       console.error("Error fetching District:", error.message);
@@ -62,7 +73,6 @@ const DashboardChart = ({ classPerformance, setIds }) => {
       );
       setCities(res?.data?.data);
     } catch (error) {
-      console.error("Fetch Cities:", error.message);
       toast.error(error.message);
     } finally {
       setLoading(false);
@@ -76,7 +86,6 @@ const DashboardChart = ({ classPerformance, setIds }) => {
       );
       setTalukas(res?.data?.data);
     } catch (error) {
-      console.error("Fetch Taluka:", error.message);
       toast.error(error.message);
     } finally {
       setLoading(false);
@@ -89,7 +98,7 @@ const DashboardChart = ({ classPerformance, setIds }) => {
       );
       setClasses(res?.data?.data || []);
     } catch (error) {
-      console.error(
+      toast.error(
         "Error fetching classes:",
         error.response?.data || error.message
       );
@@ -105,7 +114,6 @@ const DashboardChart = ({ classPerformance, setIds }) => {
       console.log("Organizations", res?.data?.data);
     } catch (error) {
       setOrgs([]);
-      console.error("Submit Orgs:", error.response.data.message);
       toast.error(error.response.data.message);
     } finally {
       setLoading(false);
@@ -116,12 +124,9 @@ const DashboardChart = ({ classPerformance, setIds }) => {
 
   // State to store selected class name (for display)
   const [selectedClass, setSelectedClass] = useState("");
-  console.log("selectedClass", selectedClass);
-  console.log("classPerformance", classPerformance);
-  console.log("ClassKeys", classKeys);
-
   const stats = classPerformance?.[selectedClass];
-
+  console.log("selected class",selectedClass);
+console.log("Stats",stats);
   const chartData = {
     labels: ["Passed", "Failed"],
     datasets: [
@@ -218,12 +223,14 @@ const DashboardChart = ({ classPerformance, setIds }) => {
           value={selectedClassId}
           onChange={(e) => {
             const selectedId = e.target.value;
+            dispatch(setSuperAdminDetails({ classId: e.target.value }));
             const selectedClassObj = classes.find(
               (cls) => cls._id === selectedId
             );
 
             setSelectedClassId(selectedId); // control the select by ID
-            setSelectedClass(selectedClassObj?.name || ""); // store/display the name
+            setSelectedClass(selectedClassObj?.name || ""); 
+            dispatch(setSuperAdminDetails({ class: selectedClassObj?.name }));
             setIds((prev) => ({
               ...prev,
               classId: selectedId,
@@ -425,7 +432,7 @@ export default function SuperAdminDashboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
         <DashboardChart
-          classPerformance={classPerformance.passFailedStudents}
+          classPerformance={classPerformance.passFailedStudents||[]}
           setIds={setIds}
         />
 

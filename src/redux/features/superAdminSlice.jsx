@@ -7,6 +7,8 @@ const initialState = {
     talukaId: null,
     cityId: null,
     orgId: null,
+    classId:null,
+    class:null,
   }
 };
 
@@ -24,6 +26,8 @@ const superAdminSlice = createSlice({
         talukaId: null,
         cityId: null,
         orgId: null,
+        classId:null,
+        class:null,
       };
     },
   },
