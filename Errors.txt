@@ -272,3 +272,14 @@ TypeError: Cannot read properties of undefined (reading 'title')
 4.teacher-dashboard/add_assignment  fetch class and subject from redux
      
 New organization -- 
+
+
+
+
+Frontend Fixes Issues Come on 12 April
+1.When New Teacher Added then if teacher fill incomplete details and submit form then also profile completed successfully
+2.Fix the names in teacher complete profile form
+3.subject names not seen in teacer complete profile form
+4.No subjects apears in ChapterDistribution
+5.add chapterCurriculum subject not see
+
