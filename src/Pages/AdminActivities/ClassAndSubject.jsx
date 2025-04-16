@@ -38,7 +38,7 @@ export default function Classes() {
     }
   };
   const showSubject = (classId, className) => {
-    navigate(`/admin-dashboard/class_subject/subjects`, {
+    navigate(`/admin-dashboard/classes/subjects`, {
       state: { classId, className },
     });
   };
@@ -61,7 +61,7 @@ export default function Classes() {
         <div className="flex justify-end mb-2">
           <button
             className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-all flex items-center justify-center space-x-2 text-xl"
-            onClick={() => navigate(`/admin-dashboard/class_subject/addClass`)}
+            onClick={() => navigate(`/admin-dashboard/classes/addClass`)}
           >
             <PlusCircle className="h-5 w-5" /> {/* Add the Plus icon */}
             <span>Add Class</span>

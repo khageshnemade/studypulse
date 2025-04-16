@@ -28,7 +28,7 @@ export const navbarLinks = [
       {
         label: "Classes & Subjects",
         icon: BookOpen,
-        path: "/admin-dashboard/class_subject",
+        path: "/admin-dashboard/classes",
         color: "#1abc9c", // New teal color
       },
     ],

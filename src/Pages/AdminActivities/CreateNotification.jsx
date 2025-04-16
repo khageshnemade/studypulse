@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { toast, ToastContainer } from 'react-toastify'; // Make sure to install react-toastify
-import makeRequest from '../../axios'; // Your axios setup for API calls (makeRequest)
-import { useNavigate } from 'react-router-dom'; // For redirecting after success
+import { toast, ToastContainer } from 'react-toastify'; 
+import makeRequest from '../../axios'; 
+import { useNavigate } from 'react-router-dom';
+import { ArrowLeft } from "lucide-react";
+import { Link } from "react-router-dom";
+
+
 
 export default function CreateNotification() {
     const [title, setTitle] = useState(''); // New state for the title
@@ -43,10 +47,6 @@ export default function CreateNotification() {
 
             if (response.data.success) {
                 toast.success('Notification created successfully!');
-                // Redirect to admin dashboard after success
-                setTimeout(() => {
-                    navigate('/admin-dashboard'); // Redirect to the admin dashboard page
-                }, 2000);
             } else {
                 toast.error('Notification creation failed. Please try again.');
             }
@@ -59,7 +59,22 @@ export default function CreateNotification() {
 
     return (
         <div className="max-w-md mx-auto p-6 bg-white rounded-xl shadow-lg space-y-6">
-            <h2 className="text-2xl font-bold text-center text-gray-800">Create Notification</h2>
+             <div className="flex items-center justify-center mb-2 relative">
+        <Link
+            to="/admin-dashboard/notifications"
+            className="absolute left-0 group"
+        >
+            <ArrowLeft 
+                className="w-6 h-6 text-blue-600 hover:text-blue-800 cursor-pointer" 
+                aria-label="Back to Notifications"
+            />
+            <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                Back to Notifications
+            </span>
+        </Link>
+
+        <h2 className="text-2xl font-bold text-center text-gray-800">Create Notification</h2>
+    </div>
             <form onSubmit={createNotification} className="space-y-4">
                 {/* Title Input */}
                 <div className="flex flex-col">

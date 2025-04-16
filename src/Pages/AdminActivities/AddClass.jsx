@@ -68,7 +68,7 @@ const AddClass = () => {
       setImageUrl(""); // Reset the image URL
       setFile(null); // Clear the selected file
       setTimeout(() => {
-        navigate("/admin-dashboard/class_subject");
+        navigate("/admin-dashboard/classes");
       }, 1700);
     } catch (error) {
       toast.error("Failed to create class. Please try again.");

@@ -151,53 +151,65 @@ function StudentPassedFailed({
 
   return (
     <div>
-      <h2 className="text-xl font-semibold mb-4 bg-gradient-to-r from-green-500 to-teal-300 text-white p-2 rounded-md w-full text-center font-serif">
+      <h2 className="text-lg font-semibold mb-4 bg-gradient-to-r from-green-500 to-teal-300 text-white p-2 rounded-md w-full text-center font-serif">
         Subjectwise Class Performance
       </h2>
       <div className="bg-white shadow rounded-xl p-6 transform transition-transform duration-300 hover:scale-105">
-        {loadingResults && (
-          <div className="mb-2 flex justify-center items-center">
-            <div className="animate-spin border-4 border-blue-500 border-t-transparent w-6 h-6 rounded-full "></div>
-          </div>
-        )}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
-          <div>
-            <select
-              id="classSelector"
-              value={selectedClass || ""}
-              onChange={handleClassChange}
-              className="w-full p-1 border rounded-lg focus:ring focus:ring-blue-300"
-            >
-              <option value="">Select Class</option>
-              {classes?.map((classData) => (
-                <option key={classData._id} value={classData._id}>
-                  {classData.name}
-                </option>
-              ))}
-            </select>
-          </div>
+  {loadingResults && (
+    <div className="mb-2 flex justify-center items-center">
+      <div className="animate-spin border-4 border-blue-500 border-t-transparent w-6 h-6 rounded-full"></div>
+    </div>
+  )}
 
-          <div>
-            <select
-              id="subjectSelector"
-              value={selectedSubject || ""}
-              onChange={handleSubjectChange}
-              className="w-full p-1 border rounded-lg focus:ring focus:ring-blue-300"
-            >
-              <option value="">Select Subject</option>
-              {subjects?.map((subject) => (
-                <option key={subject._id} value={subject._id}>
-                  {subject.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+    <div>
+      <select
+        id="classSelector"
+        value={selectedClass || ""}
+        onChange={handleClassChange}
+        className="w-full p-1 border rounded-lg focus:ring focus:ring-blue-300"
+      >
+        <option value="">Select Class</option>
+        {classes?.map((classData) => (
+          <option key={classData._id} value={classData._id}>
+            {classData.name}
+          </option>
+        ))}
+      </select>
+    </div>
 
-        <div className="bg-gray-50 w-full p-6 rounded-lg flex justify-center">
-          <Pie options={options} data={getPieChartData()} />
-        </div>
-      </div>
+    <div>
+      <select
+        id="subjectSelector"
+        value={selectedSubject || ""}
+        onChange={handleSubjectChange}
+        className="w-full p-1 border rounded-lg focus:ring focus:ring-blue-300"
+      >
+        <option value="">Select Subject</option>
+        {subjects?.map((subject) => (
+          <option key={subject._id} value={subject._id}>
+            {subject.name}
+          </option>
+        ))}
+      </select>
+    </div>
+  </div>
+
+  {/* Show message if class or subject is not selected */}
+  {(!selectedClass || !selectedSubject) && (
+    <div className="text-center text-red-500 mb-4">
+      <p>Please select both class and subject to view the stats.</p>
+    </div>
+  )}
+
+  {/* Pie chart container, only renders when class and subject are selected */}
+  {selectedClass && selectedSubject && (
+    <div className="w-full p-6 rounded-lg flex justify-center">
+      <Pie options={options} data={getPieChartData()} />
+    </div>
+  )}
+</div>
+
     </div>
   );
 }
@@ -339,7 +351,7 @@ export default function AdminDashboard() {
         </div>
         {/* Classes Created Card */}
         <div className="bg-orange-400 rounded-2xl p-2 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer"
-          onClick={() => navigate("class_subject")}>
+          onClick={() => navigate("classes")}>
 
           <div className="text-center mb-4">
             <h3 className="text-xl font-bold text-white font-serif">
@@ -378,7 +390,7 @@ export default function AdminDashboard() {
             key={index}
             className="bg-white shadow rounded-xl p-6 transform transition-transform duration-300 hover:scale-105 max-h-96 overflow-y-auto text-center"
           >
-            <h2 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-blue-500 to-blue-300 text-white p-2 rounded-md w-full text-center font-serif">
+            <h2 className="text-lg font-semibold mb-4 bg-gradient-to-r from-blue-500 to-blue-300 text-white p-2 rounded-md w-full text-center font-serif">
               {title}
             </h2>
 

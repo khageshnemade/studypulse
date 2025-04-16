@@ -12,7 +12,7 @@ const Table = () => {
   const [showUpdateStudent, setShowUpdateStudent] = useState(false);
   const [students, setStudents] = useState([]);
   const orgId = useSelector((state) => state.org.orgId);
-
+const [pages,setPages]=useState();
   const [classes, setClasses] = useState([]);
   const [classId, setClassId] = useState("");
   const [pageSize, setPageSize] = useState(10);
@@ -26,7 +26,7 @@ const Table = () => {
   } = useSelector((state) => state.admin.adminDetails);
 
   useEffect(() => {
-    console.log("OrgId",orgId);
+    console.log("OrgId", orgId);
     setClassId(initialClassId);
     setPageSize(page);
     setProfileComplete(isp);
@@ -34,10 +34,11 @@ const Table = () => {
 
   const fetchStudents = async () => {
     setLoading(true);
-    const url = `/admin/get-all-students?classId=${classId}&page=${page}&limit=${pageSize}&isProfileComplete=${profileComplete}`;
+    const url = `/admin/get-all-students?classId=${classId}&page=${currentPage}&limit=${pageSize}&isProfileComplete=${profileComplete}`; 
     try {
       const res = await makeRequest.get(url);
       setStudents(res?.data?.data);
+      setPages(res?.data?.totalPages)
       dispatch(setStudent(res?.data?.data));
     } catch (error) {
       console.error("Error fetching students:", error?.response?.data?.message);
@@ -56,14 +57,14 @@ const Table = () => {
   const handleNextPage = () => {
     console.log("Student ", students, pageSize, currentPage);
 
-    if (students.length + 2 >= pageSize * currentPage) {
+    if (currentPage<pages) {
       setCurrentPage((prevPage) => prevPage + 1);
     }
   };
 
   useEffect(() => {
     if (classId) fetchStudents();
-  }, [currentPage, classId, pageSize, profileComplete, showUpdateStudent]);
+  }, [currentPage, classId, pageSize, profileComplete, showUpdateStudent, profileComplete]);
 
   const fetchClasses = async () => {
     try {
@@ -74,11 +75,6 @@ const Table = () => {
     } catch (error) {
       console.error("Error fetching classes:", error.message);
     }
-  };
-
-  const handleToggle = () => {
-    setProfileComplete(!profileComplete);
-    dispatch(setAdminDetails({ isp: !profileComplete }));
   };
 
   useEffect(() => {
@@ -99,171 +95,174 @@ const Table = () => {
       toast.error("Failed to update status");
     }
   };
-
+  const handleToggle = () => {
+    setProfileComplete(!profileComplete);
+    dispatch(setAdminDetails({ isp: !profileComplete }));
+  };
   return showUpdateStudent ? (
     <UpdateStudent id={currentId} setShowUpdateStudent={setShowUpdateStudent} />
   ) : (
     <div className="container mx-auto p-6">
-      <div className="flex justify-between mb-4">
-        {!profileComplete ? (
-          <select
-            disabled
-            id="classId"
-            value={classId}
-            onChange={(e) => {
-              dispatch(setAdminDetails({ classId: e.target.value }));
+    <div className="flex justify-between mb-4 gap-2">
+      {/* Dropdown */}
+      <select
+        value={profileComplete}
+        onChange={(e) => {
+          handleToggle()
+        }}
+        className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white w-1/3"
+      >
+        <option value={false}>Incomplete Profiles</option>
+        <option value={true}>Completed Profiles</option>
+      </select>
+      <select
+        id="classId"
+        value={classId}
+        onChange={(e) => {
+          dispatch(setAdminDetails({ classId: e.target.value }));
+          setCurrentPage(1)
+          setClassId(e.target.value);
+        }}
+        disabled={profileComplete === false} // Disable if Incomplete Profiles
+        className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white w-1/3"
+      >
+        <option value="" selected>
+          {profileComplete === false ? "Not Required" : "Select Class"}
+        </option>
+        {profileComplete && classes.map((cls) => (
+          <option key={cls._id} value={cls._id}>
+            {cls.name}
+          </option>
+        ))}
+      </select>
+     
+      <select
+        id="pageSize"
+        value={pageSize}
+        onChange={(e) => {
+          dispatch(setAdminDetails({ page: e.target.value }));
+          setCurrentPage(1)
 
-              setClassId(e.target.value);
-            }}
-            className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white w-1/3"
-          >
-            <option value="" selected>
-              Not Required
-            </option>
-          </select>
-        ) : (
-          <select
-            id="classId"
-            value={classId}
-            onChange={(e) => {
-              dispatch(setAdminDetails({ classId: e.target.value }));
-
-              setClassId(e.target.value);
-            }}
-            className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white w-1/3"
-          >
-            <option value="">Select Class</option>
-            {classes.map((cls) => (
-              <option key={cls._id} value={cls._id}>
-                {cls.name}
-              </option>
-            ))}
-          </select>
-        )}
-        {loading && (
-          <div className="mt-2 flex justify-center items-center">
-            <div className="animate-spin border-4 border-blue-500 border-t-transparent w-6 h-6 rounded-full"></div>
-          </div>
-        )}
-        <select
-          id="pageSize"
-          value={pageSize}
-          onChange={(e) => {
-            dispatch(setAdminDetails({ page: e.target.value }));
-
-            setPageSize(Number(e.target.value));
-          }}
-          className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white w-1/3"
-        >
-          <option value="1">1</option>
-          <option value="10">10</option>
-          <option value="25">25</option>
-          <option value="50">50</option>
-        </select>
-      </div>
-
-      <div className="flex justify-between items-center mb-4">
-        <button
-          onClick={handleToggle}
-          className={`px-4 py-2 rounded-lg text-white ${profileComplete ? "bg-green-500" : "bg-red-500"}`}
-        >
-          {profileComplete ? "Completed Profiles" : "Incompleted Profiles"}
-        </button>
-        <div className="text-lg font-semibold">Page: {currentPage}</div>
-      </div>
-
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white rounded-lg shadow-md whitespace-nowrap">
-          <thead className="bg-teal-700 font-serif  text-white ">
-            <tr>
-              <th className="px-4 py-2 border">Profile</th>
-              <th className="px-4 py-2 border">Name</th>
-              <th className="px-4 py-2 border">Email</th>
-              <th className="px-4 py-2 border">Phone</th>
-              <th className="px-4 py-2 border">City</th>
-              {profileComplete && <th className="px-4 py-2 border">More</th>}
-              <th className="px-4 py-2 border">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {students.map((row) => (
-              <tr key={row._id} className="hover:bg-gray-50">
-                <td className="px-4 py-2 border">
-                  {row?.profilePic ? (
-                    <img
+          setPageSize(Number(e.target.value));
+        }}
+        className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white w-1/3"
+      >
+        <option value="1">1</option>
+        <option value="10">10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+      </select>
+       {/* Loading Spinner */}
+       
+    </div>
+  
+    {loading && (
+        <div className="mt-2 mb-5 flex justify-center items-center">
+          <div className="animate-spin border-4 border-blue-500 border-t-transparent w-6 h-6 rounded-full"></div>
+        </div>
+      )}
+        <h2 className="text-xl font-bold mb-3 text-gray-800 dark:text-white">
+    {profileComplete ? "✅ Completed Profile Students" : "⚠️ Incomplete Profile Students"}
+  </h2>
+  
+   
+  
+    <div className="overflow-x-auto">
+      <table className="min-w-full bg-white rounded-lg shadow-md whitespace-nowrap">
+        <thead className="bg-teal-700 font-serif text-white">
+          <tr>
+            <th className="px-4 py-2 border">Profile</th>
+            <th className="px-4 py-2 border">Name</th>
+            <th className="px-4 py-2 border">Email</th>
+            <th className="px-4 py-2 border">Phone</th>
+            <th className="px-4 py-2 border">City</th>
+            {profileComplete && <th className="px-4 py-2 border">More</th>}
+            <th className="px-4 py-2 border">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {students.map((row) => (
+            <tr key={row._id} className="hover:bg-gray-50">
+              <td className="px-4 py-2 border">
+                {row?.profilePic ? (
+                  <img
                     src={
-                      row.profilePic.startsWith('https://api.studypulse.live')
+                      row.profilePic.startsWith("https://api.studypulse.live")
                         ? row.profilePic
                         : `https://api.studypulse.live/${row.profilePic}`
                     }
-                      alt="Profile"
-                      className="w-16 h-16 object-cover rounded-full" // Set explicit width and height here
-                    />
-                  ) : (
-                    <div className="w-16 h-16 flex items-center justify-center bg-blue-600 text-white text-2xl font-bold rounded-full">
-                      {`${row.firstName[0]}${row.lastName[0]}`.toUpperCase()}
-                    </div>
-                  )}
-                </td>
-
-                <td className="px-4 py-2 border">
-                  {row.firstName} {row.lastName}
-                </td>
-                <td className="px-4 py-2 border">{row.email}</td>
-                <td className="px-4 py-2 border">{row.phoneNumber}</td>
-                <td className="px-4 py-2 border">{row?.cityData?.name}</td>
-                {profileComplete && (
-                  <td className="border border-gray-300 px-4 py-2 max-w-min">
-                    <div className="flex space-x-3 items-center">
-                      <button
-                        onClick={() => {
-                          setCurrentId(row._id);
-                          setShowUpdateStudent(true);
-                        }}
-                        className="px-2 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-                      >
-                        <ChevronDown />
-                      </button>
-                    </div>
-                  </td>
+                    alt="Profile"
+                    className="w-16 h-16 object-cover rounded-full"
+                  />
+                ) : (
+                  <div className="w-16 h-16 flex items-center justify-center bg-blue-600 text-white text-2xl font-bold rounded-full">
+                    {`${row.firstName[0]}${row.lastName[0]}`.toUpperCase()}
+                  </div>
                 )}
-                <td className="px-4 py-2 border">
-                  <button
-                    onClick={() => handleStatusChange(row)}
-                    className={`px-4 py-2 rounded-md text-white ${
-                      row.status === "active"
-                        ? "bg-green-500 hover:bg-green-600"
-                        : "bg-red-500 hover:bg-red-600"
-                    }`}
-                  >
-                    {row.status}
-                  </button>
+              </td>
+  
+              <td className="px-4 py-2 border">{row.firstName} {row.lastName}</td>
+              <td className="px-4 py-2 border">{row.email}</td>
+              <td className="px-4 py-2 border">{row.phoneNumber}</td>
+              <td className="px-4 py-2 border">{row?.cityData?.name}</td>
+              {profileComplete && (
+                <td className="border border-gray-300 px-4 py-2 max-w-min">
+                  <div className="flex space-x-3 items-center">
+                    <button
+                      onClick={() => {
+                        setCurrentId(row._id);
+                        setShowUpdateStudent(true);
+                      }}
+                      className="px-2 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                    >
+                      <ChevronDown />
+                    </button>
+                  </div>
                 </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <div className="flex justify-between mt-4">
-        <button
-          onClick={handlePrevPage}
-          disabled={currentPage === 1}
-          className="px-4 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400 disabled:opacity-50"
-        >
-          Prev
-        </button>
-        <button
-          onClick={handleNextPage}
-          disabled={students.length + 2 < pageSize * currentPage}
-          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50"
-        >
-          Next
-        </button>
-      </div>
+              )}
+              <td className="px-4 py-2 border">
+                <button
+                  onClick={() => handleStatusChange(row)}
+                  className={`px-4 py-2 rounded-md text-white ${
+                    row.status === "active"
+                      ? "bg-green-500 hover:bg-green-600"
+                      : "bg-red-500 hover:bg-red-600"
+                  }`}
+                >
+                  {row.status}
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
+  
+    <div className="flex justify-between mt-4">
+      <button
+        onClick={handlePrevPage}
+        disabled={currentPage === 1}
+        className="px-4 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400 disabled:opacity-50"
+      >
+        Prev
+      </button>
+      <div className="flex justify-between items-center mb-4">
+      <div className="text-lg font-semibold">Page: {currentPage}</div>
+    </div>
+      <button
+        onClick={handleNextPage}
+        disabled={currentPage>=pages}
+        className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+  
+  
   );
 };
+
 
 export default function StudentData() {
   return (
