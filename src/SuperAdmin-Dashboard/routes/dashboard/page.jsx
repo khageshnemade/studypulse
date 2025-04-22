@@ -49,10 +49,10 @@ const DashboardChart = ({ classPerformance, setIds }) => {
     if (orgId) {
       fetchClasses();
       setIds((prev) => ({ ...prev, orgId }));
-   
+
     }
   }, [orgId]);
- 
+
 
   // API fetches
   const fetchDistricts = async () => {
@@ -119,10 +119,20 @@ const DashboardChart = ({ classPerformance, setIds }) => {
 
 
   // Prepare chart data
-  const stats =  classPerformance?.[selectedClass]
-  console.log("class Performance",classPerformance);
-  console.log("selected Class",selectedClass);
-  console.log("stats",stats);
+  const stats = classPerformance?.[selectedClass]
+    ? classPerformance[selectedClass]
+    : Object.values(classPerformance || {}).reduce(
+      (acc, curr) => {
+        acc.passed += curr.passed || 0;
+        acc.failed += curr.failed || 0;
+        return acc;
+      },
+      { passed: 0, failed: 0 }
+    );
+
+  console.log("class Performance", classPerformance);
+  console.log("selected Class", selectedClass);
+  console.log("stats", stats);
 
   const chartData = {
     labels: ["Passed", "Failed"],
@@ -196,7 +206,7 @@ const DashboardChart = ({ classPerformance, setIds }) => {
           name="org"
           value={orgId}
           onChange={(e) => {
-            dispatch(setSuperAdminDetails({ orgId: e.target.value, classId: null,class:null }));
+            dispatch(setSuperAdminDetails({ orgId: e.target.value, classId: null, class: null }));
 
             setIds((prev) => ({
               ...prev,
@@ -269,7 +279,7 @@ export default function SuperAdminDashboard() {
     fetchDashboardData();
     getClassPerformance();
   }, [ids]);
- 
+
 
   const fetchDashboardData = async () => {
     try {
@@ -357,7 +367,7 @@ export default function SuperAdminDashboard() {
                   <div className="bg-white text-blue-600 p-3 rounded-full shadow-md">
                     {icon}
                   </div>
-                  <p className="text-3xl font-bold text-white">{total}</p>
+                  <p className="text-3xl font-bold text-white whitespace-nowrap">{total}</p>
                 </div>
 
                 {typeof activeCount !== "undefined" &&
@@ -385,47 +395,47 @@ export default function SuperAdminDashboard() {
 
       {/* Recently Added Teachers & Students */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 my-4">
-  {[
-    {
-      title: "Recently Added Teachers",
-      data: dashboard.recentlyAddedTeachers,
-    },
-    {
-      title: "Recently Added Students",
-      data: dashboard.recentlyAddedStudents,
-    },
-  ].map(({ title, data }, index) => (
-    <div
-      key={index}
-      className="bg-white shadow rounded-lg p-4 transform transition-transform duration-300 hover:scale-[1.03] max-h-[700px] overflow-y-auto text-center"
-    >
-      <h2 className="text-lg font-bold mb-3 bg-gradient-to-r from-blue-500 to-blue-300 text-white p-2 rounded w-full font-serif">
-        {title}
-      </h2>
-
-      <div className="space-y-3">
-        {data?.map((person) => (
+        {[
+          {
+            title: "Recently Added Teachers",
+            data: dashboard.recentlyAddedTeachers,
+          },
+          {
+            title: "Recently Added Students",
+            data: dashboard.recentlyAddedStudents,
+          },
+        ].map(({ title, data }, index) => (
           <div
-            key={person._id || person.id}
-            className="flex items-center p-3 border-b last:border-b-0 space-x-3"
+            key={index}
+            className="bg-white shadow rounded-lg p-4 transform transition-transform duration-300 hover:scale-[1.03] max-h-[700px] overflow-y-auto text-center"
           >
-            <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white font-medium text-base">
-              {person.firstName[0]}
-              {person.lastName[0]}
-            </div>
-            <div className="flex-1 text-left">
-              <p className="text-sm font-medium text-gray-800">
-                {person.firstName} {person.lastName}
-              </p>
-              <p className="text-xs text-gray-600">{person.email}</p>
-              <p className="text-xs text-gray-600">{person.phoneNumber}</p>
+            <h2 className="text-lg font-bold mb-3 bg-gradient-to-r from-blue-500 to-blue-300 text-white p-2 rounded w-full font-serif">
+              {title}
+            </h2>
+
+            <div className="space-y-3">
+              {data?.map((person) => (
+                <div
+                  key={person._id || person.id}
+                  className="flex items-center p-3 border-b last:border-b-0 space-x-3"
+                >
+                  <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white font-medium text-base">
+                    {person.firstName[0]}
+                    {person.lastName[0]}
+                  </div>
+                  <div className="flex-1 text-left">
+                    <p className="text-sm font-medium text-gray-800">
+                      {person.firstName} {person.lastName}
+                    </p>
+                    <p className="text-xs text-gray-600">{person.email}</p>
+                    <p className="text-xs text-gray-600">{person.phoneNumber}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         ))}
       </div>
-    </div>
-  ))}
-</div>
 
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">

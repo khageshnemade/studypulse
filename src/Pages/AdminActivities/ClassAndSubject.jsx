@@ -94,24 +94,26 @@ export default function Classes() {
                 key={index}
                 className="hover:bg-gray-200 hover:text-gray-900 transition-all"
               >
-                <td className="border border-gray-800 px-4 py-2">
+                <td className="w-20 h-20 text-center align-middle">
                   {item.image ? (
-                    <img
-                    src={
-                      item.image.startsWith('https://api.studypulse.live')
-                        ? item.image
-                        : `https://api.studypulse.live/${item.image}`
-                    }
-                     
-                      alt={`No Image`}
-                      className="w-16 h-16 object-cover" // Add this to adjust the image size
-                    />
+                    <div className="flex items-center justify-center w-full h-full">
+                      <img
+                        src={
+                          item.image.startsWith('https://api.studypulse.live')
+                            ? item.image
+                            : `https://api.studypulse.live/${item.image}`
+                        }
+                        alt="No Image"
+                        className="w-16 h-16 object-cover rounded-full"
+                      />
+                    </div>
                   ) : (
-                    <div className="w-16 h-16 flex items-center justify-center bg-blue-600 text-white text-2xl rounded-full">
+                    <div className="w-16 h-16 flex items-center justify-center bg-blue-600 text-white text-2xl rounded-full mx-auto">
                       {`${item.name[0]}`.toUpperCase()}
                     </div>
                   )}
                 </td>
+
                 <td className="border border-gray-800 px-4 py-2">
                   {item.name}
                 </td>

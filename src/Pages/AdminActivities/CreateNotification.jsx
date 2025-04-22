@@ -93,7 +93,7 @@ export default function CreateNotification() {
                 {/* Notification Text */}
                 <div className="flex flex-col">
                     <label htmlFor="text" className="text-sm font-medium text-gray-600">Notification Text</label>
-                    <input
+                    <textarea
                         id="text"
                         type="text"
                         value={text}

@@ -31,6 +31,10 @@ const CreateChapterCurriculum = () => {
   useEffect(() => {
     fetchSubjects();
   }, [classId]);
+useEffect(() => {
+ console.log("Chapters",chapters);
+ 
+}, [chapters])
 
   useEffect(() => {
     setChapterId(initialChapterId || "");
@@ -63,7 +67,7 @@ const CreateChapterCurriculum = () => {
   const fetchChapters = async () => {
     try {
       // Construct the request URL with query parameters
-      const response = await makeRequest.get("teacher/get-all-chapter");
+      const response = await makeRequest.get(`teacher/get-all-chapter?subjectId=${subjectId}&classId=${classId}`);
       console.log("Chapters", response.data);
       setChapters(response?.data?.data);
       setLoading(false);
@@ -190,7 +194,7 @@ const CreateChapterCurriculum = () => {
 
             {/* Chapter Selection */}
             <div>
-              <label className="block text-sm font-medium mb-1">
+              <label className="block text-sm font-medium mb-1 text-black">
                 Select Chapter
               </label>
               <select
@@ -212,7 +216,7 @@ const CreateChapterCurriculum = () => {
                 htmlFor="title"
                 className="block text-sm font-medium text-slate-900 dark:text-slate-50"
               >
-                Chapter Title
+                Title
               </label>
               <input
                 type="text"
@@ -230,7 +234,7 @@ const CreateChapterCurriculum = () => {
                 htmlFor="description"
                 className="block text-sm font-medium text-slate-900 dark:text-slate-50"
               >
-                Chapter Description
+                Chapter Curriculum Description
               </label>
               <textarea
                 id="description"

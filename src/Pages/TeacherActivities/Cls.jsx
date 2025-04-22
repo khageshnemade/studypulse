@@ -70,7 +70,7 @@ export default function Cls() {
         <table className="table-auto w-full border-collapse border border-gray-300 whitespace-nowrap">
           <thead className="bg-teal-600 text-white font-serif">
             <tr>
-            <th className="border border-gray-300 px-4 py-2 text-left font-medium">
+              <th className="border border-gray-300 px-4 py-2 text-left font-medium">
                 Picture
               </th>
               <th className="border border-gray-300 px-4 py-2 text-left font-medium">
@@ -91,24 +91,26 @@ export default function Cls() {
                 key={index}
                 className="hover:bg-teal-50 hover:text-teal-700 transition-all"
               >
-                <td>
-                {item.image ? (
-                    <img
-                    src={
-                      item.image.startsWith('https://api.studypulse.live')
-                        ? item.image
-                        : `https://api.studypulse.live/${item.image}`
-                    }
-                     
-                      alt={`No Image`}
-                      className="w-16 h-16 object-cover" // Add this to adjust the image size
-                    />
-                  ) : (
-                    <div className="w-16 h-16 flex items-center justify-center bg-blue-600 text-white text-2xl rounded-full">
-                      {`${item.name[0]}`.toUpperCase()}
-                    </div>
-                  )}
+                <td className="p-2 text-center align-middle">
+                  <div className="flex justify-center items-center w-full h-full">
+                    {item.image ? (
+                      <img
+                        src={
+                          item.image.startsWith('https://api.studypulse.live')
+                            ? item.image
+                            : `https://api.studypulse.live/${item.image}`
+                        }
+                        alt="No Image"
+                        className="w-16 h-16 object-cover rounded-full"
+                      />
+                    ) : (
+                      <div className="w-16 h-16 flex items-center justify-center bg-blue-600 text-white text-2xl rounded-full">
+                        {`${item.name[0]}`.toUpperCase()}
+                      </div>
+                    )}
+                  </div>
                 </td>
+
                 <td className="border border-gray-300 px-4 py-2">
                   {item.name}
                 </td>
