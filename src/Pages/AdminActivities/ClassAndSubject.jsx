@@ -94,7 +94,7 @@ export default function Classes() {
                 key={index}
                 className="hover:bg-gray-200 hover:text-gray-900 transition-all"
               >
-                <td className="w-20 h-20 text-center align-middle">
+                <td className="border border-gray-300 w-20 h-20 text-center align-middle">
                   {item.image ? (
                     <div className="flex items-center justify-center w-full h-full">
                       <img
@@ -113,6 +113,7 @@ export default function Classes() {
                     </div>
                   )}
                 </td>
+
 
                 <td className="border border-gray-800 px-4 py-2">
                   {item.name}

@@ -28,7 +28,6 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-
 function StudentPassedFailed({
   selectedClass,
   selectedSubject,
@@ -49,24 +48,23 @@ function StudentPassedFailed({
   const [loadingResults, setLoadingResults] = useState(false);
 
   const getPieChartData = () => ({
-    labels: ["Passed", "Failed", "Absent"],
+    labels: ['Passed', 'Failed', 'Absent'],
     datasets: [
       {
         data: [statusCounts.pass, statusCounts.fail, statusCounts.absent],
-        backgroundColor: ["#4CAF50", "#F44336", "#FFC107"],
+        backgroundColor: ['#4CAF50', '#F44336', '#FFC107'],
       },
     ],
   });
 
   const handleClassChange = (event) => {
     setSelectedClass(event.target.value);
-
     dispatch(
       setAdminDetails({
         classId: event.target.value,
       })
     );
-    setSelectedSubject("");
+    setSelectedSubject('');
   };
 
   const handleSubjectChange = (event) => {
@@ -83,13 +81,9 @@ function StudentPassedFailed({
       const res = await makeRequest.get(
         `/admin/get-students-results-by-class?classId=${selectedClass}&subjectId=${selectedSubject}&page=1&limit=1&resultStatus=${status}`
       );
-      // Extracting totalRecords for the specific status
       return res?.data?.totalRecords || 0;
     } catch (error) {
-      console.error(
-        `Error fetching ${status} students:`,
-        error.response?.data || error.message
-      );
+      console.error(`Error fetching ${status} students:`, error.response?.data || error.message);
       return 0;
     }
   };
@@ -98,9 +92,9 @@ function StudentPassedFailed({
     setLoadingResults(true);
     try {
       const [passCount, failCount, absentCount] = await Promise.all([
-        fetchStudentsResults("pass"),
-        fetchStudentsResults("fail"),
-        fetchStudentsResults("absent"),
+        fetchStudentsResults('pass'),
+        fetchStudentsResults('fail'),
+        fetchStudentsResults('absent'),
       ]);
 
       setStatusCounts({
@@ -119,32 +113,39 @@ function StudentPassedFailed({
     }
   }, [selectedClass, selectedSubject]);
 
+  // Add the resize effect to handle window resize
+  useEffect(() => {
+    const handleResize = () => {
+      window.dispatchEvent(new Event('resize')); // Triggers the resize event to re-render the chart
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []); // Empty dependency array means this runs only once on component mount
+
   const options = {
     responsive: true,
+    maintainAspectRatio: false, // Important to allow responsive resizing
     plugins: {
       legend: {
-        position: "top",
+        position: 'top',
       },
       tooltip: {
         enabled: true,
       },
     },
     onClick: (event, chartElement) => {
-      console.log("Chart clicked:", chartElement);
       if (chartElement.length > 0) {
         const clickedIndex = chartElement[0].index;
-        const labels = ["pass", "fail", "absent"];
+        const labels = ['pass', 'fail', 'absent'];
         const label = labels[clickedIndex];
-        console.log("Selected label:", label);
         setSelectedStatus(label);
-
         dispatch(
           setAdminDetails({
             status: label,
           })
         );
-
-        navigate("student");
+        navigate('student');
       }
     },
   };
@@ -154,65 +155,66 @@ function StudentPassedFailed({
       <h2 className="text-lg font-semibold mb-4 bg-gradient-to-r from-green-500 to-teal-300 text-white p-2 rounded-md w-full text-center font-serif">
         Subjectwise Class Performance
       </h2>
-      <div className="bg-white shadow rounded-xl p-6 transform transition-transform duration-300 hover:scale-105">
-  {loadingResults && (
-    <div className="mb-2 flex justify-center items-center">
-      <div className="animate-spin border-4 border-blue-500 border-t-transparent w-6 h-6 rounded-full"></div>
-    </div>
-  )}
+      <div className="bg-white shadow rounded-xl p-6 mb-8 transition-all hover:shadow-lg">
+        {loadingResults && (
+          <div className="mb-2 flex justify-center items-center">
+            <div className="animate-spin border-4 border-blue-500 border-t-transparent w-6 h-6 rounded-full"></div>
+          </div>
+        )}
 
-  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
-    <div>
-      <select
-        id="classSelector"
-        value={selectedClass || ""}
-        onChange={handleClassChange}
-        className="w-full p-1 border rounded-lg focus:ring focus:ring-blue-300"
-      >
-        <option value="">Select Class</option>
-        {classes?.map((classData) => (
-          <option key={classData._id} value={classData._id}>
-            {classData.name}
-          </option>
-        ))}
-      </select>
-    </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+          <div>
+            <select
+              id="classSelector"
+              value={selectedClass || ''}
+              onChange={handleClassChange}
+              className="w-full p-1 border rounded-lg focus:ring focus:ring-blue-300"
+            >
+              <option value="">Select Class</option>
+              {classes?.map((classData) => (
+                <option key={classData._id} value={classData._id}>
+                  {classData.name}
+                </option>
+              ))}
+            </select>
+          </div>
 
-    <div>
-      <select
-        id="subjectSelector"
-        value={selectedSubject || ""}
-        onChange={handleSubjectChange}
-        className="w-full p-1 border rounded-lg focus:ring focus:ring-blue-300"
-      >
-        <option value="">Select Subject</option>
-        {subjects?.map((subject) => (
-          <option key={subject._id} value={subject._id}>
-            {subject.name}
-          </option>
-        ))}
-      </select>
-    </div>
-  </div>
+          <div>
+            <select
+              id="subjectSelector"
+              value={selectedSubject || ''}
+              onChange={handleSubjectChange}
+              className="w-full p-1 border rounded-lg focus:ring focus:ring-blue-300"
+            >
+              <option value="">Select Subject</option>
+              {subjects?.map((subject) => (
+                <option key={subject._id} value={subject._id}>
+                  {subject.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
 
-  {/* Show message if class or subject is not selected */}
-  {(!selectedClass || !selectedSubject) && (
-    <div className="text-center text-red-500 mb-4">
-      <p>Please select both class and subject to view the stats.</p>
-    </div>
-  )}
+        {(!selectedClass || !selectedSubject) && (
+          <div className="text-center text-red-500 mb-4">
+            <p>Please select both class and subject to view the stats.</p>
+          </div>
+        )}
 
-  {/* Pie chart container, only renders when class and subject are selected */}
-  {selectedClass && selectedSubject && (
-    <div className="w-full p-6 rounded-lg flex justify-center">
-      <Pie options={options} data={getPieChartData()} />
-    </div>
-  )}
-</div>
-
+        {selectedClass && selectedSubject && (
+          <div className="w-full flex justify-center">
+            <div className="relative w-full max-w-2xl h-64">
+              <Pie options={options} data={getPieChartData()} />
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
+
+
 
 export default function AdminDashboard() {
   const [loading, setLoading] = useState(false);
@@ -420,7 +422,8 @@ export default function AdminDashboard() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
-        <div className="bg-white shadow rounded-xl p-6 duration-300 hover:scale-105 mb-8">
+        <div className="bg-white shadow rounded-xl p-6 mb-8 transition-all hover:shadow-lg">
+
           <StudentPassedFailed
             selectedClass={selectedClass}
             selectedSubject={selectedSubject}
@@ -432,6 +435,8 @@ export default function AdminDashboard() {
             subjects={subjects}
           />
         </div>
+
+
 
         <div className="bg-white shadow rounded-xl p-6 duration-300 hover:scale-105 mb-8">
           <AssignmentData />

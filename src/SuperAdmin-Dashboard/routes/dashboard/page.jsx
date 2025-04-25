@@ -37,6 +37,9 @@ const DashboardChart = ({ classPerformance, setIds }) => {
       setOrgId(idsFromRedux.orgId || "");
       setSelectedClassId(idsFromRedux.classId || "");
       setSelectedClass(idsFromRedux.class || "");
+      console.log("Districts", districts);
+
+
     }
   }, [idsFromRedux]);
 
@@ -255,6 +258,19 @@ const DashboardChart = ({ classPerformance, setIds }) => {
           ))}
         </select>
       </div>
+      <div className="d-flex justify-content-center align-items-center mt-2" style={{ gap: '1rem' }}>
+  <h2 className="mb-0" style={{ fontWeight: 'bold' }}>
+    {!orgId ? "All Organizations Data" : orgs.find(o => o._id === orgId)?.name || "Organization Not Found"}
+  </h2>
+
+  {selectedClassId && (
+    <h2 className="mb-0" style={{ fontWeight: 'bold' }}>
+      {selectedClass}
+    </h2>
+  )}
+</div>
+
+
 
       {/* Chart */}
       <div className="w-full text-center mt-6">
