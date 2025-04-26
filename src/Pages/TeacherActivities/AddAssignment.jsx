@@ -255,7 +255,7 @@ const AddAssignment = () => {
             <div>
               <label className="block text-sm font-medium">Passing Marks</label>
               <input
-                type="number"
+                type="text"
                 value={passingMarks}
                 onChange={(e) => setPassingMarks(e.target.value)}
                 required
@@ -265,7 +265,7 @@ const AddAssignment = () => {
             <div>
               <label className="block text-sm font-medium">Total Marks</label>
               <input
-                type="number"
+                type="text"
                 value={totalMarks}
                 onChange={(e) => setTotalMarks(e.target.value)}
                 required
