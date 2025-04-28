@@ -197,7 +197,7 @@ export default function StudentsRegistered() {
                 <td className="border p-3">
                   <img
                    src={
-                    student.profilePic.startsWith('https://api.studypulse.live')
+                    student?.profilePic?.startsWith('https://api.studypulse.live')
                       ? student.profilePic
                       : `https://api.studypulse.live/${student.profilePic}`
                   }
