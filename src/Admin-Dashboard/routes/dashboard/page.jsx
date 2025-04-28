@@ -16,7 +16,7 @@ import { makeRequest } from "../../../axios";
 import { BookOpen, FileText, Layers } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import OnlineUsers from "../../../Pages/AdminActivities/OnlineUsers";
-import AssignmentData from "./AssignmentData";
+// import AssignmentData from "./AssignmentData";
 
 // Registering chart components
 ChartJS.register(
@@ -438,9 +438,9 @@ export default function AdminDashboard() {
 
 
 
-        <div className="bg-white shadow rounded-xl p-6 duration-300 hover:scale-105 mb-8">
+        {/* <div className="bg-white shadow rounded-xl p-6 duration-300 hover:scale-105 mb-8">
           <AssignmentData />
-        </div>
+        </div> */}
         <div className="bg-white shadow rounded-xl p-6 duration-300 hover:scale-105 mb-8">
           <OnlineUsers users={users} />
         </div>

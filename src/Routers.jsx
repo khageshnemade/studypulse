@@ -151,7 +151,7 @@ const router = createBrowserRouter(
         { path: "refreshToken", element: <RefreshToken /> },
         { path: "notifications", element: <Notifications /> },
         { path: "studentsReport", element: <StudentReport /> },
-        { path: "ass_stat", element: <AssignmentData /> },
+        // { path: "ass_stat", element: <AssignmentData /> },
         { path: "announce", element: <CreateNotification /> },
         { path: "update_notifications", element: <Notifications /> },
         { path: "counter", element: <UploadedCount /> },
