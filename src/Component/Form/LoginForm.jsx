@@ -61,8 +61,9 @@ function LoginForm() {
         const profileCompletion = response?.data.data.profileCompletion;
         const organizationName = response?.data?.data?.organizationName;
         const profilePic = response?.data?.data?.profilePic;
-
+        
         console.log("Response Data:", response.data);
+        const orgId = response?.data?.data?.organizationID;
 
         dispatch(setRole(userRole));
 
@@ -96,7 +97,6 @@ function LoginForm() {
 
         setTimeout(() => {
           if (userRole === "admin") {
-            const orgId = response?.data?.data?.organizationID;
             dispatch(setOrgId(orgId));
             dispatch(
               setAdminDetails({ classId: "demoForFetchinfInactiveStudent" })
@@ -135,7 +135,6 @@ function LoginForm() {
 
       // Access the userRole
       const userRole = parsedUserData.role;
-      const orgId = response?.data?.data?.organizationID;
 
       console.log("User Role:", userRole);
       setTimeout(() => {
