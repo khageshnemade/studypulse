@@ -262,13 +262,13 @@ export default function TeacherDashboard() {
                   className="flex flex-col py-2 border-b border-gray-200"
                 >
                   <p className="text-gray-700 font-semibold text-lg">
-                    {assignment.title}
+                    {assignment?.title}
                   </p>
                   <p className="text-gray-900 font-bold text-sm">
                     {assignment.subjectId.name}
                   </p>
                   <p className="text-gray-500 text-xs">
-                    {assignment.chapterId.title}
+                    {assignment?.chapterId?.title}
                   </p>
                 </div>
               ))}
@@ -284,7 +284,7 @@ export default function TeacherDashboard() {
                   className="flex flex-col py-2 border-b border-gray-200"
                 >
                   <p className="text-gray-700 font-semibold text-lg">
-                    {curriculum.title}
+                    {curriculum?.title}
                   </p>
                   <p className="text-gray-900 font-bold text-sm">
                     {curriculum.subjectId.name}
