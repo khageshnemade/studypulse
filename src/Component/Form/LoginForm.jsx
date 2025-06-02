@@ -36,8 +36,9 @@ function LoginForm() {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault(); // ✅ Always stop the default form submission
+
     if (!captchaVerified) {
       toast.error("Please verify CAPTCHA");
       return;
@@ -45,81 +46,63 @@ function LoginForm() {
 
     setLoading(true);
 
-    try {
-      console.log("In Login Submit");
+    axios.post(`https://api.studypulse.live/web/api/login/`, formData, { withCredentials: true })
+      .then((response) => {
+        if (response.status === 200 || response.status === 201) {
+          const userRole = response?.data?.data?.role;
+          const userName = `${response?.data?.data?.firstName} ${response?.data?.data?.lastName}`;
+          const token = response?.data?.token;
+          const organizationID = response?.data?.data?.organizationID || "defaultOrgID";
+          const profileCompletion = response?.data?.data?.profileCompletion;
+          const organizationName = response?.data?.data?.organizationName;
+          const profilePic = response?.data?.data?.profilePic;
 
-      const response = await makeRequest.post(`login/`, formData, {
-        withCredentials: true, // Include cookies in the request
+          dispatch(setRole(userRole));
+
+          localStorage.setItem(
+            "user",
+            JSON.stringify({
+              user: formData.email,
+              role: userRole,
+              token,
+              userName,
+              organizationID,
+              profileCompletion,
+              organizationName,
+              profilePic,
+            })
+          );
+
+          toast.success(response?.data?.message);
+
+          setTimeout(() => {
+            if (userRole === "admin") {
+              dispatch(setOrgId(organizationID));
+              dispatch(setAdminDetails({ classId: "demoForFetchinfInactiveStudent" }));
+              navigate("/admin-dashboard");
+            } else if (userRole === "teacher") {
+              navigate("/teacher-dashboard");
+            } else if (userRole === "superAdmin") {
+              navigate("/superadmin-dashboard");
+            } else if (userRole === "student") {
+              navigate("/dashboard");
+            }
+          }, 500);
+        } else {
+          toast.error("Login failed. Please try again.");
+        }
+      })
+      .catch((error) => {
+        console.error("Login error:", error);
+
+        const message = error?.response?.data?.message || error?.message || "Something went wrong";
+        toast.error(`Error: ${message}`);
+      })
+      .finally(() => {
+        setLoading(false);
       });
-      console.log("Login successful:", response?.data);
-      if (response.status === 200 || response.status === 201) {
-        const userRole = response?.data?.data?.role; // 'Student' or 'Admin'
-        const userName = `${response?.data?.data?.firstName} ${response?.data?.data?.lastName}`;
-        const token = response?.data?.token;
-        const organizationID =
-          response?.data?.data?.organizationID || "defaultOrgID"; // Fallback value
-        const profileCompletion = response?.data.data.profileCompletion;
-        const organizationName = response?.data?.data?.organizationName;
-        const profilePic = response?.data?.data?.profilePic;
-        
-        console.log("Response Data:", response.data);
-        const orgId = response?.data?.data?.organizationID;
-
-        dispatch(setRole(userRole));
-
-        // Store user details in local storage
-        localStorage.setItem(
-          "user",
-          JSON.stringify({
-            user: formData.email,
-            role: userRole,
-            token,
-            userName,
-            organizationID,
-            profileCompletion,
-            organizationName, // Save organization name
-            profilePic, // Save profile picture URL
-          })
-        );
-
-        console.log("Stored User Data:", {
-          email: formData.email,
-          role: userRole,
-          token,
-          userName,
-          organizationID,
-          profileCompletion,
-          organizationName,
-          profilePic,
-        });
-
-        toast.success(response?.data?.message);
-
-        setTimeout(() => {
-          if (userRole === "admin") {
-            dispatch(setOrgId(orgId));
-            dispatch(
-              setAdminDetails({ classId: "demoForFetchinfInactiveStudent" })
-            );
-            navigate("/admin-dashboard");
-          } else if (userRole === "teacher") {
-            navigate("/teacher-dashboard");
-          } else if (userRole === "superAdmin") {
-            navigate("/superadmin-dashboard");
-          } else if (userRole === "student") {
-            navigate("/dashboard");
-          }
-        }, 500);
-      } else {
-        toast.error("Login failed. Please try again.");
-      }
-    } catch (error) {
-      console.error("Error:", error?.response?.data?.message);
-      toast.error(`Error: ${error?.response?.data?.message}`);
-    } finally {
-      setLoading(false);
-    }
   };
+
 
   const [showPassword, setShowPassword] = useState(false);
   const togglePasswordVisibility = () => {
@@ -163,8 +146,7 @@ function LoginForm() {
 
       <form
         className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md"
-        onSubmit={handleSubmit}
-      >
+        onSubmit={handleSubmit}>
         <div className="mb-4">
           <input
             type="text"

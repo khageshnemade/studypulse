@@ -289,7 +289,7 @@ export default function Subject() {
                 Picture
               </th>
               <th className="border border-gray-300 px-4 py-2 text-left text-gray-700">
-                Classes
+                Subjects
               </th>
               <th className="border border-gray-300 px-4 py-2 text-left text-gray-700">
                 Created At

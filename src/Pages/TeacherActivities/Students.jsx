@@ -105,26 +105,28 @@ export default function Students() {
                 key={student._id}
                 className="border-b hover:bg-blue-50 transition-colors duration-300"
               >
-                <td className="px-6 py-4 text-sm text-center">
-                  {student?.innerData.profilePic ? (
-                    <img
-                    src={
-                      student?.innerData.profilePic.startsWith('https://api.studypulse.live')
-                        ? student?.innerData.profilePic
-                        : `https://api.studypulse.live/${student?.innerData.profilePic}`
-                    }
-                      alt="Profile"
-                      className="w-12 h-12 rounded-full border-2 border-blue-500"
-                    />
-                  ) : (
-                    <div className="w-16 h-16 flex items-center justify-center mx-auto bg-blue-600 text-white text-2xl rounded-full">
-                      {student?.innerData?.firstName && student?.innerData?.lastName
-                        ? `${student?.innerData.firstName[0] || ""}${student?.innerData.lastName[0] || ""}`.toUpperCase()
-                        : "NN"}{" "}
-                      {/* Fallback initials */}
-                    </div>
-                  )}
+                <td className="px-6 py-4 text-sm">
+                  <div className="flex justify-center items-center">
+                    {student?.innerData.profilePic ? (
+                      <img
+                        src={
+                          student?.innerData.profilePic.startsWith('https://api.studypulse.live')
+                            ? student?.innerData.profilePic
+                            : `https://api.studypulse.live/${student?.innerData.profilePic}`
+                        }
+                        alt="Profile"
+                        className="w-12 h-12 rounded-full border-2 border-blue-500 object-cover"
+                      />
+                    ) : (
+                      <div className="w-12 h-12 flex items-center justify-center bg-blue-600 text-white text-lg rounded-full">
+                        {student?.innerData?.firstName && student?.innerData?.lastName
+                          ? `${student?.innerData.firstName[0]}${student?.innerData.lastName[0]}`.toUpperCase()
+                          : "NN"}
+                      </div>
+                    )}
+                  </div>
                 </td>
+
                 <td className="px-6 py-4 text-sm text-gray-900">
                   {student.innerData.firstName} {student.innerData.lastName}
                 </td>
@@ -164,21 +166,32 @@ export default function Students() {
                         </button>
                       </div>
                       <div className="mt-4">
-                        {selectedStudent.documents.map((doc, index) => (
-                          <div key={index} className="mb-2">
-                            <Link
-                              to={`https://api.studypulse.live/${doc}`}
-                              target="_blank"
-                              className="text-blue-600 hover:text-blue-800 hover:underline"
-                            >
-                              Document {index + 1}
-                            </Link>
-                          </div>
-                        ))}
+                        {selectedStudent.documents.map((doc, index) => {
+                          let label = "Incorrect Document";
+
+                          if (doc?.toLowerCase().includes("aadhaar") || doc?.toLowerCase().includes("adhar")) {
+                            label = "Aadhar Card";
+                          } else if (doc?.toLowerCase().includes("pan")) {
+                            label = "PAN Card";
+                          }
+
+                          return (
+                            <div key={index} className="mb-2">
+                              <Link
+                                to={`https://api.studypulse.live/${doc}`}
+                                target="_blank"
+                                className="text-blue-600 hover:text-blue-800 hover:underline"
+                              >
+                                {label}
+                              </Link>
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                   </div>
                 )}
+
               </tr>
             ))}
           </tbody>

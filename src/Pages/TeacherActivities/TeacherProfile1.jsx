@@ -120,7 +120,7 @@ const TeacherProfile = () => {
         }, 2000);
       }
     } catch (error) {
-      console.error("Error submitting form:", error.message);
+      toast.error(error.response.data.message);
     }
   };
   const handleRemoveFromClassAndSubjects = (classId, subjectIndex) => {
@@ -148,26 +148,46 @@ const TeacherProfile = () => {
   };
 
   const handleC_SSubmit = async () => {
-    console.log("Classes and Subjects", selectedClassId, selectedSubjectId); // Debugging output
+    console.log("Classes and Subjects", selectedClassId, selectedSubjectId);
 
-    // Update state
+    const selectedSubject = subjects.find(
+      (subj) => subj._id === selectedSubjectId
+    );
+
+    if (!selectedSubject) {
+      console.warn("Subject not found in subjects list");
+      return;
+    }
+
+    // Update state with full subject objects
     setS_c((prev) => {
-      const existingSubjects = prev[selectedClassId] || []; // Get the array if it exists, otherwise an empty array
+      const existingSubjects = prev[selectedClassId] || [];
+
+      // Avoid duplicates by ID
+      const isAlreadyAdded = existingSubjects.some(
+        (s) => s._id === selectedSubject._id
+      );
+      const newSubjects = isAlreadyAdded
+        ? existingSubjects
+        : [...existingSubjects, selectedSubject];
 
       const updatedState = {
         ...prev,
-        [selectedClassId]: [
-          ...new Set([...existingSubjects, selectedSubjectId]),
-        ], // Add new subjectId, ensuring uniqueness
+        [selectedClassId]: newSubjects,
       };
 
-      // After updating state, update classIds and subjectIds arrays
-      setClassIds(Object.keys(updatedState)); // Extract class IDs
-      setSubjectIds(Object.values(updatedState).flat()); // Extract subject IDs and flatten into one array
+      // Optional: maintain classIds and subjectIds separately if needed
+      setClassIds(Object.keys(updatedState));
+      setSubjectIds(
+        Object.values(updatedState)
+          .flat()
+          .map((s) => s._id)
+      );
 
       return updatedState;
     });
   };
+
   const handleFileUpload = async (file) => {
     if (!file) {
       toast.error("Please select an image to upload.");
@@ -484,86 +504,76 @@ const TeacherProfile = () => {
 
         {/* Classes and Subjects */}
         <div className="m-3">
-      {/* Select Class */}
-      <div className="m-2">
-        <select
-          value={selectedClassId}
-          onChange={(e) => {
-            const selectedClass = e.target.value;
-            setSelectedClassId(selectedClass);
-            fetchSubjectsByClassId(selectedClass); // Fetch subjects when class changes
-          }}
-          name="classes"
-          className="w-full px-3 py-2 border rounded-lg"
-        >
-          <option value="">Select Class</option>
-          {classes.map((classItem) => (
-            <option key={classItem._id} value={classItem._id}>
-              {classItem.name}
-            </option>
-          ))}
-        </select>
-      </div>
+          {/* Select Class */}
+          <div className="m-2">
+            <select
+              value={selectedClassId}
+              onChange={(e) => {
+                const selectedClass = e.target.value;
+                setSelectedClassId(selectedClass);
+                fetchSubjectsByClassId(selectedClass); // Fetch subjects when class changes
+              }}
+              name="classes"
+              className="w-full px-3 py-2 border rounded-lg"
+            >
+              <option value="">Select Class</option>
+              {classes.map((classItem) => (
+                <option key={classItem._id} value={classItem._id}>
+                  {classItem.name}
+                </option>
+              ))}
+            </select>
+          </div>
 
-      {/* Select Subject */}
-      <div className="m-2">
-        <select
-          value={selectedSubjectId}
-          onChange={(e) => setSelectedSubjectId(e.target.value)} // Update selected subject id
-          name="subjects"
-          className="w-full px-3 py-2 border rounded-lg"
-        >
-          <option value="">Select Subject</option>
-          {subjects.map((subjectItem) => (
-            <option key={subjectItem._id} value={subjectItem._id}>
-              {subjectItem.name}
-            </option>
-          ))}
-        </select>
-      </div>
+          {/* Select Subject */}
+          <div className="m-2">
+            <select
+              value={selectedSubjectId}
+              onChange={(e) => setSelectedSubjectId(e.target.value)} // Update selected subject id
+              name="subjects"
+              className="w-full px-3 py-2 border rounded-lg"
+            >
+              <option value="">Select Subject</option>
+              {subjects.map((subjectItem) => (
+                <option key={subjectItem._id} value={subjectItem._id}>
+                  {subjectItem.name}
+                </option>
+              ))}
+            </select>
+          </div>
 
-      {/* Add Button */}
-      <div>
-        <button
-          type="button" // Ensure it's not a submit button
-          onClick={handleC_SSubmit}
-          className="btn btn-info m-2"
-        >
-          Add
-        </button>
-      </div>
+          {/* Add Button */}
+          <div>
+            <button
+              type="button" // Ensure it's not a submit button
+              onClick={handleC_SSubmit}
+              className="btn btn-info m-2"
+            >
+              Add
+            </button>
+          </div>
 
-      {/* Display Classes and Subjects */}
-      <div>
-        <div className="grid grid-cols-2 gap-2">
-          {Object.entries(s_c).map(([classId, subjectIds]) => {
-            const className = classes.find((cls) => cls._id === classId)?.name;
-            return (
-              <div key={classId} className="card p-4 border rounded-lg shadow-lg">
-                <h3>{className}</h3>
-                {subjectIds.map((subjectId, index) => {
-                  const subjectName = subjects.find(
-                    (subject) => subject._id === subjectId
-                  )?.name;
-                  return (
-                    <div key={index} className="subject-item mb-2">
-                      {subjectName || "Subject not found"}
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveFromClassAndSubjects(classId, index)}
-                        className="btn btn-danger ml-2"
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  );
-                })}
-              </div>
-            );
-          })}
+          {/* Display Classes and Subjects */}
+          <div>
+            <div className="grid grid-cols-2 gap-2">
+              {Object.entries(s_c).map(([classId, subjects]) => {
+                const className = classes.find(cls => String(cls._id) === String(classId))?.name || "Unknown Class";
+
+                return (
+                  <div key={classId}>
+                    <h4>Class: {className}</h4>
+                    <ul>
+                      {subjects.map((subject) => (
+                        <li key={subject._id}>{subject.name}</li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })}
+
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
         <button
           type="submit"
           className="w-full mt-6 py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg"
@@ -571,7 +581,7 @@ const TeacherProfile = () => {
           Submit
         </button>
       </form>
-     
+
       <ToastContainer />
     </div>
   );

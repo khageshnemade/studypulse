@@ -63,13 +63,13 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
           firstName: userData.firstName,
           lastName: userData.lastName,
           phoneNumber: userData.phoneNumber,
-          address: studentData.address,
+          address: studentData?.address,
           dob: studentData.dob,
           status: userData.status,
           profilePic: studentData.profilePic || "",
         },
         studentData: {
-          address: studentData.address,
+          address: studentData?.address,
           dob: studentData.dob,
           grade: studentData.grade,
           gender: studentData.gender,
@@ -143,6 +143,8 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
       );
 
       if (response.data.success) {
+        console.log(response.data);
+
         setDocs([...docs, response?.data.url]);
         toast.success("Image uploaded successfully!");
       } else {
@@ -328,9 +330,16 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
                   {docs.map((doc, index) => (
                     <li
                       key={index}
-                      className="flex items-center justify-between px-4 py-2 bg-gray-100 rounded-lg "
+                      className="flex items-center justify-between px-4 py-2 bg-gray-100 rounded-lg"
                     >
-                      <span>{doc}</span>
+                      <span>
+                        {doc?.toLowerCase().includes("adhar")
+                          ? "Aadhar Card"
+                          : doc?.toLowerCase().includes("pan")
+                            ? "PAN Card"
+                            : "Incorrect Document"}
+                      </span>
+
                       <button
                         type="button"
                         onClick={() => handleRemoveDocument(doc)}
@@ -340,6 +349,7 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
                       </button>
                     </li>
                   ))}
+
                 </ul>
               </div>
 
@@ -399,22 +409,20 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
           <div className="mt-4 flex border-b">
             <button
               onClick={() => setActiveTab("about")}
-              className={`flex-1 py-2 text-center font-semibold ${
-                activeTab === "about"
-                  ? "text-blue-600 border-b-2 border-blue-600"
-                  : "text-gray-600 hover:text-blue-600"
-              }`}
+              className={`flex-1 py-2 text-center font-semibold ${activeTab === "about"
+                ? "text-blue-600 border-b-2 border-blue-600"
+                : "text-gray-600 hover:text-blue-600"
+                }`}
             >
               About
             </button>
 
             <button
               onClick={() => setActiveTab("studentData")}
-              className={`flex-1 py-2 text-center font-semibold ${
-                activeTab === "studentData"
-                  ? "text-blue-600 border-b-2 border-blue-600"
-                  : "text-gray-600 hover:text-blue-600"
-              }`}
+              className={`flex-1 py-2 text-center font-semibold ${activeTab === "studentData"
+                ? "text-blue-600 border-b-2 border-blue-600"
+                : "text-gray-600 hover:text-blue-600"
+                }`}
             >
               Other Details
             </button>
@@ -437,7 +445,7 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
                           label: "Phone Number:",
                           value: userData.phoneNumber,
                         },
-                        { label: "Address:", value: studentData.address },
+                        { label: "Address:", value: studentData?.address },
                         { label: "Role:", value: userData.role },
                         { label: "Email Address:", value: userData.email },
                         { label: "City:", value: userData?.cityData?.name },
@@ -484,21 +492,29 @@ export const UpdateStudent = ({ id, setShowUpdateStudent }) => {
                           },
                           {
                             label: "Documents:",
-                            value:
-                              studentData.documents.length > 0
-                                ? studentData.documents.map((doc, index) => (
-                                    <div key={index} className="mb-2">
-                                      <Link
-                                        to={`https://api.studypulse.live/${doc}`}
-                                        target="_blank"
-                                        className="text-blue-600 hover:text-blue-800 hover:underline"
-                                      >
-                                        Document {index + 1}
-                                      </Link>
-                                    </div>
-                                  ))
-                                : "No documents available",
+                            value: studentData.documents.length > 0
+                              ? studentData.documents.map((doc, index) => {
+                                const docLabel = doc?.toLowerCase().includes("adhar")
+                                  ? "Aadhar Card"
+                                  : doc?.toLowerCase().includes("pan")
+                                    ? "PAN Card"
+                                    : "Incorrect Document";
+
+                                return (
+                                  <div key={index} className="mb-2">
+                                    <Link
+                                      to={`https://api.studypulse.live/${doc}`}
+                                      target="_blank"
+                                      className="text-blue-600 hover:text-blue-800 hover:underline"
+                                    >
+                                      {docLabel}
+                                    </Link>
+                                  </div>
+                                );
+                              })
+                              : "No documents available"
                           },
+
                         ].map((item, index) => (
                           <li
                             key={index}

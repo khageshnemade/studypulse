@@ -24,6 +24,7 @@ const AdminModal = ({ onClose }) => {
     if (userData) {
       setUser(userData);
     }
+    
   }, []);
 
   if (!user) {
@@ -57,7 +58,8 @@ const AdminModal = ({ onClose }) => {
             <div className="flex flex-col space-y-4">
               <div>
                 <span className="font-semibold text-gray-700">Email:</span>
-                <p className="text-gray-600">{user.email}</p>
+                <p className="text-gray-600">{user?.user
+                }</p>
               </div>
 
               <div>
