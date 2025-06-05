@@ -60,6 +60,7 @@ import TeacherSubjectLimits from "./Pages/TeacherActivities/TeacherSubjectLimits
 import PieClick from "./Pages/AdminActivities/PieClick";
 import Invoice from "./Invoice";
 import RefreshToken from "./Admin-Dashboard/RefreshToken";
+import AdminTeacherSalaryTable from "./Pages/AdminActivities/AdminTeacherSalaryTable";
 
 const user = localStorage.getItem("user"); // Check if the user is logged in
 
@@ -159,6 +160,7 @@ const router = createBrowserRouter(
         { path: "students", element: <StudentData /> },
         { path: "student", element: <StudentsRegistered /> },
         { path: "teachers", element: <TeacherData /> },
+        { path: "teachers/salaryData", element: <AdminTeacherSalaryTable /> },
         { path: "classes/addclass", element: <AddClass /> },
         { path: "classes", element: <Classes /> },
         { path: "classes/addSubject", element: <AddSubject /> },

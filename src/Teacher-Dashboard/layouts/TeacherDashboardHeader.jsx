@@ -101,7 +101,7 @@ export const TeacherDashboardHeader = ({ collapsed, setCollapsed }) => {
   const pathnames = location.pathname.split("/").filter((x) => x);
 
   return (
-    <header className="relative z-10 flex h-[70px] items-center justify-between px-6 shadow-xl transition-colors bg-gradient-to-r from-teal-500 via-teal-600 to-blue-600">
+    <header className="relative z-10 flex h-[70px] items-center justify-between px-6 bg-blue-600">
       {/* Menu Button */}
       <div className="flex items-center gap-x-3 mr-2">
         <button
@@ -161,7 +161,7 @@ export const TeacherDashboardHeader = ({ collapsed, setCollapsed }) => {
                 className="w-full h-full object-cover rounded-full transition-opacity duration-300"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center bg-blue-600 text-white text-lg font-bold">
+              <div className="w-full h-full flex items-center justify-center bg-indigo-300 text-white text-lg font-bold">
                 {userName
                   .split(" ")
                   .map((name) => name[0])

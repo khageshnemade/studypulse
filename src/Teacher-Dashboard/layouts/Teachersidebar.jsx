@@ -48,64 +48,39 @@ export const TeacherSidebar = forwardRef(({ collapsed, setCollapsed }, ref) => {
         <aside
           ref={ref}
           className={cn(
-            "fixed z-[100] flex h-full w-[240px] flex-col overflow-x-hidden bg-gradient-to-b to-blue-700 from-teal-600 [transition:_width_300ms_cubic-bezier(0.4,_0,_0.2,_1),_left_300ms_cubic-bezier(0.4,_0,_0.2,_1),_background-color_150ms_cubic-bezier(0.4,_0,_0.2,_1),_border_150ms_cubic-bezier(0.4,_0,_0.2,_1)] dark:border-slate-700 dark:bg-slate-900",
+            "fixed z-[100] flex h-full w-[240px] flex-col overflow-x-hidden bg-blue-600",
             collapsed ? "md:w-[70px] md:items-center" : "md:w-[240px]",
             collapsed ? "max-md:-left-full" : "max-md:left-0"
           )}
         >
-          {/* <div className="flex gap-x-3 p-3 items-center justify-center">
-            <img
-              src={logoLight}
-              alt="Study Pulse"
-              className="dark:hidden"
-              height="120px"
-              width="120px"
-            />
-            <img
-              src={logoDark}
-              alt="Study Pulse"
-              className="hidden dark:block"
-              height="40px"
-              width="40px"
-            />
-            
-            {!collapsed && (
-              <p className="font-bold text-2xl text-gray-600 transition-colors dark:text-slate-50">
-                 Pulse
-              </p>
-            )}
-          </div> */}
-          {/* Left section for the button */}
+          
 
-          <div className="flex flex-col items-center justify-center p-3">
-            <div className="flex items-center justify-center gap-x-3">
-            <img
-            src={logoLight}
-            alt="Study Pulse"
-            className="dark:hidden"
-            height="120px"
-            width="120px"
-          />
-          <img
-            src={logoDark}
-            alt="Study Pulse"
-            className="hidden dark:block"
-            height="40px"
-            width="40px"
-          />
-        </div>
-
-            {/* Pulse text */}
-            {!collapsed && (
-             <p
-             className="font-bold text-2xl text-white text-transparent bg-clip-text transition-colors dark:text-slate-50 absolute top-[120px]"
-             style={{ fontFamily: 'Poppins, sans-serif' }}
-           >
-             Study Pulse
-           </p>
-            )}
-          </div>
-          <hr className="border-t-2 border-gray-700 my-2" />
+        <div className="flex justify-center py-2">
+             <div className="flex items-center gap-2">
+               {/* Logo (light/dark modes) */}
+               <img
+                 src={logoLight}
+                 alt="Study Pulse"
+                 className="dark:hidden"
+                 height="40"
+                 width="40"
+               />
+               <img
+                 src={logoDark}
+                 alt="Study Pulse"
+                 className="hidden dark:block"
+                 height="40"
+                 width="40"
+               />
+     
+               {/* Study Pulse text */}
+               {!collapsed && (
+                 <p className="font-semibold text-2xl text-white font-serif">
+                   Study Pulse
+                 </p>
+               )}
+             </div>
+           </div>
 
           <div className="flex w-full flex-col gap-y-4 overflow-y-auto overflow-x-hidden p-3 [scrollbar-width:_thin]">
             {navbarLinks.map((navbarLink) => (

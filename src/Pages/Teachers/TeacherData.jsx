@@ -6,6 +6,7 @@ import { setTeacher } from "../../redux/features/teacherSlice";
 import { makeRequest } from "../../axios";
 import { UpdateTeacher } from "../AdminActivities/UpdateTeacher";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 export const Table = () => {
   const [loading, setLoading] = useState(false);
@@ -13,7 +14,7 @@ export const Table = () => {
   const dispatch = useDispatch();
   const [showUpdateTeacher, setShowUpdateTeacher] = useState(false);
   const [teachers, setTeachers] = useState([]);
-
+const navigate=useNavigate()
   useEffect(() => {
     fetchTeachers();
   }, [showUpdateTeacher]);
@@ -64,6 +65,7 @@ export const Table = () => {
             <th className="px-4 py-2">Email</th>
             <th className="px-4 py-2">Phone Number</th>
             <th className="px-4 py-2">Address</th>
+            <th className="px-4 py-2">SalaryView</th>
             <th className="px-4 py-2">Experience</th>
             <th className="px-4 py-2">More</th>
             <th className="px-4 py-2">Status</th>
@@ -75,11 +77,11 @@ export const Table = () => {
               <td className="px-4 py-2">
                 {row?.profilePic ? (
                   <img
-                  src={
-                    row.profilePic.startsWith('https://api.studypulse.live')
-                      ? row.profilePic
-                      : `https://api.studypulse.live/${row.profilePic}`
-                  }
+                    src={
+                      row.profilePic.startsWith('https://api.studypulse.live')
+                        ? row.profilePic
+                        : `https://api.studypulse.live/${row.profilePic}`
+                    }
                     alt="Profile"
                     className="w-16 h-16 object-cover"
                   />
@@ -93,6 +95,14 @@ export const Table = () => {
               <td className="px-4 py-2">{row.email}</td>
               <td className="px-4 py-2">{row.phoneNumber}</td>
               <td className="px-4 py-2">{`${row?.cityData?.name}, ${row?.cityData?.name}`}</td>
+              <td className="px-4 py-2">  <button
+                className="p-2 bg-blue-500 text-white rounded-lg"
+                onClick={() => {
+                  navigate('/admin-dashboard/teachers/salaryData')
+                }}
+              >
+                <ChevronDown className="w-5 h-5" />
+              </button></td>
               <td className="px-4 py-2">
                 {row?.teacherData?.totalYearsOfExperience}
               </td>
@@ -109,9 +119,8 @@ export const Table = () => {
               </td>
               <td className="p-3">
                 <button
-                  className={`text-white p-1 rounded-md ${
-                    row.status === "active" ? "bg-green-500" : "bg-red-500"
-                  }`}
+                  className={`text-white p-1 rounded-md ${row.status === "active" ? "bg-green-500" : "bg-red-500"
+                    }`}
                   onClick={() => handleClick(row)}
                 >
                   {row.status}

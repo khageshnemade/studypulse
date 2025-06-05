@@ -35,32 +35,34 @@ export const AdminSidebar = forwardRef(({ collapsed }, ref) => {
         collapsed ? "max-md:-left-full" : "max-md:left-0"
       )}
     >
-      <div className="flex flex-col items-center justify-center p-3">
-        <div className="flex items-center justify-center gap-x-3">
+      <div className="flex justify-center py-2">
+        <div className="flex items-center gap-2">
+          {/* Logo (light/dark modes) */}
           <img
             src={logoLight}
             alt="Study Pulse"
             className="dark:hidden"
-            height="120px"
-            width="120px"
+            height="40"
+            width="40"
           />
           <img
             src={logoDark}
             alt="Study Pulse"
             className="hidden dark:block"
-            height="40px"
-            width="40px"
+            height="40"
+            width="40"
           />
-        </div>
 
-        {/* Pulse text */}
-        {!collapsed && (
-          <p className="font-bold text-2xl text-white text-transparent bg-clip-text transition-colors dark:text-slate-50 absolute top-[120px] font-serif">
-            Study Pulse
-          </p>
-        )}
+          {/* Study Pulse text */}
+          {!collapsed && (
+            <p className="font-semibold text-2xl text-white font-serif">
+              Study Pulse
+            </p>
+          )}
+        </div>
       </div>
-      <hr className="border-t-2 border-gray-700 my-2" />
+
+
 
       <div className="flex w-full flex-col gap-y-4 overflow-y-auto overflow-x-hidden p-3 [scrollbar-width:_thin]">
         {navbarLinks.map((navbarLink) => (
@@ -90,7 +92,7 @@ export const AdminSidebar = forwardRef(({ collapsed }, ref) => {
                 )}
               >
                 <link.icon
-                  size={22}
+                  size={18}
                   className="flex-shrink-0"
                   style={{ color: link.color }}
                 />
