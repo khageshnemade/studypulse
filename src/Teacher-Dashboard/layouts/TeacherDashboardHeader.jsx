@@ -196,49 +196,46 @@ export const TeacherDashboardHeader = ({ collapsed, setCollapsed }) => {
             <span className="absolute top-0 right-0 block w-2.5 h-2.5 rounded-full bg-red-500 ring-2 ring-white"></span>
           )}
         </button>
+        {isNotificationOpen && (
+  <div
+    ref={notificationRef}
+    className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg border border-gray-200 z-50"
+  >
+    {/* Header */}
+    <div className="flex justify-between items-center px-4 py-3 border-b border-gray-200">
+      <h3 className="text-gray-800 font-semibold text-lg">Notifications</h3>
+      <button
+        onClick={closeModal}
+        className="text-gray-500 hover:text-gray-800 transition"
+      >
+        <X size={18} />
+      </button>
+    </div>
 
-        {isNotificationOpen && notifications.length > 0 && (
-          <div
-            ref={notificationRef}
-            className="absolute top-12 right-0 bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100 shadow-xl rounded-xl p-4 max-w-xs w-[300px] transition-all duration-300 ease-in-out"
-          >
-            <h3 className="font-bold text-gray-800 text-lg mb-3">
-              Announcements
-            </h3>
-            <ul className="space-y-4">
-              {notifications.map((notification) => {
-                const formattedDate = new Date(
-                  notification.endDate
-                ).toLocaleDateString();
-                return (
-                  <li
-                    key={notification._id}
-                    className="flex items-center space-x-3 p-2 rounded-lg bg-white shadow-md hover:bg-gray-50 transition duration-200"
-                  >
-                    <div className="flex-1">
-                      <p className="text-gray-800 font-medium">
-                        {notification.title}
-                      </p>
-                      <p className="text-sm text-gray-600">
-                        {notification.text}
-                      </p>
-                      <span className="text-xs text-gray-500">
-                        {formattedDate}
-                      </span>
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-            {/* Close Button for Notifications */}
-            <button
-              onClick={closeModal}
-              className="absolute top-2 right-2 text-gray-600 hover:text-gray-900 transition-transform transform hover:scale-125"
+    {/* Scrollable notification list */}
+    <div className="max-h-72 overflow-y-auto custom-scroll px-4 py-2">
+      {notifications.length > 0 ? (
+        notifications.map((notification) => {
+          const formattedDate = new Date(notification.endDate).toLocaleDateString();
+          return (
+            <div
+              key={notification._id}
+              className="mb-3 p-3 bg-gray-50 rounded-md hover:bg-gray-100 transition"
             >
-              <X size={18} />
-            </button>
-          </div>
-        )}
+              <p className="text-sm font-semibold text-gray-800">{notification.title}</p>
+              <p className="text-sm text-gray-600">{notification.text}</p>
+              <span className="text-xs text-gray-500">{formattedDate}</span>
+            </div>
+          );
+        })
+      ) : (
+        <p className="text-sm text-gray-500 text-center py-4">No notifications</p>
+      )}
+    </div>
+  </div>
+)}
+
+
       </div>
     </header>
   );

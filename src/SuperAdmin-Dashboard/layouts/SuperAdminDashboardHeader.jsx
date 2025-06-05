@@ -47,7 +47,7 @@ export const SuperAdminDashboardHeader = ({ collapsed, setCollapsed }) => {
   }, []);
   return (
     <>
-      <header className="relative z-10 flex h-[60px] items-center justify-between bg-gradient-to-r from-teal-400 via-teal-500 to-blue-500 px-4 shadow-md transition-colors">
+      <header className="relative z-10 flex h-[60px] items-center justify-between bg-blue-500">
         <div className="flex self-end gap-x-3  relative bottom-2 ">
           <button
             className="btn-ghost size-10 text-gray-100"
@@ -97,23 +97,23 @@ export const SuperAdminDashboardHeader = ({ collapsed, setCollapsed }) => {
             onClick={toggleModal}
             className="w-12 h-12 rounded-full overflow-hidden cursor-pointer bg-teal-600 flex items-center justify-center"
           >
-          {
-  profile.profilePic && profile.profilePic.startsWith('http') ? (
-    <img
-      src={profile.profilePic}
-      alt="Profile"
-      className="w-full h-full object-cover rounded-full transition-opacity duration-300"
-    />
-  ) : (
-    <div className="w-full h-full flex items-center justify-center bg-blue-600 text-white text-lg font-bold">
-      {userName
-        .split(" ")
-        .map((name) => name[0])
-        .join("")
-        .toUpperCase()}
-    </div>
-  )
-}
+            {
+              profile.profilePic && profile.profilePic.startsWith('http') ? (
+                <img
+                  src={profile.profilePic}
+                  alt="Profile"
+                  className="w-full h-full object-cover rounded-full transition-opacity duration-300"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-blue-600 text-white text-lg font-bold">
+                  {userName
+                    .split(" ")
+                    .map((name) => name[0])
+                    .join("")
+                    .toUpperCase()}
+                </div>
+              )
+            }
 
           </button>
 
@@ -125,7 +125,7 @@ export const SuperAdminDashboardHeader = ({ collapsed, setCollapsed }) => {
             </div>
           </div>
         </div>
-        
+
       </header>
       {isModalOpen && <AdminModal onClose={toggleModal} />}
     </>
