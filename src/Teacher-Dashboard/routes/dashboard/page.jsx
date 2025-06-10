@@ -7,7 +7,8 @@ import TeacherProfile from "../../../Pages/TeacherActivities/TeacherProfile1";
 import { makeRequest } from "../../../axios";
 import TeacherSubjectLimits from "../../../Pages/TeacherActivities/TeacherSubjectLimits";
 import { useNavigate } from "react-router-dom";
-
+import { useDispatch, useSelector } from 'react-redux';
+import { setCurrentTeacher } from "../../../redux/features/teacherx";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -17,11 +18,23 @@ export default function TeacherDashboard() {
   const user = localStorage.getItem("user");
   const profileCompletion = JSON.parse(user)?.profileCompletion;
   const [dashboard, setData] = useState({});
-
+  const dispatch = useDispatch();
+  const teacherData = useSelector((state) => state.currentTeacher.currentTeacher);
   useEffect(() => {
     fetchDashboardData();
+    fetchteacherFullData();
   }, []);
-
+const fetchteacherFullData=async()=>{
+  try {
+    const res = await makeRequest.get("/teacher/get-data");
+   console.log(res?.data?.data);
+   dispatch(setCurrentTeacher(res?.data?.data));
+  } catch (error) {
+    console.error("Error fetching dashboard data:", error);
+  } finally {
+    setLoading(false);
+  }
+}
   const fetchDashboardData = async () => {
     setLoading(true);
     try {

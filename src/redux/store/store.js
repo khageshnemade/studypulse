@@ -22,6 +22,7 @@ import classReducer from "../features/classSlice";
 import idsReducer from "../features/idsSlice";
 import adminReducer from "../features/adminSlice";
 import superAdminReducer from "../features/superAdminSlice";
+import teacherReducer from "../features/teacherx";
 
 const rootReducer = combineReducers({
   profile: profileReducer,
@@ -37,7 +38,8 @@ const rootReducer = combineReducers({
   ids: idsReducer,
   admin: adminReducer,
   superAdmin: superAdminReducer,
-  devTools: process.env.NODE_ENV !== "production",
+  currentTeacher: teacherReducer,
+    devTools: process.env.NODE_ENV !== "production",
 });
 
 const persistConfig = {
