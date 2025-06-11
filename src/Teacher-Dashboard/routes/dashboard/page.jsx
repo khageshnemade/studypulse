@@ -13,7 +13,7 @@ import { setCurrentTeacher } from "../../../redux/features/teacherx";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function TeacherDashboard() {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const user = localStorage.getItem("user");
   const profileCompletion = JSON.parse(user)?.profileCompletion;
@@ -24,17 +24,17 @@ export default function TeacherDashboard() {
     fetchDashboardData();
     fetchteacherFullData();
   }, []);
-const fetchteacherFullData=async()=>{
-  try {
-    const res = await makeRequest.get("/teacher/get-data");
-   console.log(res?.data?.data);
-   dispatch(setCurrentTeacher(res?.data?.data));
-  } catch (error) {
-    console.error("Error fetching dashboard data:", error);
-  } finally {
-    setLoading(false);
+  const fetchteacherFullData = async () => {
+    try {
+      const res = await makeRequest.get("/teacher/get-data");
+      console.log(res?.data?.data);
+      dispatch(setCurrentTeacher(res?.data?.data));
+    } catch (error) {
+      console.error("Error fetching dashboard data:", error);
+    } finally {
+      setLoading(false);
+    }
   }
-}
   const fetchDashboardData = async () => {
     setLoading(true);
     try {
@@ -104,6 +104,7 @@ const fetchteacherFullData=async()=>{
         <h2 className="text-xl font-semibold mb-4 bg-gradient-to-r from-red-500 to-red-300 text-white p-2 rounded-md font-serif text-center">
           Chapters Distribution
         </h2>
+
         <select
           className="border px-3 py-2 mb-4 rounded w-full max-w-3xl mx-auto"
           value={selectedClass}
@@ -116,8 +117,15 @@ const fetchteacherFullData=async()=>{
           ))}
         </select>
 
-        <Doughnut data={pieData} options={options} />
+        {pieData?.datasets?.[0]?.data?.length > 0 ? (
+          <Doughnut data={pieData} options={options} />
+        ) : (
+          <p className="text-center text-gray-500 mt-4 text-base font-medium">
+            No chapters available.
+          </p>
+        )}
       </div>
+
     );
   };
 
@@ -185,7 +193,7 @@ const fetchteacherFullData=async()=>{
             </div>
 
             {/* Available Assignments */}
-            <div className="bg-gradient-to-r from-yellow-200 to-yellow-300 rounded-2xl p-4 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer shadow-lg"          onClick={() => navigate("chapters/assignments")}>
+            <div className="bg-gradient-to-r from-yellow-200 to-yellow-300 rounded-2xl p-4 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer shadow-lg" onClick={() => navigate("chapters/assignments")}>
               {/* Title Row */}
               <div className="text-center mb-2">
                 <h3 className="font-bold text-gray-800 text-xl font-serif">
@@ -210,7 +218,7 @@ const fetchteacherFullData=async()=>{
             </div>
 
             {/* Available Classes */}
-            <div className="bg-gradient-to-r from-red-200 to-red-300 rounded-2xl p-4 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer shadow-lg" onClick={()=>navigate('cls')}>
+            <div className="bg-gradient-to-r from-red-200 to-red-300 rounded-2xl p-4 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer shadow-lg" onClick={() => navigate('cls')}>
               {/* Title Row */}
               <div className="text-center mb-2">
                 <h3 className="font-bold text-gray-800 text-xl font-serif">
@@ -235,7 +243,7 @@ const fetchteacherFullData=async()=>{
             </div>
 
             {/* Available Curriculums */}
-            <div className="bg-gradient-to-r from-pink-200 to-pink-300 rounded-2xl p-4 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer shadow-lg" onClick={()=>navigate('chapterCurrs')}>
+            <div className="bg-gradient-to-r from-pink-200 to-pink-300 rounded-2xl p-4 flex flex-col justify-between transition-transform transform duration-500 hover:scale-105 cursor-pointer shadow-lg" onClick={() => navigate('chapterCurrs')}>
               {/* Title Row */}
               <div className="text-center mb-2">
                 <h3 className="font-bold text-gray-800 text-xl font-serif">
@@ -264,7 +272,9 @@ const fetchteacherFullData=async()=>{
             <div className=" rounded-lg p-6 shadow-sm">
               <HollowPieChart classes={classes} />
             </div>
-            <TeacherSubjectLimits />
+            <div className="rounded-lg p-6 shadow-sm max-h-[500px] overflow-y-auto">
+              <TeacherSubjectLimits />
+            </div>
             <div className="rounded-lg p-6 shadow-sm">
               <p className="text-xl font-semibold mb-4 bg-gradient-to-r from-purple-500 to-purple-300 text-white p-2 rounded-md shadow-md font-serif">
                 Recently Added Assignments

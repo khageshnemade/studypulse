@@ -75,7 +75,7 @@ const AddChapter = () => {
         }, 2000); // Wait 2 seconds before redirecting
       }
     } catch (err) {
-      console.error("Error creating chapter:", err.message);
+      toast.error(err.response.data.message)
       setError("Failed to create chapter");
     } finally {
       setIsLoading(false);
@@ -188,11 +188,10 @@ const AddChapter = () => {
 
             <button
               type="submit"
-              className={`w-full py-3 px-6 rounded-md bg-blue-300 text-gray-600 font-semibold flex items-center justify-center ${
-                isLoading
-                  ? "bg-blue-300 cursor-not-allowed"
-                  : "hover:bg-blue-700 focus:ring-2 hover:text-white focus:ring-blue-400 transition-all duration-300"
-              }`}
+              className={`w-full py-3 px-6 rounded-md bg-blue-300 text-gray-600 font-semibold flex items-center justify-center ${isLoading
+                ? "bg-blue-300 cursor-not-allowed"
+                : "hover:bg-blue-700 focus:ring-2 hover:text-white focus:ring-blue-400 transition-all duration-300"
+                }`}
               disabled={isLoading}
             >
               {isLoading ? (

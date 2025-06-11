@@ -15,6 +15,7 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
   const [teacherData, setTeacherData] = useState({ classId: [] });
   const [file, setFile] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
+  console.log(teachersData);
 
   // Fetch teacher data and populate the form when the component mounts or ID changes
   useEffect(() => {
@@ -27,6 +28,23 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
       console.log("Teacher Dta", teacherData);
     }
   }, [teachersData, id]);
+  useEffect(() => {
+    if (teacherData.subjectLimits) {
+      const dailyVideoLimits = {};
+      const perVideoPrice = {};
+
+      Object.entries(teacherData.subjectLimits).forEach(([subjectId, limits]) => {
+        dailyVideoLimits[subjectId] = limits.minDailyVideoLimit;
+        perVideoPrice[subjectId] = limits.perVideoPrice;
+      });
+
+      setTeacherData(prev => ({
+        ...prev,
+        dailyVideoLimits,
+        perVideoPrice,
+      }));
+    }
+  }, [teacherData.subjectLimits]);
 
   const handleFileUpload = async (file) => {
     console.log("File Upload", file);
@@ -103,6 +121,9 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
           gender: teacherData?.gender,
           status: teacherData?.status,
           address: teacherData?.address,
+          dailyVideoLimits: teacherData.dailyVideoLimits,
+          perVideoPrice: teacherData.perVideoPrice
+
         },
       });
 
@@ -138,11 +159,11 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
       <div className="text-center">
         {userData.profilePic ? (
           <img
-          src={
-            userData.profilePic.startsWith('https://api.studypulse.live')
-              ? userData.profilePic
-              : `https://api.studypulse.live/${userData.profilePic}`
-          }
+            src={
+              userData.profilePic.startsWith('https://api.studypulse.live')
+                ? userData.profilePic
+                : `https://api.studypulse.live/${userData.profilePic}`
+            }
             alt="NO Image Present"
             className="w-28 h-28 mx-auto rounded-full border-4 border-gray-300 shadow-md"
           />
@@ -263,11 +284,11 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
                 {userData.profilePic && ( // Use userData.profilePic here
                   <div className="mt-4 w-full ">
                     <img
-                     src={
-                      userData.profilePic.startsWith('https://api.studypulse.live')
-                        ? userData.profilePic
-                        : `https://api.studypulse.live/${userData.profilePic}`
-                    }
+                      src={
+                        userData.profilePic.startsWith('https://api.studypulse.live')
+                          ? userData.profilePic
+                          : `https://api.studypulse.live/${userData.profilePic}`
+                      }
                       alt="Profile"
                       className="w-24 h-24 rounded-full mx-auto"
                     />
@@ -337,6 +358,69 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
                   <option value="accepted">accepted</option>
                 </select>
               </div>
+              {teacherData.subjectData?.map((subject) => (
+                <div
+                  key={subject._id}
+                  className="mb-4 border border-gray-200 p-4 rounded-lg bg-gray-50"
+                >
+                  <h3 className="font-semibold text-gray-800 mb-2">{subject.name}</h3>
+
+                  <div className="flex flex-col sm:flex-row sm:space-x-4">
+                    {/* Daily Video Limit Input */}
+                    <div className="flex-1">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Daily Video Limit
+                      </label>
+                      <input
+                        type="number"
+                        className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        value={
+                          teacherData.dailyVideoLimits?.[subject._id] ?? ""
+                        }
+                        onChange={(e) => {
+                          const val =
+                            e.target.value === "" ? "" : Number(e.target.value);
+                          setTeacherData((prev) => ({
+                            ...prev,
+                            dailyVideoLimits: {
+                              ...prev.dailyVideoLimits,
+                              [subject._id]: val,
+                            },
+                          }));
+                        }}
+                        min={0}
+                      />
+                    </div>
+
+                    {/* Per Video Price Input */}
+                    <div className="flex-1">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Per Video Price
+                      </label>
+                      <input
+                        type="number"
+                        className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        value={
+                          teacherData.perVideoPrice?.[subject._id] ?? ""
+                        }
+                        onChange={(e) => {
+                          const val =
+                            e.target.value === "" ? "" : Number(e.target.value);
+                          setTeacherData((prev) => ({
+                            ...prev,
+                            perVideoPrice: {
+                              ...prev.perVideoPrice,
+                              [subject._id]: val,
+                            },
+                          }));
+                        }}
+                        min={0}
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+
 
               {/* Buttons */}
               <div className="mt-6 flex justify-end space-x-3">
@@ -364,32 +448,29 @@ export const UpdateTeacher = ({ id, setShowUpdateTeacher }) => {
         <div className="flex border-b border-gray-300">
           <button
             onClick={() => setActiveTab("about")}
-            className={`flex-1 py-2 text-center font-semibold ${
-              activeTab === "about"
-                ? "text-blue-600 border-b-2 border-blue-600"
-                : "text-gray-600 hover:text-blue-600"
-            }`}
+            className={`flex-1 py-2 text-center font-semibold ${activeTab === "about"
+              ? "text-blue-600 border-b-2 border-blue-600"
+              : "text-gray-600 hover:text-blue-600"
+              }`}
           >
             About
           </button>
 
           <button
             onClick={() => setActiveTab("qualificationData")}
-            className={`flex-1 py-2 text-center font-semibold ${
-              activeTab === "qualificationData"
-                ? "text-blue-600 border-b-2 border-blue-600"
-                : "text-gray-600 hover:text-blue-600"
-            }`}
+            className={`flex-1 py-2 text-center font-semibold ${activeTab === "qualificationData"
+              ? "text-blue-600 border-b-2 border-blue-600"
+              : "text-gray-600 hover:text-blue-600"
+              }`}
           >
             Education
           </button>
           <button
             onClick={() => setActiveTab("experienceData")}
-            className={`flex-1 py-2 text-center font-semibold ${
-              activeTab === "experienceData"
-                ? "text-blue-600 border-b-2 border-blue-600"
-                : "text-gray-600 hover:text-blue-600"
-            }`}
+            className={`flex-1 py-2 text-center font-semibold ${activeTab === "experienceData"
+              ? "text-blue-600 border-b-2 border-blue-600"
+              : "text-gray-600 hover:text-blue-600"
+              }`}
           >
             Experience
           </button>
