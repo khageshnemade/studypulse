@@ -61,6 +61,7 @@ import PieClick from "./Pages/AdminActivities/PieClick";
 import Invoice from "./Invoice";
 import RefreshToken from "./Admin-Dashboard/RefreshToken";
 import AdminTeacherSalaryTable from "./Pages/AdminActivities/AdminTeacherSalaryTable";
+import PaymentHistory from "./Pages/AdminActivities/PaymentHistory";
 
 const user = localStorage.getItem("user"); // Check if the user is logged in
 
@@ -119,14 +120,6 @@ const router = createBrowserRouter(
       ],
     },
 
-    // Protected routes (only accessible if the user is logged in)
-
-    {
-      path: "/admin-dashboard", // Only accessible if the user is logged in
-      element: <AdminLayout />,
-      children: [{ index: true, element: <AdminDashboard /> }],
-    },
-
     { path: "/add", element: <Showemail /> },
     {
       path: "/superadmin-dashboard",
@@ -165,6 +158,8 @@ const router = createBrowserRouter(
         { path: "classes", element: <Classes /> },
         { path: "classes/addSubject", element: <AddSubject /> },
         { path: "classes/subjects", element: <Subject /> },
+        { path: "paymentlist", element: <PaymentHistory /> },
+        { path: "paymentlist/create", element: <PaymentHistory /> },
       ],
     },
     {
