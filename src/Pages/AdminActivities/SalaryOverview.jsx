@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { FaFileInvoiceDollar } from "react-icons/fa";
-import { MdDateRange } from "react-icons/md";
 import { IoIosPerson } from "react-icons/io";
 import { IoArrowBack } from "react-icons/io5";
-import { useNavigate } from "react-router-dom"; // or useHistory if using older React Router
+import { MdPhone, MdEmail } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 import makeRequest from "../../axios";
 
 const SalaryOverview = () => {
@@ -12,14 +12,14 @@ const SalaryOverview = () => {
   const [error, setError] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("2025-05");
 
-  const navigate = useNavigate(); // to go back
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPaymentData = async () => {
       setLoading(true);
       try {
         const response = await makeRequest.get(
-          `/admin/get-salary-overview-for-teachers?month={selectedMonth}`
+          `/admin/get-salary-overview-for-teachers?month=${selectedMonth}`
         );
         if (response.data.success) {
           setPaymentData(response.data.data);
@@ -38,7 +38,7 @@ const SalaryOverview = () => {
 
   return (
     <div className="max-w-5xl mx-auto p-4">
-      {/* Header Row */}
+      {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <button
           onClick={() => navigate(-1)}
@@ -49,7 +49,7 @@ const SalaryOverview = () => {
         </button>
 
         <h1 className="text-2xl font-semibold text-gray-800 flex-1 text-center">
-          Payment History
+          Salary Overview
         </h1>
 
         <input
@@ -64,46 +64,41 @@ const SalaryOverview = () => {
       {loading && <p className="text-center">Loading...</p>}
       {error && <p className="text-center text-red-500">{error}</p>}
 
-      {/* Payment Cards */}
+      {/* Empty state */}
       {!loading && !error && paymentData.length === 0 && (
         <p className="text-center text-gray-500">
           No payment records for this month.
         </p>
       )}
 
+      {/* Payment Cards */}
       {paymentData.map((item) => (
-        <div key={item._id} className="bg-white shadow rounded-lg p-6 mb-4">
+        <div key={item.id} className="bg-white shadow rounded-lg p-6 mb-4">
           <div className="flex items-center mb-4">
             <IoIosPerson className="text-blue-500 text-2xl mr-2" />
-            <p className="text-gray-700 font-medium">User ID: {item.userId}</p>
-          </div>
-
-          <div className="flex items-center mb-2">
-            <MdDateRange className="text-green-600 text-xl mr-2" />
-            <p className="text-gray-600">
-              Payment Date: {new Date(item.paymentDate).toLocaleDateString()}
+            <p className="text-gray-700 font-medium">
+              {item.firstName} {item.lastName}
             </p>
           </div>
 
           <div className="flex items-center mb-2">
-            <FaFileInvoiceDollar className="text-yellow-600 text-xl mr-2" />
-            <p className="text-gray-600">Amount Paid: ₹{item.amount}</p>
+            <MdEmail className="text-gray-600 text-xl mr-2" />
+            <p className="text-gray-600">Email: {item.email}</p>
+          </div>
+
+          <div className="flex items-center mb-2">
+            <MdPhone className="text-gray-600 text-xl mr-2" />
+            <p className="text-gray-600">Phone: {item.phoneNumber}</p>
           </div>
 
           <div className="mb-2 text-gray-600">
-            Total Videos Uploaded: {item.totalVideosUploadedInMonth}
+            Total Videos Uploaded: {item.totalUploads}
           </div>
 
-          <div className="mb-2 text-gray-600">Remarks: {item.remarks}</div>
-
-          <a
-            href={`/${item.paySlipUrl}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block mt-3 text-blue-600 hover:underline"
-          >
-            View Payslip
-          </a>
+          <div className="flex items-center mb-2">
+            <FaFileInvoiceDollar className="text-yellow-600 text-xl mr-2" />
+            <p className="text-gray-600">Monthly Salary: ₹{item.monthlySalary}</p>
+          </div>
         </div>
       ))}
     </div>

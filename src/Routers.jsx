@@ -62,6 +62,7 @@ import Invoice from "./Invoice";
 import RefreshToken from "./Admin-Dashboard/RefreshToken";
 import AdminTeacherSalaryTable from "./Pages/AdminActivities/AdminTeacherSalaryTable";
 import PaymentHistory from "./Pages/AdminActivities/PaymentHistory";
+import SalaryOverview from "./Pages/AdminActivities/SalaryOverview";
 
 const user = localStorage.getItem("user"); // Check if the user is logged in
 
@@ -158,6 +159,7 @@ const router = createBrowserRouter(
         { path: "classes", element: <Classes /> },
         { path: "classes/addSubject", element: <AddSubject /> },
         { path: "classes/subjects", element: <Subject /> },
+        { path: "salary", element: <SalaryOverview /> },
         { path: "paymentlist", element: <PaymentHistory /> },
         { path: "paymentlist/create", element: <PaymentHistory /> },
       ],
