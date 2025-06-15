@@ -3,26 +3,29 @@ import { FaFileInvoiceDollar } from "react-icons/fa";
 import { IoIosPerson } from "react-icons/io";
 import { IoArrowBack } from "react-icons/io5";
 import { MdPhone, MdEmail } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import makeRequest from "../../axios";
 
 const SalaryOverview = () => {
   const [paymentData, setPaymentData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [selectedMonth, setSelectedMonth] = useState("2025-05");
-
+  const currentMonth = new Date().toISOString().slice(0, 7); // "YYYY-MM"
+  const [selectedMonth, setSelectedMonth] = useState(currentMonth);
+  const location = useLocation();
+  const teacherId = location.state.teacher_id;
   const navigate = useNavigate();
-
+  const teacherData = paymentData.filter((item) => item.id === teacherId);
   useEffect(() => {
     const fetchPaymentData = async () => {
       setLoading(true);
       try {
         const response = await makeRequest.get(
-          `/admin/get-salary-overview-for-teachers?month=${selectedMonth}`
+          `/admin/get-salary-overview-for-teachers?month=${selectedMonth}&userId=${teacherId}`
         );
         if (response.data.success) {
           setPaymentData(response.data.data);
+          console.log(response.data.data);
         } else {
           setError("Failed to fetch data.");
         }
@@ -71,36 +74,37 @@ const SalaryOverview = () => {
         </p>
       )}
 
-      {/* Payment Cards */}
-      {paymentData.map((item) => (
-        <div key={item.id} className="bg-white shadow rounded-lg p-6 mb-4">
-          <div className="flex items-center mb-4">
-            <IoIosPerson className="text-blue-500 text-2xl mr-2" />
-            <p className="text-gray-700 font-medium">
-              {item.firstName} {item.lastName}
-            </p>
-          </div>
-
-          <div className="flex items-center mb-2">
-            <MdEmail className="text-gray-600 text-xl mr-2" />
-            <p className="text-gray-600">Email: {item.email}</p>
-          </div>
-
-          <div className="flex items-center mb-2">
-            <MdPhone className="text-gray-600 text-xl mr-2" />
-            <p className="text-gray-600">Phone: {item.phoneNumber}</p>
-          </div>
-
-          <div className="mb-2 text-gray-600">
-            Total Videos Uploaded: {item.totalUploads}
-          </div>
-
-          <div className="flex items-center mb-2">
-            <FaFileInvoiceDollar className="text-yellow-600 text-xl mr-2" />
-            <p className="text-gray-600">Monthly Salary: ₹{item.monthlySalary}</p>
-          </div>
+      {/* Table Structure */}
+      {!loading && !error && paymentData.length > 0 && (
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow">
+            <thead className="bg-gray-100 text-gray-700 text-left">
+              <tr>
+                <th className="py-3 px-4 border-b">Name</th>
+                <th className="py-3 px-4 border-b">Email</th>
+                <th className="py-3 px-4 border-b">Phone</th>
+                <th className="py-3 px-4 border-b">Total Uploads</th>
+                <th className="py-3 px-4 border-b">Monthly Salary (₹)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {teacherData.map((item) => (
+                <tr key={item.id} className="hover:bg-gray-50">
+                  <td className="py-3 px-4 border-b">
+                    {item.firstName} {item.lastName}
+                  </td>
+                  <td className="py-3 px-4 border-b">{item.email}</td>
+                  <td className="py-3 px-4 border-b">{item.phoneNumber}</td>
+                  <td className="py-3 px-4 border-b text-center">
+                    {item.totalUploads}
+                  </td>
+                  <td className="py-3 px-4 border-b">₹{item.monthlySalary}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      ))}
+      )}
     </div>
   );
 };

@@ -1,307 +1,499 @@
-import React, { useState } from "react";
-
+import React, { useEffect, useState } from "react";
+import makeRequest from "../../../axios";
+import { toast } from "react-toastify";
+import { setSuperAdminDetails } from "../../../redux/features/superAdminSlice";
+import { useDispatch, useSelector } from "react-redux";
 const StudentList = () => {
-  // Dummy data for organizations, classes, subjects, and students
-  const organizations = ["Organization A", "Organization B", "Organization C"];
-  const classes = ["Class 1", "Class 2", "Class 3"];
-  const subjects = ["Math", "Science", "History"];
+  // State for dropdown options
+  const [districts, setDistricts] = useState([]);
+  const [talukas, setTalukas] = useState([]);
+  const [cities, setCities] = useState([]);
+  const [organizations, setOrganizations] = useState([]);
+  const [classes, setClasses] = useState([]);
+  const [subjects, setSubjects] = useState([]);
 
-  // Dummy students data
-  const studentsData = [
-    {
-      id: 1,
-      name: "John Doe",
-      organization: "Organization A",
-      class: "Class 1",
-      subject: "Math",
-      marks: 85,
-      status: "Passed",
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      organization: "Organization A",
-      class: "Class 1",
-      subject: "Science",
-      marks: 45,
-      status: "Failed",
-    },
-    {
-      id: 3,
-      name: "Sam Brown",
-      organization: "Organization B",
-      class: "Class 2",
-      subject: "History",
-      marks: 75,
-      status: "Passed",
-    },
-    {
-      id: 4,
-      name: "Lucy Green",
-      organization: "Organization C",
-      class: "Class 3",
-      subject: "Math",
-      marks: 65,
-      status: "Passed",
-    },
-    {
-      id: 5,
-      name: "Mark White",
-      organization: "Organization C",
-      class: "Class 2",
-      subject: "Math",
-      marks: 32,
-      status: "Failed",
-    },
-    {
-      id: 6,
-      name: "Anna Black",
-      organization: "Organization A",
-      class: "Class 2",
-      subject: "Math",
-      marks: 92,
-      status: "Passed",
-    },
-    {
-      id: 7,
-      name: "Chris Blue",
-      organization: "Organization B",
-      class: "Class 3",
-      subject: "History",
-      marks: 68,
-      status: "Passed",
-    },
-    {
-      id: 8,
-      name: "Diana Red",
-      organization: "Organization C",
-      class: "Class 1",
-      subject: "Science",
-      marks: 55,
-      status: "Failed",
-    },
-    {
-      id: 9,
-      name: "Steven Yellow",
-      organization: "Organization A",
-      class: "Class 3",
-      subject: "Math",
-      marks: 79,
-      status: "Passed",
-    },
-    {
-      id: 10,
-      name: "Julia Orange",
-      organization: "Organization B",
-      class: "Class 1",
-      subject: "Math",
-      marks: 65,
-      status: "Passed",
-    },
-    {
-      id: 11,
-      name: "Liam Gray",
-      organization: "Organization C",
-      class: "Class 2",
-      subject: "History",
-      marks: 58,
-      status: "Failed",
-    },
-    {
-      id: 12,
-      name: "Olivia Violet",
-      organization: "Organization A",
-      class: "Class 1",
-      subject: "Math",
-      marks: 90,
-      status: "Passed",
-    },
-    {
-      id: 13,
-      name: "Mia Green",
-      organization: "Organization B",
-      class: "Class 2",
-      subject: "Science",
-      marks: 65,
-      status: "Failed",
-    },
-  ];
-
-  // State for filters
+  // Selected values
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+  const [selectedTaluka, setSelectedTaluka] = useState("");
+  const [selectedCity, setSelectedCity] = useState("");
   const [selectedOrganization, setSelectedOrganization] = useState("");
   const [selectedClass, setSelectedClass] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
-  const [viewMore, setViewMore] = useState(false); // State for showing full list or not
+  const [resStatus, setResStatus] = useState("absent");
 
-  // Pagination states
+  // Students and pagination
+  const [students, setStudents] = useState([]);
+  const [viewMore, setViewMore] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const studentsPerPage = 10;
 
-  // Filter students based on selected dropdowns
-  const filteredStudents = studentsData.filter((student) => {
-    return (
-      (selectedOrganization
-        ? student.organization === selectedOrganization
-        : true) &&
-      (selectedClass ? student.class === selectedClass : true) &&
-      (selectedSubject ? student.subject === selectedSubject : true)
-    );
-  });
+  const dispatch = useDispatch();
+  const { superAdminDetails } = useSelector((state) => state.superAdmin);
+  console.log(superAdminDetails);
+  useEffect(() => {
+    if (superAdminDetails && Object.keys(superAdminDetails).length > 0) {
+      setSelectedDistrict(superAdminDetails.districtId);
+      setSelectedTaluka(superAdminDetails.talukaId);
+      setSelectedCity(superAdminDetails.cityId);
+      setSelectedOrganization(superAdminDetails.orgId);
+      setSelectedClass(superAdminDetails.classId);
+      setSelectedSubject(superAdminDetails.subjectId);
+      setResStatus(superAdminDetails.status);
+    }
+  }, [superAdminDetails]);
+
+  // Fetch districts on mount
+  useEffect(() => {
+    fetchDistricts();
+  }, []);
+
+  // Fetch talukas on district change
+  useEffect(() => {
+    if (selectedDistrict) {
+      fetchTalukas(selectedDistrict);
+      setSelectedTaluka("");
+      setCities([]);
+      setSelectedCity("");
+      setOrganizations([]);
+      setSelectedOrganization("");
+      setClasses([]);
+      setSelectedClass("");
+      setSubjects([]);
+      setSelectedSubject("");
+      setStudents([]);
+    } else {
+      setTalukas([]);
+      setSelectedTaluka("");
+      setCities([]);
+      setSelectedCity("");
+      setOrganizations([]);
+      setSelectedOrganization("");
+      setClasses([]);
+      setSelectedClass("");
+      setSubjects([]);
+      setSelectedSubject("");
+      setStudents([]);
+    }
+  }, [selectedDistrict]);
+
+  // Fetch cities on taluka change
+  useEffect(() => {
+    if (selectedDistrict && selectedTaluka) {
+      fetchCities(selectedDistrict, selectedTaluka);
+      setSelectedCity("");
+      setOrganizations([]);
+      setSelectedOrganization("");
+      setClasses([]);
+      setSelectedClass("");
+      setSubjects([]);
+      setSelectedSubject("");
+      setStudents([]);
+    } else {
+      setCities([]);
+      setSelectedCity("");
+      setOrganizations([]);
+      setSelectedOrganization("");
+      setClasses([]);
+      setSelectedClass("");
+      setSubjects([]);
+      setSelectedSubject("");
+      setStudents([]);
+    }
+  }, [selectedTaluka, selectedDistrict]);
+
+  // Fetch organizations on city change
+  useEffect(() => {
+    if (selectedDistrict && selectedTaluka && selectedCity) {
+      fetchOrganizations(selectedDistrict, selectedTaluka, selectedCity);
+      setSelectedOrganization("");
+      setClasses([]);
+      setSelectedClass("");
+      setSubjects([]);
+      setSelectedSubject("");
+      setStudents([]);
+    } else {
+      setOrganizations([]);
+      setSelectedOrganization("");
+      setClasses([]);
+      setSelectedClass("");
+      setSubjects([]);
+      setSelectedSubject("");
+      setStudents([]);
+    }
+  }, [selectedCity, selectedTaluka, selectedDistrict]);
+
+  // Fetch classes on organization change
+  useEffect(() => {
+    if (selectedOrganization) {
+      fetchClasses(selectedOrganization);
+      setSelectedClass("");
+      setSubjects([]);
+      setSelectedSubject("");
+      setStudents([]);
+    } else {
+      setClasses([]);
+      setSelectedClass("");
+      setSubjects([]);
+      setSelectedSubject("");
+      setStudents([]);
+    }
+  }, [selectedOrganization]);
+
+  // Fetch subjects on class change
+  useEffect(() => {
+    if (selectedClass) {
+      fetchSubjects(selectedClass);
+      setSelectedSubject("");
+      setStudents([]);
+    } else {
+      setSubjects([]);
+      setSelectedSubject("");
+      setStudents([]);
+    }
+  }, [selectedClass]);
+
+  // Fetch students when class and subject are selected
+  useEffect(() => {
+    if (selectedClass && selectedSubject && resStatus) {
+      fetchStudents(selectedClass, selectedSubject, resStatus);
+    } else {
+      setStudents([]);
+    }
+  }, [selectedClass, selectedSubject, resStatus]);
+
+  // API calls
+
+  const fetchDistricts = async () => {
+    try {
+      const res = await makeRequest.get("/districts");
+      setDistricts(res?.data?.data || []);
+    } catch (error) {
+      toast.error("Failed to load districts");
+    }
+  };
+
+  const fetchTalukas = async (districtId) => {
+    try {
+      const res = await makeRequest.get(
+        `/get-taluka-by-district-id?districtId=${districtId}`
+      );
+      setTalukas(res?.data?.data || []);
+    } catch (error) {
+      toast.error("Failed to load talukas");
+    }
+  };
+
+  const fetchCities = async (districtId, talukaId) => {
+    try {
+      const res = await makeRequest.get(
+        `/get-cities-by-district-id-and-taluka-id?districtId=${districtId}&talukaId=${talukaId}`
+      );
+      setCities(res?.data?.data || []);
+    } catch (error) {
+      toast.error("Failed to load cities");
+    }
+  };
+
+  const fetchOrganizations = async (districtId, talukaId, cityId) => {
+    try {
+      const res = await makeRequest.get(
+        `/get-org-by-district-taluka-city-id?districtId=${districtId}&talukaId=${talukaId}&cityId=${cityId}`
+      );
+      setOrganizations(res?.data?.data || []);
+    } catch (error) {
+      toast.error("Failed to load organizations");
+    }
+  };
+
+  const fetchClasses = async (orgId) => {
+    try {
+      const res = await makeRequest.get(
+        `/get-classes-by-org-id?organizationId=${orgId}`
+      );
+      setClasses(res?.data?.data || []);
+    } catch (error) {
+      toast.error("Failed to load classes");
+    }
+  };
+
+  const fetchSubjects = async (classId) => {
+    try {
+      const res = await makeRequest.get(
+        `/get-subjects-by-class-id?classId=${classId}`
+      );
+      setSubjects(res?.data?.data || []);
+    } catch (error) {
+      toast.error("Failed to load subjects");
+    }
+  };
+
+  const fetchStudents = async (classId, subjectId, resStatus) => {
+    try {
+      const res = await makeRequest.get(
+        `superAdmin/get-students-results-by-class?classId=${classId}&subjectId=${subjectId}&page=1&limit=100&resultStatus=${resStatus}`
+      );
+      setStudents(res?.data?.data || []);
+      setCurrentPage(1);
+      setViewMore(false);
+    } catch (error) {
+      toast.error("Failed to load students");
+    }
+  };
 
   // Pagination logic
-  const totalPages = Math.ceil(filteredStudents.length / studentsPerPage);
+  const totalPages = Math.ceil(students.length / studentsPerPage);
   const startIndex = (currentPage - 1) * studentsPerPage;
-  const currentStudents = filteredStudents.slice(
-    startIndex,
-    startIndex + studentsPerPage
-  );
+  const displayedStudents = viewMore
+    ? students.slice(startIndex, startIndex + studentsPerPage)
+    : students.slice(0, studentsPerPage);
 
-  // Handle pagination change
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
-  // Toggle the "View More" state
   const handleViewMore = () => {
     setViewMore(true);
   };
 
   return (
-    <div className="space-y-6 p-8 bg-gray-50 rounded-lg shadow-lg max-h-[650px] overflow-y-auto text-center">
-      <h1 className="text-center text-xl font-semibold">Student List</h1>
+    <div className="space-y-6 p-8 bg-gray-50 rounded-lg shadow-lg text-center">
+      <h1 className="text-xl font-semibold mb-6">Student List</h1>
 
-      {/* Dropdown filters */}
-      <div className="flex items-center space-x-4">
-        <div className="flex-1">
-          <select
-            onChange={(e) => setSelectedOrganization(e.target.value)}
-            value={selectedOrganization || ""}
-            className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg shadow-sm"
-          >
-            <option value="" disabled>
-              Select Organization
+      {/* Filters */}
+      <div className="flex flex-wrap gap-4 justify-center">
+        {/* District */}
+        <select
+          value={selectedDistrict}
+          onChange={(e) => {
+            setSelectedDistrict(e.target.value);
+            dispatch(
+              setSuperAdminDetails({
+                districtId: e.target.value,
+              })
+            );
+          }}
+          className="min-w-[200px] px-4 py-3 border rounded-lg"
+        >
+          <option value="">Select District</option>
+          {districts.map((d) => (
+            <option key={d._id} value={d._id}>
+              {d.name}
             </option>
-            {["Organization A", "Organization B", "Organization C"].map(
-              (org) => (
-                <option key={org} value={org}>
-                  {org}
-                </option>
-              )
-            )}
-          </select>
-        </div>
+          ))}
+        </select>
 
-        <div className="flex-1">
-          <select
-            onChange={(e) => setSelectedClass(e.target.value)}
-            value={selectedClass || ""}
-            className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg shadow-sm"
-          >
-            <option value="" disabled>
-              Select Class
+        {/* Taluka */}
+        <select
+          value={selectedTaluka}
+          onChange={(e) => {
+            setSelectedTaluka(e.target.value);
+            dispatch(
+              setSuperAdminDetails({
+                talukaId: e.target.value,
+              })
+            );
+          }}
+          className="min-w-[200px] px-4 py-3 border rounded-lg"
+          disabled={!selectedDistrict}
+        >
+          <option value="">Select Taluka</option>
+          {talukas.map((t) => (
+            <option key={t._id} value={t._id}>
+              {t.name}
             </option>
-            {["Class 1", "Class 2", "Class 3"].map((cls) => (
-              <option key={cls} value={cls}>
-                {cls}
-              </option>
-            ))}
-          </select>
-        </div>
+          ))}
+        </select>
 
-        <div className="flex-1">
-          <select
-            onChange={(e) => setSelectedSubject(e.target.value)}
-            value={selectedSubject || ""}
-            className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg shadow-sm"
-          >
-            <option value="" disabled>
-              Select Subject
+        {/* City */}
+        <select
+          value={selectedCity}
+          onChange={(e) => {
+            setSelectedCity(e.target.value);
+            dispatch(
+              setSuperAdminDetails({
+                cityId: e.target.value,
+              })
+            );
+          }}
+          className="min-w-[200px] px-4 py-3 border rounded-lg"
+          disabled={!selectedTaluka}
+        >
+          <option value="">Select City</option>
+          {cities.map((c) => (
+            <option key={c._id} value={c._id}>
+              {c.name}
             </option>
-            {["Math", "Science", "History"].map((subject) => (
-              <option key={subject} value={subject}>
-                {subject}
-              </option>
-            ))}
-          </select>
-        </div>
+          ))}
+        </select>
+
+        {/* Organization */}
+        <select
+          value={selectedOrganization}
+          onChange={(e) => {
+            setSelectedOrganization(e.target.value);
+            dispatch(
+              setSuperAdminDetails({
+                orgId: e.target.value,
+              })
+            );
+          }}
+          className="min-w-[200px] px-4 py-3 border rounded-lg"
+          disabled={!selectedCity}
+        >
+          <option value="">Select Organization</option>
+          {organizations.map((org) => (
+            <option key={org._id} value={org._id}>
+              {org.name}
+            </option>
+          ))}
+        </select>
+
+        {/* Class */}
+        <select
+          value={selectedClass}
+          onChange={(e) => {
+            setSelectedClass(e.target.value);
+            dispatch(
+              setSuperAdminDetails({
+                classId: e.target.value,
+              })
+            );
+          }}
+          className="min-w-[200px] px-4 py-3 border rounded-lg"
+          disabled={!selectedOrganization}
+        >
+          <option value="">Select Class</option>
+          {classes.map((cls) => (
+            <option key={cls._id} value={cls._id}>
+              {cls.name}
+            </option>
+          ))}
+        </select>
+
+        {/* Subject */}
+        <select
+          value={selectedSubject}
+          onChange={(e) => {
+            setSelectedSubject(e.target.value);
+            dispatch(
+              setSuperAdminDetails({
+                subjectId: e.target.value,
+              })
+            );
+          }}
+          className="min-w-[200px] px-4 py-3 border rounded-lg"
+          disabled={!selectedClass}
+        >
+          <option value="">Select Subject</option>
+          {subjects.map((sub) => (
+            <option key={sub._id} value={sub._id}>
+              {sub.name}
+            </option>
+          ))}
+        </select>
+
+        {/* Status */}
+        <select
+          value={resStatus}
+          onChange={(e) => {
+            setResStatus(e.target.value);
+            dispatch(
+              setSuperAdminDetails({
+                status: e.target.value,
+              })
+            );
+          }}
+          className="min-w-[200px] px-4 py-3 border rounded-lg"
+          disabled={!selectedSubject}
+        >
+          <option value="">Select Status</option>
+          <option value="pass">Pass</option>
+          <option value="fail">Fail</option>
+          <option value="absent">Absent</option>
+        </select>
       </div>
 
-      {/* Display filtered students */}
-      <div className="mt-6">
-        {currentStudents.length > 0 ? (
-          <div className="overflow-x-auto bg-white shadow-md rounded-lg">
-            <table className="min-w-full table-auto">
-              <thead className="bg-gray-200">
-                <tr>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">
-                    Name
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">
-                    Marks
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">
-                    Status
-                  </th>
+      {/* Students Table */}
+      <div className="mt-6 bg-white rounded-lg shadow-md overflow-hidden">
+        {displayedStudents.length ? (
+          <table className="min-w-full table-auto border-collapse">
+            <thead className="bg-gray-100 text-gray-700 sticky top-0 z-10">
+              <tr>
+                <th className="px-6 py-4 text-left font-semibold">Name</th>
+                <th className="px-6 py-4 text-left font-semibold">Email</th>
+                <th className="px-6 py-4 text-left font-semibold">Phone</th>
+                <th className="px-6 py-4 text-left font-semibold">Marks</th>
+                <th className="px-6 py-4 text-left font-semibold">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {displayedStudents.map((student, idx) => (
+                <tr
+                  key={student._id}
+                  className={`${
+                    idx % 2 === 0 ? "bg-white" : "bg-gray-50"
+                  } hover:bg-gray-100 transition`}
+                >
+                  <td className="px-6 py-4 flex items-center space-x-3">
+                    <img
+                      src={`${import.meta.env.VITE_API_BASE_URL}/${student.profilePic}`}
+                      alt="Profile"
+                      className="w-8 h-8 rounded-full object-cover"
+                    />
+                    <span>
+                      {student.firstName} {student.lastName}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4">{student.email}</td>
+                  <td className="px-6 py-4">{student.phoneNumber}</td>
+                  <td className="px-6 py-4">{student.marks}</td>
+                  <td className="px-6 py-4">
+                    <span
+                      className={`font-medium ${
+                        student.result === "Passed"
+                          ? "text-green-600"
+                          : student.result === "absent"
+                            ? "text-orange-500"
+                            : "text-red-600"
+                      }`}
+                    >
+                      {student.result}
+                    </span>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {currentStudents.map((student) => (
-                  <tr key={student.id} className="border-b border-gray-200">
-                    <td className="px-6 py-4 text-sm text-gray-700">
-                      {student.name}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-700">
-                      {student.marks}
-                    </td>
-                    <td className="px-6 py-4 text-sm">
-                      <span
-                        className={`${
-                          student.status === "Passed"
-                            ? "text-green-500"
-                            : "text-red-500"
-                        } font-semibold`}
-                      >
-                        {student.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              ))}
+            </tbody>
+          </table>
         ) : (
-          <p className="text-gray-500">
+          <p className="text-gray-500 p-4">
             No students found based on the selected filters.
           </p>
         )}
       </div>
 
-      {/* View More button */}
-      {!viewMore && filteredStudents.length > 10 && (
-        <div className="text-center mt-4">
-          <button
-            onClick={handleViewMore}
-            className="px-6 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600"
-          >
-            View More
-          </button>
-        </div>
+      {/* Pagination */}
+      {!viewMore && students.length > studentsPerPage && (
+        <button
+          onClick={handleViewMore}
+          className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+        >
+          View More
+        </button>
       )}
 
-      {/* Pagination controls */}
-      {viewMore && filteredStudents.length > 10 && (
-        <div className="flex justify-center space-x-4 mt-6">
-          {Array.from({ length: totalPages }, (_, index) => (
+      {viewMore && students.length > studentsPerPage && (
+        <div className="flex justify-center space-x-2 mt-6">
+          {Array.from({ length: totalPages }, (_, i) => (
             <button
-              key={index}
-              onClick={() => handlePageChange(index + 1)}
-              className={`px-4 py-2 rounded-md ${
-                currentPage === index + 1
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-200 text-gray-700"
+              key={i}
+              onClick={() => handlePageChange(i + 1)}
+              className={`px-4 py-2 rounded ${
+                currentPage === i + 1
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
               }`}
             >
-              {index + 1}
+              {i + 1}
             </button>
           ))}
         </div>

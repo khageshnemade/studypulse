@@ -26,7 +26,9 @@ const DashboardChart = ({ classPerformance, setIds }) => {
 
   const [loading, setLoading] = useState(false);
 
-  const idsFromRedux = useSelector((state) => state.superAdmin.superAdminDetails);
+  const idsFromRedux = useSelector(
+    (state) => state.superAdmin.superAdminDetails
+  );
 
   // Set local state from Redux on mount/update
   useEffect(() => {
@@ -37,25 +39,28 @@ const DashboardChart = ({ classPerformance, setIds }) => {
       setOrgId(idsFromRedux.orgId || "");
       setSelectedClassId(idsFromRedux.classId || "");
       setSelectedClass(idsFromRedux.class || "");
-      console.log("Districts", districts);
-
-
     }
   }, [idsFromRedux]);
 
   // Fetch hierarchy data
-  useEffect(() => { fetchDistricts(); }, []);
-  useEffect(() => { if (districtId) fetchTalukas(); }, [districtId]);
-  useEffect(() => { if (talukaId) fetchCities(); }, [talukaId]);
-  useEffect(() => { if (cityId) fetchOrgs(); }, [cityId]);
+  useEffect(() => {
+    fetchDistricts();
+  }, []);
+  useEffect(() => {
+    if (districtId) fetchTalukas();
+  }, [districtId]);
+  useEffect(() => {
+    if (talukaId) fetchCities();
+  }, [talukaId]);
+  useEffect(() => {
+    if (cityId) fetchOrgs();
+  }, [cityId]);
   useEffect(() => {
     if (orgId) {
       fetchClasses();
       setIds((prev) => ({ ...prev, orgId }));
-
     }
   }, [orgId]);
-
 
   // API fetches
   const fetchDistricts = async () => {
@@ -73,7 +78,9 @@ const DashboardChart = ({ classPerformance, setIds }) => {
   const fetchTalukas = async () => {
     try {
       setLoading(true);
-      const res = await makeRequest.get(`/get-taluka-by-district-id?districtId=${districtId}`);
+      const res = await makeRequest.get(
+        `/get-taluka-by-district-id?districtId=${districtId}`
+      );
       setTalukas(res?.data?.data);
     } catch (err) {
       toast.error("Failed to fetch talukas");
@@ -112,30 +119,26 @@ const DashboardChart = ({ classPerformance, setIds }) => {
 
   const fetchClasses = async () => {
     try {
-      const res = await makeRequest.get(`/get-classes-by-org-id?organizationId=${orgId}`);
+      const res = await makeRequest.get(
+        `/get-classes-by-org-id?organizationId=${orgId}`
+      );
       setClasses(res?.data?.data || []);
     } catch (err) {
       toast.error("Failed to fetch classes");
     }
   };
 
-
-
   // Prepare chart data
   const stats = classPerformance?.[selectedClass]
     ? classPerformance[selectedClass]
     : Object.values(classPerformance || {}).reduce(
-      (acc, curr) => {
-        acc.passed += curr.passed || 0;
-        acc.failed += curr.failed || 0;
-        return acc;
-      },
-      { passed: 0, failed: 0 }
-    );
-
-  console.log("class Performance", classPerformance);
-  console.log("selected Class", selectedClass);
-  console.log("stats", stats);
+        (acc, curr) => {
+          acc.passed += curr.passed || 0;
+          acc.failed += curr.failed || 0;
+          return acc;
+        },
+        { passed: 0, failed: 0 }
+      );
 
   const chartData = {
     labels: ["Passed", "Failed"],
@@ -151,7 +154,9 @@ const DashboardChart = ({ classPerformance, setIds }) => {
   return (
     <div className="bg-white shadow rounded-xl p-6 transform transition-transform duration-300 hover:scale-105 max-h-[800px] overflow-y-auto text-center">
       <h2 className="text-lg font-semibold mb-4 bg-gradient-to-r from-blue-500 to-blue-300 text-white p-2 rounded-md w-full text-center font-serif">
-        {selectedClass ? `${selectedClass} Class Performance` : "Organization Performance"}
+        {selectedClass
+          ? `${selectedClass} Class Performance`
+          : "Organization Performance"}
       </h2>
 
       {/* Dropdowns */}
@@ -168,7 +173,9 @@ const DashboardChart = ({ classPerformance, setIds }) => {
         >
           <option value="">Select District</option>
           {districts.map(({ _id, name }) => (
-            <option key={_id} value={_id}>{name}</option>
+            <option key={_id} value={_id}>
+              {name}
+            </option>
           ))}
         </select>
 
@@ -184,7 +191,9 @@ const DashboardChart = ({ classPerformance, setIds }) => {
         >
           <option value="">Select Taluka</option>
           {talukas.map(({ _id, name }) => (
-            <option key={_id} value={_id}>{name}</option>
+            <option key={_id} value={_id}>
+              {name}
+            </option>
           ))}
         </select>
 
@@ -200,7 +209,9 @@ const DashboardChart = ({ classPerformance, setIds }) => {
         >
           <option value="">Select City</option>
           {cities.map(({ _id, name }) => (
-            <option key={_id} value={_id}>{name}</option>
+            <option key={_id} value={_id}>
+              {name}
+            </option>
           ))}
         </select>
 
@@ -209,7 +220,13 @@ const DashboardChart = ({ classPerformance, setIds }) => {
           name="org"
           value={orgId}
           onChange={(e) => {
-            dispatch(setSuperAdminDetails({ orgId: e.target.value, classId: null, class: null }));
+            dispatch(
+              setSuperAdminDetails({
+                orgId: e.target.value,
+                classId: null,
+                class: null,
+              })
+            );
 
             setIds((prev) => ({
               ...prev,
@@ -224,7 +241,9 @@ const DashboardChart = ({ classPerformance, setIds }) => {
         >
           <option value="">Select Organization</option>
           {orgs.map(({ _id, name }) => (
-            <option key={_id} value={_id}>{name}</option>
+            <option key={_id} value={_id}>
+              {name}
+            </option>
           ))}
         </select>
 
@@ -234,13 +253,17 @@ const DashboardChart = ({ classPerformance, setIds }) => {
           value={selectedClassId}
           onChange={(e) => {
             const selectedId = e.target.value;
-            const selectedClassObj = classes.find(cls => cls._id === selectedId);
+            const selectedClassObj = classes.find(
+              (cls) => cls._id === selectedId
+            );
             const selectedClassName = selectedClassObj?.name || "";
 
-            dispatch(setSuperAdminDetails({
-              classId: selectedId,
-              class: selectedClassName,
-            }));
+            dispatch(
+              setSuperAdminDetails({
+                classId: selectedId,
+                class: selectedClassName,
+              })
+            );
 
             setSelectedClassId(selectedId);
             setSelectedClass(selectedClassName);
@@ -254,23 +277,29 @@ const DashboardChart = ({ classPerformance, setIds }) => {
         >
           <option value="">Select Class</option>
           {classes.map(({ _id, name }) => (
-            <option key={_id} value={_id}>{name}</option>
+            <option key={_id} value={_id}>
+              {name}
+            </option>
           ))}
         </select>
       </div>
-      <div className="d-flex justify-content-center align-items-center mt-2" style={{ gap: '1rem' }}>
-  <h2 className="mb-0" style={{ fontWeight: 'bold' }}>
-    {!orgId ? "All Organizations Data" : orgs.find(o => o._id === orgId)?.name || "Organization Not Found"}
-  </h2>
+      <div
+        className="d-flex justify-content-center align-items-center mt-2"
+        style={{ gap: "1rem" }}
+      >
+        <h2 className="mb-0" style={{ fontWeight: "bold" }}>
+          {!orgId
+            ? "All Organizations Data"
+            : orgs.find((o) => o._id === orgId)?.name ||
+              "Organization Not Found"}
+        </h2>
 
-  {selectedClassId && (
-    <h2 className="mb-0" style={{ fontWeight: 'bold' }}>
-      {selectedClass}
-    </h2>
-  )}
-</div>
-
-
+        {selectedClassId && (
+          <h2 className="mb-0" style={{ fontWeight: "bold" }}>
+            {selectedClass}
+          </h2>
+        )}
+      </div>
 
       {/* Chart */}
       <div className="w-full text-center mt-6">
@@ -278,7 +307,9 @@ const DashboardChart = ({ classPerformance, setIds }) => {
           {stats ? (
             <Pie data={chartData} />
           ) : (
-            <p className="text-gray-500">Please select Organization or Class to view performance.</p>
+            <p className="text-gray-500">
+              Please select Organization or Class to view performance.
+            </p>
           )}
         </div>
       </div>
@@ -296,7 +327,6 @@ export default function SuperAdminDashboard() {
     getClassPerformance();
   }, [ids]);
 
-
   const fetchDashboardData = async () => {
     try {
       const res = await makeRequest.get("superAdmin/get-dashboard-details");
@@ -312,7 +342,6 @@ export default function SuperAdminDashboard() {
       const res = await makeRequest.get(
         `superAdmin/get-dashboard-class-performance?organizationID=${ids.orgId}&classId=${ids.classId}`
       );
-      console.log("Setting classPerformance:", res.data);
       setClassPerformance(res?.data?.data); // Expect this to have .passFailedStudents
     } catch (error) {
       console.error("Failed to fetch class performance:", error);
@@ -383,7 +412,9 @@ export default function SuperAdminDashboard() {
                   <div className="bg-white text-blue-600 p-3 rounded-full shadow-md">
                     {icon}
                   </div>
-                  <p className="text-3xl font-bold text-white whitespace-nowrap">{total}</p>
+                  <p className="text-3xl font-bold text-white whitespace-nowrap">
+                    {total}
+                  </p>
                 </div>
 
                 {typeof activeCount !== "undefined" &&
@@ -396,14 +427,12 @@ export default function SuperAdminDashboard() {
                         Inactive: {inactiveCount}
                       </span>
                     </div>
-
                   )}
 
                 <div className="text-center text-white text-xs mt-2">
                   {description}
                 </div>
               </div>
-
             );
           }
         )}
@@ -444,7 +473,9 @@ export default function SuperAdminDashboard() {
                       {person.firstName} {person.lastName}
                     </p>
                     <p className="text-xs text-gray-600">{person.email}</p>
-                    <p className="text-xs text-gray-600">{person.phoneNumber}</p>
+                    <p className="text-xs text-gray-600">
+                      {person.phoneNumber}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -452,7 +483,6 @@ export default function SuperAdminDashboard() {
           </div>
         ))}
       </div>
-
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
         <DashboardChart

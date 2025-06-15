@@ -1,5 +1,5 @@
 // src/features/idsSlice.js
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   superAdminDetails: {
@@ -7,18 +7,23 @@ const initialState = {
     talukaId: null,
     cityId: null,
     orgId: null,
-    classId:null,
-    class:null,
-  }
+    classId: null,
+    class: null,
+    subjectId: null,
+    status: null,
+  },
 };
 
 const superAdminSlice = createSlice({
-  name: 'superAdmin',
+  name: "superAdmin",
   initialState,
   reducers: {
     setSuperAdminDetails: (state, action) => {
-      console.log('Updating superAdminDetails with payload:', action.payload); // optional for debugging
-      state.superAdminDetails = { ...state.superAdminDetails, ...action.payload };
+      console.log("Updating superAdminDetails with payload:", action.payload); // optional for debugging
+      state.superAdminDetails = {
+        ...state.superAdminDetails,
+        ...action.payload,
+      };
     },
     resetSuperAdminDetails: (state) => {
       state.superAdminDetails = {
@@ -26,13 +31,16 @@ const superAdminSlice = createSlice({
         talukaId: null,
         cityId: null,
         orgId: null,
-        classId:null,
-        class:null,
+        classId: null,
+        class: null,
+        subjectId: null,
+        status: null,
       };
     },
   },
 });
 
-export const { setSuperAdminDetails, resetSuperAdminDetails } = superAdminSlice.actions;
+export const { setSuperAdminDetails, resetSuperAdminDetails } =
+  superAdminSlice.actions;
 
 export default superAdminSlice.reducer;

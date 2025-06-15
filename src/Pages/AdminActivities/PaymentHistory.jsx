@@ -97,7 +97,7 @@ const PaymentHistory = () => {
           <div className="mb-2 text-gray-600">Remarks: {item.remarks}</div>
 
           <a
-            href={`/${item.paySlipUrl}`}
+            href={`https://api.studypulse.live/${item.paySlipUrl}`}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block mt-3 text-blue-600 hover:underline"

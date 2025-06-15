@@ -37,9 +37,12 @@ export const TeacherSidebar = forwardRef(({ collapsed, setCollapsed }, ref) => {
   }, []);
 
   const renderSidebarContent = (links) => (
-    <div className="flex flex-col w-full h-full overflow-y-auto p-4 space-y-6 scrollbar-thin">
+    <div className="flex flex-col w-full h-full overflow-y-auto p-2 space-y-6 scrollbar-thin">
       {links.map((navbarLink) => (
-        <nav key={navbarLink.title} className={cn("space-y-2", collapsed && "items-center")}>
+        <nav
+          key={navbarLink.title}
+          className={cn("space-y-2", collapsed && "items-center")}
+        >
           {!collapsed && (
             <p className="text-sm font-bold text-white uppercase tracking-wide pl-2">
               {navbarLink.title}
@@ -59,7 +62,11 @@ export const TeacherSidebar = forwardRef(({ collapsed, setCollapsed }, ref) => {
                 )
               }
             >
-              <link.icon size={20} className="flex-shrink-0" style={{ color: link.color }} />
+              <link.icon
+                size={20}
+                className="flex-shrink-0"
+                style={{ color: link.color }}
+              />
               {!collapsed && <span className="text-sm">{link.label}</span>}
             </NavLink>
           ))}
@@ -88,10 +95,24 @@ export const TeacherSidebar = forwardRef(({ collapsed, setCollapsed }, ref) => {
       >
         {/* Logo Section */}
         <div className="flex items-center justify-center gap-3 p-4 border-b border-blue-500">
-          <img src={logoLight} alt="Study Pulse" className="dark:hidden" height="40" width="40" />
-          <img src={logoDark} alt="Study Pulse" className="hidden dark:block" height="40" width="40" />
+          <img
+            src={logoLight}
+            alt="Study Pulse"
+            className="dark:hidden"
+            height="40"
+            width="40"
+          />
+          <img
+            src={logoDark}
+            alt="Study Pulse"
+            className="hidden dark:block"
+            height="40"
+            width="40"
+          />
           {!collapsed && (
-            <span className="text-xl font-serif text-white font-semibold">Study Pulse</span>
+            <span className="text-xl font-serif text-white font-semibold">
+              Study Pulse
+            </span>
           )}
         </div>
 
@@ -101,7 +122,13 @@ export const TeacherSidebar = forwardRef(({ collapsed, setCollapsed }, ref) => {
           : renderSidebarContent([
               {
                 title: "Dashboard",
-                links: [{ label: "Home", icon: Home, path: "/teacher-dashboard/profile" }],
+                links: [
+                  {
+                    label: "Home",
+                    icon: Home,
+                    path: "/teacher-dashboard/profile",
+                  },
+                ],
               },
             ])}
       </aside>

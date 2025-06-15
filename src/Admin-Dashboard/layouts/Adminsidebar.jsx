@@ -55,7 +55,7 @@ export const AdminSidebar = forwardRef(({ collapsed }, ref) => {
       </div>
 
       {/* Navigation Section */}
-      <div className="flex-1 w-full overflow-y-auto p-4 space-y-6 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
+      <div className="flex-1 w-full overflow-y-auto p-2 space-y-6 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
         {navbarLinks.map((navbarLink) => (
           <div key={navbarLink.title} className="space-y-2">
             {!collapsed && (
