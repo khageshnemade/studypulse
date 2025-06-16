@@ -260,21 +260,17 @@ const StudentList = () => {
       <h1 className="text-xl font-semibold mb-6">Student List</h1>
 
       {/* Filters */}
-      <div className="flex flex-wrap gap-4 justify-center">
+      <div className="flex flex-wrap gap-2 justify-center text-sm">
         {/* District */}
         <select
           value={selectedDistrict}
           onChange={(e) => {
             setSelectedDistrict(e.target.value);
-            dispatch(
-              setSuperAdminDetails({
-                districtId: e.target.value,
-              })
-            );
+            dispatch(setSuperAdminDetails({ districtId: e.target.value }));
           }}
-          className="min-w-[200px] px-4 py-3 border rounded-lg"
+          className="min-w-[160px] px-2 py-1 border rounded-md"
         >
-          <option value="">Select District</option>
+          <option value="">District</option>
           {districts.map((d) => (
             <option key={d._id} value={d._id}>
               {d.name}
@@ -287,16 +283,12 @@ const StudentList = () => {
           value={selectedTaluka}
           onChange={(e) => {
             setSelectedTaluka(e.target.value);
-            dispatch(
-              setSuperAdminDetails({
-                talukaId: e.target.value,
-              })
-            );
+            dispatch(setSuperAdminDetails({ talukaId: e.target.value }));
           }}
-          className="min-w-[200px] px-4 py-3 border rounded-lg"
+          className="min-w-[160px] px-2 py-1 border rounded-md"
           disabled={!selectedDistrict}
         >
-          <option value="">Select Taluka</option>
+          <option value="">Taluka</option>
           {talukas.map((t) => (
             <option key={t._id} value={t._id}>
               {t.name}
@@ -309,16 +301,12 @@ const StudentList = () => {
           value={selectedCity}
           onChange={(e) => {
             setSelectedCity(e.target.value);
-            dispatch(
-              setSuperAdminDetails({
-                cityId: e.target.value,
-              })
-            );
+            dispatch(setSuperAdminDetails({ cityId: e.target.value }));
           }}
-          className="min-w-[200px] px-4 py-3 border rounded-lg"
+          className="min-w-[160px] px-2 py-1 border rounded-md"
           disabled={!selectedTaluka}
         >
-          <option value="">Select City</option>
+          <option value="">City</option>
           {cities.map((c) => (
             <option key={c._id} value={c._id}>
               {c.name}
@@ -331,16 +319,12 @@ const StudentList = () => {
           value={selectedOrganization}
           onChange={(e) => {
             setSelectedOrganization(e.target.value);
-            dispatch(
-              setSuperAdminDetails({
-                orgId: e.target.value,
-              })
-            );
+            dispatch(setSuperAdminDetails({ orgId: e.target.value }));
           }}
-          className="min-w-[200px] px-4 py-3 border rounded-lg"
+          className="min-w-[160px] px-2 py-1 border rounded-md"
           disabled={!selectedCity}
         >
-          <option value="">Select Organization</option>
+          <option value="">Organization</option>
           {organizations.map((org) => (
             <option key={org._id} value={org._id}>
               {org.name}
@@ -353,16 +337,12 @@ const StudentList = () => {
           value={selectedClass}
           onChange={(e) => {
             setSelectedClass(e.target.value);
-            dispatch(
-              setSuperAdminDetails({
-                classId: e.target.value,
-              })
-            );
+            dispatch(setSuperAdminDetails({ classId: e.target.value }));
           }}
-          className="min-w-[200px] px-4 py-3 border rounded-lg"
+          className="min-w-[160px] px-2 py-1 border rounded-md"
           disabled={!selectedOrganization}
         >
-          <option value="">Select Class</option>
+          <option value="">Class</option>
           {classes.map((cls) => (
             <option key={cls._id} value={cls._id}>
               {cls.name}
@@ -375,16 +355,12 @@ const StudentList = () => {
           value={selectedSubject}
           onChange={(e) => {
             setSelectedSubject(e.target.value);
-            dispatch(
-              setSuperAdminDetails({
-                subjectId: e.target.value,
-              })
-            );
+            dispatch(setSuperAdminDetails({ subjectId: e.target.value }));
           }}
-          className="min-w-[200px] px-4 py-3 border rounded-lg"
+          className="min-w-[160px] px-2 py-1 border rounded-md"
           disabled={!selectedClass}
         >
-          <option value="">Select Subject</option>
+          <option value="">Subject</option>
           {subjects.map((sub) => (
             <option key={sub._id} value={sub._id}>
               {sub.name}
@@ -397,79 +373,77 @@ const StudentList = () => {
           value={resStatus}
           onChange={(e) => {
             setResStatus(e.target.value);
-            dispatch(
-              setSuperAdminDetails({
-                status: e.target.value,
-              })
-            );
+            dispatch(setSuperAdminDetails({ status: e.target.value }));
           }}
-          className="min-w-[200px] px-4 py-3 border rounded-lg"
+          className="min-w-[160px] px-2 py-1 border rounded-md"
           disabled={!selectedSubject}
         >
-          <option value="">Select Status</option>
+          <option value="">Status</option>
           <option value="pass">Pass</option>
           <option value="fail">Fail</option>
           <option value="absent">Absent</option>
         </select>
       </div>
 
+
       {/* Students Table */}
-      <div className="mt-6 bg-white rounded-lg shadow-md overflow-hidden">
-        {displayedStudents.length ? (
-          <table className="min-w-full table-auto border-collapse">
-            <thead className="bg-gray-100 text-gray-700 sticky top-0 z-10">
-              <tr>
-                <th className="px-6 py-4 text-left font-semibold">Name</th>
-                <th className="px-6 py-4 text-left font-semibold">Email</th>
-                <th className="px-6 py-4 text-left font-semibold">Phone</th>
-                <th className="px-6 py-4 text-left font-semibold">Marks</th>
-                <th className="px-6 py-4 text-left font-semibold">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {displayedStudents.map((student, idx) => (
-                <tr
-                  key={student._id}
-                  className={`${
-                    idx % 2 === 0 ? "bg-white" : "bg-gray-50"
-                  } hover:bg-gray-100 transition`}
-                >
-                  <td className="px-6 py-4 flex items-center space-x-3">
-                    <img
-                      src={`${import.meta.env.VITE_API_BASE_URL}/${student.profilePic}`}
-                      alt="Profile"
-                      className="w-8 h-8 rounded-full object-cover"
-                    />
-                    <span>
-                      {student.firstName} {student.lastName}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">{student.email}</td>
-                  <td className="px-6 py-4">{student.phoneNumber}</td>
-                  <td className="px-6 py-4">{student.marks}</td>
-                  <td className="px-6 py-4">
-                    <span
-                      className={`font-medium ${
-                        student.result === "Passed"
-                          ? "text-green-600"
-                          : student.result === "absent"
-                            ? "text-orange-500"
-                            : "text-red-600"
-                      }`}
-                    >
-                      {student.result}
-                    </span>
-                  </td>
+      <div className="mt-6  bg-white rounded-lg shadow-md overflow-hidden">
+        <div className="max-h-[400px]">
+          {displayedStudents.length ? (
+            <table className="min-w-full table-auto border-collapse">
+              <thead className="bg-gray-100 text-gray-700 sticky top-0 z-10">
+                <tr>
+                  <th className="px-6 py-4 text-left font-semibold">Name</th>
+                  <th className="px-6 py-4 text-left font-semibold">Email</th>
+                  <th className="px-6 py-4 text-left font-semibold">Phone</th>
+                  <th className="px-6 py-4 text-left font-semibold">Marks</th>
+                  <th className="px-6 py-4 text-left font-semibold">Status</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <p className="text-gray-500 p-4">
-            No students found based on the selected filters.
-          </p>
-        )}
+              </thead>
+              <tbody>
+                {displayedStudents.map((student, idx) => (
+                  <tr
+                    key={student._id}
+                    className={`${idx % 2 === 0 ? "bg-white" : "bg-gray-50"
+                      } hover:bg-gray-100 transition`}
+                  >
+                    <td className="px-6 py-4 flex items-center space-x-3">
+                      <img
+                        src={`${import.meta.env.VITE_API_BASE_URL}/${student.profilePic}`}
+                        alt="Profile"
+                        className="w-8 h-8 rounded-full object-cover"
+                      />
+                      <span>
+                        {student.firstName} {student.lastName}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">{student.email}</td>
+                    <td className="px-6 py-4">{student.phoneNumber}</td>
+                    <td className="px-6 py-4">{student.marks}</td>
+                    <td className="px-6 py-4">
+                      <span
+                        className={`font-medium ${student.result === "Passed"
+                            ? "text-green-600"
+                            : student.result === "absent"
+                              ? "text-orange-500"
+                              : "text-red-600"
+                          }`}
+                      >
+                        {student.result}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p className="text-gray-500 p-4">
+              No students found based on the selected filters.
+            </p>
+          )}
+        </div>
       </div>
+
 
       {/* Pagination */}
       {!viewMore && students.length > studentsPerPage && (
@@ -487,11 +461,10 @@ const StudentList = () => {
             <button
               key={i}
               onClick={() => handlePageChange(i + 1)}
-              className={`px-4 py-2 rounded ${
-                currentPage === i + 1
+              className={`px-4 py-2 rounded ${currentPage === i + 1
                   ? "bg-blue-600 text-white"
                   : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-              }`}
+                }`}
             >
               {i + 1}
             </button>

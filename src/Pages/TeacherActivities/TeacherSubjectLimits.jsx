@@ -5,12 +5,14 @@ import dayjs from 'dayjs';
 const TeacherSubjectLimits = () => {
   const teacherData = useSelector((state) => state.currentTeacher.currentTeacher);
 
+  // Get today's uploaded count from video upload history
   const getTodaysUploaded = (history) => {
     const today = dayjs().format('YYYY-MM-DD');
     const todayEntry = history.find((entry) => entry.date === today);
     return todayEntry?.videosUploaded || 0;
   };
 
+  // Calculate per-subject stats
   const subjects = (teacherData?.subjects || []).map((subject) => {
     const subjectLimit = teacherData.subjectLimits?.[subject._id];
 
@@ -25,7 +27,24 @@ const TeacherSubjectLimits = () => {
     } = subjectLimit;
 
     const todaysUploaded = getTodaysUploaded(videosUploadedHistory);
-    const monthlyRemaining = minDailyVideoLimit - monthlyVideosUploaded;
+    const dailyRemaining = Math.max(0, minDailyVideoLimit - todaysUploaded);
+
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
+
+    const totalDays = new Date(year, month + 1, 0).getDate();
+
+    // Count working (non-Sunday) days in the current month
+    let workingDays = 0;
+    for (let day = 1; day <= totalDays; day++) {
+      const date = new Date(year, month, day);
+      if (date.getDay() !== 0) {
+        workingDays++;
+      }
+    }
+
+    const monthlyRemaining = Math.max(0, (workingDays * minDailyVideoLimit) - monthlyVideosUploaded);
     const todaySalary = todaysUploaded * salaryPerVideo;
     const monthlySalary = monthlyVideosUploaded * perVideoPrice;
 
@@ -36,9 +55,10 @@ const TeacherSubjectLimits = () => {
       perVideoPrice,
       salaryPerVideo,
       todaysUploaded,
+      dailyRemaining,
       monthlyRemaining,
       todaySalary,
-      monthlySalary,
+      monthlySalary
     };
   }).filter(Boolean);
 
@@ -60,7 +80,7 @@ const TeacherSubjectLimits = () => {
               <div className="flex justify-between items-start mb-3 gap-3 flex-wrap sm:flex-nowrap">
                 <div className="flex gap-3 items-center">
                   <img
-                    src="https://via.placeholder.com/48"
+                    src={``}
                     alt={subject.name}
                     className="w-10 h-10 object-cover rounded-full"
                   />
@@ -72,25 +92,23 @@ const TeacherSubjectLimits = () => {
                   </div>
                 </div>
                 <span
-                  className={`text-sm font-medium ${subject.monthlyRemaining <= 0 ? 'text-red-500' : 'text-green-600'
-                    }`}
+                  className={`text-sm font-medium ${subject.monthlyRemaining <= 0 ? 'text-red-500' : 'text-green-600'}`}
                 >
                   {subject.monthlyRemaining <= 0 ? '⚠️ Limit Reached' : '✅ On Track'}
                 </span>
               </div>
 
               <div className="grid grid-cols-2 gap-3 text-sm text-gray-700">
-                <div><strong>Limit:</strong> {subject.minDailyVideoLimit}</div>
-                <div><strong>Posted:</strong> {subject.monthlyVideosUploaded}</div>
-                <div><strong>Remaining:</strong> {subject.monthlyRemaining}</div>
-                <div><strong>Per Video:</strong> ₹{subject.perVideoPrice}</div>
-                <div><strong>Today's Uploads:</strong> {subject.todaysUploaded}</div>
+                <div><strong>Daily Posted:</strong> {subject.todaysUploaded}</div>
+                <div><strong>Monthly Posted:</strong> {subject.monthlyVideosUploaded}</div>
+                <div><strong>Daily Remaining:</strong> {subject.dailyRemaining}</div>
+                <div><strong>Monthly Remaining:</strong> {subject.monthlyRemaining}</div>
+                <div><strong>Daily Limit:</strong> {subject.minDailyVideoLimit}</div>
+                <div><strong>Monthly Limit:</strong> {subject.monthlyRemaining+subject.monthlyVideosUploaded}</div>
                 <div><strong>Today's Salary:</strong> ₹{subject.todaySalary}</div>
-                <div className="col-span-2">
-                  <strong>Monthly Salary:</strong> ₹{subject.monthlySalary}
-                </div>
+                <div>  <strong>Monthly Salary:</strong> ₹{subject.monthlySalary}</div>
+              
               </div>
-
             </div>
           ))}
         </div>
@@ -104,7 +122,6 @@ const TeacherSubjectLimits = () => {
         </div>
       )}
     </div>
-
   );
 };
 

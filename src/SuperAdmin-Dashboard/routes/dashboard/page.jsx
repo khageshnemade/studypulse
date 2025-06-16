@@ -132,13 +132,13 @@ const DashboardChart = ({ classPerformance, setIds }) => {
   const stats = classPerformance?.[selectedClass]
     ? classPerformance[selectedClass]
     : Object.values(classPerformance || {}).reduce(
-        (acc, curr) => {
-          acc.passed += curr.passed || 0;
-          acc.failed += curr.failed || 0;
-          return acc;
-        },
-        { passed: 0, failed: 0 }
-      );
+      (acc, curr) => {
+        acc.passed += curr.passed || 0;
+        acc.failed += curr.failed || 0;
+        return acc;
+      },
+      { passed: 0, failed: 0 }
+    );
 
   const chartData = {
     labels: ["Passed", "Failed"],
@@ -160,7 +160,7 @@ const DashboardChart = ({ classPerformance, setIds }) => {
       </h2>
 
       {/* Dropdowns */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
         {/* District Dropdown */}
         <select
           name="district"
@@ -169,7 +169,7 @@ const DashboardChart = ({ classPerformance, setIds }) => {
             dispatch(setSuperAdminDetails({ districtId: e.target.value }));
             setDistrictId(e.target.value);
           }}
-          className="border border-gray-300 rounded-md px-3 py-2 w-full text-sm"
+          className="border border-gray-300 rounded px-2 py-1 text-xs w-full"
         >
           <option value="">Select District</option>
           {districts.map(({ _id, name }) => (
@@ -187,7 +187,7 @@ const DashboardChart = ({ classPerformance, setIds }) => {
             dispatch(setSuperAdminDetails({ talukaId: e.target.value }));
             setTalukaId(e.target.value);
           }}
-          className="border border-gray-300 rounded-md px-3 py-2 w-full text-sm"
+          className="border border-gray-300 rounded px-2 py-1 text-xs w-full"
         >
           <option value="">Select Taluka</option>
           {talukas.map(({ _id, name }) => (
@@ -205,7 +205,7 @@ const DashboardChart = ({ classPerformance, setIds }) => {
             dispatch(setSuperAdminDetails({ cityId: e.target.value }));
             setCityId(e.target.value);
           }}
-          className="border border-gray-300 rounded-md px-3 py-2 w-full text-sm"
+          className="border border-gray-300 rounded px-2 py-1 text-xs w-full"
         >
           <option value="">Select City</option>
           {cities.map(({ _id, name }) => (
@@ -227,7 +227,6 @@ const DashboardChart = ({ classPerformance, setIds }) => {
                 class: null,
               })
             );
-
             setIds((prev) => ({
               ...prev,
               orgId: e.target.value,
@@ -237,7 +236,7 @@ const DashboardChart = ({ classPerformance, setIds }) => {
             setSelectedClass("");
             setOrgId(e.target.value);
           }}
-          className="border border-gray-300 rounded-md px-3 py-2 w-full text-sm"
+          className="border border-gray-300 rounded px-2 py-1 text-xs w-full"
         >
           <option value="">Select Organization</option>
           {orgs.map(({ _id, name }) => (
@@ -253,9 +252,7 @@ const DashboardChart = ({ classPerformance, setIds }) => {
           value={selectedClassId}
           onChange={(e) => {
             const selectedId = e.target.value;
-            const selectedClassObj = classes.find(
-              (cls) => cls._id === selectedId
-            );
+            const selectedClassObj = classes.find((cls) => cls._id === selectedId);
             const selectedClassName = selectedClassObj?.name || "";
 
             dispatch(
@@ -264,16 +261,14 @@ const DashboardChart = ({ classPerformance, setIds }) => {
                 class: selectedClassName,
               })
             );
-
             setSelectedClassId(selectedId);
             setSelectedClass(selectedClassName);
-
             setIds((prev) => ({
               ...prev,
               classId: selectedId,
             }));
           }}
-          className="border border-gray-300 rounded-md px-3 py-2 w-full text-sm"
+          className="border border-gray-300 rounded px-2 py-1 text-xs w-full"
         >
           <option value="">Select Class</option>
           {classes.map(({ _id, name }) => (
@@ -283,6 +278,7 @@ const DashboardChart = ({ classPerformance, setIds }) => {
           ))}
         </select>
       </div>
+
       <div
         className="d-flex justify-content-center align-items-center mt-2"
         style={{ gap: "1rem" }}
@@ -291,7 +287,7 @@ const DashboardChart = ({ classPerformance, setIds }) => {
           {!orgId
             ? "All Organizations Data"
             : orgs.find((o) => o._id === orgId)?.name ||
-              "Organization Not Found"}
+            "Organization Not Found"}
         </h2>
 
         {selectedClassId && (
@@ -484,15 +480,22 @@ export default function SuperAdminDashboard() {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
-        <DashboardChart
-          classPerformance={classPerformance.passFailedStudents || []}
-          setIds={setIds}
-        />
+      <div className="grid grid-cols-1 lg:grid-cols- gap-8 mt-6">
+        {/* Dashboard Chart */}
+        <div className="h-[700px] bg-white rounded-lg shadow p-4 overflow-hidden">
+          <DashboardChart
+            classPerformance={classPerformance.passFailedStudents || []}
+            setIds={setIds}
+          />
+        </div>
 
-        <StudentList />
-        <ToastContainer />
+        {/* Student List */}
+        <div className="h-[700px] bg-white rounded-lg shadow p-4 overflow-auto">
+          <StudentList />
+        </div>
       </div>
+
+      <ToastContainer />
     </div>
   );
 }

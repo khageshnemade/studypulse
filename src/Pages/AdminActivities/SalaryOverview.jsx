@@ -5,6 +5,7 @@ import { IoArrowBack } from "react-icons/io5";
 import { MdPhone, MdEmail } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
 import makeRequest from "../../axios";
+import { ToastContainer } from "react-toastify";
 
 const SalaryOverview = () => {
   const [paymentData, setPaymentData] = useState([]);
@@ -85,6 +86,7 @@ const SalaryOverview = () => {
                 <th className="py-3 px-4 border-b">Phone</th>
                 <th className="py-3 px-4 border-b">Total Uploads</th>
                 <th className="py-3 px-4 border-b">Monthly Salary (₹)</th>
+                <th className="py-3 px-4 border-b">Make Payement</th>
               </tr>
             </thead>
             <tbody>
@@ -99,12 +101,14 @@ const SalaryOverview = () => {
                     {item.totalUploads}
                   </td>
                   <td className="py-3 px-4 border-b">₹{item.monthlySalary}</td>
+                  <td className="py-3 px-4 border-b"><button onClick={()=>{navigate('/admin-dashboard/createpayment',{state:{teacher_id:item.id,salary:item.monthlySalary,cmonth:selectedMonth}})}}>go</button></td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
       )}
+      <ToastContainer/>
     </div>
   );
 };

@@ -272,7 +272,7 @@ export default function TeacherDashboard() {
             <div className=" rounded-lg p-6 shadow-sm">
               <HollowPieChart classes={classes} />
             </div>
-            <div className="rounded-lg p-6 shadow-sm max-h-[500px] overflow-y-auto">
+            <div className="rounded-lg p-6 shadow-sm   max-h-[500px] overflow-y-auto">
               <TeacherSubjectLimits />
             </div>
             <div className="rounded-lg p-6 shadow-sm">
