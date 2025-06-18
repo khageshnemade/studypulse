@@ -16,16 +16,16 @@ const SalaryOverview = () => {
   const location = useLocation();
   const teacherId = location.state.teacher_id;
   const navigate = useNavigate();
-  const teacherData = paymentData.filter((item) => item.id === teacherId);
+  const teacherData = paymentData.filter((item) => item.userId === teacherId);
   useEffect(() => {
     const fetchPaymentData = async () => {
       setLoading(true);
       try {
         const response = await makeRequest.get(
-          `/admin/get-salary-overview-for-teachers?month=${selectedMonth}&userId=${teacherId}`
+          `/admin/get-salary-overview-for-teacher-by-id?month=${selectedMonth}&userId=${teacherId}`
         );
         if (response.data.success) {
-          setPaymentData(response.data.data);
+          setPaymentData(response?.data?.data);
           console.log(response.data.data);
         } else {
           setError("Failed to fetch data.");
@@ -91,24 +91,38 @@ const SalaryOverview = () => {
             </thead>
             <tbody>
               {teacherData.map((item) => (
-                <tr key={item.id} className="hover:bg-gray-50">
+                <tr key={item.userId} className="hover:bg-gray-50">
                   <td className="py-3 px-4 border-b">
                     {item.firstName} {item.lastName}
                   </td>
                   <td className="py-3 px-4 border-b">{item.email}</td>
                   <td className="py-3 px-4 border-b">{item.phoneNumber}</td>
                   <td className="py-3 px-4 border-b text-center">
-                    {item.totalUploads}
+                    {item.totalVideos}
                   </td>
-                  <td className="py-3 px-4 border-b">₹{item.monthlySalary}</td>
-                  <td className="py-3 px-4 border-b"><button onClick={()=>{navigate('/admin-dashboard/createpayment',{state:{teacher_id:item.id,salary:item.monthlySalary,cmonth:selectedMonth}})}}>go</button></td>
+                  <td className="py-3 px-4 border-b">₹{item.totalEarnings}</td>
+                  <td className="py-3 px-4 border-b">
+                    <button
+                      onClick={() => {
+                        navigate("/admin-dashboard/createpayment", {
+                          state: {
+                            teacher_id: item.userId,
+                            salary: item.totalEarnings,
+                            cmonth: selectedMonth,
+                          },
+                        });
+                      }}
+                    >
+                      go
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
       )}
-      <ToastContainer/>
+      <ToastContainer />
     </div>
   );
 };

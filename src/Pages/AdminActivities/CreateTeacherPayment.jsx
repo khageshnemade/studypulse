@@ -9,7 +9,7 @@ const CreateTeacherPayment = () => {
   const teachers = useSelector((state) => state.teachers.teachersData || []);
   const location = useLocation();
   const { teacher_id, salary, cmonth } = location.state || {};
-const navigate=useNavigate()
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     teacherId: "",
     month: "",
@@ -53,7 +53,10 @@ const navigate=useNavigate()
     formData.append("files", file);
 
     try {
-      const response = await makeRequest.post("file-upload/payment_pic", formData);
+      const response = await makeRequest.post(
+        "file-upload/payment_pic",
+        formData
+      );
       if (response.data.success) {
         const uploadedUrl = response.data.url;
         setFormData((prev) => ({ ...prev, paySlipUrl: uploadedUrl }));
@@ -77,12 +80,12 @@ const navigate=useNavigate()
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { teacherId, month, amount, remarks, paySlipUrl } = formData;
-    
+
     if (!teacherId || !month || !amount || !remarks || !paySlipUrl) {
       toast.error("Please fill all fields and upload the payslip.");
       return;
     }
-  
+
     try {
       const res = await makeRequest.post("/admin/create-payment-for-teacher", {
         teacherId,
@@ -103,9 +106,9 @@ const navigate=useNavigate()
         });
         setFile(null);
         setUploadPreview("");
-       setTimeout(() => {
-        navigate(-1);
-       }, 2000);
+        setTimeout(() => {
+          navigate(-1);
+        }, 2000);
       } else {
         toast.error("Failed to create payment.");
       }
@@ -120,7 +123,7 @@ const navigate=useNavigate()
       <h2 className="text-xl font-semibold mb-4 text-center">
         Create Teacher Payment
       </h2>
-      <ToastContainer/>
+      <ToastContainer />
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Teacher Select */}
         <div>
@@ -129,6 +132,7 @@ const navigate=useNavigate()
             name="teacherId"
             value={formData.teacherId}
             onChange={handleChange}
+            disabled
             className="w-full border px-3 py-2 rounded"
           >
             <option value="">-- Select Teacher --</option>
@@ -144,6 +148,7 @@ const navigate=useNavigate()
         <div>
           <label className="block mb-1 font-medium">Select Month</label>
           <input
+            disabled
             type="month"
             name="month"
             value={formData.month}
@@ -158,6 +163,7 @@ const navigate=useNavigate()
           <input
             type="number"
             name="amount"
+            disabled
             value={formData.amount}
             onChange={handleChange}
             className="w-full border px-3 py-2 rounded"
