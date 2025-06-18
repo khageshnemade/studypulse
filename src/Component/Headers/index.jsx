@@ -25,6 +25,14 @@ function Header({ className, logo, joinBtn, search }) {
   {/* Navigation Section */}
   <nav className="flex items-center">
     <ul className="flex items-center gap-4">
+    <li>
+          <Link
+            to="/privacy"
+            className="px-4 py-2 rounded-md text-sm font-medium text-white border border-white/20  hover:bg-[#D9EAFD] hover:border-[#D9EAFD] hover:text-black transition"
+          >
+            Privacy Policy
+          </Link>
+        </li>
       {/* Conditionally Render Buttons */}
       {location.pathname === "/login" || location.pathname === "/" ? (
         <li>

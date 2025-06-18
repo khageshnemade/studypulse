@@ -64,6 +64,7 @@ import AdminTeacherSalaryTable from "./Pages/AdminActivities/AdminTeacherSalaryT
 import PaymentHistory from "./Pages/AdminActivities/PaymentHistory";
 import SalaryOverview from "./Pages/AdminActivities/SalaryOverview";
 import CreateTeacherPayment from "./Pages/AdminActivities/CreateTeacherPayment";
+import PrivacyPolicy from "./Component/Privacy/PrivacyPolicy";
 
 const user = localStorage.getItem("user"); // Check if the user is logged in
 
@@ -71,6 +72,7 @@ const router = createBrowserRouter(
   [
     // Public routes accessible even if the user is not logged in
     { path: "/", element: <Login /> },
+    { path: "/privacy", element: <PrivacyPolicy /> },
 
     { path: "/login", element: <Login /> },
 
@@ -85,40 +87,8 @@ const router = createBrowserRouter(
 
         { path: "contents", element: <Content /> },
         { path: "contents/:id", element: <Singlecontent /> },
-
         { path: "/dashboard/profile", element: <Profile /> },
-        {
-          path: "customers",
-          element: user ? <h1 className="title">Customers</h1> : <Home />,
-        },
-        {
-          path: "new-customer",
-          element: user ? <h1 className="title">New Customer</h1> : <Home />,
-        },
-        {
-          path: "verified-customers",
-          element: user ? (
-            <h1 className="title">Verified Customers</h1>
-          ) : (
-            <Home />
-          ),
-        },
-        {
-          path: "products",
-          element: user ? <h1 className="title">Products</h1> : <Home />,
-        },
-        {
-          path: "new-product",
-          element: user ? <h1 className="title">New Product</h1> : <Home />,
-        },
-        {
-          path: "inventory",
-          element: user ? <h1 className="title">Inventory</h1> : <Home />,
-        },
-        {
-          path: "settings",
-          element: user ? <h1 className="title">Settings</h1> : <Home />,
-        },
+       
       ],
     },
 
@@ -136,7 +106,6 @@ const router = createBrowserRouter(
         { path: "createRegion", element: <CreateRegion /> },
       ],
     },
-    { path: "/invoice", element: <Invoice /> },
     {
       path: "/admin-dashboard", // Only accessible if the user is logged in
       element: <AdminLayout />,

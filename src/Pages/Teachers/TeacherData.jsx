@@ -1,4 +1,4 @@
-import { ChevronDown, User } from "lucide-react";
+import { ChevronDown, User, Wallet } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
@@ -105,7 +105,7 @@ export const Table = () => {
                     });
                   }}
                 >
-                  <ChevronDown className="w-5 h-5" />
+                  <Wallet className="w-5 h-5" />
                 </button>
               </td>
               <td className="px-4 py-2">
