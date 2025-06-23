@@ -31,10 +31,9 @@ const CreateChapterCurriculum = () => {
   useEffect(() => {
     fetchSubjects();
   }, [classId]);
-useEffect(() => {
- console.log("Chapters",chapters);
- 
-}, [chapters])
+  useEffect(() => {
+    console.log("Chapters", chapters);
+  }, [chapters]);
 
   useEffect(() => {
     setChapterId(initialChapterId || "");
@@ -67,7 +66,9 @@ useEffect(() => {
   const fetchChapters = async () => {
     try {
       // Construct the request URL with query parameters
-      const response = await makeRequest.get(`teacher/get-all-chapter?subjectId=${subjectId}&classId=${classId}`);
+      const response = await makeRequest.get(
+        `teacher/get-all-chapter?subjectId=${subjectId}&classId=${classId}`
+      );
       console.log("Chapters", response.data);
       setChapters(response?.data?.data);
       setLoading(false);
@@ -123,7 +124,7 @@ useEffect(() => {
         });
       }, 2000);
     } catch (err) {
-      console.error("Error creating chapter curriculum:", err.message);
+      toast.error(err.response.data.message);
       setError("Failed to create chapter curriculum");
     } finally {
       setIsLoading(false);

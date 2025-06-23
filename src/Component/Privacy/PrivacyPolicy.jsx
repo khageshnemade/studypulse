@@ -1,148 +1,131 @@
-import React from 'react'
+import React from "react";
 
 const PrivacyPolicy = () => {
   return (
-    <pre>
-        Privacy Policy for SJSA (Government School Management App) 
-
-Last updated: 18 June 2025 
-
-Welcome to SJSA, an Android app developed to support the digital management of Government School Hostels. This Privacy Policy describes how we collect, use, and protect your personal data when you use our services. 
-
-Shape 
-
-1. About the App 
-
-SJSA enables parents/guardians to: 
-
-Monitor student meals, attendance, and holidays 
-
-Apply for leave through the app 
-
-Add/manage emergency contacts 
-
-Use QR code-based entry for hostel access 
-
-Shape 
-
-2. Information We Collect 
-
-We may collect the following types of personal and institutional data: 
-
-Student details: Full name, class, date of birth, gender 
-
-Guardian information: Name, mobile number, address, relationship 
-
-Hostel data: Attendance, meals, leave status 
-
-Uploaded documents:medical report,  profile photo 
-
-Location data: District, taluka, city, school ID 
-
-Emergency contact information 
-
-Device information and session metadata (for login/security) 
-
-Shape 
-
-3. Purpose of Data Collection 
-
-The data collected is used to: 
-
-Register students/parent  and manage their hostel profile 
-
-Display academic and hostel records to parents 
-
-Process leave applications and emergency contact info 
-
-Enable QR code-based entry management 
-
-Ensure communication between hostels and parent 
-
-Maintain app security and service quality 
-
-Shape 
-
-4. Data Protection and Security 
-
-We implement multiple levels of data protection: 
-
-Communication is secured using HTTPS 
-
-Authentication uses token-based access 
-
-Personal documents are accessed only by authorized officials 
-
-Shape 
-
-5. Sharing of Information 
-
-We do not sell or rent personal data. Data is only shared with: 
-
-Designated school or hostel officials for administrative use 
-
-Educational authorities when required by law or policy 
-
-Shape 
-
-6. Third-Party Services 
-
-The app may use the following third-party tools to enable features: 
-
-Android system services (e.g., camera, storage) 
-
-Networking libraries (e.g., Retrofit) 
-These services do not have access to your personal data unless explicitly authorized. 
-
-Shape 
-
-7. User Rights 
-
-Parents and guardians using the app have the right to: 
-
-View and update student or guardian data within the app 
-
-Raise concerns about misuse or incorrect data entries 
-
-Shape 
-
-8. Children's Data 
-
-SJSA is designed for parents managing their children's hostel life. We do not knowingly collect data directly from children without parental guidance or school mediation. 
-
- 
-
-9. Contact Us 
-
-For support, queries, or data-related issues, contact: 
-
-Eonixa Dynamics Pvt Ltd 
-
-Email: eonixadynamics@gmail.com 
-
-Phone: +91-9112906555 
-
-Eonixa Dynamics Pvt Ltd 
-Pune Maharashtra 
-
- 
-
-10. Updates to This Policy 
-
-This policy may be updated periodically. You will be informed of any changes via in-app notification or official communication. 
-
- 
-
-11. Design & Develop  
-
-Eonixa Dynamics Pvt Ltd 
-Pune Maharashtra 
-
- 
-
- 
-    </pre>
-  )
-}
-
-export default PrivacyPolicy
+    <div className="bg-white text-gray-800 px-6 py-10 max-w-4xl mx-auto">
+      <h1 className="text-3xl font-bold text-center mb-8">Privacy Policy</h1>
+
+      <p className="mb-6">
+        At <span className="font-semibold">eklavya</span>, we value your privacy
+        and are committed to protecting the personal information of our users.
+        This Privacy Policy describes how we collect, use, and protect your data
+        when you use our mobile application.
+      </p>
+
+      {/* Section 1 */}
+      <div className="mb-8">
+        <h2 className="text-xl font-semibold mb-3">
+          1. Information We Collect
+        </h2>
+        <ul className="list-disc list-inside space-y-2">
+          <li>
+            <strong>Personal Information:</strong> When users register/login, we
+            collect name, email ID, class/standard, and optionally profile
+            image.
+          </li>
+          <li>
+            <strong>Usage Data:</strong> We collect data related to videos
+            watched, exams attempted, and results.
+          </li>
+          <li>
+            <strong>Chat Communication:</strong> Messages and interactions with
+            teachers are stored securely for academic purposes.
+          </li>
+        </ul>
+      </div>
+
+      {/* Section 2 */}
+      <div className="mb-8">
+        <h2 className="text-xl font-semibold mb-3">
+          2. How We Use Your Information
+        </h2>
+        <ul className="list-disc list-inside space-y-2">
+          <li>Authenticate users and manage user sessions</li>
+          <li>Track video progress and provide access to related exams</li>
+          <li>Show user exam results and performance</li>
+          <li>Enable secure chat between students and teachers</li>
+          <li>Improve app features and user experience</li>
+        </ul>
+      </div>
+
+      {/* Section 3 */}
+      <div className="mb-8">
+        <h2 className="text-xl font-semibold mb-3">
+          3. Data Sharing and Security
+        </h2>
+        <ul className="list-disc list-inside space-y-2">
+          <li>
+            We do not sell or share your personal data with third parties.
+          </li>
+          <li>Data is stored securely on encrypted servers.</li>
+          <li>Only authorized personnel have access to user data.</li>
+        </ul>
+      </div>
+
+      {/* Section 4 */}
+      <div className="mb-8">
+        <h2 className="text-xl font-semibold mb-3">4. Children’s Privacy</h2>
+        <p>
+          eklavya is designed for students from 1st to 10th grade. We encourage
+          parental guidance. We do not knowingly collect personal information
+          from children without parental consent.
+        </p>
+      </div>
+
+      {/* Section 5 */}
+      <div className="mb-8">
+        <h2 className="text-xl font-semibold mb-3">5. User Rights</h2>
+        <ul className="list-disc list-inside space-y-2">
+          <li>Access your profile and academic data</li>
+          <li>Request correction or deletion of your personal data</li>
+          <li>Contact us for any privacy-related concerns</li>
+        </ul>
+      </div>
+
+      {/* Section 6 */}
+      <div className="mb-8">
+        <h2 className="text-xl font-semibold mb-3">6. Contact Us</h2>
+        <p className="mb-2">
+          For support, queries, or data-related issues, contact:
+        </p>
+        <b>Eonixa Dynamics Pvt Ltd</b>
+        <p>
+          <b> Email: </b>
+          <a
+            href="mailto:eonixadynamics@gmail.com"
+            className="text-blue-600 hover:underline"
+          >
+            eonixadynamics@gmail.com
+          </a>
+        </p>
+        <p>
+          <b> Phone: </b>
+          <a href="tel:+919112906555" className="text-blue-600 hover:underline">
+            +91-9112906555
+          </a>
+        </p>
+        <p>Pune, Maharashtra</p>
+      </div>
+
+      {/* Section 10 */}
+      <div className="mb-8">
+        <h2 className="text-xl font-semibold mb-3">
+          10. Updates to This Policy
+        </h2>
+        <p>
+          This policy may be updated periodically. You will be informed of any
+          changes via in-app notification or official communication.
+        </p>
+      </div>
+
+      {/* Section 11 */}
+      <div>
+        <h2 className="text-xl font-semibold mb-3">11. Design & Develop</h2>
+        <p>Eonixa Dynamics Pvt Ltd</p>
+        <p>Pune, Maharashtra</p>
+      </div>
+    </div>
+  );
+};
+
+export default PrivacyPolicy;

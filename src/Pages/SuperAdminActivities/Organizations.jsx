@@ -39,7 +39,7 @@ export default function Organizations() {
         setOrgs((prevOrgs) => [...prevOrgs, data.data]);
       }
     } catch (err) {
-      console.err("Error creating org:", err);
+      toast.error(err.response.data.message);
     } finally {
       setIsModalOpen(false);
     }

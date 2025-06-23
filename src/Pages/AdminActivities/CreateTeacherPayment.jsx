@@ -4,6 +4,7 @@ import { AiOutlineSend, AiOutlineUpload } from "react-icons/ai";
 import { toast, ToastContainer } from "react-toastify";
 import makeRequest from "../../axios";
 import { useLocation, useNavigate } from "react-router-dom";
+import { IoArrowBack } from "react-icons/io5";
 
 const CreateTeacherPayment = () => {
   const teachers = useSelector((state) => state.teachers.teachersData || []);
@@ -120,10 +121,22 @@ const CreateTeacherPayment = () => {
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white rounded shadow">
+      {/* Back Button */}
+      <div className="mb-4">
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center text-blue-600 hover:text-blue-800 font-medium"
+        >
+          <IoArrowBack className="mr-2" size={20} />
+          Back
+        </button>
+      </div>
+
       <h2 className="text-xl font-semibold mb-4 text-center">
         Create Teacher Payment
       </h2>
       <ToastContainer />
+
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Teacher Select */}
         <div>
