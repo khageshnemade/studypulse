@@ -1,147 +1,216 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { jsPDF } from "jspdf";
-import { mark } from "framer-motion/client";
+import { FaArrowLeft, FaCheck, FaTimes } from "react-icons/fa";
+import makeRequest from "../../axios";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const StudentReport = () => {
   const reportRef = useRef();
+  const [subjects, setSubjects] = useState([]);
+  const [academicYears, setAcademicYears] = useState([]);
+  const [selectedYearId, setSelectedYearId] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const location = useLocation();
+  const studentId = location.state.studentId || "68553aefe3ee59d1c941a5b7";
+  const navigate = useNavigate();
 
-  // Function to handle PDF generation
+  const fetchAcademicYears = async () => {
+    try {
+      const response = await makeRequest.get("admin/get-academic-years");
+      const data = response.data?.data || [];
+      setAcademicYears(data);
+
+      // Default to first year if none selected
+      if (data.length > 0) {
+        setSelectedYearId(data[0]._id);
+      }
+    } catch (err) {
+      setError("Failed to fetch academic years.");
+    }
+  };
+
+  const fetchReportData = async (yearId) => {
+    if (!yearId) return;
+    setIsLoading(true);
+
+    try {
+      const response = await makeRequest.get(
+        `admin/get-student-report-card?academicYearId=${yearId}&studentId=${studentId}`
+      );
+      const data = response.data?.data || [];
+      setSubjects(data);
+      setError("");
+    } catch (err) {
+      setError("Failed to fetch report card data.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAcademicYears();
+  }, []);
+
+  useEffect(() => {
+    if (selectedYearId) {
+      fetchReportData(selectedYearId);
+    }
+  }, [selectedYearId]);
+
   const handleDownloadPDF = () => {
     const doc = new jsPDF({
-      orientation: "portrait", // Portrait or landscape orientation
-      unit: "mm", // Measurement unit (mm, cm, etc.)
-      format: "a4", // Page size (A4 is default but you can specify other sizes)
+      orientation: "portrait",
+      unit: "mm",
+      format: "a4",
     });
 
-    // Add content to the PDF
     doc.html(reportRef.current, {
       callback: function (doc) {
-        // Save the PDF with a title
         doc.save("Student_Report_Card.pdf");
       },
       x: 10,
       y: 10,
-      width: 180, // Adjust width if needed (margin from left)
-      windowWidth: 1000, // Adjust window width if the content is not showing fully
+      width: 180,
+      windowWidth: 1000,
     });
   };
 
-  const studentInfo = {
-    name: "John Doe",
-    class: "10th",
-    teacher: "Mrs. Smith",
-    schoolName: "ENGLISH MEDIUM WADGAONSHERI",
-    schoolYear: "2024-2025",
-  };
+  const getAttemptStatus = (assignments) => {
+    const attemptsList = [];
 
-  const passingGrade = 50;
+    assignments.forEach((assignment) => {
+      assignment.attempts.forEach((attempt) => {
+        attemptsList.push(
+          attempt.result === "pass" ? (
+            <span key={attempt.attemptNumber} className="text-green-600 flex items-center gap-1">
+              <FaCheck /> Attempt {attempt.attemptNumber}: Passed
+            </span>
+          ) : (
+            <span key={attempt.attemptNumber} className="text-red-600 flex items-center gap-1">
+              <FaTimes /> Attempt {attempt.attemptNumber}: Failed
+            </span>
+          )
+        );
+      });
+    });
 
-  const subjects = [
-    { name: "Literature", marks: [85, "-", "-"] },
-    { name: "History", marks: [75, "-", "-"] },
-    { name: "Geography", marks: [60, "-", "-"] },
-    { name: "Algebra", marks: [55, "-", "-"] },
-    { name: "Social Science", marks: [70, "-", "-"] },
-    { name: "Chemistry", marks: [95, "-", "-"] },
-    { name: "Art", marks: [85, "-", "-"] },
-    { name: "Physical Education", marks: [50, "-", "-"] },
-    { name: "Entrepreneurship", marks: [40, 42, 45] },
-  ];
-
-  // Function to check if a student has passed each attempt and return the status
-  const getAttemptStatus = (marks) => {
-    let status = marks.map((mark, index) =>
-      mark >= passingGrade
-        ? `Attempt ${index + 1}: Passed`:
-        isNaN(mark) ?'': `Attempt ${index + 1}: Failed,`
-    );
-
-    return status
+    return <div className="flex flex-col">{attemptsList}</div>;
   };
 
   return (
     <div className="flex flex-col items-center">
-      {/* PDF Content */}
-      <div
-        ref={reportRef}
-        className="w-[90%] bg-yellow-100 p-6 border-2 border-gray-800 rounded-lg shadow-lg"
-      >
-        <h1 className="text-2xl font-bold text-center text-gray-900">
-          STUDENT REPORT CARD
-        </h1>
 
-        <div className="grid grid-cols-2 gap-2 border-2 border-gray-800 p-4 mt-4">
-          {Object.entries(studentInfo).map(([key, value]) => (
-            <p key={key} className="text-gray-700 font-medium">
-              <span className="font-bold capitalize">
-                {key.replace(/([A-Z])/g, " $1")}:
-              </span>{" "}
-              {value}
-            </p>
-          ))}
+      <div className="w-full max-w-5xl my-4 px-4">
+        <div className="flex justify-between items-center mb-4">
+          {/* Back Button - Blue and Sleek */}
+          <button
+            onClick={() => navigate(-1)}
+            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow transition"
+          >
+            <FaArrowLeft />
+            Back
+          </button>
+
+          {/* Year Selector */}
+          <div className="flex items-center gap-2">
+            <label htmlFor="yearSelect" className="font-medium text-gray-800">
+              Academic Year:
+            </label>
+            <select
+              id="yearSelect"
+              className="border rounded px-3 py-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              value={selectedYearId}
+              onChange={(e) => setSelectedYearId(e.target.value)}
+            >
+              {academicYears.map((year) => (
+                <option key={year._id} value={year._id}>
+                  {year.yearName}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
-
-        <table className="w-full mt-4 border-collapse border border-gray-800">
-          <thead>
-            <tr className="bg-gray-800 text-white">
-              <th className="border border-gray-700 p-2 text-left">Subject</th>
-              <th className="border border-gray-700 p-2">Marks Assignment1</th>
-              <th className="border border-gray-700 p-2">Marks Assignment2</th>
-              <th className="border border-gray-700 p-2">Marks Assignment3</th>
-              <th className="border border-gray-700 p-2">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {subjects.map((subject, index) => (
-              <tr key={index} className="text-gray-800 bg-white">
-                <td className="border border-gray-700 p-2">{subject.name}</td>
-
-                {subject.marks.length > 0 ? (
-                  subject.marks.map((mark, idx) => (
-                    <td
-                      key={idx}
-                      className="border border-gray-700 p-2 text-center"
-                    >
-                      {mark || "-"}
-                    </td>
-                  ))
-                ) : (
-                  <td
-                    colSpan={subject.marks.length}
-                    className="border border-gray-700 p-2 text-center"
-                  >
-                    {"-"}
-                  </td>
-                )}
-
-                {/* Display the pass/fail status */}
-                <td className="border border-gray-700 p-2 text-center">
-                  {getAttemptStatus(subject.marks)}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        <div className="grid grid-cols-2 gap-2 border-2 border-gray-800 p-4 mt-4">
-          <p className="text-gray-700 font-medium">Percentage: 90%</p>
-          <p className="text-gray-700 font-medium">Status:Fail</p>
-        </div>
-
-        <footer className="text-center text-gray-700 mt-4">
-          <p>www.yourwebsite.com</p>
-          <p>391 Christopher St, New York</p>
-          <p>(655) 334-9988</p>
-        </footer>
       </div>
 
-      {/* Download Button */}
-      <button
-        onClick={handleDownloadPDF}
-        className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700 transition"
-      >
-        Download PDF
-      </button>
+
+      {isLoading ? (
+        <p>Loading ...</p>
+      ) : error ? (
+        <p className="text-red-500">{error}</p>
+      ) : (
+        <>
+          <div
+            ref={reportRef}
+            className="w-[90%] bg-yellow-100 p-6 border-2 border-gray-800 rounded-lg shadow-lg"
+          >
+            <h1 className="text-2xl font-bold text-center text-gray-900">
+              STUDENT REPORT CARD
+            </h1>
+
+            <div className="grid grid-cols-2 gap-2 border-2 border-gray-800 p-4 mt-4">
+              <p><strong>Student:</strong> John Doe</p>
+              <p><strong>Class:</strong> 10th</p>
+              <p><strong>Teacher:</strong> Mrs. Smith</p>
+              <p><strong>School:</strong> ENGLISH MEDIUM WADGAONSHERI</p>
+              <p>
+                <strong>Year:</strong>{" "}
+                {academicYears.find((y) => y._id === selectedYearId)?.yearName}
+              </p>
+            </div>
+
+            <table className="w-full mt-4 border-collapse border border-gray-800">
+              <thead>
+                <tr className="bg-gray-800 text-white">
+                  <th className="border p-2">Subject</th>
+                  <th className="border p-2">Assignment 1</th>
+                  <th className="border p-2">Assignment 2</th>
+                  <th className="border p-2">Assignment 3</th>
+                  <th className="border p-2">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {subjects.map((subject, index) => {
+                  const assignments = subject.assignments;
+                  const marks = ["-", "-", "-"];
+                  assignments.forEach((a, idx) => {
+                    const firstAttempt = a.attempts[0]?.obtainedMarks ?? "-";
+                    marks[idx] = firstAttempt;
+                  });
+
+                  return (
+                    <tr key={index} className="bg-white text-gray-800">
+                      <td className="border p-2">{subject.subjectName}</td>
+                      {marks.map((mark, idx) => (
+                        <td key={idx} className="border p-2 text-center">{mark}</td>
+                      ))}
+                      <td className="border p-2">{getAttemptStatus(assignments)}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+
+            <div className="grid grid-cols-2 gap-2 border-2 border-gray-800 p-4 mt-4">
+              <p className="text-gray-700 font-medium">Percentage: 90%</p>
+              <p className="text-gray-700 font-medium">Status: Pass</p>
+            </div>
+
+            <footer className="text-center text-gray-700 mt-4">
+              <p>www.yourwebsite.com</p>
+              <p>391 Christopher St, New York</p>
+              <p>(655) 334-9988</p>
+            </footer>
+          </div>
+
+          <button
+            onClick={handleDownloadPDF}
+            className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700 transition"
+          >
+            Download PDF
+          </button>
+        </>
+      )}
     </div>
   );
 };
