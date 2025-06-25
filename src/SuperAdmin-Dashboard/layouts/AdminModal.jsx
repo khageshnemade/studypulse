@@ -1,9 +1,10 @@
-import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { LogOut, X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const AdminModal = ({ onClose }) => {
-  // Close modal on outside click
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
   const handleOutsideClick = (e) => {
     if (e.target.id === "modal-overlay") {
       onClose();
@@ -16,66 +17,76 @@ const AdminModal = ({ onClose }) => {
       document.removeEventListener("click", handleOutsideClick);
     };
   }, []);
-  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Fetch the user object from localStorage
     const userData = JSON.parse(localStorage.getItem("user"));
     if (userData) {
       setUser(userData);
-    }
-    
+         }
   }, []);
 
-  if (!user) {
-    return <div>Loading...</div>;
-  }
+  if (!user) return <div>Loading...</div>;
+
   return (
     <div
       id="modal-overlay"
       className="fixed inset-0 z-[200] flex items-start justify-end bg-black bg-opacity-50"
     >
       <div
-        className="relative  p-6 max-w-[40%] md:w-[400px] animate-fade-in"
-        onClick={(e) => e.stopPropagation()} // Prevent click events from propagating to the overlay
+        onClick={(e) => e.stopPropagation()}
+        className="relative mt-12 mr-4 bg-white rounded-md shadow-md w-full max-w-xs p-4 animate-fade-in"
       >
-        {/* Modal Content */}
-        <div className="max-w-full mx-auto p-6 bg-white rounded-lg shadow-lg">
-          <h2 className="text-2xl font-semibold text-center mb-6 text-gray-900">
-            Profile Details
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="flex flex-col items-center space-y-4">
-              <div className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center text-white text-3xl font-semibold">
-                {user.userName?.charAt(0)}
-              </div>
-              <h3 className="text-xl font-semibold text-gray-800">
-                {user.userName}
-              </h3>
-              <p className="text-gray-600">{user.role}</p>
-            </div>
+        {/* Close Button */}
+        <button
+          onClick={onClose}
+          className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
+        >
+          <X size={18} />
+        </button>
 
-            <div className="flex flex-col space-y-4">
-              <div>
-                <span className="font-semibold text-gray-700">Email:</span>
-                <p className="text-gray-600">{user?.user
-                }</p>
-              </div>
+        {/* Header */}
+        <h2 className="text-lg font-semibold text-center text-gray-800 mb-4">
+          Profile
+        </h2>
 
-              <div>
-                <span className="font-semibold text-gray-700">
-                  Profile Completion:
-                </span>
-                <p className="text-gray-600">
-                  {user.profileCompletion ? "Completed" : "Not Completed"}
-                </p>
-              </div>
-              <div>
-                <span className="font-semibold text-gray-700">Role:</span>
-                <p className="text-gray-600">{user.role}</p>
-              </div>
-            </div>
+        {/* Profile */}
+        <div className="flex flex-col items-center space-y-2 mb-4">
+          <div className="w-16 h-16 rounded-full bg-blue-600 text-white text-xl font-semibold flex items-center justify-center">
+            {user.userName?.charAt(0)}
           </div>
+          <h3 className="text-base font-medium text-gray-800">{user.userName}</h3>
+          <p className="text-xs text-gray-500 capitalize">{user.role}</p>
+        </div>
+
+        {/* Info */}
+        <div className="space-y-2 text-xs text-gray-700">
+          <div>
+            <span className="font-medium">Email:</span>
+            <p className="text-gray-600 break-all">{user?.email || "Not provided"}</p>
+          </div>
+          <div>
+            <span className="font-medium">Profile Completion:</span>
+            <p className="text-gray-600">
+              {user.profileCompletion ? "Completed" : "Not Completed"}
+            </p>
+          </div>
+          <div>
+            <span className="font-medium">Role:</span>
+            <p className="text-gray-600">{user.role}</p>
+          </div>
+        </div>
+
+        {/* Buttons */}
+        <div className="mt-4 flex flex-col space-y-2">
+          <button
+            onClick={() => {
+              navigate("/admin-dashboard/update");
+              onClose();
+            }}
+            className="w-full bg-blue-600 text-white py-1.5 px-3 rounded hover:bg-blue-700 text-sm transition"
+          >
+            Update Organization
+          </button>
         </div>
       </div>
     </div>

@@ -16,13 +16,50 @@ export default function Organizations() {
   const [talukaId, settalukaId] = useState("");
   const [cityId, setCityId] = useState("");
   const [loading, setLoading] = useState(false);
+  const [activeAcademicYearId, setActiveAcademicYearId] = useState("");
+
   const dispatch = useDispatch();
   const {
     districtId: initialDistrictId,
     talukaId: initialTalukaId,
     cityId: initialCityId,
   } = useSelector((state) => state.superAdmin.superAdminDetails);
-
+  const [academicYears, setAcademicYears] = useState([]);
+  const [error, setError] = useState("");
+  const fetchAcademicYears = async () => {
+    try {
+      const res = await makeRequest.get("/superAdmin/get-academic-years");
+  
+      if (res.data.success) {
+        const years = res.data.data;
+  
+        // Set academic years in state
+        setAcademicYears(years);
+  
+        // Get today's date
+        const today = new Date();
+  
+        // Find the current academic year based on today's date
+        const currentYear = years.find((year) => {
+          const start = new Date(year.startDate);
+          const end = new Date(year.endDate);
+          return today >= start && today <= end;
+        });
+  
+        // Set the current academic year ID as default selected
+        if (currentYear) {
+          setActiveAcademicYearId(currentYear._id);
+        }
+      } else {
+        setError("Failed to load academic years");
+      }
+    } catch (err) {
+      setError("Error fetching academic years");
+    } finally {
+      setLoading(false);
+    }
+  };
+  
   const addOrganization = async () => {
     try {
       const { data, status } = await makeRequest.post(
@@ -32,6 +69,7 @@ export default function Organizations() {
           cityID: cityId,
           talukaID: talukaId,
           districtID: districtId,
+          activeAcademicYearId: "6813ab7674ca553c000995e1"
         }
       );
       if (status === 200 || status === 201) {
@@ -46,6 +84,7 @@ export default function Organizations() {
   };
   useEffect(() => {
     fetchDistricts();
+    fetchAcademicYears()
   }, []);
   useEffect(() => {
     if (districtId) fetchTalukas();
@@ -110,7 +149,6 @@ export default function Organizations() {
         `/get-org-by-district-taluka-city-id?talukaId=${talukaId}&cityId=${cityId}&districtId=${districtId}`
       );
       setOrgs(res?.data?.data);
-      console.log("Organizations", res?.data?.data);
     } catch (error) {
       setOrgs([]);
       console.error("Submit Orgs:", error.response.data.message);
@@ -212,13 +250,12 @@ export default function Organizations() {
             >
               {/* Dropdowns for district, taluka, and city */}
               <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                {/* District */}
                 <select
                   name="district"
                   value={districtId}
                   onChange={(e) => {
-                    dispatch(
-                      setSuperAdminDetails({ districtId: e.target.value })
-                    );
+                    dispatch(setSuperAdminDetails({ districtId: e.target.value }));
                     setDistrictId(e.target.value);
                   }}
                   className="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -232,13 +269,12 @@ export default function Organizations() {
                   ))}
                 </select>
 
+                {/* Taluka */}
                 <select
                   name="taluka"
                   value={talukaId}
                   onChange={(e) => {
-                    dispatch(
-                      setSuperAdminDetails({ talukaId: e.target.value })
-                    );
+                    dispatch(setSuperAdminDetails({ talukaId: e.target.value }));
                     settalukaId(e.target.value);
                   }}
                   className="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -252,6 +288,7 @@ export default function Organizations() {
                   ))}
                 </select>
 
+                {/* City */}
                 <select
                   name="city"
                   value={cityId}
@@ -269,7 +306,24 @@ export default function Organizations() {
                     </option>
                   ))}
                 </select>
+
+                {/* Academic Year (spans 2 columns on md+) */}
+                <div className="md:col-span-2">
+                  <select
+                    value={activeAcademicYearId}
+                    onChange={(e) => setActiveAcademicYearId(e.target.value)}
+                    className="w-full border px-3 py-2 rounded text-gray-700"
+                  >
+                    <option value="">Select Academic Year</option>
+                    {academicYears.map((year) => (
+                      <option key={year._id} value={year._id}>
+                        {year.yearName}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
+
 
               {/* Organization name input */}
               <input

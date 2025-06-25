@@ -7,6 +7,7 @@ import { ArrowRight, ChevronDown, Trash2, Users2 } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import { setAdminDetails } from "../../redux/features/adminSlice";
 import { useNavigate } from "react-router-dom";
+import { AiOutlineEye } from "react-icons/ai";
 const Table = () => {
   const [currentId, setCurrentId] = useState("");
   const dispatch = useDispatch();
@@ -208,32 +209,32 @@ const navigate=useNavigate();
               <td className="px-4 py-2 border">{row.phoneNumber}</td>
               <td className="px-4 py-2 border">{row?.cityData?.name}</td>
               {profileComplete && (
-                <td className="border border-gray-300 px-4 py-2 max-w-min">
-                  <div className="flex space-x-3 items-center">
-                    <button
-                      onClick={() => {
-                        setCurrentId(row._id);
-                        setShowUpdateStudent(true);
-                      }}
-                      className="px-2 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-                    >
-                      <ChevronDown />
-                    </button>
-                  </div>
-                </td>
-              )}
-              {profileComplete && (
-                <td className="border border-gray-300 px-4 py-2 max-w-min">
-                  <div className="flex space-x-3 items-center">
-                    <button
-                      onClick={() => navigate('/admin-dashboard/studentsReport',{state:{studentId:row._id}})}
-                      className="px-2 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-                    >
-                      <ChevronDown />
-                    </button>
-                  </div>
-                </td>
-              )}
+  <td className="border border-gray-300 px-4 py-2 max-w-min">
+    <div className="flex space-x-3 items-center">
+      <button
+        onClick={() => {
+          setCurrentId(row._id);
+          setShowUpdateStudent(true);
+        }}
+        className="px-2 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+      >
+        <ChevronDown />
+      </button>
+    </div>
+  </td>
+)}
+{profileComplete && (
+  <td className="border border-gray-300 px-4 py-2 max-w-min">
+    <div className="flex space-x-3 items-center">
+      <button
+        onClick={() => navigate('/admin-dashboard/studentsReport', { state: { studentId: row._id } })}
+        className="px-2 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+      >
+        <AiOutlineEye size={20} />
+      </button>
+    </div>
+  </td>
+)}
               <td className="px-4 py-2 border">
                 <button
                   onClick={() => handleStatusChange(row)}

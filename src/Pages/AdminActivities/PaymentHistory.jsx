@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { FaFileInvoiceDollar } from "react-icons/fa";
-import { MdDateRange } from "react-icons/md";
-import { IoIosPerson } from "react-icons/io";
 import { IoArrowBack } from "react-icons/io5";
-import { useNavigate } from "react-router-dom"; // or useHistory if using older React Router
+import { useLocation, useNavigate } from "react-router-dom";
 import makeRequest from "../../axios";
 
 const PaymentHistory = () => {
@@ -12,7 +9,13 @@ const PaymentHistory = () => {
   const [error, setError] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("2025-05");
 
-  const navigate = useNavigate(); // to go back
+  const location = useLocation();
+  const { teacher_id: teacherIdFromState, teacher } = location.state || {};
+  const navigate = useNavigate();
+
+  const filteredData = paymentData.filter(
+    (item) => item.userId === teacherIdFromState
+  );
 
   useEffect(() => {
     const fetchPaymentData = async () => {
@@ -32,23 +35,22 @@ const PaymentHistory = () => {
         setLoading(false);
       }
     };
-
     fetchPaymentData();
   }, [selectedMonth]);
 
   return (
-    <div className="max-w-5xl mx-auto p-4">
-      {/* Header Row */}
-      <div className="flex items-center justify-between mb-6">
+    <div className="max-w-6xl mx-auto px-4 py-6">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700"
+          className="flex items-center bg-blue-600 hover:bg-blue-700 text-white text-sm px-3 py-2 rounded transition"
         >
-          <IoArrowBack className="mr-1" />
+          <IoArrowBack className="mr-2" />
           Back
         </button>
 
-        <h1 className="text-2xl font-semibold text-gray-800 flex-1 text-center">
+        <h1 className="text-xl font-semibold text-gray-800 text-center flex-1">
           Payment History
         </h1>
 
@@ -56,56 +58,70 @@ const PaymentHistory = () => {
           type="month"
           value={selectedMonth}
           onChange={(e) => setSelectedMonth(e.target.value)}
-          className="border px-3 py-2 rounded text-gray-700"
+          className="border border-gray-300 px-3 py-2 text-sm rounded-md text-gray-700 focus:outline-none focus:ring focus:border-blue-400"
         />
       </div>
 
-      {/* Loading & Error */}
-      {loading && <p className="text-center">Loading...</p>}
+      {/* Loading / Error */}
+      {loading && <p className="text-center text-gray-500">Loading...</p>}
       {error && <p className="text-center text-red-500">{error}</p>}
 
-      {/* Payment Cards */}
-      {!loading && !error && paymentData.length === 0 && (
-        <p className="text-center text-gray-500">
-          No payment records for this month.
-        </p>
-      )}
-
-      {paymentData.map((item) => (
-        <div key={item._id} className="bg-white shadow rounded-lg p-6 mb-4">
-          <div className="flex items-center mb-4">
-            <IoIosPerson className="text-blue-500 text-2xl mr-2" />
-            <p className="text-gray-700 font-medium">User ID: {item.userId}</p>
-          </div>
-
-          <div className="flex items-center mb-2">
-            <MdDateRange className="text-green-600 text-xl mr-2" />
-            <p className="text-gray-600">
-              Payment Date: {new Date(item.paymentDate).toLocaleDateString()}
+      {/* Table */}
+      {!loading && !error && (
+        <>
+          {filteredData.length === 0 ? (
+            <p className="text-center text-gray-500">
+              No payment records found for this month.
             </p>
-          </div>
-
-          <div className="flex items-center mb-2">
-            <FaFileInvoiceDollar className="text-yellow-600 text-xl mr-2" />
-            <p className="text-gray-600">Amount Paid: ₹{item.amount}</p>
-          </div>
-
-          <div className="mb-2 text-gray-600">
-            Total Videos Uploaded: {item.totalVideosUploadedInMonth}
-          </div>
-
-          <div className="mb-2 text-gray-600">Remarks: {item.remarks}</div>
-
-          <a
-            href={`https://api.studypulse.live/${item.paySlipUrl}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block mt-3 text-blue-600 hover:underline"
-          >
-            View Payslip
-          </a>
-        </div>
-      ))}
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200 border text-sm">
+                <thead className="bg-gray-100 text-gray-700">
+                  <tr>
+                    <th className="px-4 py-3 text-left whitespace-nowrap">Name</th>
+                    <th className="px-4 py-3 text-left whitespace-nowrap">Payment Date</th>
+                    <th className="px-4 py-3 text-left whitespace-nowrap">Amount Paid</th>
+                    <th className="px-4 py-3 text-left whitespace-nowrap">Videos Uploaded</th>
+                    <th className="px-4 py-3 text-left whitespace-nowrap">Remarks</th>
+                    <th className="px-4 py-3 text-left whitespace-nowrap">Payslip</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-100">
+                  {filteredData.map((item) => (
+                    <tr key={item._id} className="hover:bg-gray-50">
+                      <td className="px-4 py-2 whitespace-nowrap">
+                        {teacher?.firstName} {teacher?.lastName}
+                      </td>
+                      <td className="px-4 py-2 whitespace-nowrap">
+                        {new Date(item.paymentDate).toLocaleDateString()}
+                      </td>
+                      <td className="px-4 py-2 whitespace-nowrap">
+                        ₹{Number(item.amount).toLocaleString("en-IN")}
+                      </td>
+                      <td className="px-4 py-2 whitespace-nowrap">
+                        {item.totalVideosUploadedInMonth}
+                      </td>
+                      <td className="px-4 py-2 whitespace-nowrap">
+                        {item.remarks || "—"}
+                      </td>
+                      <td className="px-4 py-2 whitespace-nowrap">
+                        <a
+                          href={`https://api.studypulse.live/${item.paySlipUrl}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:underline"
+                        >
+                          View
+                        </a>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 };

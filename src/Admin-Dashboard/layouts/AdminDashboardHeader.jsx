@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import AdminModal from "../../SuperAdmin-Dashboard/layouts/AdminModal";
+import { useSelector } from "react-redux";
 
 export const AdminDashboardHeader = ({ collapsed, setCollapsed }) => {
   // const { theme, setTheme } = useTheme();
@@ -123,7 +124,7 @@ export const AdminDashboardHeader = ({ collapsed, setCollapsed }) => {
           {/* Show Organization Name and Username on Hover (Only the Text) */}
           <div className="absolute bottom-full top-8 transform -translate-x-2/3 mb-2 group-hover:block group-hover:opacity-80 hidden rounded-xl w-[300px] text-center transition-opacity duration-300 opacity-0">
             <div className="bg-gradient-to-r from-teal-500 via-blue-500 to-purple-500 p-4 rounded-lg shadow-lg">
-              <p className="text-white">{profile?.organizationName}</p>
+              <p className="text-white">{useSelector((state) => state.org.orgName)}</p>
               <p className="text-white mt-1">{userName}</p>
             </div>
           </div>

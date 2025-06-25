@@ -387,62 +387,65 @@ const StudentList = () => {
 
 
       {/* Students Table */}
-      <div className="mt-6  bg-white rounded-lg shadow-md overflow-hidden">
-        <div className="max-h-[400px]">
-          {displayedStudents.length ? (
-            <table className="min-w-full table-auto border-collapse">
-              <thead className="bg-gray-100 text-gray-700 sticky top-0 z-10">
-                <tr>
-                  <th className="px-6 py-4 text-left font-semibold">Name</th>
-                  <th className="px-6 py-4 text-left font-semibold">Email</th>
-                  <th className="px-6 py-4 text-left font-semibold">Phone</th>
-                  <th className="px-6 py-4 text-left font-semibold">Marks</th>
-                  <th className="px-6 py-4 text-left font-semibold">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {displayedStudents.map((student, idx) => (
-                  <tr
-                    key={student._id}
-                    className={`${idx % 2 === 0 ? "bg-white" : "bg-gray-50"
-                      } hover:bg-gray-100 transition`}
-                  >
-                    <td className="px-6 py-4 flex items-center space-x-3">
-                      <img
-                        src={`${import.meta.env.VITE_API_BASE_URL}/${student.profilePic}`}
-                        alt="Profile"
-                        className="w-8 h-8 rounded-full object-cover"
-                      />
-                      <span>
-                        {student.firstName} {student.lastName}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4">{student.email}</td>
-                    <td className="px-6 py-4">{student.phoneNumber}</td>
-                    <td className="px-6 py-4">{student.marks}</td>
-                    <td className="px-6 py-4">
-                      <span
-                        className={`font-medium ${student.result === "Passed"
-                            ? "text-green-600"
-                            : student.result === "absent"
-                              ? "text-orange-500"
-                              : "text-red-600"
-                          }`}
-                      >
-                        {student.result}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <p className="text-gray-500 p-4">
-              No students found based on the selected filters.
-            </p>
-          )}
-        </div>
-      </div>
+      <div className="mt-6 bg-white rounded-lg shadow-md overflow-hidden">
+  <div className="max-h-[400px] overflow-auto">
+    {displayedStudents.length ? (
+      <table className="min-w-full table-auto border-collapse">
+        <thead className="bg-gray-100 text-gray-700 sticky top-0 z-10">
+          <tr>
+            <th className="px-6 py-4 text-left font-semibold whitespace-nowrap">Name</th>
+            <th className="px-6 py-4 text-left font-semibold whitespace-nowrap">Email</th>
+            <th className="px-6 py-4 text-left font-semibold whitespace-nowrap">Phone</th>
+            <th className="px-6 py-4 text-left font-semibold whitespace-nowrap">Marks</th>
+            <th className="px-6 py-4 text-left font-semibold whitespace-nowrap">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {displayedStudents.map((student, idx) => (
+            <tr
+              key={student._id}
+              className={`${
+                idx % 2 === 0 ? "bg-white" : "bg-gray-50"
+              } hover:bg-gray-100 transition`}
+            >
+              <td className="px-6 py-4 flex items-center space-x-3 whitespace-nowrap">
+                <img
+                  src={`${import.meta.env.VITE_API_BASE_URL}/${student.profilePic}`}
+                  alt="Profile"
+                  className="w-8 h-8 rounded-full object-cover"
+                />
+                <span>
+                  {student.firstName} {student.lastName}
+                </span>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">{student.email}</td>
+              <td className="px-6 py-4 whitespace-nowrap">{student.phoneNumber}</td>
+              <td className="px-6 py-4 whitespace-nowrap">{student.marks}</td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <span
+                  className={`font-medium ${
+                    student.result === "Passed"
+                      ? "text-green-600"
+                      : student.result === "absent"
+                      ? "text-orange-500"
+                      : "text-red-600"
+                  }`}
+                >
+                  {student.result}
+                </span>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    ) : (
+      <p className="text-gray-500 p-4">
+        No students found based on the selected filters.
+      </p>
+    )}
+  </div>
+</div>
+
 
 
       {/* Pagination */}

@@ -47,6 +47,7 @@ function LoginForm() {
     setLoading(true);
 
     axios.post(`https://api.studypulse.live/web/api/login/`, formData, { withCredentials: true })
+    // axios.post(`http://localhost:5050/web/api/login/`, formData, { withCredentials: true })
       .then((response) => {
         if (response.status === 200 || response.status === 201) {
           const userRole = response?.data?.data?.role;
@@ -121,8 +122,8 @@ function LoginForm() {
 
       console.log("User Role:", userRole);
       setTimeout(() => {
+        dispatch(setOrgId(parsedUserData.organizationID));
         if (userRole === "admin") {
-          dispatch(setOrgId(orgId));
           navigate("/admin-dashboard");
         } else if (userRole === "teacher") {
           navigate("/teacher-dashboard");

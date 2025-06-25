@@ -7,6 +7,7 @@ import { makeRequest } from "../../axios";
 import { UpdateTeacher } from "../AdminActivities/UpdateTeacher";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import { FaMoneyCheckAlt } from "react-icons/fa";
 
 export const Table = () => {
   const [loading, setLoading] = useState(false);
@@ -66,6 +67,7 @@ export const Table = () => {
             <th className="px-4 py-2">Phone Number</th>
             <th className="px-4 py-2">Address</th>
             <th className="px-4 py-2">SalaryView</th>
+            <th className="py-3 px-4 whitespace-nowrap">Payment History</th>
             <th className="px-4 py-2">Experience</th>
             <th className="px-4 py-2">More</th>
             <th className="px-4 py-2">Status</th>
@@ -96,18 +98,33 @@ export const Table = () => {
               <td className="px-4 py-2">{row.phoneNumber}</td>
               <td className="px-4 py-2">{`${row?.cityData?.name}, ${row?.cityData?.name}`}</td>
               <td className="px-4 py-2">
-                {" "}
-                <button
-                  className="p-2 bg-blue-500 text-white rounded-lg"
-                  onClick={() => {
-                    navigate("/admin-dashboard/salary", {
-                      state: { teacher_id: row._id },
-                    });
-                  }}
-                >
-                  <Wallet className="w-5 h-5" />
-                </button>
-              </td>
+  <button
+    title="Go to Salary Page"
+    className="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+    onClick={() => {
+      navigate("/admin-dashboard/salary", {
+        state: { teacher_id: row._id },
+      });
+    }}
+  >
+    <Wallet className="w-5 h-5" />
+  </button>
+</td>
+
+<td className="py-3 px-4">
+  <button
+    title="View Payment History"
+    onClick={() => {
+      navigate("/admin-dashboard/paymentlist", {
+        state: { teacher_id: row._id, teacher: row },
+      });
+    }}
+    className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+  >
+    <FaMoneyCheckAlt className="w-5 h-5" />
+  </button>
+</td>
+
               <td className="px-4 py-2">
                 {row?.teacherData?.totalYearsOfExperience}
               </td>
@@ -124,9 +141,8 @@ export const Table = () => {
               </td>
               <td className="p-3">
                 <button
-                  className={`text-white p-1 rounded-md ${
-                    row.status === "active" ? "bg-green-500" : "bg-red-500"
-                  }`}
+                  className={`text-white p-1 rounded-md ${row.status === "active" ? "bg-green-500" : "bg-red-500"
+                    }`}
                   onClick={() => handleClick(row)}
                 >
                   {row.status}

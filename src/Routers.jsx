@@ -65,6 +65,7 @@ import PaymentHistory from "./Pages/AdminActivities/PaymentHistory";
 import SalaryOverview from "./Pages/AdminActivities/SalaryOverview";
 import CreateTeacherPayment from "./Pages/AdminActivities/CreateTeacherPayment";
 import PrivacyPolicy from "./Component/Privacy/PrivacyPolicy";
+import UpdateOrganization from "./Pages/AdminActivities/UpdateOrganization";
 
 const user = localStorage.getItem("user"); // Check if the user is logged in
 
@@ -132,6 +133,7 @@ const router = createBrowserRouter(
         { path: "salary", element: <SalaryOverview /> },
         { path: "createpayment", element: <CreateTeacherPayment /> },
         { path: "paymentlist", element: <PaymentHistory /> },
+        { path: "update", element: <UpdateOrganization /> },
       ],
     },
     {

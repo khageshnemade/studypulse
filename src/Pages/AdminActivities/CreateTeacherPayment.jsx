@@ -23,6 +23,7 @@ const CreateTeacherPayment = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadPreview, setUploadPreview] = useState("");
 
+
   useEffect(() => {
     if (teacher_id || salary || cmonth) {
       setFormData((prev) => ({
@@ -32,7 +33,8 @@ const CreateTeacherPayment = () => {
         month: cmonth || "",
       }));
     }
-  }, [teacher_id, salary, cmonth]);
+  }, [teacher_id, salary, cmonth, location.state]);
+  
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -89,7 +91,7 @@ const CreateTeacherPayment = () => {
 
     try {
       const res = await makeRequest.post("/admin/create-payment-for-teacher", {
-        teacherId,
+        userId:teacherId,
         month,
         amount: parseFloat(amount),
         remarks,
@@ -183,7 +185,6 @@ const CreateTeacherPayment = () => {
             placeholder="Enter amount (₹)"
           />
         </div>
-
         {/* Remarks */}
         <div>
           <label className="block mb-1 font-medium">Remarks</label>

@@ -75,31 +75,25 @@ const SalaryOverview = () => {
 
       {/* Table */}
       {!loading && !error && paymentData?.length > 0 && (
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow">
-            <thead className="bg-gray-100 text-gray-700 text-left">
+        <div className="w-full overflow-x-auto">
+          <table className="min-w-full table-auto text-sm">
+            <thead className="bg-gray-100 text-left text-gray-600 uppercase tracking-wider sticky top-0 z-10">
               <tr>
-                <th className="py-3 px-4 border-b whitespace-nowrap">Name</th>
-                <th className="py-3 px-4 border-b whitespace-nowrap">Email</th>
-                <th className="py-3 px-4 border-b whitespace-nowrap">Phone</th>
-                <th className="py-3 px-4 border-b whitespace-nowrap text-center">
-                  Total Uploads
-                </th>
-                <th className="py-3 px-4 border-b whitespace-nowrap">
-                  Monthly Salary (₹)
-                </th>
-                <th className="py-3 px-4 border-b whitespace-nowrap">
-                  Make Payment
-                </th>
-              </tr>
+                <th className="py-3 px-4 whitespace-nowrap">Name</th>
+                <th className="py-3 px-4 whitespace-nowrap">Email</th>
+                <th className="py-3 px-4 whitespace-nowrap">Phone</th>
+                <th className="py-3 px-4 text-center whitespace-nowrap">Videos</th>
+                <th className="py-3 px-4 whitespace-nowrap">Earnings</th>
+                <th className="py-3 px-4 whitespace-nowrap">Make Payment</th>
+                </tr>
             </thead>
             <tbody>
               {teacherData.map((item) => (
-                <tr key={item.userId} className="hover:bg-gray-50">
-                  <td className="py-3 px-4 border-b whitespace-nowrap truncate max-w-[180px]">
+                <tr key={item.userId} className="hover:bg-blue-50 transition-colors">
+                  <td className="py-3 px-4 border-b truncate max-w-[180px] whitespace-nowrap">
                     {item.firstName} {item.lastName}
                   </td>
-                  <td className="py-3 px-4 border-b whitespace-nowrap truncate max-w-[220px]">
+                  <td className="py-3 px-4 border-b truncate max-w-[220px] whitespace-nowrap">
                     {item.email}
                   </td>
                   <td className="py-3 px-4 border-b whitespace-nowrap">
@@ -109,30 +103,28 @@ const SalaryOverview = () => {
                     {item.totalVideos}
                   </td>
                   <td className="py-3 px-4 border-b whitespace-nowrap">
-                    ₹{item.totalEarnings}
+                    ₹{Number(item.totalEarnings).toLocaleString("en-IN")}
                   </td>
                   <td className="py-3 px-4 border-b whitespace-nowrap">
-                    <button
-                      onClick={() => {
-                        navigate("/admin-dashboard/createpayment", {
-                          state: {
-                            teacher_id: item.userId,
-                            salary: item.totalEarnings,
-                            cmonth: selectedMonth,
-                          },
-                        });
-                      }}
-                      className="text-blue-600 hover:text-blue-800"
-                      title="Make Payment"
-                    >
-                      <FaMoneyCheckAlt size={20} />
+                    <button onClick={() => {
+                      navigate("/admin-dashboard/createpayment", {
+                        state: {
+                          teacher_id: item.userId,
+                          salary: item.totalEarnings,
+                          cmonth: selectedMonth,
+                        },
+                      });
+                    }} className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
+                      Pay
                     </button>
                   </td>
+                 
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
+
       )}
       <ToastContainer />
     </div>
