@@ -1,4 +1,4 @@
-import { ChevronDown, User, Wallet } from "lucide-react";
+import { ChevronDown, ReceiptText, User, Wallet } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
@@ -7,7 +7,6 @@ import { makeRequest } from "../../axios";
 import { UpdateTeacher } from "../AdminActivities/UpdateTeacher";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
-import { FaMoneyCheckAlt } from "react-icons/fa";
 
 export const Table = () => {
   const [loading, setLoading] = useState(false);
@@ -98,32 +97,32 @@ export const Table = () => {
               <td className="px-4 py-2">{row.phoneNumber}</td>
               <td className="px-4 py-2">{`${row?.cityData?.name}, ${row?.cityData?.name}`}</td>
               <td className="px-4 py-2">
-  <button
-    title="Go to Salary Page"
-    className="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-    onClick={() => {
-      navigate("/admin-dashboard/salary", {
-        state: { teacher_id: row._id },
-      });
-    }}
-  >
-    <Wallet className="w-5 h-5" />
-  </button>
-</td>
+                <button
+                  title="Go to Salary Page"
+                  className="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                  onClick={() => {
+                    navigate("/admin-dashboard/salary", {
+                      state: { teacher_id: row._id },
+                    });
+                  }}
+                >
+                  <Wallet className="w-5 h-5" />
+                </button>
+              </td>
 
-<td className="py-3 px-4">
-  <button
-    title="View Payment History"
-    onClick={() => {
-      navigate("/admin-dashboard/paymentlist", {
-        state: { teacher_id: row._id, teacher: row },
-      });
-    }}
-    className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-  >
-    <FaMoneyCheckAlt className="w-5 h-5" />
-  </button>
-</td>
+              <td className="py-3 px-4">
+                <button
+                  title="View Payment History"
+                  onClick={() => {
+                    navigate("/admin-dashboard/paymentlist", {
+                      state: { teacher_id: row._id, teacher: row },
+                    });
+                  }}
+                  className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+                >
+                  <ReceiptText className="w-5 h-5" />
+                </button>
+              </td>
 
               <td className="px-4 py-2">
                 {row?.teacherData?.totalYearsOfExperience}
@@ -160,12 +159,12 @@ export const Table = () => {
 const TeacherData = () => {
   return (
     <div className="flex flex-col gap-y-4">
-      {/* <p className="text-center text sm:text-xl md:text-2xl font-serif p-2 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto m-3 drop-shadow-lg border-[1.5px] border-blue-800">
+      <p className="text-center text sm:text-xl md:text-2xl font-serif p-2 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto m-3 drop-shadow-lg border-[1.5px] border-blue-800">
         <User className="text sm:text-xl md:text-2xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce text-blue-600" />
         <span className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
           Teachers
         </span>
-      </p> */}
+      </p>
 
       <Table />
     </div>

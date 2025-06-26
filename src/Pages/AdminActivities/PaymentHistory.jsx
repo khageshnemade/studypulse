@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { IoArrowBack } from "react-icons/io5";
 import { useLocation, useNavigate } from "react-router-dom";
 import makeRequest from "../../axios";
+import { ReceiptText } from "lucide-react";
 
 const PaymentHistory = () => {
   const [paymentData, setPaymentData] = useState([]);
@@ -22,7 +23,7 @@ const PaymentHistory = () => {
       setLoading(true);
       try {
         const response = await makeRequest.get(
-          `/admin/get-payment-history-for-teachers?month=${selectedMonth}`
+          `/admin/get-payment-history-for-teachers`
         );
         if (response.data.success) {
           setPaymentData(response.data.data);
@@ -50,16 +51,19 @@ const PaymentHistory = () => {
           Back
         </button>
 
-        <h1 className="text-xl font-semibold text-gray-800 text-center flex-1">
-          Payment History
-        </h1>
+        <p className="text-center text sm:text-xl md:text-2xl font-serif p-2 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto m-3 drop-shadow-lg border-[1.5px] border-yellow-800">
+          <ReceiptText className="text sm:text-xl md:text-2xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce text-yellow-600" />
+          <span className="bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent">
+            Payment History
+          </span>
+        </p>
 
-        <input
+        {/* <input
           type="month"
           value={selectedMonth}
           onChange={(e) => setSelectedMonth(e.target.value)}
           className="border border-gray-300 px-3 py-2 text-sm rounded-md text-gray-700 focus:outline-none focus:ring focus:border-blue-400"
-        />
+        /> */}
       </div>
 
       {/* Loading / Error */}
@@ -71,7 +75,7 @@ const PaymentHistory = () => {
         <>
           {filteredData.length === 0 ? (
             <p className="text-center text-gray-500">
-              No payment records found for this month.
+              No payment records found.
             </p>
           ) : (
             <div className="overflow-x-auto">
@@ -79,6 +83,7 @@ const PaymentHistory = () => {
                 <thead className="bg-gray-100 text-gray-700">
                   <tr>
                     <th className="px-4 py-3 text-left whitespace-nowrap">Name</th>
+                    <th className="px-4 py-3 text-left whitespace-nowrap">Month</th>
                     <th className="px-4 py-3 text-left whitespace-nowrap">Payment Date</th>
                     <th className="px-4 py-3 text-left whitespace-nowrap">Amount Paid</th>
                     <th className="px-4 py-3 text-left whitespace-nowrap">Videos Uploaded</th>
@@ -91,6 +96,9 @@ const PaymentHistory = () => {
                     <tr key={item._id} className="hover:bg-gray-50">
                       <td className="px-4 py-2 whitespace-nowrap">
                         {teacher?.firstName} {teacher?.lastName}
+                      </td>
+                      <td className="px-4 py-2 whitespace-nowrap">
+                        {item?.month}
                       </td>
                       <td className="px-4 py-2 whitespace-nowrap">
                         {new Date(item.paymentDate).toLocaleDateString()}

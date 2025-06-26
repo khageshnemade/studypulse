@@ -4,6 +4,7 @@ import { IoArrowBack } from "react-icons/io5";
 import { useLocation, useNavigate } from "react-router-dom";
 import makeRequest from "../../axios";
 import { ToastContainer } from "react-toastify";
+import { Wallet } from "lucide-react";
 
 const SalaryOverview = () => {
   const [paymentData, setPaymentData] = useState([]);
@@ -49,10 +50,12 @@ const SalaryOverview = () => {
           <IoArrowBack className="mr-1" />
           Back
         </button>
-
-        <h1 className="text-2xl font-semibold text-gray-800 text-center flex-1">
-          Salary Overview
-        </h1>
+        <p className="text-center text sm:text-xl md:text-2xl font-serif p-2 rounded-2xl flex w-full sm:w-4/6 justify-center items-center mx-auto m-3 drop-shadow-lg border-[1.5px] border-green-800">
+  <Wallet className="text sm:text-xl md:text-2xl h-8 sm:h-10 md:h-12 min-w-5 sm:min-w-6 md:min-w-8 min-h-5 sm:min-h-6 md:min-h-8 mr-4 animate-bounce text-green-600" />
+  <span className="bg-gradient-to-r from-green-500 to-emerald-500 bg-clip-text text-transparent">
+    Salary Overview
+  </span>
+</p>
 
         <input
           type="month"

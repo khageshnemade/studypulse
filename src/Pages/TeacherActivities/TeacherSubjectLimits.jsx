@@ -20,18 +20,24 @@ const TeacherSubjectLimits = () => {
 
     const {
       minDailyVideoLimit = 0,
-      monthlyVideosUploaded = 0,
       perVideoPrice = 0,
       salaryPerVideo = perVideoPrice,
       videosUploadedHistory = []
     } = subjectLimit;
-
-    const todaysUploaded = getTodaysUploaded(videosUploadedHistory);
-    const dailyRemaining = Math.max(0, minDailyVideoLimit - todaysUploaded);
-
     const now = new Date();
     const year = now.getFullYear();
     const month = now.getMonth();
+    const monthlyVideosUploaded = videosUploadedHistory.reduce((total, entry) => {
+      const entryDate = new Date(entry.date);
+      if (entryDate.getMonth() === month && entryDate.getFullYear() === year) {
+        return total + entry.videosUploaded;
+      }
+      return total;
+    }, 0);
+    const todaysUploaded = getTodaysUploaded(videosUploadedHistory);
+    const dailyRemaining = Math.max(0, minDailyVideoLimit - todaysUploaded);
+
+
 
     const totalDays = new Date(year, month + 1, 0).getDate();
 
@@ -61,7 +67,6 @@ const TeacherSubjectLimits = () => {
       monthlySalary
     };
   }).filter(Boolean);
-
   const totalMonthlySalary = subjects.reduce((sum, subject) => sum + subject.monthlySalary, 0);
 
   return (
@@ -79,11 +84,6 @@ const TeacherSubjectLimits = () => {
             >
               <div className="flex justify-between items-start mb-3 gap-3 flex-wrap sm:flex-nowrap">
                 <div className="flex gap-3 items-center">
-                  <img
-                    src={``}
-                    alt={subject.name}
-                    className="w-10 h-10 object-cover rounded-full"
-                  />
                   <div>
                     <h3 className="text-base font-semibold capitalize">{subject.name}</h3>
                     {subject.className && (
@@ -104,10 +104,10 @@ const TeacherSubjectLimits = () => {
                 <div><strong>Daily Remaining:</strong> {subject.dailyRemaining}</div>
                 <div><strong>Monthly Remaining:</strong> {subject.monthlyRemaining}</div>
                 <div><strong>Daily Limit:</strong> {subject.minDailyVideoLimit}</div>
-                <div><strong>Monthly Limit:</strong> {subject.monthlyRemaining+subject.monthlyVideosUploaded}</div>
+                <div><strong>Monthly Limit:</strong> {subject.monthlyRemaining + subject.monthlyVideosUploaded}</div>
                 <div><strong>Today's Salary:</strong> ₹{subject.todaySalary}</div>
                 <div>  <strong>Monthly Salary:</strong> ₹{subject.monthlySalary}</div>
-              
+
               </div>
             </div>
           ))}

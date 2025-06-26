@@ -7,11 +7,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { ClipLoader } from "react-spinners";
 import { useDispatch } from "react-redux";
 import { setRole } from "../../redux/features/roleSlice";
-
 import { setAdminDetails } from "../../redux/features/adminSlice";
-
-import { setOrgId } from "../../redux/features/orgSlice";
-import makeRequest from "../../axios";
+import { setOrgId, setOrgName } from "../../redux/features/orgSlice";
 
 function LoginForm() {
   const dispatch = useDispatch();
@@ -22,8 +19,7 @@ function LoginForm() {
     email: "",
     password: "",
   });
-  const [role, setRoleToggle] = useState("Student"); // Default to Student login
-
+  
   const handleCaptchaChange = (value) => {
     setCaptchaVerified(!!value);
   };
@@ -73,7 +69,9 @@ function LoginForm() {
               profilePic,
             })
           );
-
+          dispatch(setOrgId(organizationID));
+          dispatch(setOrgName(organizationName)); // ✅ Here
+          
           toast.success(response?.data?.message);
 
           setTimeout(() => {
@@ -119,10 +117,9 @@ function LoginForm() {
 
       // Access the userRole
       const userRole = parsedUserData.role;
-
-      console.log("User Role:", userRole);
+   
       setTimeout(() => {
-        dispatch(setOrgId(parsedUserData.organizationID));
+       
         if (userRole === "admin") {
           navigate("/admin-dashboard");
         } else if (userRole === "teacher") {
