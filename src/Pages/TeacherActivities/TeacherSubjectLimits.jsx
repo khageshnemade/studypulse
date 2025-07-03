@@ -22,7 +22,7 @@ const TeacherSubjectLimits = () => {
       minDailyVideoLimit = 0,
       perVideoPrice = 0,
       salaryPerVideo = perVideoPrice,
-      videosUploadedHistory = []
+      videosUploadedHistory = [],
     } = subjectLimit;
     const now = new Date();
     const year = now.getFullYear();

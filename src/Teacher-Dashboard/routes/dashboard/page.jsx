@@ -313,7 +313,7 @@ export default function TeacherDashboard() {
                     {curriculum.subjectId.name}
                   </p>
                   <p className="text-gray-500 text-xs">
-                    {curriculum.chapterId.title}
+                    {curriculum?.chapterId?.title}
                   </p>
                 </div>
               ))}

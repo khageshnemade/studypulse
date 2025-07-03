@@ -66,6 +66,8 @@ import SalaryOverview from "./Pages/AdminActivities/SalaryOverview";
 import CreateTeacherPayment from "./Pages/AdminActivities/CreateTeacherPayment";
 import PrivacyPolicy from "./Component/Privacy/PrivacyPolicy";
 import UpdateOrganization from "./Pages/AdminActivities/UpdateOrganization";
+import DeleteUserForm from "./Pages/TeacherActivities/DeleteUserForm";
+import ContactForm from "./Component/Form/ContactForm";
 
 const user = localStorage.getItem("user"); // Check if the user is logged in
 
@@ -78,18 +80,19 @@ const router = createBrowserRouter(
     { path: "/login", element: <Login /> },
 
     { path: "/register", element: <Register /> },
-
+    
     // Protected routes (only accessible if the user is logged in)
     {
       path: "/dashboard", // Only accessible if the user is logged in
       element: <Layout />,
       children: [
         { index: true, element: <DashboardPage /> },
-
+        
         { path: "contents", element: <Content /> },
         { path: "contents/:id", element: <Singlecontent /> },
         { path: "/dashboard/profile", element: <Profile /> },
-       
+        { path: "contact", element: <ContactForm /> },
+        
       ],
     },
 
@@ -171,6 +174,10 @@ const router = createBrowserRouter(
         {
           path: "chapters/assignments/assignRes",
           element: <AssignmentResult />,
+        },
+        {
+          path: "delete",
+          element: <DeleteUserForm />,
         },
         { path: "chapterCurrs/chat", element: <GroupChatWindow /> },
       ],
